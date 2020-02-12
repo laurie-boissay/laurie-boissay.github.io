@@ -1,4 +1,4 @@
 # LB_web_site
-My own responsive web site fr
+My own responsive french web site
 
 https://jaenne.github.io/
