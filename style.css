@@ -1,0 +1,155 @@
+body
+/* Heritage: all the tags in the body tag take this style. */
+{
+	background-color: #F5F6CE;
+	color: #0B0B61; 
+    font-size: 1em;
+    text-align: justify;
+    width: 95%;
+    margin: auto;
+    overflow: scroll;
+    word-wrap: break-word;
+}
+
+#background_h
+{
+	background-image: url("images/background_h_big.png")
+}
+
+p
+{
+	padding: 0px 20px 0px 20px;
+}
+
+ul
+{
+	padding: 10px 20px 0px 20px;
+	margin: 20px;	
+}
+
+li
+{
+	padding: 10px 20px 0px 20px;
+}
+
+a:visited
+{
+	color:#3ADF00;
+}
+
+a:hover
+{
+	color:#3ADF00;	
+}
+
+h1
+{
+    color: #3ADF00;
+    font-weight : bold;
+    font-size: 2em;
+    text-align: center;
+    border: 3px grey outset;
+    background-color: rgba(255,255,153,0.8);
+    box-shadow: 6px 6px 5px black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;   
+}
+
+h2
+{
+    color: #2ECCFA;
+    font-size: 1.5em;
+    text-align: center;
+    border: 3px grey outset;
+    background-color: rgba(255,255,153,0.8);
+    box-shadow: 6px 6px 5px black;
+    border-radius: 10px;/*round border.*/
+    padding: 10px;
+    margin: 10px;   
+}
+
+h3
+{
+	margin: 20px;	
+}
+
+h1 + h3, #bunny
+{
+	text-align: center;
+}
+
+#left_box, #right_box
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.shadow:hover
+{
+	box-shadow: 6px 6px 5px black;
+}
+
+nav ul
+{
+	list-style-type: none;
+}
+
+section ul
+{
+	list-style-image: url("images/star.png");
+}
+
+.arrow
+{
+	text-align: right;
+}
+
+
+/*_______________MEDIA QUERY_____________________*/
+
+
+@media only screen and (min-width: 801px)
+{
+	nav /*The navigation menu is always visible.*/
+	{
+		position: fixed;
+		bottom:0px;
+		left:0px;
+	}
+
+	nav
+	{
+		border: 3px grey outset;
+		background-color: rgba(255,255,153,0.8);
+		border-radius: 10px;
+		box-shadow: 6px 6px 5px black;
+	    margin: 10px;
+	}
+
+	#left_box
+	{
+		background-image: url("images/background_v_big.png");		
+	}
+
+	#global_box
+	{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	#right_box
+	{
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.arrow
+	{
+		visibility: hidden;
+	}	
+}
