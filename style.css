@@ -110,7 +110,7 @@ section ul
 /*_______________MEDIA QUERY_____________________*/
 
 
-@media only screen and (min-width: 801px)
+@media only screen and (min-width: 1280px)
 {
 	nav /*The navigation menu is always visible.*/
 	{
