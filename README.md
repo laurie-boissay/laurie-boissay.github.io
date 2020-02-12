@@ -1,2 +1,2 @@
 # LB_web_site
-My own web site fr
+My own responsive web site fr
