@@ -3,13 +3,13 @@ body
 {	
 	background-color: #F5F6CE;
 	color: #0B0B61; 
-    font-size: 1em;
-    text-align: justify;
-    width: auto;
-    margin: auto;
-    overflow: scroll;
-    word-wrap: break-word;
-    min-width: 600px;
+	font-size: 1em;
+	text-align: justify;
+	width: auto;
+	margin: auto;
+	overflow: scroll;
+	word-wrap: break-word;
+	min-width: 600px;
 }
 
 #global_box, #navigation ul
@@ -31,7 +31,7 @@ section, footer, #navigation, header
 		background-color: rgb(255,255,179);
 		border-radius: 10px;
 		box-shadow: 6px 6px 5px black;
-	    margin: 10px;
+		margin: 10px;
 	}
 
 section, footer
@@ -74,25 +74,25 @@ a:hover
 
 h1
 {
-    color: #3ADF00;
-    font-weight : bold;
-    font-size: 2em;
-    text-align: center;
+	color: #3ADF00;
+	font-weight : bold;
+	font-size: 2em;
+	text-align: center;
 	background-color: rgb(207,207,186);    
-    border-radius: 10px;/*round border.*/
-    padding: 10px;
-    margin: 10px;
+	border-radius: 10px;/*round border.*/
+	padding: 10px;
+	margin: 10px;
 }
 
 h2
 {
-    color: #2ECCFA;
-    font-size: 1.5em;
-    text-align: center;    
-    background-color: rgb(207,207,186);    
-    border-radius: 10px;/*round border.*/
-    padding: 10px;
-    margin: 10px;   
+	color: #2ECCFA;
+	font-size: 1.5em;
+	text-align: center;    
+	background-color: rgb(207,207,186);    
+	border-radius: 10px;/*round border.*/
+	padding: 10px;
+	margin: 10px;   
 }
 
 h3
