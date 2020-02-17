@@ -1,6 +1,6 @@
 body
 /* Heritage: all the tags in the body tag take this style. */
-{	
+{
 	background-color: #F5F6CE;
 	color: #0B0B61; 
 	font-size: 1em;
@@ -12,7 +12,15 @@ body
 	min-width: 600px;
 }
 
-#global_box, #navigation ul
+footer
+	{
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+#global_box, #navigation ul, #box
 	{
 		display: flex;
 		flex-wrap: wrap;
@@ -34,7 +42,7 @@ section, footer, #navigation, header
 		margin: 10px;
 	}
 
-section, footer
+section
 	{
 		min-width: 600px;
 	}
@@ -78,7 +86,7 @@ h1
 	font-weight : bold;
 	font-size: 2em;
 	text-align: center;
-	background-color: rgb(207,207,186);    
+	background-color: rgb(207,207,186);
 	border-radius: 10px;/*round border.*/
 	padding: 10px;
 	margin: 10px;
@@ -88,7 +96,7 @@ h2
 {
 	color: #2ECCFA;
 	font-size: 1.5em;
-	text-align: center;    
+	text-align: center;
 	background-color: rgb(207,207,186);
 	border-radius: 10px;/*round border.*/
 	padding: 10px;
