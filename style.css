@@ -10,6 +10,8 @@ body
 	overflow: scroll;
 	word-wrap: break-word;
 	min-width: 600px;
+	font-family: 'Simonetta', 'Ubuntu', sans-serif;
+	font-size: 110%
 }
 
 footer
