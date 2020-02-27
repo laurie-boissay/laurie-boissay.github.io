@@ -15,20 +15,20 @@ body
 }
 
 footer
-	{
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-		justify-content: space-around;
-	}
+{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-around;
+}
 
 #global_box, #navigation ul, #box
-	{
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-		justify-content: space-around;
-	}
+{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-around;
+}
 
 #background
 {
@@ -36,18 +36,18 @@ footer
 }
 
 section, footer, #navigation, header
-	{
-		border: 3px grey outset;
-		background-color: rgb(255,255,179);
-		border-radius: 10px;
-		box-shadow: 6px 6px 5px black;
-		margin: 10px;
-	}
+{
+	border: 3px grey outset;
+	background-color: rgb(255,255,179);
+	border-radius: 10px;
+	box-shadow: 6px 6px 5px black;
+	margin: 10px;
+}
 
 section
-	{
-		min-width: 600px;
-	}
+{
+	min-width: 600px;
+}
 
 #menu
 {
@@ -140,5 +140,11 @@ section ul
 	body
 	{
 		font-size: 150%;
+	}
+
+	li
+
+	{
+		padding: 40px 20px 0px 20px;
 	}
 }
