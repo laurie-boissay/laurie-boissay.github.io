@@ -134,3 +134,11 @@ section ul
 {
 	text-align: right;
 }
+
+@media all and (max-width: 799px)
+{
+	body
+	{
+		font-size: 150%;
+	}
+}
