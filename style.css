@@ -1,7 +1,7 @@
 body
 /* Heritage: all the tags in the body tag take this style. */
 {
-	background-color: #F5F6CE;
+	background-color: #1a7204;
 	color: #0B0B61; 
 	font-size: 1em;
 	text-align: justify;
@@ -38,7 +38,7 @@ footer
 section, footer, #navigation, header
 {
 	border: 3px grey outset;
-	background-color: rgb(255,255,179);
+	background-color: #eeecdd;
 	border-radius: 10px;
 	box-shadow: 6px 6px 5px black;
 	margin: 10px;
