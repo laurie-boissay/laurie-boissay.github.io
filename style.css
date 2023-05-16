@@ -96,7 +96,7 @@ h1
 	margin: 10px;
 }
 
-h2
+h2 , #contact a
 {
 	color: #2ECCFA;
 	font-size: 1.5em;
@@ -120,6 +120,7 @@ h1 + h3, #bunny
 .shadow:hover
 {
 	box-shadow: 6px 6px 5px black;
+	transition: 1s;
 }
 
 nav ul
@@ -135,6 +136,9 @@ section ul
 .arrow
 {
 	text-align: right;
+}
+
+
 }
 
 @media all and (max-width: 799px)
