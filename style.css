@@ -1,7 +1,7 @@
 body
 /* Heritage: all the tags in the body tag take this style. */
 {
-	background-color: #1a7204;
+	background-color: #999999;
 	color: #0B0B61; 
 	font-size: 1em;
 	text-align: justify;
@@ -30,10 +30,12 @@ footer
 	justify-content: space-around;
 }
 
+/*
 #background
 {
 	background-image: url("images/background_h_big.png");
 }
+*/
 
 section, footer, #navigation, header
 {
