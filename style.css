@@ -96,7 +96,7 @@ h1
 	margin: 10px;
 }
 
-h2 , #contact a
+h2 
 {
 	color: #2ECCFA;
 	font-size: 1.5em;
@@ -115,6 +115,18 @@ h3
 h1 + h3, #bunny
 {
 	text-align: center;
+}
+
+#contact a , #navigation a
+{
+	color: #2ECCFA;
+	font-size: 1.5em;
+	text-align: center;
+	background-color: rgb(207,207,186);
+	border-radius: 10px;/*round border.*/
+	padding: 10px;
+	margin: 10px;
+	text-decoration: none;
 }
 
 .shadow:hover
