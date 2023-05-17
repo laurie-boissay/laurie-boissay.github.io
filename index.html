@@ -28,14 +28,14 @@
 	</head>
 
 	<body class="container-fluid">
-		<header class="marge">
+		<header id="top" class="marge">
 			<h1><strong>Laurie Boissay</strong> <strong>Développeuse</strong> <strong>Web</strong> et <strong>Web Mobile</strong></h1>
 			<h3>A l’aise sur <strong>Linux</strong> et Windows je suis à la recherche d'un <strong>stage</strong> de 2 mois de novembre à décembre.</h3>
 		</header>
 
 		<nav class="navbar navbar-expand-lg bg-body-tertiary" id="navigation">
 			<div class="container-fluid">
-				<a class="navbar-brand"><img src="images/green_compas.png" alt="Compas." />Menu</a>
+				<a class="nav-link" href="#top"><img src="images/green_compas.png" alt="Compas."/>Top</a>
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -145,13 +145,13 @@
 				<div class="row align-items-top">
 					<div class="col">
 						
-						<div class="accordion" id="accordionPanelsStayOpenExample">
+						<div class="accordion accordion-flush" id="accordionFlushExample">
 							<div class="accordion-item">
 								<h2 class="accordion-header">
-									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
 									Le site web d'une association</button>
 								</h2>
-								<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+								<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
 									<div class="accordion-body">
 									<p>
 										Le <strong>site web</strong> d'une <a href="https://le-cercle-des-investigateurs.github.io" target="_blank">association de jeux de société</a>. J'ai proposé au président du club de développer bénévolement un site web pour augmenter la visibilité de l'association.
