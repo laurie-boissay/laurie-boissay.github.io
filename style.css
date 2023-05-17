@@ -12,3 +12,17 @@ h1, h2, h3
   font-weight: bold;
   text-align: center;
 }
+
+/* sexy sticky nav */
+#navigation
+{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 1;
+}
+
+header
+{
+    padding-top: 100px;
+}
