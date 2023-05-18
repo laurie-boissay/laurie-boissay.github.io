@@ -23,28 +23,33 @@ p strong, a strong, ul strong
   font-weight: normal;
 }
 
-p, a, ul, #bleu
+p, a, ul
+{
+  color: #000080; /* Bleu dark */
+  font-weight: normal;
+}
+
+.bleu
 {
   color: #000080; /* Bleu dark */
 }
 
-#peps
-{
+.nav-link{
   color: #DAA520; /* orange  */
 }
 
-#liens
+.liens
 {
-  color: #0000ff; /* bleu  */
+  color: #0000ff; /* bleu*/
 }
 
-#liens:hover
+.liens:hover
 {
   color: #DAA520; /* orange  */
   transition: color 0.5s;
 }
 
-#peps:hover {
+.nav-link:hover {
   color: #0000ff; /* Bleu */
   transform: scale(1.05);
   transition: transform 1.5s, color 1.5s;
