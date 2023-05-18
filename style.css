@@ -1,28 +1,82 @@
 /* Fond et couleurs */
 body 
 {
-  background-color: #f2f2f2;
-  color: #333333;
+  background-color: #F8F8F8; /*Blanc cassé*/
   font-family: 'Montserrat', sans-serif;
 }
 
+
 /* Typographie */
-h1, h2, h3
-{
-  font-weight: bold;
+h1, h2, h3, nav
+{ 
   text-align: center;
+  font-weight: bold;
+  color: #444444; /* gris  */
+}
+
+h1 strong, h2 strong, h3 strong {
+  font-weight: bold;
+}
+
+p strong, a strong, ul strong 
+{
+  font-weight: normal;
+}
+
+p, a, ul, #bleu
+{
+  color: #000080; /* Bleu dark */
+}
+
+#peps
+{
+  color: #DAA520; /* orange  */
+}
+
+#liens
+{
+  color: #0000ff; /* bleu  */
+}
+
+#liens:hover
+{
+  color: #DAA520; /* orange  */
+  transition: color 0.5s;
+}
+
+#peps:hover {
+  color: #0000ff; /* Bleu */
+  transform: scale(1.05);
+  transition: transform 1.5s, color 1.5s;
 }
 
 /* sexy sticky nav */
 #navigation
 {
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    z-index: 1;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+}
+
+#clic
+{
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
 
 .marge
 {
-    padding-top: 100px;
+  padding-top: 100px;
+}
+
+
+#contact
+{
+  padding-bottom: 50px;
+}
+
+h1, h2, h3
+{
+  padding-bottom: 25px;
 }
