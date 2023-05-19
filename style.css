@@ -75,6 +75,15 @@ p, a, ul
   padding-top: 100px;
 }
 
+ul 
+{
+  list-style-type: none;
+}
+
+section ul li::before {
+  content: "\221E";
+  margin-right: 5px;
+}
 
 #contact
 {
