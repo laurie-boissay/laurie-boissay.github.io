@@ -34,7 +34,8 @@ p, a, ul
   color: #000080; /* Bleu dark */
 }
 
-.nav-link{
+.nav-link, .orange
+{
   color: #DAA520; /* orange  */
 }
 
