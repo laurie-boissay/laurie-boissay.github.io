@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {% include head.html %}
+
+  {%- if page.extra_head -%}
+    {{ page.extra_head }}
+  {%- endif -%}
+</head>
+
+<body class="container-fluid">
+
+  {% include recipe-header.html %}
+  {% include navbar.html %}
+
+  <main>
+    <section>
+      <div class="container">
+
+        {{ content }}
+
+        {% include footer.html %}
+
+      </div>
+    </section>
+  </main>
+
+  {% include scripts.html %}
+</body>
+</html>
