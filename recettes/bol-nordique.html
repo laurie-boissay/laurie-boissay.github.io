@@ -1,18 +1,11 @@
 ---
+layout: recipe
 title: "Bol nordique — Recettes low carb"
 description: "Bol nordique low carb : skyr, truite fumée, concombre, vinaigre de cidre, graines de chia, levure de bière. Recette 1 personne avec macros détaillées."
-recipe_title : "Bol nordique"
-recipe_subtitle : "Petit déjeuner — low carb modéré"
----
+recipe_title: "Bol nordique"
+recipe_subtitle: "Petit déjeuner — low carb modéré"
 
-
-<!DOCTYPE html>
-<html lang="fr">
-  
-<head>
-   {% include head.html %}
-  
-  <!-- Données structurées (SEO) -->
+extra_head: |
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,81 +26,61 @@ recipe_subtitle : "Petit déjeuner — low carb modéré"
     ]
   }
   </script>
-</head>
+---
 
-<body class="container-fluid">
+<p class="lead">
+  <strong>Pour :</strong> 1 personne —
+  <strong>Temps :</strong> 5 minutes —
+  <strong>Niveau :</strong> facile
+</p>
 
-  {% include recipe-header.html %}
-  {% include navbar.html %}
+<hr>
 
-  <main>
-    <section class="marge">
-      <div class="container">
+<h2>Ingrédients</h2>
+<ul>
+  <li>200 g de skyr nature</li>
+  <li>80 g de truite fumée</li>
+  <li>100 g de concombre</li>
+  <li>10 g de vinaigre de cidre (≈ 2 cuillères à café)</li>
+  <li>10 g de graines de chia (≈ 1 cuillère à soupe)</li>
+  <li>5 g de levure de bière (≈ 1 cuillère à soupe)</li>
+  <li>Poivre blanc</li>
+</ul>
 
-        <p class="lead">
-          <strong>Pour :</strong> 1 personne —
-          <strong>Temps :</strong> 5 minutes —
-          <strong>Niveau :</strong> facile
-        </p>
+<h2>Préparation</h2>
+<ol>
+  <li>Couper le concombre en petits dés.</li>
+  <li>Dans un bol, mélanger le skyr avec le vinaigre de cidre et le poivre blanc.</li>
+  <li>Ajouter la truite fumée (en morceaux) et le concombre.</li>
+  <li>Ajouter les graines de chia puis mélanger.</li>
+  <li>Laisser au frigo toute la nuit.</li>
+  <li>Ajouter la levure de bière au moment de manger.</li>
+</ol>
 
-        <hr>
+<h2>Informations nutritionnelles</h2>
+<p>Valeurs estimées pour 1 portion :</p>
 
-        <h2>Ingrédients</h2>
-        <ul>
-          <li>200 g de skyr nature</li>
-          <li>80 g de truite fumée</li>
-          <li>100 g de concombre</li>
-          <li>10 g de vinaigre de cidre (≈ 2 cuillères à café)</li>
-          <li>10 g de graines de chia (≈ 1 cuillère à soupe)</li>
-          <li>5 g de levure de bière (≈ 1 cuillère à soupe)</li>
-          <li>Poivre blanc</li>
-        </ul>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr><th>Calories</th><td>≈ 347 kcal</td></tr>
+      <tr><th>Protéines</th><td>≈ 45 g</td></tr>
+      <tr><th>Lipides</th><td>≈ 12 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 17 g</td></tr>
+      <tr><th>Fibres</th><td>≈ 5 g</td></tr>
+      <tr><th>Glucides nets</th><td>≈ 12 g</td></tr>
+      <tr><th>Fructose</th><td>≈ 0,7 g</td></tr>
+    </tbody>
+  </table>
+</div>
 
-        <h2>Préparation</h2>
-        <ol>
-          <li>Couper le concombre en petits dés.</li>
-          <li>Dans un bol, mélanger le skyr avec le vinaigre de cidre et le poivre blanc.</li>
-          <li>Ajouter la truite fumée (en morceaux) et le concombre.</li>
-          <li>Ajouter les graines de chia puis mélanger.</li>
-          <li>Laisser au frigo toute la nuit.</li>
-          <li>Ajouter la levure de bière au moment de manger.</li>
-        </ol>
+<p class="small text-muted">
+  Ces valeurs sont des estimations et peuvent varier selon les marques et quantités utilisées.
+</p>
 
-        <h2>Informations nutritionnelles</h2>
-        <p>Valeurs estimées pour 1 portion :</p>
-
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <tbody>
-              <tr><th>Calories</th><td>≈ 347 kcal</td></tr>
-              <tr><th>Protéines</th><td>≈ 45 g</td></tr>
-              <tr><th>Lipides</th><td>≈ 12 g</td></tr>
-              <tr><th>Glucides</th><td>≈ 17 g</td></tr>
-              <tr><th>Fibres</th><td>≈ 5 g</td></tr>
-              <tr><th>Glucides nets</th><td>≈ 12 g</td></tr>
-              <tr><th>Fructose</th><td>≈ 0,7 g</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p class="small text-muted">
-          Ces valeurs sont des estimations et peuvent varier selon les marques et quantités utilisées.
-        </p>
-
-        <h2>Notes low carb</h2>
-        <ul>
-          <li>✔ Low carb modéré : OK.</li>
-          <li>⚠ Pas strict : le skyr contient du lactose (donc des glucides).</li>
-          <li>Si reflux : réduire ou supprimer le vinaigre de cidre.</li>
-        </ul>
-
-        {% include footer.html %}
-
-
-      </div>
-    </section>
-  </main>
-
-  {% include scripts.html %}
-</body>
-</html>
+<h2>Notes low carb</h2>
+<ul>
+  <li>✔ Low carb modéré : OK.</li>
+  <li>⚠ Pas strict : le skyr contient du lactose (donc des glucides).</li>
+  <li>Si reflux : réduire ou supprimer le vinaigre de cidre.</li>
+</ul>
