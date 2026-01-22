@@ -1,0 +1,7 @@
+{% assign items = include.recipes | where: "recipe_group", include.group | sort: "recipe_sort" %}
+
+<ul>
+  {% for r in items %}
+    <li><a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a></li>
+  {% endfor %}
+</ul>
