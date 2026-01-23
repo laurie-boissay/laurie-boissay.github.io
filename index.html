@@ -22,6 +22,11 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   <section class="marge" id="index">
     <h2>Index</h2>
 
+    <!-- Suggestion aléatoire (exclut le tag gout-sucre) -->
+    <div class="container mb-4">
+      <div id="random-pick"></div>
+    </div>
+
     {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
     {% assign groups = all_recipes | map: "recipe_group" | sort | uniq %}
 
@@ -33,10 +38,28 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     </div>
 
     <!-- Sections catégories (auto) -->
-    <div class="container">
+    <div class="container" id="recipes-index">
       {% for g in groups %}
         <h3 id="{{ g | slugify }}">{{ g }}</h3>
-        {% include recipe-list.html recipes=all_recipes group=g %}
+
+        <div class="recipe-group-block mb-4">
+          {% assign group_recipes = all_recipes | where: "recipe_group", g | sort: "recipe_sort" %}
+
+          {% for r in group_recipes %}
+            <article
+              class="recipe-card mb-2"
+              data-tags="{{ r.tags | join: ',' | escape }}"
+            >
+              <a href="{{ r.url | relative_url }}">
+                {{ r.recipe_title }}
+              </a>
+              {% if r.recipe_subtitle %}
+                <div class="text-muted small">{{ r.recipe_subtitle }}</div>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+
       {% endfor %}
     </div>
   </section>
@@ -52,5 +75,114 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   </footer>
 
   {% include scripts.html %}
+
+  <script>
+    /*
+      Exclusion ferme :
+      toute recette ayant le tag "gout-sucre" est exclue du tirage aléatoire
+    */
+    const EXCLUDED_TAG = "gout-sucre";
+
+    const indexRoot = document.getElementById("recipes-index");
+    const pickHost = document.getElementById("random-pick");
+
+    let lastHref = null;
+
+    function isValidRecipeLink(a) {
+      const href = (a.getAttribute("href") || "").trim();
+      if (!href) return false;
+      if (href.startsWith("#")) return false;
+      if (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:")) return false;
+      if (!href.endsWith(".html")) return false;
+      if (href === "index.html" || href.endsWith("/index.html")) return false;
+
+      const title = (a.textContent || "").trim();
+      if (!title) return false;
+
+      return true;
+    }
+
+    function hasExcludedTag(link) {
+      const card = link.closest(".recipe-card");
+      if (!card) return false;
+
+      const tags = (card.dataset.tags || "")
+        .split(",")
+        .map(t => t.trim().toLowerCase())
+        .filter(Boolean);
+
+      return tags.includes(EXCLUDED_TAG);
+    }
+
+    function getCandidates() {
+      if (!indexRoot) return [];
+
+      const links = Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
+        .filter(isValidRecipeLink)
+        .filter(a => !hasExcludedTag(a));
+
+      return links;
+    }
+
+    function pickRandom(links) {
+      if (links.length === 0) return null;
+      if (links.length === 1) return links[0];
+
+      let a;
+      let tries = 0;
+      do {
+        a = links[Math.floor(Math.random() * links.length)];
+        tries++;
+      } while ((a.getAttribute("href") === lastHref) && tries < 30);
+
+      lastHref = a.getAttribute("href");
+      return a;
+    }
+
+    function renderPick(a) {
+      const href = a.getAttribute("href");
+      const title = (a.textContent || "").trim();
+
+      pickHost.innerHTML = `
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="mb-2 text-muted">Suggestion aléatoire (hors goût sucré)</div>
+            <h3 class="h5 mb-3">${title}</h3>
+
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+              <a class="btn btn-primary" href="${href}">Ça me plaît</a>
+              <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
+                Autre idée
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btn-reroll").addEventListener("click", pickAndRender);
+    }
+
+    function renderEmpty() {
+      pickHost.innerHTML = `
+        <div class="alert alert-warning mb-0">
+          Aucune recette disponible (toutes ont le tag « ${EXCLUDED_TAG} » ou aucune recette détectée).
+        </div>
+      `;
+    }
+
+    function pickAndRender() {
+      const links = getCandidates();
+      if (links.length === 0) return renderEmpty();
+
+      const a = pickRandom(links);
+      if (!a) return renderEmpty();
+
+      renderPick(a);
+    }
+
+    // Tirage au chargement
+    pickAndRender();
+  </script>
+
 </body>
 </html>
