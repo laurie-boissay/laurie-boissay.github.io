@@ -1,6 +1,6 @@
 ---
 title: "Recettes low carb"
-description: "Mes recettes low carb (recettes faibles en glucides). Index : plats, petits déjeuners, desserts et recettes de base."
+description: "Mes recettes low carb (recettes faibles en glucides). Index par catégories."
 ---
 
 <!DOCTYPE html>
@@ -22,33 +22,22 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index : plat
   <section class="marge" id="index">
     <h2>Index</h2>
 
+    {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+    {% assign groups = all_recipes | map: "recipe_group" | sort | uniq %}
+
+    <!-- Boutons catégories (auto) -->
     <div class="container text-center mb-4">
-      <a class="btn btn-outline-primary m-1" href="index.html#plats">Plats</a>
-      <a class="btn btn-outline-primary m-1" href="index.html#petitdej">Petits déjeuners</a>
-      <a class="btn btn-outline-primary m-1" href="index.html#desserts">Desserts</a>
-      <a class="btn btn-outline-primary m-1" href="index.html#bases">Recettes de base</a>
+      {% for g in groups %}
+        <a class="btn btn-outline-primary m-1" href="index.html#{{ g | slugify }}">{{ g }}</a>
+      {% endfor %}
     </div>
 
+    <!-- Sections catégories (auto) -->
     <div class="container">
-
-      {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-
-      <!-- PLATS -->
-      <h3 id="plats">Plats</h3>
-      {% include recipe-list.html recipes=all_recipes group="Plats" %}
-
-      <!-- PETITS DÉJEUNERS -->
-      <h3 id="petitdej">Petits déjeuners</h3>
-      {% include recipe-list.html recipes=all_recipes group="Petits déjeuners" %}
-
-      <!-- DESSERTS -->
-      <h3 id="desserts">Desserts</h3>
-      {% include recipe-list.html recipes=all_recipes group="Desserts" %}
-
-      <!-- BASES -->
-      <h3 id="bases">Recettes de base</h3>
-      {% include recipe-list.html recipes=all_recipes group="Recettes de base" %}
-
+      {% for g in groups %}
+        <h3 id="{{ g | slugify }}">{{ g }}</h3>
+        {% include recipe-list.html recipes=all_recipes group=g %}
+      {% endfor %}
     </div>
   </section>
 
