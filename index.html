@@ -22,7 +22,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   <section class="marge" id="index">
     <h2>Index</h2>
 
-    <!-- Suggestion aléatoire (exclut le tag gout-sucre) -->
+    <!-- Suggestion aléatoire (hors goût sucré + hors bases) -->
     <div class="container mb-4">
       <div id="random-pick"></div>
     </div>
@@ -42,7 +42,10 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       {% for g in groups %}
         <h3 id="{{ g | slugify }}">{{ g }}</h3>
 
-        <div class="recipe-group-block mb-4">
+        <div
+          class="recipe-group-block mb-4"
+          data-recipe-group="{{ g | escape }}"
+        >
           {% assign group_recipes = all_recipes | where: "recipe_group", g | sort: "recipe_sort" %}
 
           {% for r in group_recipes %}
@@ -78,10 +81,13 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
 
   <script>
     /*
-      Exclusion ferme :
-      toute recette ayant le tag "gout-sucre" est exclue du tirage aléatoire
+      EXCLUSIONS FERMES POUR LE TIRAGE :
+      - tag "gout-sucre"
+      - recipe_group "Bases" ou "Bases pour goût sucré" (tout ce qui commence par "Bases")
     */
+
     const EXCLUDED_TAG = "gout-sucre";
+    const EXCLUDED_GROUP_PREFIX = "bases";
 
     const indexRoot = document.getElementById("recipes-index");
     const pickHost = document.getElementById("random-pick");
@@ -102,10 +108,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       return true;
     }
 
-    function hasExcludedTag(link) {
-      const card = link.closest(".recipe-card");
-      if (!card) return false;
-
+    function hasExcludedTag(card) {
       const tags = (card.dataset.tags || "")
         .split(",")
         .map(t => t.trim().toLowerCase())
@@ -114,14 +117,29 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       return tags.includes(EXCLUDED_TAG);
     }
 
+    function isInExcludedGroup(a) {
+      // Remonte jusqu’au conteneur qui porte data-recipe-group
+      const groupEl = a.closest("[data-recipe-group]");
+      if (!groupEl) return false;
+
+      const group = (groupEl.dataset.recipeGroup || "").trim().toLowerCase();
+      return group.startsWith(EXCLUDED_GROUP_PREFIX);
+    }
+
     function getCandidates() {
       if (!indexRoot) return [];
 
-      const links = Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
+      return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
         .filter(isValidRecipeLink)
-        .filter(a => !hasExcludedTag(a));
+        .filter(a => {
+          const card = a.closest(".recipe-card");
+          if (!card) return false;
 
-      return links;
+          if (hasExcludedTag(card)) return false;
+          if (isInExcludedGroup(a)) return false;
+
+          return true;
+        });
     }
 
     function pickRandom(links) {
@@ -133,7 +151,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       do {
         a = links[Math.floor(Math.random() * links.length)];
         tries++;
-      } while ((a.getAttribute("href") === lastHref) && tries < 30);
+      } while (a.getAttribute("href") === lastHref && tries < 30);
 
       lastHref = a.getAttribute("href");
       return a;
@@ -146,9 +164,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       pickHost.innerHTML = `
         <div class="card">
           <div class="card-body text-center">
-            <div class="mb-3 fw-bold fs-4">
-              On mange quoi&nbsp;?
-            </div>
+            <div class="mb-3 fw-bold fs-4">On mange quoi&nbsp;?</div>
             <h3 class="h5 mb-3">${title}</h3>
 
             <div class="d-flex justify-content-center flex-wrap gap-2">
@@ -167,7 +183,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     function renderEmpty() {
       pickHost.innerHTML = `
         <div class="alert alert-warning mb-0">
-          Aucune recette disponible (toutes ont le tag « ${EXCLUDED_TAG} » ou aucune recette détectée).
+          Aucune recette disponible (hors bases et hors goût sucré).
         </div>
       `;
     }
