@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {% include head.html %}
+</head>
+
+<body class="container-fluid{% if page.body_id %} {{ page.body_id }}{% endif %}">
+  {% include navbar.html %}
+
+  <header class="marge" id="top">
+    <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
+    {% if page.page_h3 %}
+      <h3><span class="bleu">{{ page.page_h3 }}</span></h3>
+    {% endif %}
+    {% if page.page_h2_orange %}
+      <h2><span class="orange">{{ page.page_h2_orange }}</span></h2>
+    {% endif %}
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  {% include footer.html %}
+  {% include scripts.html %}
+</body>
+</html>
