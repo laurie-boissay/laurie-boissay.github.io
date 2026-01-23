@@ -1,6 +1,6 @@
 ---
 title: "Repères low carb"
-description: "Repères low carb : apports visés, aliments autorisés/à limiter/à éviter, ingrédients spécifiques, matériel utile, FAQ."
+description: "Repères low carb : apports visés, principes (cétose, lipolyse), intérêt des protéines, schéma glycémie/insuline/lipolyse, ingrédients et FAQ."
 ---
 
 <!DOCTYPE html>
@@ -13,192 +13,152 @@ description: "Repères low carb : apports visés, aliments autorisés/à limiter
 
   <header id="top" class="marge">
     <h1><strong>Repères low carb</strong></h1>
-    <h3><span class="bleu">Objectifs, aliments, ingrédients, matériel</span></h3>
+    <h3><span class="bleu">Objectifs, principes et choix alimentaires</span></h3>
   </header>
 
   {% include navbar.html %}
 
-  <!-- Apports -->
-  <section class="marge" id="apports">
-    <h2>Apports journaliers visés</h2>
+  <!-- SCHÉMA SIMPLE -->
+  <section class="marge" id="schema">
+    <h2>Schéma simple : glycémie → insuline → lipolyse</h2>
     <div class="container">
 
       <p>
-        Repères pratiques pour garder une cohérence entre les recettes et le suivi.
-        Ce n’est pas un avis médical.
+        Version simplifiée (utile pour comprendre l’idée du low carb, sans prétendre résumer toute la physiologie).
       </p>
 
-      <div class="table-responsive">
-        <table class="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th>Repère</th>
-              <th>Objectif</th>
-              <th>Détails</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Protéines</strong></td>
-              <td><strong>≈ 2 g/kg/jour</strong></td>
-              <td>Priorité éditoriale du site.</td>
-            </tr>
-            <tr>
-              <td><strong>Glucides</strong></td>
-              <td><strong>Low carb modéré</strong></td>
-              <td>Pas de cétose recherchée.</td>
-            </tr>
-            <tr>
-              <td><strong>Fibres</strong></td>
-              <td><strong>Priorité quotidienne</strong></td>
-              <td>Légumes + fibres ajoutées si besoin.</td>
-            </tr>
-            <tr>
-              <td><strong>Fructose</strong></td>
-              <td><strong>Suivi explicite</strong></td>
-              <td>Indiqué quand pertinent.</td>
-            </tr>
-            <tr>
-              <td><strong>Lipides</strong></td>
-              <td>Variable</td>
-              <td>Selon les recettes.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="card">
+        <div class="card-body">
+
+          <div class="mb-3">
+            <div class="fw-bold">1) Plus de glucides rapidement disponibles</div>
+            <div class="mt-2">
+              <span class="badge text-bg-primary">Glycémie ↑</span>
+              <span class="mx-2">→</span>
+              <span class="badge text-bg-secondary">Insuline ↑</span>
+              <span class="mx-2">→</span>
+              <span class="badge text-bg-dark">Lipolyse ↓</span>
+            </div>
+            <div class="text-muted small mt-2">
+              Plus l’insuline est élevée, plus l’organisme privilégie l’utilisation/stockage de l’énergie récente
+              et met en pause l’utilisation des graisses corporelles.
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="mb-3">
+            <div class="fw-bold">2) Moins de glucides, plus de protéines/fibres</div>
+            <div class="mt-2">
+              <span class="badge text-bg-primary">Glycémie ↘</span>
+              <span class="mx-2">→</span>
+              <span class="badge text-bg-secondary">Insuline ↘</span>
+              <span class="mx-2">→</span>
+              <span class="badge text-bg-dark">Lipolyse ↗</span>
+            </div>
+            <div class="text-muted small mt-2">
+              En pratique, une glycémie plus stable et une insuline plus basse facilitent l’accès aux graisses
+              comme source d’énergie, surtout sur la durée.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="alert alert-secondary mt-3 mb-0">
+        <strong>À déterminer selon les personnes :</strong> l’ampleur de l’effet dépend du contexte (activité,
+        sommeil, stress, composition du repas, insulinorésistance, etc.). Le schéma sert de repère, pas de verdict.
       </div>
 
     </div>
   </section>
 
-  <!-- Aliments -->
-  <section class="marge" id="aliments">
-    <h2>Aliments : autorisés, à limiter, à éviter</h2>
+  <!-- PRINCIPES -->
+  <section class="marge" id="principes">
+    <h2>Principes clés</h2>
     <div class="container">
 
-      <div class="row g-3">
+      <h3>Cétose</h3>
+      <p>
+        La cétose est un état métabolique dans lequel l’organisme produit des corps cétoniques
+        à partir des lipides, faute de glucides suffisants.
+      </p>
+      <p>
+        <strong>Ce site ne vise pas la cétose.</strong>
+        Certaines recettes peuvent s’en approcher ponctuellement, mais ce n’est ni un objectif
+        ni un prérequis.
+      </p>
 
-        <div class="col-12 col-lg-4">
-          <div class="p-3 border rounded-3 h-100">
-            <h3>OK (base du site)</h3>
-            <ul class="mb-0">
-              <li>Viandes, poissons, fruits de mer</li>
-              <li>Œufs</li>
-              <li>Légumes low carb</li>
-              <li>Produits laitiers simples</li>
-              <li>Matières grasses</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <div class="p-3 border rounded-3 h-100">
-            <h3>À limiter</h3>
-            <ul class="mb-0">
-              <li>Fruits</li>
-              <li>Légumineuses</li>
-              <li>Oléagineux</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <div class="p-3 border rounded-3 h-100">
-            <h3>À éviter</h3>
-            <ul class="mb-0">
-              <li>Sucres ajoutés</li>
-              <li>Céréales classiques</li>
-              <li>Produits ultra-transformés sucrés</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
+      <h3>Lipolyse</h3>
+      <p>
+        La lipolyse correspond à l’utilisation des graisses corporelles comme source d’énergie.
+        Elle est favorisée lorsque l’insuline est basse, ce qui arrive plus facilement
+        lorsque l’apport en glucides est réduit.
+      </p>
+      <p>
+        Le low carb cherche à <strong>faciliter la lipolyse</strong>, sans passer par un régime extrême.
+      </p>
 
     </div>
   </section>
 
-  <!-- Ingrédients spécifiques -->
-  <section class="marge" id="ingredients">
-    <h2>Ingrédients “moins communs” : à quoi ça sert ?</h2>
+  <!-- PROTÉINES -->
+  <section class="marge" id="proteines">
+    <h2>Pourquoi viser 2&nbsp;g de protéines par kilo de poids de corps</h2>
     <div class="container">
 
-      <div class="accordion" id="accordionIngredients">
+      <p>
+        L’objectif protéique élevé est un choix central de ce site.
+      </p>
 
-        <div class="accordion-item">
-          <h3 class="accordion-header" id="hKonjac">
-            <button class="accordion-button collapsed" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#cKonjac">
-              Konjac (poudre)
-            </button>
-          </h3>
-          <div id="cKonjac" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              <p>
-                Épaississant et texturant, utilisé en très petite quantité.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <h3 class="accordion-header" id="hPsyllium">
-            <button class="accordion-button collapsed" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#cPsyllium">
-              Psyllium blond
-            </button>
-          </h3>
-          <div id="cPsyllium" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              <p>
-                Fibre liant l’eau, utile pour la tenue et l’apport en fibres.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <h3 class="accordion-header" id="hWhey">
-            <button class="accordion-button collapsed" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#cWhey">
-              Whey
-            </button>
-          </h3>
-          <div id="cWhey" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              <p>
-                Protéines en poudre pour augmenter facilement l’apport protéique.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Où trouver -->
-  <section class="marge" id="trouver">
-    <h2>Où trouver les ingrédients</h2>
-    <div class="container">
-      <ul class="mb-0">
-        <li><strong>Konjac (poudre)</strong> et <strong>psyllium blond</strong> : pharmacies.</li>
-        <li><strong>Whey</strong> : pharmacies et magasins de sport.</li>
-        <li>Le reste : marchés et supermarchés classiques en France.</li>
+      <ul>
+        <li>Les protéines favorisent la <strong>satiété</strong>.</li>
+        <li>Elles aident à <strong>préserver la masse musculaire</strong> lors d’une perte de poids.</li>
+        <li>Elles ont un <strong>coût métabolique élevé</strong> (effet thermique des aliments).</li>
+        <li>Elles limitent les pertes musculaires fréquentes lors des régimes restrictifs.</li>
       </ul>
+
+      <p>
+        Le seuil de <strong>~2 g/kg/jour</strong> est volontairement haut : c’est un cadre simple, efficace,
+        compatible avec une approche low carb non cétogène, et cohérent avec les recettes du site.
+      </p>
+
     </div>
   </section>
 
-  <!-- Matériel -->
-  <section class="marge" id="materiel">
-    <h2>Ustensiles &amp; électroménager utiles</h2>
+  <!-- LOW CARB -->
+  <section class="marge" id="lowcarb">
+    <h2>Pourquoi une approche low carb</h2>
+    <div class="container">
+
+      <p>
+        Le low carb consiste à réduire les glucides, en particulier les sucres et les produits
+        ultra-transformés, sans les éliminer totalement.
+      </p>
+
+      <ul>
+        <li>Réduction des pics glycémiques.</li>
+        <li>Meilleure stabilité de l’énergie au cours de la journée.</li>
+        <li>Diminution des fringales et du grignotage.</li>
+        <li>Approche plus <strong>durable</strong> que des régimes très restrictifs.</li>
+      </ul>
+
+      <p>
+        Les recettes de ce site peuvent être <strong>plus ou moins strictes</strong>,
+        selon les ingrédients, mais restent orientées vers un impact glycémique limité.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- OÙ TROUVER -->
+  <section class="marge" id="trouver">
+    <h2>Où trouver les ingrédients spécifiques</h2>
     <div class="container">
       <ul class="mb-0">
-        <li>Balance de cuisine</li>
-        <li>Poêle / casserole</li>
-        <li>Fouet, maryse</li>
-        <li>Four</li>
-        <li>Mixeur plongeant</li>
+        <li><strong>Konjac (poudre)</strong> et <strong>psyllium blond</strong> : pharmacie.</li>
+        <li><strong>Whey</strong> : pharmacie et magasins de sport.</li>
+        <li>Le reste : supermarché classique en France.</li>
       </ul>
     </div>
   </section>
@@ -220,12 +180,12 @@ description: "Repères low carb : apports visés, aliments autorisés/à limiter
           <div id="cF4" class="accordion-collapse collapse">
             <div class="accordion-body">
               <p>
-                Le régime végétarien propose ses propres défis, et ceux du régime low carb
+                Le régime végétarien pose ses propres défis nutritionnels, et ceux du low carb
                 sont déjà largement suffisants pour ce site.
               </p>
               <p class="mb-0">
-                Si vous pensez pouvoir affronter les deux de front, vous pouvez très bien
-                créer votre propre site&nbsp;: <strong>GéPéTo</strong> est un puissant allié.
+                Si vous pensez pouvoir mener les deux de front, vous pouvez créer votre propre site :
+                <strong>GéPéTo</strong> est un puissant allié.
               </p>
             </div>
           </div>
