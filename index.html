@@ -81,9 +81,9 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
 
   <script>
     /*
-      EXCLUSIONS FERMES POUR LE TIRAGE :
+      EXCLUSIONS POUR LE TIRAGE :
       - tag "gout-sucre"
-      - recipe_group "Bases" ou "Bases pour goût sucré" (tout ce qui commence par "Bases")
+      - recipe_group commençant par "bases"
     */
 
     const EXCLUDED_TAG = "gout-sucre";
@@ -118,11 +118,13 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     }
 
     function isInExcludedGroup(a) {
-      // Remonte jusqu’au conteneur qui porte data-recipe-group
       const groupEl = a.closest("[data-recipe-group]");
       if (!groupEl) return false;
 
-      const group = (groupEl.dataset.recipeGroup || "").trim().toLowerCase();
+      const group = (groupEl.dataset.recipeGroup || "")
+        .trim()
+        .toLowerCase();
+
       return group.startsWith(EXCLUDED_GROUP_PREFIX);
     }
 
