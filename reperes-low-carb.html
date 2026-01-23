@@ -1,25 +1,30 @@
 ---
-layout: default
-title: Repères low carb
-description: Repères low carb : apports visés, aliments autorisés, ingrédients spécifiques et matériel utile.
-robots: noindex, follow
+title: "Repères low carb"
+description: "Repères low carb : apports visés, aliments autorisés/à limiter/à éviter, ingrédients spécifiques, matériel utile, FAQ."
 ---
 
-<header id="top" class="marge">
-  <h1><strong>Repères low carb</strong></h1>
-  <h3><span class="bleu">Aide-mémoire : objectifs, aliments, ingrédients, matériel</span></h3>
-</header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {% include head.html %}
+</head>
 
-<main>
+<body class="container-fluid" id="reperes-low-carb">
 
-  <!-- Apports visés -->
+  <header id="top" class="marge">
+    <h1><strong>Repères low carb</strong></h1>
+    <h3><span class="bleu">Objectifs, aliments, ingrédients, matériel</span></h3>
+  </header>
+
+  {% include navbar.html %}
+
+  <!-- Apports -->
   <section class="marge" id="apports">
     <h2>Apports journaliers visés</h2>
     <div class="container">
 
       <p>
-        Les valeurs ci-dessous sont des <strong>repères</strong>. Elles servent à maintenir une cohérence
-        entre les recettes et à faciliter le suivi.
+        Repères pratiques pour garder une cohérence entre les recettes et le suivi. Ce n’est pas un avis médical.
       </p>
 
       <div class="table-responsive">
@@ -28,34 +33,34 @@ robots: noindex, follow
             <tr>
               <th>Repère</th>
               <th>Objectif</th>
-              <th>Notes</th>
+              <th>Détails</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Protéines</strong></td>
               <td><strong>≈ 2 g/kg/jour</strong></td>
-              <td>Priorité du site.</td>
+              <td>Priorité éditoriale du site (recettes souvent “très protéinées”).</td>
             </tr>
             <tr>
               <td><strong>Glucides</strong></td>
-              <td>Low carb modéré</td>
-              <td>Pas de cétose recherchée.</td>
+              <td><strong>Low carb modéré</strong></td>
+              <td>Pas de cétose recherchée. Certaines recettes sont plus strictes que d’autres.</td>
             </tr>
             <tr>
               <td><strong>Fibres</strong></td>
-              <td>Priorité quotidienne</td>
-              <td>Légumes + fibres ajoutées si besoin.</td>
+              <td><strong>Priorité quotidienne</strong></td>
+              <td>Légumes + sources de fibres. Certaines recettes utilisent aussi du psyllium.</td>
             </tr>
             <tr>
               <td><strong>Fructose</strong></td>
-              <td>Suivi explicite</td>
-              <td>Indiqué quand pertinent.</td>
+              <td><strong>Suivi explicite</strong></td>
+              <td>Indiqué quand pertinent (fruits, certains produits laitiers, etc.).</td>
             </tr>
             <tr>
               <td><strong>Lipides</strong></td>
               <td>Variable</td>
-              <td>Pas un objectif en soi.</td>
+              <td>Selon les recettes et l’appétit (pas un objectif en soi).</td>
             </tr>
           </tbody>
         </table>
@@ -66,20 +71,26 @@ robots: noindex, follow
 
   <!-- Aliments -->
   <section class="marge" id="aliments">
-    <h2>Aliments : repères pratiques</h2>
+    <h2>Aliments : autorisés, à limiter, à éviter</h2>
     <div class="container">
+
+      <p>
+        Repères pour une approche low carb (réduction des sucres et de l’ultra-transformé), sans régime cétogène.
+        Quand un ingrédient d’une recette n’est <strong>pas compatible low carb</strong>, c’est indiqué sur la recette.
+      </p>
 
       <div class="row g-3">
 
         <div class="col-12 col-lg-4">
           <div class="p-3 border rounded-3 h-100">
-            <h3>Base du site</h3>
-            <ul>
+            <h3>OK (base du site)</h3>
+            <ul class="mb-0">
               <li>Viandes, poissons, fruits de mer</li>
               <li>Œufs</li>
-              <li>Légumes low carb</li>
-              <li>Produits laitiers simples</li>
-              <li>Matières grasses classiques</li>
+              <li>Légumes “low carb” (la majorité des légumes)</li>
+              <li>Produits laitiers simples (selon tolérance)</li>
+              <li>Matières grasses (beurre, crème, huiles)</li>
+              <li>Oléagineux (portion raisonnable)</li>
             </ul>
           </div>
         </div>
@@ -87,10 +98,11 @@ robots: noindex, follow
         <div class="col-12 col-lg-4">
           <div class="p-3 border rounded-3 h-100">
             <h3>À limiter</h3>
-            <ul>
-              <li>Fruits</li>
+            <ul class="mb-0">
+              <li>Fruits (même “sains” : ça reste du sucre)</li>
               <li>Légumineuses</li>
-              <li>Noix / oléagineux</li>
+              <li>Noix / amandes : faciles à surconsommer</li>
+              <li>Produits “low carb” industriels (souvent trompeurs)</li>
             </ul>
           </div>
         </div>
@@ -98,42 +110,120 @@ robots: noindex, follow
         <div class="col-12 col-lg-4">
           <div class="p-3 border rounded-3 h-100">
             <h3>À éviter</h3>
-            <ul>
-              <li>Sucres ajoutés</li>
-              <li>Céréales classiques</li>
-              <li>Produits ultra-transformés sucrés</li>
+            <ul class="mb-0">
+              <li>Sucres ajoutés (toutes formes)</li>
+              <li>Boissons sucrées / jus</li>
+              <li>Pain, pâtes, riz, céréales classiques</li>
+              <li>Pâtisseries et biscuits classiques</li>
+              <li>Ultra-transformés sucrés</li>
             </ul>
           </div>
         </div>
 
       </div>
+
     </div>
   </section>
 
   <!-- Ingrédients spécifiques -->
   <section class="marge" id="ingredients">
-    <h2>Ingrédients spécifiques</h2>
+    <h2>Ingrédients “moins communs” : à quoi ça sert ?</h2>
     <div class="container">
 
-      <h3>Konjac (poudre)</h3>
-      <ul>
-        <li>Épaississant / texturant</li>
-        <li>Dosage très faible</li>
-        <li>Trop = texture gélifiée</li>
-      </ul>
+      <p>
+        Certaines recettes utilisent des ingrédients pratiques pour baisser les glucides ou améliorer la texture.
+        L’idée reste simple : utile, compréhensible, et pas introuvable.
+      </p>
 
-      <h3>Psyllium</h3>
-      <ul>
-        <li>Fibre liant l’eau</li>
-        <li>Améliore la tenue des préparations</li>
-      </ul>
+      <div class="accordion" id="accordionIngredients">
 
-      <h3>Whey</h3>
-      <ul>
-        <li>Augmente facilement les protéines</li>
-        <li>Vérifier les glucides selon la marque</li>
-      </ul>
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hKonjac">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cKonjac"
+                    aria-expanded="false" aria-controls="cKonjac">
+              Konjac (poudre)
+            </button>
+          </h3>
+          <div id="cKonjac" class="accordion-collapse collapse"
+               aria-labelledby="hKonjac" data-bs-parent="#accordionIngredients">
+            <div class="accordion-body">
+              <p>
+                Sert surtout à <strong>épaissir</strong> et donner de la tenue (sauces, crèmes, certains desserts),
+                en évitant l’effet “maïzena/farine”.
+              </p>
+              <ul class="mb-0">
+                <li><strong>Dosage repère</strong> : très petit (ex. 1 c. à café), à ajuster selon la recette.</li>
+                <li><strong>Piège</strong> : trop en mettre → texture gélatineuse.</li>
+                <li><strong>Astuce</strong> : bien disperser pour éviter les grumeaux.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hPsyllium">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cPsyllium"
+                    aria-expanded="false" aria-controls="cPsyllium">
+              Psyllium
+            </button>
+          </h3>
+          <div id="cPsyllium" class="accordion-collapse collapse"
+               aria-labelledby="hPsyllium" data-bs-parent="#accordionIngredients">
+            <div class="accordion-body">
+              <p>
+                Fibre qui aide à <strong>lier</strong> et retenir l’eau (tenue, texture plus “souple” dans certaines pâtes).
+              </p>
+              <ul class="mb-0">
+                <li><strong>Effet</strong> : plus de fibres, meilleure tenue.</li>
+                <li><strong>Piège</strong> : trop → pâte compacte.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hWhey">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cWhey"
+                    aria-expanded="false" aria-controls="cWhey">
+              Whey (protéines en poudre)
+            </button>
+          </h3>
+          <div id="cWhey" class="accordion-collapse collapse"
+               aria-labelledby="hWhey" data-bs-parent="#accordionIngredients">
+            <div class="accordion-body">
+              <p>
+                Sert à augmenter facilement les <strong>protéines</strong> (pancakes, desserts, shakers),
+                avec un impact glucidique variable selon la marque.
+              </p>
+              <ul class="mb-0">
+                <li><strong>À vérifier</strong> : glucides par portion.</li>
+                <li><strong>Texture</strong> : peut assécher → ajuster le liquide.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="small mt-3 mb-0">
+        Cette section sera complétée au fil des recettes.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- Où trouver -->
+  <section class="marge" id="trouver">
+    <h2>Où trouver les ingrédients</h2>
+    <div class="container">
+      <ul class="mb-0">
+        <li><strong>Priorité</strong> : supermarché classique en France.</li>
+        <li>Magasins bio : parfois utile (ex. psyllium).</li>
+        <li>En ligne : seulement si vraiment nécessaire, et signalé.</li>
+      </ul>
     </div>
   </section>
 
@@ -142,15 +232,125 @@ robots: noindex, follow
     <h2>Ustensiles &amp; électroménager utiles</h2>
     <div class="container">
 
-      <ul>
-        <li>Balance de cuisine</li>
-        <li>Poêle / casserole</li>
-        <li>Fouet, maryse</li>
-        <li>Four (pratique)</li>
-        <li>Mixeur plongeant</li>
-      </ul>
+      <div class="row g-3">
+
+        <div class="col-12 col-lg-6">
+          <div class="p-3 border rounded-3 h-100">
+            <h3>Indispensables</h3>
+            <ul class="mb-0">
+              <li>Balance de cuisine</li>
+              <li>Poêle / casserole correctes</li>
+              <li>Fouet, maryse, saladier</li>
+              <li>Couteau + planche</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="p-3 border rounded-3 h-100">
+            <h3>Très pratiques (optionnels)</h3>
+            <ul class="mb-0">
+              <li>Four</li>
+              <li>Mixeur plongeant</li>
+              <li>Robot / batteur</li>
+              <li>Airfryer</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
 
     </div>
   </section>
 
-</main>
+  <!-- FAQ -->
+  <section class="marge" id="faq">
+    <h2>Questions courantes</h2>
+    <div class="container">
+
+      <div class="accordion" id="accordionFaq">
+
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hF1">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cF1"
+                    aria-expanded="false" aria-controls="cF1">
+              Est-ce que c’est du keto ?
+            </button>
+          </h3>
+          <div id="cF1" class="accordion-collapse collapse"
+               aria-labelledby="hF1" data-bs-parent="#accordionFaq">
+            <div class="accordion-body">
+              Non. C’est une approche <strong>low carb</strong>. La cétose n’est pas un objectif.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hF2">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cF2"
+                    aria-expanded="false" aria-controls="cF2">
+              Pourquoi autant de protéines ?
+            </button>
+          </h3>
+          <div id="cF2" class="accordion-collapse collapse"
+               aria-labelledby="hF2" data-bs-parent="#accordionFaq">
+            <div class="accordion-body">
+              Parce que l’objectif central du site est d’aider à atteindre un apport protéique élevé tout en restant low carb.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hF3">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cF3"
+                    aria-expanded="false" aria-controls="cF3">
+              Diabète / prédiabète : c’est “adapté” ?
+            </button>
+          </h3>
+          <div id="cF3" class="accordion-collapse collapse"
+               aria-labelledby="hF3" data-bs-parent="#accordionFaq">
+            <div class="accordion-body">
+              Ça peut convenir à certaines personnes car les glucides sont réduits, mais ce site n’est pas un avis médical.
+              En cas de pathologie ou de traitement, l’avis d’un professionnel de santé reste indispensable.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="hF4">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#cF4"
+                    aria-expanded="false" aria-controls="cF4">
+              Pourquoi pas de recettes végétariennes ?
+            </button>
+          </h3>
+          <div id="cF4" class="accordion-collapse collapse"
+               aria-labelledby="hF4" data-bs-parent="#accordionFaq">
+            <div class="accordion-body">
+              Choix éditorial : les recettes de ce site sont <strong>non végétariennes</strong>.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="marge">
+    <div class="container text-center">
+      <div class="row align-items-top">
+        <div class="col">
+          Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  {% include scripts.html %}
+
+</body>
+</html>
