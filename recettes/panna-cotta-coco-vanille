@@ -1,0 +1,116 @@
+---
+layout: recipe
+title: "Panna cotta coco vanille"
+description: "Panna cotta à la crème et lait de coco, vanille et stévia. Dessert low carb modéré, simple et sans farine."
+recipe_title: "Panna cotta coco vanille"
+recipe_subtitle: "Dessert — goût sucré — low carb modéré"
+recipe_group: "Desserts & crèmes"
+recipe_sort: "panna-cotta-coco-vanille"
+recipe_tested: false
+tags:
+  - gout-sucre
+  - low-carb-modere
+  - rapide
+extra_head: |
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": "Panna cotta coco vanille",
+    "description": "Panna cotta à la crème et lait de coco, vanille et stévia. Dessert low carb modéré, simple et sans farine.",
+    "recipeYield": "4 portions",
+    "prepTime": "PT10M",
+    "cookTime": "PT5M",
+    "totalTime": "PT2H15M",
+    "recipeCategory": "Dessert",
+    "keywords": "low carb, panna cotta, coco, vanille",
+    "author": { "@type": "Person", "name": "Laurie" },
+    "recipeIngredient": [
+      "300 ml de crème entière",
+      "200 ml de lait de coco",
+      "2 feuilles de gélatine (ou 4 g de gélatine en poudre)",
+      "1 à 2 c. à café de stévia (selon puissance)",
+      "1 c. à café d’extrait de vanille"
+    ],
+    "recipeInstructions": [
+      { "@type": "HowToStep", "text": "Hydrater la gélatine dans de l’eau froide." },
+      { "@type": "HowToStep", "text": "Chauffer la crème et le lait de coco avec la vanille, sans faire bouillir." },
+      { "@type": "HowToStep", "text": "Hors du feu, incorporer la gélatine essorée et sucrer à la stévia." },
+      { "@type": "HowToStep", "text": "Verser en ramequins et réfrigérer au moins 2 heures." }
+    ]
+  }
+  </script>
+---
+
+<div class="recipe-lead">
+  <p>
+    Dessert simple et stable, sans farine ni sucre ajouté. Texture ferme et fondante, adaptée au <strong>low carb modéré</strong>.
+  </p>
+  <ul>
+    <li><strong>Portions :</strong> 4</li>
+    <li><strong>Préparation :</strong> 10 min</li>
+    <li><strong>Cuisson :</strong> 5 min</li>
+    <li><strong>Repos :</strong> 2 h minimum</li>
+  </ul>
+</div>
+
+<h2>Ingrédients</h2>
+<ul>
+  <li>300 ml de crème entière</li>
+  <li>200 ml de lait de coco</li>
+  <li>2 feuilles de gélatine (ou 4 g de gélatine en poudre)</li>
+  <li>1 à 2 c. à café de stévia (ajuster au goût)</li>
+  <li>1 c. à café d’extrait de vanille</li>
+</ul>
+
+<h2>Préparation</h2>
+<ol>
+  <li>Hydrater la gélatine : feuilles dans de l’eau froide 5 minutes (ou suivre la notice pour la poudre).</li>
+  <li>Dans une casserole, chauffer la crème et le lait de coco avec la vanille. Ne pas faire bouillir.</li>
+  <li>Hors du feu, essorer la gélatine et la dissoudre complètement dans le mélange chaud.</li>
+  <li>Sucrer à la stévia, goûter et ajuster.</li>
+  <li>Verser dans 4 ramequins. Laisser tiédir puis placer au réfrigérateur au moins 2 heures.</li>
+</ol>
+
+<h2>Informations nutritionnelles</h2>
+<p>Valeurs estimées par portion (pour 4 portions). Les chiffres varient selon les marques utilisées.</p>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <th scope="row">Énergie</th>
+        <td>≈ 330 kcal</td>
+      </tr>
+      <tr>
+        <th scope="row">Protéines</th>
+        <td>≈ 3 g</td>
+      </tr>
+      <tr>
+        <th scope="row">Lipides</th>
+        <td>≈ 33 g</td>
+      </tr>
+      <tr>
+        <th scope="row">Glucides</th>
+        <td>≈ 4 g</td>
+      </tr>
+      <tr>
+        <th scope="row">Fibres</th>
+        <td>≈ 0 g</td>
+      </tr>
+      <tr>
+        <th scope="row">Fructose</th>
+        <td>≈ 0 g</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p class="small text-muted">
+  Estimation pour 1 ramequin. Les glucides proviennent principalement du lait de coco. La stévia a un impact calorique négligeable.
+</p>
+
+<h2>Notes low carb</h2>
+<ul>
+  <li><strong>Compatible low carb modéré</strong> : très faible charge glucidique.</li>
+  <li>Dessert riche en lipides : à consommer en portions raisonnables.</li>
+  <li>Congélation déconseillée : la texture gélifiée relargue de l’eau à la décongélation.</li>
+</ul>
