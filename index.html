@@ -28,7 +28,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     </div>
 
     {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+    {% assign grouped = all_recipes | group_by: "recipe_group" %}
 
     <!-- Boutons catégories (auto) -->
     <div class="container text-center mb-4">
@@ -46,7 +46,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
           class="recipe-group-block mb-4"
           data-recipe-group="{{ g.name | escape }}"
         >
-          {% assign group_recipes = g.items | sort: "recipe_sort" %}
+          {% assign group_recipes = g.items %}
 
           {% for r in group_recipes %}
             <article
