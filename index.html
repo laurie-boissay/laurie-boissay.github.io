@@ -28,16 +28,16 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     </div>
 
     {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-    {% assign grouped = all_recipes | group_by: "recipe_group" %}
+    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
-    <!-- Boutons catégories (auto) -->
+    <!-- Boutons catégories -->
     <div class="container text-center mb-4">
       {% for g in grouped %}
-        <a class="btn btn-outline-primary m-1" href="index.html#{{ g.name | slugify }}">{{ g.name }}</a>
+        <a class="btn btn-outline-primary m-1" href="#{{ g.name | slugify }}">{{ g.name }}</a>
       {% endfor %}
     </div>
 
-    <!-- Sections catégories (auto) -->
+    <!-- Sections catégories -->
     <div class="container" id="recipes-index">
       {% for g in grouped %}
         <h3 id="{{ g.name | slugify }}">{{ g.name }}</h3>
@@ -46,39 +46,41 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
           class="recipe-group-block mb-4"
           data-recipe-group="{{ g.name | escape }}"
         >
-          {% assign group_recipes = g.items %}
+          {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
           {% for r in group_recipes %}
             <article
               class="recipe-card mb-2"
               data-tags="{{ r.tags | join: ',' | escape }}"
-              data-tested="{{ r.recipe_tested }}"
             >
-              <a href="{{ r.url | relative_url }}">
+              <a
+                href="{{ r.url | relative_url }}"
+                data-tested="{{ r.recipe_tested }}"
+              >
                 {{ r.recipe_title }}
-                {% if r.recipe_tested == false %}
-                  <span class="badge bg-warning text-dark ms-2">Non testée</span>
-                {% endif %}
               </a>
 
+              {% if r.recipe_tested == false %}
+                <span class="badge bg-warning text-dark ms-2">
+                  Recette non testée
+                </span>
+              {% endif %}
+
               {% if r.recipe_subtitle %}
-                <div class="text-muted small">{{ r.recipe_subtitle }}</div>
+                <div class="text-muted small">
+                  {{ r.recipe_subtitle }}
+                </div>
               {% endif %}
             </article>
           {% endfor %}
         </div>
-
       {% endfor %}
     </div>
   </section>
 
   <footer class="marge">
     <div class="container text-center">
-      <div class="row align-items-top">
-        <div class="col">
-          Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
-        </div>
-      </div>
+      Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
     </div>
   </footer>
 
@@ -103,9 +105,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       const href = (a.getAttribute("href") || "").trim();
       if (!href) return false;
       if (href.startsWith("#")) return false;
-      if (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:")) return false;
       if (!href.endsWith(".html")) return false;
-      if (href === "index.html" || href.endsWith("/index.html")) return false;
 
       const title = (a.textContent || "").trim();
       if (!title) return false;
@@ -127,7 +127,6 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       if (!groupEl) return false;
 
       const group = (groupEl.dataset.recipeGroup || "")
-        .trim()
         .toLowerCase();
 
       return group.startsWith(EXCLUDED_GROUP_PREFIX);
@@ -151,14 +150,13 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
 
     function pickRandom(links) {
       if (links.length === 0) return null;
-      if (links.length === 1) return links[0];
 
       let a;
       let tries = 0;
       do {
         a = links[Math.floor(Math.random() * links.length)];
         tries++;
-      } while (a.getAttribute("href") === lastHref && tries < 30);
+      } while (a.getAttribute("href") === lastHref && tries < 20);
 
       lastHref = a.getAttribute("href");
       return a;
@@ -167,24 +165,22 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
     function renderPick(a) {
       const href = a.getAttribute("href");
       const title = (a.textContent || "").trim();
-
-      const card = a.closest(".recipe-card");
-      const tested = card && card.dataset && card.dataset.tested === "true";
-
-      const badge = tested
-        ? ""
-        : `<div class="mt-2">
-             <span class="badge bg-warning text-dark">Recette non testée</span>
-           </div>`;
+      const tested = a.dataset.tested === "true";
 
       pickHost.innerHTML = `
         <div class="card">
           <div class="card-body text-center">
-            <div class="mb-3 fw-bold fs-4">On mange quoi&nbsp;?</div>
-            <h3 class="h5 mb-2">${title}</h3>
-            ${badge}
+            <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
-            <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
+            <h3 class="h5 mb-2">${title}</h3>
+
+            ${tested ? "" : `
+              <span class="badge bg-warning text-dark mb-3">
+                Recette non testée
+              </span>
+            `}
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
               <a class="btn btn-primary" href="${href}">Ça me plaît</a>
               <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
                 Autre idée
@@ -194,13 +190,15 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
         </div>
       `;
 
-      document.getElementById("btn-reroll").addEventListener("click", pickAndRender);
+      document
+        .getElementById("btn-reroll")
+        .addEventListener("click", pickAndRender);
     }
 
     function renderEmpty() {
       pickHost.innerHTML = `
         <div class="alert alert-warning mb-0">
-          Aucune recette disponible (hors bases et hors goût sucré).
+          Aucune recette disponible.
         </div>
       `;
     }
@@ -215,7 +213,6 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       renderPick(a);
     }
 
-    // Tirage au chargement
     pickAndRender();
   </script>
 
