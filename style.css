@@ -1,5 +1,5 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — VERSION COMPLETE
+   THEME CLAIR TURQUOISE / VERT — COMPAT PAGE + RECIPE
    ========================================================= */
 
 /* ---------- Variables ---------- */
@@ -20,17 +20,13 @@
 
   --border: rgba(15, 23, 42, 0.10);
   --shadow: 0 10px 30px rgba(2, 44, 44, 0.08);
+  --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
   --radius: 14px;
 }
 
 /* ---------- Reset léger ---------- */
-*{
-  box-sizing: border-box;
-}
-
-html{
-  scroll-behavior: smooth;
-}
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
 
 body{
   background:
@@ -45,15 +41,15 @@ body{
   margin: 0;
 }
 
-/* ---------- Layout global ---------- */
-.site-main{
-  padding: 18px 0 40px;
-}
-
+/* ---------- Containers (marche même si Bootstrap est là) ---------- */
 .site-container{
   max-width: 980px;
   margin: 0 auto;
   padding: 0 16px;
+}
+
+.site-main{
+  padding: 16px 0 40px;
 }
 
 .content-surface{
@@ -62,32 +58,38 @@ body{
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(16px, 2vw, 26px);
-  margin: 18px 0 24px;
-}
-
-.site-section{
-  padding-top: 10px;
+  margin: 14px 0 24px;
 }
 
 /* ---------- Typographie ---------- */
 h1, h2, h3{
   font-weight: 800;
   letter-spacing: -0.01em;
-  margin: 28px 0 12px;
+  margin: 0 0 10px;
   color: var(--text);
   text-align: left;
 }
+
+header.marge{
+  padding-top: 22px; /* on remplace ton 100px agressif */
+  padding-bottom: 6px;
+}
+
+/* Si ton navbar est sticky, on garde une marge raisonnable */
+.marge{ padding-top: 22px; }
 
 h1{
   font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem);
 }
 
 h2{
-  font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem);
+  font-size: clamp(1.4rem, 1.1rem + 1.0vw, 1.9rem);
+  margin-top: 6px;
 }
 
 h3{
-  font-size: 1.2rem;
+  font-size: 1.15rem;
+  margin-top: 6px;
 }
 
 p{
@@ -95,13 +97,8 @@ p{
   color: var(--text);
 }
 
-small, .muted{
-  color: var(--muted);
-}
-
-strong{
-  font-weight: 750;
-}
+small, .muted{ color: var(--muted); }
+strong{ font-weight: 750; }
 
 /* ---------- Liens ---------- */
 a{
@@ -110,7 +107,6 @@ a{
   border-bottom: 1px solid rgba(14,165,164,.35);
   transition: color .18s ease, border-color .18s ease, transform .18s ease;
 }
-
 a:hover{
   color: var(--link-hover);
   border-bottom-color: rgba(22,163,74,.45);
@@ -123,6 +119,7 @@ a:hover{
 .liens:hover{ color: var(--link-hover); }
 
 /* ---------- Navigation ---------- */
+/* IMPORTANT : ton navbar.html doit avoir id="navigation" pour appliquer ça */
 #navigation{
   position: sticky;
   top: 0;
@@ -130,12 +127,10 @@ a:hover{
   background: rgba(246,250,249,.88);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  box-shadow: var(--shadow-nav);
 }
 
-nav{
-  text-align: left;
-}
+nav{ text-align: left; }
 
 .nav-link{
   color: var(--muted);
@@ -143,6 +138,7 @@ nav{
   padding: 10px 12px;
   border-radius: 10px;
   border-bottom: none;
+  display: inline-block;
 }
 
 .nav-link:hover{
@@ -156,11 +152,6 @@ nav{
   background: rgba(34,197,94,.12);
 }
 
-/* Ancienne compensation inutile */
-.marge{
-  padding-top: 18px;
-}
-
 /* ---------- Listes ---------- */
 ul{
   list-style: none;
@@ -168,13 +159,15 @@ ul{
   margin: 0 0 14px;
 }
 
-section ul li{
+section ul li,
+.content-surface ul li{
   position: relative;
   padding-left: 26px;
   margin: 7px 0;
 }
 
-section ul li::before{
+section ul li::before,
+.content-surface ul li::before{
   content: "";
   position: absolute;
   left: 6px;
@@ -237,6 +230,11 @@ table td{
 }
 
 /* ---------- Footer / divers ---------- */
-#contact{
-  padding-bottom: 50px;
+#contact{ padding-bottom: 50px; }
+
+/* ---------- Optionnel : rendre les images plus clean ---------- */
+img{
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
 }
