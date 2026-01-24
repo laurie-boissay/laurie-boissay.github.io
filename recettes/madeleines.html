@@ -19,19 +19,18 @@ extra_head: >
   {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "name": "Madeleines low carb (goût classique, beurre noisette)",
-    "description": "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium, texture plus aérienne.",
+    "name": "Madeleines low carb (beurre noisette)",
+    "description": "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium.",
     "recipeCategory": "Dessert",
     "recipeCuisine": "Française",
-    "keywords": "madeleines low carb, beurre noisette, sans farine, sans whey",
-    "recipeYield": "12 madeleines (4 personnes)",
+    "recipeYield": "10 à 12 madeleines (4 personnes)",
     "prepTime": "PT15M",
     "cookTime": "PT12M",
     "totalTime": "PT27M",
     "recipeIngredient": [
       "3 œufs (jaunes et blancs séparés)",
       "70 g de beurre (pour beurre noisette)",
-      "85 g de poudre d’amandes (fine)",
+      "85 g de poudre d’amandes fine",
       "25 g d’édulcorant type stévia spécial pâtisserie",
       "6 g de levure chimique",
       "1 c. à café rase de psyllium blond (≈ 3 g)",
@@ -39,24 +38,17 @@ extra_head: >
     ],
     "recipeInstructions": [
       { "@type": "HowToStep", "text": "Faire fondre le beurre jusqu’à obtenir un beurre noisette. Laisser tiédir." },
-      { "@type": "HowToStep", "text": "Monter les blancs en neige ferme avec le sel." },
+      { "@type": "HowToStep", "text": "Monter les blancs en neige ferme avec la pincée de sel." },
       { "@type": "HowToStep", "text": "Mélanger les jaunes avec l’édulcorant." },
-      { "@type": "HowToStep", "text": "Ajouter le beurre noisette tiède aux jaunes." },
-      { "@type": "HowToStep", "text": "Incorporer poudre d’amandes, levure et psyllium." },
-      { "@type": "HowToStep", "text": "Incorporer délicatement les blancs en 3 fois." },
-      { "@type": "HowToStep", "text": "Repos 10 minutes maximum." },
-      { "@type": "HowToStep", "text": "Cuisson : four à 190 °C, enfourner puis baisser immédiatement à 180 °C. Cuire 11–12 min." }
+      { "@type": "HowToStep", "text": "Incorporer le beurre noisette tiède." },
+      { "@type": "HowToStep", "text": "Ajouter poudre d’amandes, levure chimique et psyllium." },
+      { "@type": "HowToStep", "text": "Incorporer délicatement les blancs montés." },
+      { "@type": "HowToStep", "text": "Laisser reposer 10 minutes maximum." },
+      { "@type": "HowToStep", "text": "Cuire à 190 °C puis baisser immédiatement à 180 °C pour 11 à 12 minutes." }
     ]
   }
   </script>
 ---
-
-{% if page.recipe_tested == false %}
-<div class="alert alert-warning" role="alert">
-  <strong>⚠ Recette non testée</strong><br>
-  Cette recette n’a pas encore été cuisinée. Les proportions, textures ou temps peuvent nécessiter des ajustements.
-</div>
-{% endif %}
 
 <section class="recipe-lead">
   <div class="lead-infos">
@@ -98,17 +90,17 @@ extra_head: >
 <section class="recipe-preparation">
   <h2>Préparation</h2>
   <ol>
-    <li>Faire fondre le beurre à feu moyen jusqu’à obtenir une odeur de noisette (beurre noisette). Laisser tiédir.</li>
-    <li>Monter les blancs en neige ferme avec le sel.</li>
+    <li>Faire fondre le beurre à feu moyen jusqu’à obtenir une odeur de noisette. Laisser tiédir.</li>
+    <li>Monter les blancs en neige ferme avec la pincée de sel.</li>
     <li>Mélanger les jaunes avec l’édulcorant.</li>
-    <li>Ajouter le beurre noisette tiède aux jaunes.</li>
-    <li>Incorporer poudre d’amandes, levure et psyllium.</li>
-    <li>Incorporer les blancs en 3 fois, délicatement.</li>
-    <li>Laisser reposer 10 minutes maximum.</li>
+    <li>Ajouter le beurre noisette tiède.</li>
+    <li>Incorporer la poudre d’amandes, la levure et le psyllium.</li>
+    <li>Incorporer délicatement les blancs en 3 fois.</li>
+    <li>Laisser reposer la pâte 10 minutes maximum.</li>
     <li>
       Beurrer les moules, remplir aux ¾.<br>
       Enfourner à 190 °C puis baisser immédiatement à 180 °C.<br>
-      Cuire 11–12 minutes. Démouler tiède.
+      Cuire 11 à 12 minutes.
     </li>
   </ol>
 </section>
@@ -117,9 +109,8 @@ extra_head: >
   <h2>Informations nutritionnelles</h2>
 
   <p>
-    Valeurs <strong>estimées</strong> (elles varient selon la taille des œufs, la marque de poudre d’amandes,
-    et la présence/absence d’amidon dans la levure chimique).
-    L’édulcorant à base de stévia est compté <strong>à 0</strong>.
+    Valeurs <strong>estimées</strong> pour 1 portion (¼ de la recette).
+    L’édulcorant est compté à 0.
   </p>
 
   <div class="table-responsive">
@@ -127,7 +118,7 @@ extra_head: >
       <thead>
         <tr>
           <th></th>
-          <th>Par portion (1/4 recette)</th>
+          <th>Par portion</th>
           <th>Recette entière</th>
         </tr>
       </thead>
@@ -135,17 +126,12 @@ extra_head: >
         <tr><td><strong>Calories</strong></td><td>≈ 305 kcal</td><td>≈ 1 220 kcal</td></tr>
         <tr><td><strong>Protéines</strong></td><td>≈ 9,4 g</td><td>≈ 37,5 g</td></tr>
         <tr><td><strong>Lipides</strong></td><td>≈ 28,4 g</td><td>≈ 113,4 g</td></tr>
-        <tr><td><strong>Glucides</strong> (totaux)</td><td>≈ 5,3 g</td><td>≈ 21,2 g</td></tr>
+        <tr><td><strong>Glucides</strong></td><td>≈ 5,3 g</td><td>≈ 21,2 g</td></tr>
         <tr><td><strong>Fibres</strong></td><td>≈ 3,3 g</td><td>≈ 13,3 g</td></tr>
-        <tr><td><strong>Fructose</strong></td><td>≈ 0 g (négligeable)</td><td>≈ 0 g (négligeable)</td></tr>
+        <tr><td><strong>Fructose</strong></td><td>≈ 0 g</td><td>≈ 0 g</td></tr>
       </tbody>
     </table>
   </div>
-
-  <p class="text-muted small mb-0">
-    Note : les <strong>glucides nets</strong> (glucides - fibres) sont d’environ <strong>2,0 g</strong> par portion
-    (indicatif, non affiché dans le tableau car tu suis les totaux “glucides”).
-  </p>
 </section>
 
 <section class="recipe-conservation">
@@ -160,8 +146,8 @@ extra_head: >
   <h2>Notes low carb</h2>
   <ul>
     <li>Compatible <strong>low carb modéré</strong>.</li>
-    <li>Non compatible cétogène strict (poudre d’amandes).</li>
-    <li>Le beurre noisette est essentiel pour le goût “pâtisserie”.</li>
-    <li>Si tu sens une texture trop dense : réduis légèrement le psyllium (≈ 2 g) ou bats les blancs un peu plus ferme.</li>
+    <li>Non compatible cétogène strict.</li>
+    <li>Le beurre noisette est indispensable pour le goût “pâtisserie”.</li>
+    <li>Si la texture est trop dense, réduire légèrement le psyllium (≈ 2 g).</li>
   </ul>
 </section>
