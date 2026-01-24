@@ -22,7 +22,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   <section class="marge" id="index">
     <h2>Index</h2>
 
-    <!-- Suggestion aléatoire (hors goût sucré + hors bases) -->
+    <!-- Suggestion aléatoire (hors goût sucré + hors bases + hors Amuse-bouche/Boissons/Barres pré-effort) -->
     <div class="container mb-4">
       <div id="random-pick"></div>
     </div>
@@ -92,10 +92,17 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       EXCLUSIONS POUR LE TIRAGE :
       - tag "gout-sucre"
       - recipe_group commençant par "bases"
+      - recipe_group : "Amuse-bouche", "Boissons", "Barres pré-effort"
     */
 
     const EXCLUDED_TAG = "gout-sucre";
     const EXCLUDED_GROUP_PREFIX = "bases";
+
+    const EXCLUDED_GROUPS = [
+      "amuse-bouche",
+      "boissons",
+      "barres pré-effort"
+    ];
 
     const indexRoot = document.getElementById("recipes-index");
     const pickHost = document.getElementById("random-pick");
@@ -127,10 +134,12 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       const groupEl = a.closest("[data-recipe-group]");
       if (!groupEl) return false;
 
-      const group = (groupEl.dataset.recipeGroup || "")
-        .toLowerCase();
+      const group = (groupEl.dataset.recipeGroup || "").trim().toLowerCase();
 
-      return group.startsWith(EXCLUDED_GROUP_PREFIX);
+      if (group.startsWith(EXCLUDED_GROUP_PREFIX)) return true;
+      if (EXCLUDED_GROUPS.includes(group)) return true;
+
+      return false;
     }
 
     function getCandidates() {
