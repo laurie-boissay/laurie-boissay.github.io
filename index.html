@@ -55,7 +55,9 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
             >
               <a href="{{ r.url | relative_url }}">
                 {{ r.recipe_title }}
+                {% include icone-non-teste.html tags=r.tags %}
               </a>
+
               {% if r.recipe_subtitle %}
                 <div class="text-muted small">{{ r.recipe_subtitle }}</div>
               {% endif %}
