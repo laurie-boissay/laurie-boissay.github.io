@@ -27,19 +27,8 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       <div id="random-pick"></div>
     </div>
 
-    {%- assign all_recipes = site.pages
-      | where: "layout", "recipe"
-      | where_exp: "p", "p.recipe_group"
-    -%}
-
-    {%- comment -%}
-      IMPORTANT :
-      On n'utilise PAS "map ... | sort | uniq" car si un recipe_group est mal typé (Array),
-      Liquid peut planter au sort ("comparison of Array with Array failed").
-      group_by + sort: "name" évite ce piège.
-    {%- endcomment -%}
-
-    {%- assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" -%}
+    {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
     <!-- Boutons catégories (auto) -->
     <div class="container text-center mb-4">
@@ -57,7 +46,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
           class="recipe-group-block mb-4"
           data-recipe-group="{{ g.name | escape }}"
         >
-          {%- assign group_recipes = g.items | sort: "recipe_sort" -%}
+          {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
           {% for r in group_recipes %}
             <article
@@ -66,10 +55,9 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
             >
               <a href="{{ r.url | relative_url }}">
                 {{ r.recipe_title }}
-
-                {%- if r.recipe_tested == false -%}
+                {% if r.recipe_tested == false %}
                   <span class="badge bg-warning text-dark ms-2">Non testée</span>
-                {%- endif -%}
+                {% endif %}
               </a>
 
               {% if r.recipe_subtitle %}
