@@ -1,224 +1,198 @@
 ---
+layout: page
 title: "Recettes low carb"
 description: "Mes recettes low carb (recettes faibles en glucides). Index par catégories."
+page_h1: "Mes recettes low carb"
+page_h3: "ou recettes faibles en glucides"
+page_h2_orange: "Travail en cours !"
+body_id: "home"
 ---
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  {% include head.html %}
-</head>
+<section id="index">
+  <h2>Index</h2>
 
-<body class="container-fluid">
+  <!-- Suggestion aléatoire -->
+  <div class="mb-4">
+    <div id="random-pick"></div>
+  </div>
 
-  <header id="objectifs" class="marge">
-    <h1><strong>Mes recettes low carb</strong></h1>
-    <h3><span class="bleu">ou recettes faibles en glucides</span></h3>
-    <h2><span class="orange">Travail en cours !</span></h2>
-  </header>
+  {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+  {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
-  {% include navbar.html %}
+  <!-- Boutons catégories -->
+  <div class="text-center mb-4">
+    {% for g in grouped %}
+      <a class="btn btn-outline-primary m-1" href="#{{ g.name | slugify }}">{{ g.name }}</a>
+    {% endfor %}
+  </div>
 
-  <section class="marge" id="index">
-    <h2>Index</h2>
+  <!-- Sections catégories -->
+  <div id="recipes-index">
+    {% for g in grouped %}
+      <h3 id="{{ g.name | slugify }}">{{ g.name }}</h3>
 
-    <!-- Suggestion aléatoire -->
-    <div class="container mb-4">
-      <div id="random-pick"></div>
-    </div>
+      <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
+        {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
-    {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
-
-    <!-- Boutons catégories -->
-    <div class="container text-center mb-4">
-      {% for g in grouped %}
-        <a class="btn btn-outline-primary m-1" href="#{{ g.name | slugify }}">{{ g.name }}</a>
-      {% endfor %}
-    </div>
-
-    <!-- Sections catégories -->
-    <div class="container" id="recipes-index">
-      {% for g in grouped %}
-        <h3 id="{{ g.name | slugify }}">{{ g.name }}</h3>
-
-        <div
-          class="recipe-group-block mb-4"
-          data-recipe-group="{{ g.name | escape }}"
-        >
-          {% assign group_recipes = g.items | sort: "recipe_sort" %}
-
-          {% for r in group_recipes %}
-            <article
-              class="recipe-card mb-2"
-              data-tags="{{ r.tags | join: ',' | escape }}"
+        {% for r in group_recipes %}
+          <article class="recipe-card mb-2" data-tags="{{ r.tags | join: ',' | escape }}">
+            <a
+              href="{{ r.url | relative_url }}"
+              data-tested="{{ r.recipe_tested }}"
+              data-title="{{ r.recipe_title | escape }}"
             >
-              <a
-                href="{{ r.url | relative_url }}"
-                data-tested="{{ r.recipe_tested }}"
-                data-title="{{ r.recipe_title | escape }}"
-              >
-                {{ r.recipe_title }}
-              </a>
+              {{ r.recipe_title }}
+            </a>
 
-              {% if r.recipe_tested == false %}
-                <span class="badge bg-warning text-dark ms-2">
-                  Recette non testée
-                </span>
-              {% endif %}
+            {% if r.recipe_tested == false %}
+              <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
+            {% endif %}
 
-              {% if r.recipe_subtitle %}
-                <div class="text-muted small">
-                  {{ r.recipe_subtitle }}
-                </div>
-              {% endif %}
-            </article>
-          {% endfor %}
-        </div>
-      {% endfor %}
-    </div>
-  </section>
+            {% if r.recipe_subtitle %}
+              <div class="text-muted small">{{ r.recipe_subtitle }}</div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 
-  <footer class="marge">
-    <div class="container text-center">
-      Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
-    </div>
-  </footer>
+  <hr class="my-4">
 
-  {% include scripts.html %}
+  <div class="text-center muted">
+    Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
+  </div>
+</section>
 
-  <script>
-    const EXCLUDED_TAG = "gout-sucre";
-    const EXCLUDED_GROUP_PREFIX = "bases";
+<script>
+  const EXCLUDED_TAG = "gout-sucre";
+  const EXCLUDED_GROUP_PREFIX = "bases";
 
-    const EXCLUDED_GROUPS = [
-      "amuse-bouche",
-      "boissons",
-      "barres pré-effort"
-    ];
+  const EXCLUDED_GROUPS = [
+    "amuse-bouche",
+    "boissons",
+    "barres pré-effort"
+  ];
 
-    const indexRoot = document.getElementById("recipes-index");
-    const pickHost = document.getElementById("random-pick");
+  const indexRoot = document.getElementById("recipes-index");
+  const pickHost = document.getElementById("random-pick");
 
-    let lastHref = null;
+  let lastHref = null;
 
-    function isValidRecipeLink(a) {
-      const href = (a.getAttribute("href") || "").trim();
-      if (!href) return false;
-      if (href.startsWith("#")) return false;
-      if (!href.endsWith(".html")) return false;
+  function isValidRecipeLink(a) {
+    const href = (a.getAttribute("href") || "").trim();
+    if (!href) return false;
+    if (href.startsWith("#")) return false;
+    if (!href.endsWith(".html")) return false;
 
-      const title = (a.dataset.title || a.textContent || "").trim();
-      if (!title) return false;
+    const title = (a.dataset.title || a.textContent || "").trim();
+    if (!title) return false;
 
-      return true;
-    }
+    return true;
+  }
 
-    function hasExcludedTag(card) {
-      const tags = (card.dataset.tags || "")
-        .split(",")
-        .map(t => t.trim().toLowerCase())
-        .filter(Boolean);
+  function hasExcludedTag(card) {
+    const tags = (card.dataset.tags || "")
+      .split(",")
+      .map(t => t.trim().toLowerCase())
+      .filter(Boolean);
 
-      return tags.includes(EXCLUDED_TAG);
-    }
+    return tags.includes(EXCLUDED_TAG);
+  }
 
-    function isInExcludedGroup(a) {
-      const groupEl = a.closest("[data-recipe-group]");
-      if (!groupEl) return false;
+  function isInExcludedGroup(a) {
+    const groupEl = a.closest("[data-recipe-group]");
+    if (!groupEl) return false;
 
-      const group = (groupEl.dataset.recipeGroup || "").toLowerCase();
+    const group = (groupEl.dataset.recipeGroup || "").toLowerCase();
 
-      if (group.startsWith(EXCLUDED_GROUP_PREFIX)) return true;
-      if (EXCLUDED_GROUPS.includes(group)) return true;
+    if (group.startsWith(EXCLUDED_GROUP_PREFIX)) return true;
+    if (EXCLUDED_GROUPS.includes(group)) return true;
 
-      return false;
-    }
+    return false;
+  }
 
-    function getCandidates() {
-      if (!indexRoot) return [];
+  function getCandidates() {
+    if (!indexRoot) return [];
 
-      return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
-        .filter(isValidRecipeLink)
-        .filter(a => {
-          const card = a.closest(".recipe-card");
-          if (!card) return false;
+    return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
+      .filter(isValidRecipeLink)
+      .filter(a => {
+        const card = a.closest(".recipe-card");
+        if (!card) return false;
 
-          if (hasExcludedTag(card)) return false;
-          if (isInExcludedGroup(a)) return false;
+        if (hasExcludedTag(card)) return false;
+        if (isInExcludedGroup(a)) return false;
 
-          return true;
-        });
-    }
+        return true;
+      });
+  }
 
-    function pickRandom(links) {
-      if (links.length === 0) return null;
+  function pickRandom(links) {
+    if (links.length === 0) return null;
 
-      let a;
-      let tries = 0;
-      do {
-        a = links[Math.floor(Math.random() * links.length)];
-        tries++;
-      } while (a.getAttribute("href") === lastHref && tries < 20);
+    let a;
+    let tries = 0;
+    do {
+      a = links[Math.floor(Math.random() * links.length)];
+      tries++;
+    } while (a.getAttribute("href") === lastHref && tries < 20);
 
-      lastHref = a.getAttribute("href");
-      return a;
-    }
+    lastHref = a.getAttribute("href");
+    return a;
+  }
 
-    function renderPick(a) {
-      const href = a.getAttribute("href");
-      const title = (a.dataset.title || a.textContent || "").trim();
-      const tested = a.dataset.tested === "true";
+  function renderPick(a) {
+    const href = a.getAttribute("href");
+    const title = (a.dataset.title || a.textContent || "").trim();
+    const tested = a.dataset.tested === "true";
 
-      pickHost.innerHTML = `
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
+    pickHost.innerHTML = `
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
-            <h3 class="h5 mb-3">
-              ${title}
-              ${tested ? "" : `
-                <span class="badge bg-warning text-dark ms-2">
-                  Recette non testée
-                </span>
-              `}
-            </h3>
+          <h3 class="h5 mb-3">
+            ${title}
+            ${tested ? "" : `
+              <span class="badge bg-warning text-dark ms-2">
+                Recette non testée
+              </span>
+            `}
+          </h3>
 
-            <div class="d-flex justify-content-center gap-2 mt-3">
-              <a class="btn btn-primary" href="${href}">Ça me plaît</a>
-              <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
-                Autre idée
-              </button>
-            </div>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <a class="btn btn-primary" href="${href}">Ça me plaît</a>
+            <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
+              Autre idée
+            </button>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      document
-        .getElementById("btn-reroll")
-        .addEventListener("click", pickAndRender);
-    }
+    document
+      .getElementById("btn-reroll")
+      .addEventListener("click", pickAndRender);
+  }
 
-    function renderEmpty() {
-      pickHost.innerHTML = `
-        <div class="alert alert-warning mb-0">
-          Aucune recette disponible.
-        </div>
-      `;
-    }
+  function renderEmpty() {
+    pickHost.innerHTML = `
+      <div class="alert alert-warning mb-0">
+        Aucune recette disponible.
+      </div>
+    `;
+  }
 
-    function pickAndRender() {
-      const links = getCandidates();
-      if (links.length === 0) return renderEmpty();
+  function pickAndRender() {
+    const links = getCandidates();
+    if (links.length === 0) return renderEmpty();
 
-      const a = pickRandom(links);
-      if (!a) return renderEmpty();
+    const a = pickRandom(links);
+    if (!a) return renderEmpty();
 
-      renderPick(a);
-    }
+    renderPick(a);
+  }
 
-    pickAndRender();
-  </script>
-
-</body>
-</html>
+  pickAndRender();
+</script>
