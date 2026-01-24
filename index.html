@@ -22,7 +22,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   <section class="marge" id="index">
     <h2>Index</h2>
 
-    <!-- Suggestion aléatoire (hors goût sucré + hors bases + hors Amuse-bouche/Boissons/Barres pré-effort) -->
+    <!-- Suggestion aléatoire -->
     <div class="container mb-4">
       <div id="random-pick"></div>
     </div>
@@ -88,13 +88,6 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
   {% include scripts.html %}
 
   <script>
-    /*
-      EXCLUSIONS POUR LE TIRAGE :
-      - tag "gout-sucre"
-      - recipe_group commençant par "bases"
-      - recipe_group : "Amuse-bouche", "Boissons", "Barres pré-effort"
-    */
-
     const EXCLUDED_TAG = "gout-sucre";
     const EXCLUDED_GROUP_PREFIX = "bases";
 
@@ -134,7 +127,7 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       const groupEl = a.closest("[data-recipe-group]");
       if (!groupEl) return false;
 
-      const group = (groupEl.dataset.recipeGroup || "").trim().toLowerCase();
+      const group = (groupEl.dataset.recipeGroup || "").toLowerCase();
 
       if (group.startsWith(EXCLUDED_GROUP_PREFIX)) return true;
       if (EXCLUDED_GROUPS.includes(group)) return true;
@@ -182,13 +175,14 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
           <div class="card-body text-center">
             <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
-            <h3 class="h5 mb-2">${title}</h3>
-
-            ${tested ? "" : `
-              <span class="badge bg-warning text-dark mb-3">
-                Recette non testée
-              </span>
-            `}
+            <h3 class="h5 mb-3">
+              ${title}
+              ${tested ? "" : `
+                <span class="badge bg-warning text-dark ms-2">
+                  Recette non testée
+                </span>
+              `}
+            </h3>
 
             <div class="d-flex justify-content-center gap-2 mt-3">
               <a class="btn btn-primary" href="${href}">Ça me plaît</a>
