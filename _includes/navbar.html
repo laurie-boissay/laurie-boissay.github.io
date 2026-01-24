@@ -1,5 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary" id="navigation">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
+  <div class="container-fluid site-container">
+
+    <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/" style="border-bottom:none;">
+      Recettes low carb
+    </a>
 
     <button class="navbar-toggler" type="button"
             data-bs-toggle="collapse"
@@ -10,41 +14,39 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
-      <ul class="navbar-nav mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-lg-auto me-lg-auto mb-2 mb-lg-0 gap-lg-1">
+
+        {% assign current = page.url | replace: "index.html", "" %}
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/">Recettes</a>
+          <a class="nav-link {% if current == '/' or current == '' %}active{% endif %}"
+             href="{{ site.baseurl }}/">Recettes</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/reperes-low-carb.html">
-            Repères low carb
-          </a>
+          <a class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
+             href="{{ site.baseurl }}/reperes-low-carb.html">Repères low carb</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/sucres-caches.html">
-            Sucres cachés
-          </a>
+          <a class="nav-link {% if current contains 'sucres-caches' %}active{% endif %}"
+             href="{{ site.baseurl }}/sucres-caches.html">Sucres cachés</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/edulcorants.html">
-            Édulcorants
-          </a>
+          <a class="nav-link {% if current contains 'edulcorants' %}active{% endif %}"
+             href="{{ site.baseurl }}/edulcorants.html">Édulcorants</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/apropos.html">
-            À propos
-          </a>
+          <a class="nav-link {% if current contains 'apropos' %}active{% endif %}"
+             href="{{ site.baseurl }}/apropos.html">À propos</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.baseurl }}/mentions.html">
-            Mentions légales
-          </a>
+          <a class="nav-link {% if current contains 'mentions' %}active{% endif %}"
+             href="{{ site.baseurl }}/mentions.html">Mentions légales</a>
         </li>
 
       </ul>
