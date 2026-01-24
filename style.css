@@ -1,97 +1,220 @@
-/* Fond et couleurs */
-body 
-{
-  background-color: #F8F8F8; /*Blanc cassé*/
-  font-family: 'Montserrat', sans-serif;
+/* =========================
+   Thème clair turquoise/vert
+   ========================= */
+:root{
+  --bg: #f6faf9;
+  --card: #ffffff;
+
+  --text: #0f172a;          /* très lisible */
+  --muted: #475569;
+
+  --primary: #14b8a6;       /* turquoise */
+  --primary-2: #0ea5a4;     /* turquoise plus profond */
+  --accent: #22c55e;        /* vert */
+  --accent-2: #16a34a;      /* vert plus profond */
+
+  --link: #0ea5a4;
+  --link-hover: #16a34a;
+
+  --border: rgba(15, 23, 42, 0.10);
+  --shadow: 0 10px 30px rgba(2, 44, 44, 0.08);
+  --radius: 14px;
 }
 
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
 
-/* Typographie */
-h1, h2, h3, nav
-{ 
-  text-align: center;
-  font-weight: bold;
-  color: #444444; /* gris  */
+body{
+  background: radial-gradient(1200px 600px at 10% 0%, rgba(20,184,166,.10), transparent 60%),
+              radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.10), transparent 55%),
+              var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
 }
 
-h1 strong, h2 strong, h3 strong {
-  font-weight: bold;
+/* Largeur de lecture confortable (sans toucher au HTML) */
+main, .container, .content{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
-p strong, a strong, ul strong 
-{
-  font-weight: normal;
+/* =========================
+   Typographie
+   ========================= */
+h1, h2, h3{
+  text-align: left;              /* plus moderne */
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 28px 0 12px;
+  color: var(--text);
 }
 
-p, a, ul
-{
-  color: #000080; /* Bleu dark */
-  font-weight: normal;
+h1{ font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); }
+h2{ font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.0rem); }
+h3{ font-size: 1.2rem; }
+
+p{
+  margin: 0 0 12px;
+  color: var(--text);
 }
 
-.bleu
-{
-  color: #000080; /* Bleu dark */
+small, .muted{ color: var(--muted); }
+
+/* =========================
+   Liens
+   ========================= */
+a{
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(14,165,164,.35);
+  transition: color .18s ease, border-color .18s ease, transform .18s ease;
 }
 
-.nav-link, .orange
-{
-  color: #DAA520; /* orange  */
+a:hover{
+  color: var(--link-hover);
+  border-bottom-color: rgba(22,163,74,.45);
 }
 
-.liens
-{
-  color: #0000ff; /* bleu*/
-}
+/* Compat avec tes classes existantes */
+.bleu{ color: var(--link); }
+.orange{ color: var(--accent-2); }
+.liens{ color: var(--link); }
+.liens:hover{ color: var(--link-hover); }
 
-.liens:hover
-{
-  color: #DAA520; /* orange  */
-  transition: color 0.5s;
-}
-
-.nav-link:hover {
-  color: #0000ff; /* Bleu */
-  transform: scale(1.05);
-  transition: transform 1.5s, color 1.5s;
-}
-
-/* sexy sticky nav */
-#navigation
-{
-  position: fixed;
-  top: 0px;
-  width: 100%;
+/* =========================
+   Navigation
+   ========================= */
+/* sticky propre (évite le fixed + padding-top bricolé) */
+#navigation{
+  position: sticky;
+  top: 0;
   z-index: 99;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  background: rgba(246,250,249,.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
 }
 
-#clic
-{
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+/* Liens nav */
+nav{ text-align: left; }
+
+.nav-link{
+  color: var(--muted);
+  font-weight: 700;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border-bottom: none; /* annule l'effet underline du lien */
 }
 
-.marge
-{
-  padding-top: 100px;
+.nav-link:hover{
+  color: var(--text);
+  background: rgba(20,184,166,.10);
+  transform: translateY(-1px);
 }
 
-ul 
-{
-  list-style-type: none;
+/* Etat "actif" si tu as une classe active côté HTML */
+.nav-link.active{
+  color: var(--text);
+  background: rgba(34,197,94,.12);
 }
 
-section ul li::before {
-  content: "\221E";
-  margin-right: 5px;
+/* Si tu utilisais .marge à cause du fixed : maintenant inutile */
+.marge{ padding-top: 18px; }
+
+/* =========================
+   Listes
+   ========================= */
+ul{
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 14px;
 }
 
-#contact
-{
-  padding-bottom: 50px;
+section ul li{
+  position: relative;
+  padding-left: 26px;
+  margin: 7px 0;
 }
 
-h1, h2, h3
-{
-  padding-bottom: 25px;
+section ul li::before{
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0.72em;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 6px 14px rgba(20,184,166,.25);
 }
+
+/* =========================
+   Blocs / cartes (optionnel mais utile)
+   ========================= */
+.card-soft{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin: 16px 0;
+}
+
+/* Tables (ex: ton tableau nutritionnel) */
+.table-responsive{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 6px;
+  margin: 14px 0 18px;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th{
+  text-align: left;
+  font-size: .92rem;
+  padding: 10px 12px;
+  color: var(--text);
+  background: rgba(20,184,166,.10);
+  border-bottom: 1px solid var(--border);
+}
+
+table td{
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+  color: var(--text);
+}
+
+.table-striped tbody tr:nth-child(odd){
+  background: rgba(34,197,94,.06);
+}
+
+/* Boutons (si tu as des <a class="btn ..."> ou un #clic) */
+.btn, button, #clic{
+  display: inline-block;
+  border: 1px solid rgba(20,184,166,.35);
+  background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(34,197,94,.10));
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(2, 44, 44, 0.10);
+}
+
+.btn:hover, button:hover, #clic:hover{
+  border-color: rgba(22,163,74,.45);
+  transform: translateY(-1px);
+}
+
+/* Strong : vrai gras */
+strong{ font-weight: 750; }
+
+/* Footer / contact */
+#contact{ padding-bottom: 50px; }
