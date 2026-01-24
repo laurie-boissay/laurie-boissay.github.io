@@ -27,26 +27,37 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
       <div id="random-pick"></div>
     </div>
 
-    {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-    {% assign groups = all_recipes | map: "recipe_group" | sort | uniq %}
+    {%- assign all_recipes = site.pages
+      | where: "layout", "recipe"
+      | where_exp: "p", "p.recipe_group"
+    -%}
+
+    {%- comment -%}
+      IMPORTANT :
+      On n'utilise PAS "map ... | sort | uniq" car si un recipe_group est mal typé (Array),
+      Liquid peut planter au sort ("comparison of Array with Array failed").
+      group_by + sort: "name" évite ce piège.
+    {%- endcomment -%}
+
+    {%- assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" -%}
 
     <!-- Boutons catégories (auto) -->
     <div class="container text-center mb-4">
-      {% for g in groups %}
-        <a class="btn btn-outline-primary m-1" href="index.html#{{ g | slugify }}">{{ g }}</a>
+      {% for g in grouped %}
+        <a class="btn btn-outline-primary m-1" href="index.html#{{ g.name | slugify }}">{{ g.name }}</a>
       {% endfor %}
     </div>
 
     <!-- Sections catégories (auto) -->
     <div class="container" id="recipes-index">
-      {% for g in groups %}
-        <h3 id="{{ g | slugify }}">{{ g }}</h3>
+      {% for g in grouped %}
+        <h3 id="{{ g.name | slugify }}">{{ g.name }}</h3>
 
         <div
           class="recipe-group-block mb-4"
-          data-recipe-group="{{ g | escape }}"
+          data-recipe-group="{{ g.name | escape }}"
         >
-          {% assign group_recipes = all_recipes | where: "recipe_group", g | sort: "recipe_sort" %}
+          {%- assign group_recipes = g.items | sort: "recipe_sort" -%}
 
           {% for r in group_recipes %}
             <article
@@ -55,7 +66,10 @@ description: "Mes recettes low carb (recettes faibles en glucides). Index par ca
             >
               <a href="{{ r.url | relative_url }}">
                 {{ r.recipe_title }}
-                {% include icone-non-teste.html tags=r.tags %}
+
+                {%- if r.recipe_tested == false -%}
+                  <span class="badge bg-warning text-dark ms-2">Non testée</span>
+                {%- endif -%}
               </a>
 
               {% if r.recipe_subtitle %}
