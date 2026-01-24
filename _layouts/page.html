@@ -8,17 +8,23 @@
   {% include navbar.html %}
 
   <header class="marge" id="top">
-    <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
-    {% if page.page_h3 %}
-      <h3><span class="bleu">{{ page.page_h3 }}</span></h3>
-    {% endif %}
-    {% if page.page_h2_orange %}
-      <h2><span class="orange">{{ page.page_h2_orange }}</span></h2>
-    {% endif %}
+    <div class="site-container">
+      <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
+      {% if page.page_h3 %}
+        <h3><span class="bleu">{{ page.page_h3 }}</span></h3>
+      {% endif %}
+      {% if page.page_h2_orange %}
+        <h2><span class="orange">{{ page.page_h2_orange }}</span></h2>
+      {% endif %}
+    </div>
   </header>
 
-  <main>
-    {{ content }}
+  <main class="site-main">
+    <div class="site-container">
+      <div class="content-surface">
+        {{ content }}
+      </div>
+    </div>
   </main>
 
   {% include footer.html %}
