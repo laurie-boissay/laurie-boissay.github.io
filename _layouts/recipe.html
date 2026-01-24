@@ -13,13 +13,15 @@
   {% include recipe-header.html %}
   {% include navbar.html %}
 
-  <main>
-    <section>
-      <div class="container">
+  <main class="site-main">
+    <section class="site-section">
+      <div class="container site-container">
 
         {% include bandeau-non-teste.html %}
 
-        {{ content }}
+        <div class="content-surface">
+          {{ content }}
+        </div>
 
         {% include footer.html %}
 
