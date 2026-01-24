@@ -1,6 +1,11 @@
-{% if page.tags contains "non-teste" %}
-<div class="alert alert-warning" role="alert">
-  <strong>⚠ Recette non testée</strong><br>
-  Cette recette n’a pas encore été cuisinée. Les proportions, textures ou temps peuvent nécessiter des ajustements.
-</div>
+{% comment %}
+  Bandeau "recette non testée" basé sur le champ recipe_tested (bool).
+  Remplace l’ancienne logique basée sur le tag non-teste (tag non autorisé).
+{% endcomment %}
+
+{% if page.recipe_tested == false %}
+  <div class="alert alert-warning" role="alert">
+    <strong>⚠ Recette non testée</strong><br>
+    Cette recette n’a pas encore été cuisinée. Les proportions, textures ou temps peuvent nécessiter des ajustements.
+  </div>
 {% endif %}
