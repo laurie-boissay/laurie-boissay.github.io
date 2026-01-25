@@ -1,8 +1,8 @@
 ---
 layout: recipe
 title: "Plateau de fromages low carb"
-description: "Plateau de fromages low carb modéré, avec quantités par personne. Plat simple, sans pain, avec lien vers la salade d’endives (à servir à part)."
-recipe_title: "Plateau de fromages low carb"
+description: "Plateau de fromages avec quantités par personne. Plat simple, sans pain, avec lien vers la salade d’endives (à servir à part)."
+recipe_title: "Plateau de fromages"
 recipe_subtitle: "Plat à base de fromages — low carb modéré"
 recipe_group: "Plats à base de fromages"
 recipe_sort: "plateau-fromages"
@@ -30,7 +30,7 @@ extra_head: |
 
   <p>
     Un <strong>plateau de fromages</strong> peut être un plat low carb modéré, à condition de cadrer les quantités.
-    Pour l’accompagnement, tu peux servir à part une salade très simple :
+    Accompagnement :
     {% assign salad = site.pages | where: "layout", "recipe" | where: "recipe_sort", "salade-endives-noix" | first %}
     {% if salad %}
       <a href="{{ site.baseurl }}{{ salad.url }}" style="border-bottom:none;">
