@@ -1,6 +1,6 @@
 /* =========================================================
    THEME CLAIR TURQUOISE / VERT — CSS COMPLET FINAL
-   Compatible Bootstrap + Jekyll
+   Accueil (index) + pages + recettes + navbar Bootstrap
    ========================================================= */
 
 /* ================= VARIABLES ================= */
@@ -21,13 +21,13 @@
 
   --border: rgba(15, 23, 42, 0.10);
   --shadow: 0 10px 30px rgba(2, 44, 44, 0.08);
+  --shadow-strong: 0 16px 36px rgba(2,44,44,.12);
   --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
   --radius: 14px;
 }
 
 /* ================= RESET ================= */
 *{ box-sizing: border-box; }
-
 html{ scroll-behavior: smooth; }
 
 body{
@@ -63,7 +63,7 @@ body{
   margin: 14px 0 24px;
 }
 
-/* ================= TYPOGRAPHIE ================= */
+/* ================= TYPO ================= */
 h1, h2, h3{
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -72,19 +72,9 @@ h1, h2, h3{
   text-align: left;
 }
 
-h1{
-  font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem);
-}
-
-h2{
-  font-size: clamp(1.4rem, 1.1rem + 1.0vw, 1.9rem);
-  margin-top: 6px;
-}
-
-h3{
-  font-size: 1.15rem;
-  margin-top: 6px;
-}
+h1{ font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); }
+h2{ font-size: clamp(1.4rem, 1.1rem + 1.0vw, 1.9rem); margin-top: 6px; }
+h3{ font-size: 1.15rem; margin-top: 6px; }
 
 header.marge{
   padding-top: 22px;
@@ -114,7 +104,6 @@ a:hover{
   border-bottom-color: rgba(22,163,74,.45);
 }
 
-/* compat anciennes classes */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 .liens{ color: var(--link); }
@@ -160,14 +149,12 @@ nav{ text-align: left; }
   background: rgba(34,197,94,.12);
 }
 
-/* Toggler */
 .navbar-toggler{
   border: 1px solid rgba(15, 23, 42, 0.15);
   border-radius: 12px;
   padding: 8px 10px;
 }
 
-/* Menu mobile */
 @media (max-width: 991.98px){
   #navbarSupportedContent{
     margin-top: 10px;
@@ -184,7 +171,7 @@ nav{ text-align: left; }
   }
 }
 
-/* ================= LISTES ================= */
+/* ================= LISTES GENERIQUES ================= */
 ul{
   list-style: none;
   padding-left: 0;
@@ -211,7 +198,7 @@ section ul li::before,
   box-shadow: 0 6px 14px rgba(20,184,166,.25);
 }
 
-/* ================= TABLES ================= */
+/* ================= TABLES (nutrition) ================= */
 .table-responsive{
   background: var(--card);
   border: 1px solid var(--border);
@@ -268,7 +255,116 @@ img{
   border-radius: 12px;
 }
 
-/* ================= FOOTER / DIVERS ================= */
-#contact{
-  padding-bottom: 50px;
+/* ================= FOOTER ================= */
+#contact{ padding-bottom: 50px; }
+
+/* =========================================================
+   ACCUEIL (INDEX) — STYLE DES CARTES + GRILLE
+   ========================================================= */
+
+.home #index h3{
+  margin-top: 22px;
+}
+
+/* Grille des recettes à l'intérieur d'un groupe */
+.recipes-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px){
+  .recipes-grid{ grid-template-columns: 1fr; }
+}
+
+/* Carte recette (index) */
+.recipe-card{
+  margin: 0 !important;  /* on neutralise mb-2 si Bootstrap met autre chose */
+  padding: 0;            /* l'ancre gère le padding */
+}
+
+/* Lien plein bloc (vraie carte cliquable) */
+.recipe-card-link{
+  display: block;
+  border-bottom: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 14px 12px;
+  color: var(--text);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.recipe-card-link:hover{
+  transform: translateY(-2px);
+  border-color: rgba(20,184,166,.35);
+  box-shadow: var(--shadow-strong);
+}
+
+.recipe-card-top{
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.recipe-card-title{
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  font-weight: 850;
+  color: var(--text);
+}
+
+.recipe-card-subtitle{
+  margin-top: 6px;
+}
+
+/* Tags façon “chips” */
+.recipe-tags{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag{
+  display: inline-block;
+  background: rgba(20,184,166,.12);
+  border: 1px solid rgba(20,184,166,.18);
+  color: var(--text);
+  font-size: .75rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+/* Boutons catégories : look plus cohérent (sans casser Bootstrap) */
+.home .btn.btn-outline-primary{
+  border-color: rgba(20,184,166,.35) !important;
+  color: var(--text) !important;
+  background: transparent !important;
+  border-radius: 999px;
+}
+
+.home .btn.btn-outline-primary:hover{
+  background: rgba(20,184,166,.10) !important;
+  border-color: rgba(22,163,74,.45) !important;
+}
+
+/* Bloc “On mange quoi ?” (random pick) */
+.pick-card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.pick-card-body{
+  padding: 16px;
+}
+
+/* Rendre les ancres de groupes plus agréables (scroll) */
+:target{
+  scroll-margin-top: 90px;
 }
