@@ -34,6 +34,17 @@
           {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
           <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
+
+            <!-- Accès direct : On mange quoi ? -->
+            <li>
+              <a class="dropdown-item"
+                 href="{{ site.baseurl }}/#random-pick">
+                On mange quoi ?
+              </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
             {% for g in grouped %}
               <li>
                 <a class="dropdown-item recipes-group-chip"
