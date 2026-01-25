@@ -3,3 +3,29 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous">
 </script>
+
+<script>
+  // Mobile : fermer le burger + le panneau "Recettes" après clic sur une catégorie
+  document.addEventListener("click", function (e) {
+    const chip = e.target.closest(".recipes-group-chip");
+    if (!chip) return;
+
+    // Ferme le panneau catégories (collapse interne)
+    const groupsEl = document.getElementById("recipesGroupsCollapse");
+    if (groupsEl && window.bootstrap) {
+      const groupsInstance =
+        window.bootstrap.Collapse.getInstance(groupsEl) ||
+        new window.bootstrap.Collapse(groupsEl, { toggle: false });
+      groupsInstance.hide();
+    }
+
+    // Ferme le menu mobile (burger)
+    const navEl = document.getElementById("navbarSupportedContent");
+    if (navEl && window.bootstrap) {
+      const navInstance =
+        window.bootstrap.Collapse.getInstance(navEl) ||
+        new window.bootstrap.Collapse(navEl, { toggle: false });
+      navInstance.hide();
+    }
+  });
+</script>
