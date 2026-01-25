@@ -564,3 +564,6 @@ html{
 @media (max-width: 991.98px){
   html{ scroll-padding-top: 170px; }
 }
+
+html{ scroll-padding-top: 140px; }
+@media (max-width: 991.98px){ html{ scroll-padding-top: 170px; } }
