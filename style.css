@@ -294,3 +294,28 @@ img{
   padding: 8px 12px;
   font-weight: 650;
 }
+
+/* ================= FIX BOUTONS PRIMAIRES ================= */
+
+/* Boutons Bootstrap primary (ex: "Ça me plaît") */
+.btn-primary{
+  color: #0f172a !important; /* texte foncé lisible */
+  background: linear-gradient(
+    135deg,
+    rgba(20,184,166,.35),
+    rgba(34,197,94,.30)
+  ) !important;
+  border-color: rgba(20,184,166,.55) !important;
+}
+
+/* Hover */
+.btn-primary:hover{
+  color: #0f172a !important;
+  background: linear-gradient(
+    135deg,
+    rgba(20,184,166,.55),
+    rgba(34,197,94,.45)
+  ) !important;
+  border-color: rgba(22,163,74,.65) !important;
+}
+
