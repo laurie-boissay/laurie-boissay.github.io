@@ -1,0 +1,108 @@
+---
+layout: recipe
+title: "Plateau de fromages low carb"
+description: "Plateau de fromages low carb modéré, avec quantités par personne. Plat simple, sans pain, avec lien vers la salade d’endives (à servir à part)."
+recipe_title: "Plateau de fromages low carb"
+recipe_subtitle: "Plat à base de fromages — low carb modéré"
+recipe_group: "Plats à base de fromages"
+recipe_sort: "plateau-fromages"
+recipe_tested: true
+tags:
+  - low-carb-modere
+  - rapide
+
+extra_head: |
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": "Plateau de fromages low carb",
+    "description": "Plateau de fromages low carb modéré avec quantités par personne, sans pain.",
+    "recipeYield": "4 portions",
+    "recipeCategory": "Plat principal",
+    "recipeCuisine": "Française",
+    "keywords": "fromages, plateau de fromages, low carb, sans pain"
+  }
+  </script>
+---
+
+<section class="recipe-content">
+
+  <p>
+    Un <strong>plateau de fromages</strong> peut être un plat low carb modéré, à condition de cadrer les quantités.
+    Pour l’accompagnement, tu peux servir à part une salade très simple :
+    {% assign salad = site.pages | where: "layout", "recipe" | where: "recipe_sort", "salade-endives-noix" | first %}
+    {% if salad %}
+      <a href="{{ site.baseurl }}{{ salad.url }}" style="border-bottom:none;">
+        salade d’endives aux noix
+      </a>.
+    {% else %}
+      salade d’endives aux noix.
+    {% endif %}
+  </p>
+
+  <h2>Ingrédients (4 personnes)</h2>
+  <ul>
+    <li><strong>Fromages : 400 à 480 g au total</strong> (soit <strong>100 à 120 g par personne</strong>)</li>
+  </ul>
+
+  <h2>Choix des fromages (principe simple)</h2>
+  <ul>
+    <li>Prendre <strong>3 à 4 fromages différents</strong> pour la variété.</li>
+    <li>Éviter les “trop grosses parts” : on vise la dégustation, pas l’excès.</li>
+    <li>Sortir les fromages <strong>20 à 30 minutes</strong> avant (meilleure texture et goût).</li>
+  </ul>
+
+  <h2>Préparation</h2>
+  <ol>
+    <li>Peser la quantité totale (400–480 g).</li>
+    <li>Couper en morceaux faciles à saisir (dégustation).</li>
+    <li>Dresser sur une planche ou une assiette, puis servir.</li>
+  </ol>
+
+  <h2>Informations nutritionnelles</h2>
+  <p>Valeurs estimées par portion pour <strong>110 g de fromage</strong> (moyenne, selon le choix des fromages) :</p>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <th scope="row">Énergie</th>
+          <td>≈ 380 kcal</td>
+        </tr>
+        <tr>
+          <th scope="row">Protéines</th>
+          <td>≈ 25 g</td>
+        </tr>
+        <tr>
+          <th scope="row">Glucides</th>
+          <td>≈ 1,5 g</td>
+        </tr>
+        <tr>
+          <th scope="row">dont fructose</th>
+          <td>≈ 0 g</td>
+        </tr>
+        <tr>
+          <th scope="row">Lipides</th>
+          <td>≈ 31 g</td>
+        </tr>
+        <tr>
+          <th scope="row">Fibres</th>
+          <td>≈ 0 g</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="small text-muted">
+    Estimations pour le fromage uniquement. Les valeurs varient surtout selon la proportion de fromages très gras
+    (double/triple crème) ou plus maigres (certains chèvres frais, etc.).
+  </p>
+
+  <h2>Notes low carb</h2>
+  <ul>
+    <li>Le fromage est naturellement <strong>très faible en glucides</strong> : l’enjeu principal est la <strong>quantité</strong>.</li>
+    <li>Ce plat est <strong>dense en calories</strong> : la portion (100–120 g) est le point de contrôle.</li>
+  </ul>
+
+</section>
