@@ -472,3 +472,77 @@ img{
 .badge{
   border-radius: 999px;
 }
+
+
+/* =========================================================
+   NAVBAR : panneau catégories "Recettes"
+   ========================================================= */
+
+.nav-recipes-toggle{
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Le panneau (collapse) */
+.recipes-groups-collapse{
+  margin-top: 8px;
+}
+
+/* Une vraie surface "dropdown" */
+.recipes-groups-panel{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px;
+  min-width: min(760px, 92vw);
+}
+
+.recipes-groups-title{
+  font-weight: 850;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+/* Grille de chips */
+.recipes-groups-grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Chips de catégorie */
+.recipes-group-chip{
+  display: inline-block;
+  border-bottom: none;
+  background: rgba(20,184,166,.10);
+  border: 1px solid rgba(20,184,166,.28);
+  color: var(--text);
+  font-weight: 650;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+
+.recipes-group-chip:hover{
+  transform: translateY(-1px);
+  border-color: rgba(22,163,74,.45);
+  background: rgba(34,197,94,.10);
+}
+
+/* Sur desktop, on évite que ça fasse "pavé" trop large */
+@media (min-width: 992px){
+  .recipes-groups-panel{
+    margin-top: 10px;
+  }
+}
+
+/* Sur mobile, le panneau prend toute la largeur du menu */
+@media (max-width: 991.98px){
+  .recipes-groups-panel{
+    min-width: auto;
+    width: 100%;
+  }
+}
+
