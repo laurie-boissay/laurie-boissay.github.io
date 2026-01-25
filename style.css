@@ -555,3 +555,12 @@ img{
   #recipes-index h3{ scroll-margin-top: 160px; }
 }
 
+/* Compensation sticky navbar pour TOUTES les ancres (y compris au chargement) */
+html{
+  scroll-padding-top: 140px;
+}
+
+/* Mobile : navbar plus haute */
+@media (max-width: 991.98px){
+  html{ scroll-padding-top: 170px; }
+}
