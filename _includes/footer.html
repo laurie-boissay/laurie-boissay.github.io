@@ -1,5 +1,7 @@
 <footer class="mt-4">
-  <a class="btn btn-outline-primary" href="../index.html#index">
-    ← Retour à l’index
-  </a>
+  {% unless page.body_id == "home" %}
+    <a class="btn btn-outline-primary" href="{{ site.baseurl }}/#index">
+      ← Retour à l’index
+    </a>
+  {% endunless %}
 </footer>
