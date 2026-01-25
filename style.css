@@ -459,3 +459,47 @@ img{
 .recipes-dropdown-menu .dropdown-item:hover{
   background: rgba(20,184,166,.10) !important;
 }
+
+/* =========================================================
+   NO UNDERLINE — OVERRIDE FINAL (Bootstrap-safe)
+   À coller tout en bas du fichier
+   ========================================================= */
+
+/* Bootstrap 5.3+ : supprime la déco via variables */
+:root{
+  --bs-link-decoration: none;
+  --bs-link-hover-decoration: none;
+}
+
+/* Force absolue : aucun soulignement nulle part */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited{
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-thickness: 0 !important;
+  text-decoration-skip-ink: auto;
+}
+
+/* Empêche aussi les “faux soulignements” faits en background/ombre */
+a,
+a *{
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Cas Bootstrap : dropdown + nav */
+.navbar a,
+.dropdown-menu a,
+.dropdown-item,
+.nav-link,
+.navbar-brand{
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
