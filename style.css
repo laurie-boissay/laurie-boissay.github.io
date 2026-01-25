@@ -319,3 +319,45 @@ img{
   border-color: rgba(22,163,74,.65) !important;
 }
 
+/* ================= TAGS (index) : lisibles, espacés ================= */
+
+/* Si tes tags sont dans un conteneur .recipe-tags (mon HTML conseillé) */
+.recipe-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Si tes tags sont juste une ligne dans la card (cas le plus probable) :
+   on vise le dernier <p> contenant les tags */
+.recipe-card-link .tags,
+.recipe-card-link p.tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+
+/* Style "chip" pour chaque tag */
+.recipe-card-link .tag,
+.recipe-card-link .tags .tag,
+.recipe-card-link a.tag,
+.recipe-card-link .tags a{
+  display: inline-block;
+  border-bottom: none;
+  background: rgba(20,184,166,.10);
+  border: 1px solid rgba(20,184,166,.22);
+  color: var(--text);
+  font-size: .78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Hover */
+.recipe-card-link .tags a:hover{
+  background: rgba(34,197,94,.10);
+  border-color: rgba(22,163,74,.40);
+}
