@@ -34,25 +34,41 @@ body_id: "home"
       <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
         {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
-        {% for r in group_recipes %}
-          <article class="recipe-card mb-2" data-tags="{{ r.tags | join: ',' | escape }}">
-            <a
-              href="{{ r.url | relative_url }}"
-              data-tested="{{ r.recipe_tested }}"
-              data-title="{{ r.recipe_title | escape }}"
-            >
-              {{ r.recipe_title }}
-            </a>
+        <div class="recipes-grid">
+          {% for r in group_recipes %}
+            <article class="recipe-card mb-2" data-tags="{{ r.tags | join: ',' | escape }}">
+              <a
+                class="recipe-card-link"
+                href="{{ r.url | relative_url }}"
+                data-tested="{{ r.recipe_tested }}"
+                data-title="{{ r.recipe_title | escape }}"
+              >
+                <div class="recipe-card-top">
+                  <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
 
-            {% if r.recipe_tested == false %}
-              <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
-            {% endif %}
+                  {% if r.recipe_tested == false %}
+                    <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
+                  {% endif %}
+                </div>
 
-            {% if r.recipe_subtitle %}
-              <div class="text-muted small">{{ r.recipe_subtitle }}</div>
-            {% endif %}
-          </article>
-        {% endfor %}
+                {% if r.recipe_subtitle %}
+                  <div class="text-muted small recipe-card-subtitle">
+                    {{ r.recipe_subtitle }}
+                  </div>
+                {% endif %}
+
+                {% if r.tags %}
+                  <div class="recipe-tags">
+                    {% for tag in r.tags %}
+                      <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </a>
+            </article>
+          {% endfor %}
+        </div>
+
       </div>
     {% endfor %}
   </div>
@@ -148,8 +164,8 @@ body_id: "home"
     const tested = a.dataset.tested === "true";
 
     pickHost.innerHTML = `
-      <div class="card">
-        <div class="card-body text-center">
+      <div class="pick-card">
+        <div class="pick-card-body text-center">
           <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
           <h3 class="h5 mb-3">
