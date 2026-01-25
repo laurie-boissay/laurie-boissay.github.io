@@ -399,3 +399,20 @@ img{
     max-height: 75vh;
   }
 }
+
+/* Cartes recette : pas de soulignement partout */
+.recipe-card-link a,
+.recipe-card-link{
+  border-bottom: none !important;
+}
+
+/* Si titre cliquable (souvent un <a> sur le h3/titre) */
+.recipe-card-link a:hover{
+  border-bottom: none !important;
+}
+
+/* Tags (chips) : jamais soulignés */
+.recipe-card-link .tag,
+.recipe-card-link .tags a{
+  border-bottom: none !important;
+}
