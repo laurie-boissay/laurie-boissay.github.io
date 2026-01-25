@@ -361,3 +361,26 @@ img{
   background: rgba(34,197,94,.10);
   border-color: rgba(22,163,74,.40);
 }
+
+/* Dropdown "Recettes" : liste longue scrollable */
+.recipes-dropdown-menu{
+  max-height: 70vh;
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 8px;
+}
+
+/* Items plus lisibles */
+.recipes-dropdown-menu .dropdown-item{
+  border-bottom: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 650;
+}
+
+/* Hover */
+.recipes-dropdown-menu .dropdown-item:hover{
+  background: rgba(20,184,166,.10);
+}
