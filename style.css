@@ -1,5 +1,5 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET FINAL
    Accueil + pages + recettes + navbar Bootstrap
    ========================================================= */
 
@@ -11,9 +11,9 @@
   --text: #0f172a;
   --muted: #475569;
 
-  --primary: #14b8a6;   /* turquoise */
+  --primary: #14b8a6;
   --primary-2: #0ea5a4;
-  --accent: #22c55e;    /* vert */
+  --accent: #22c55e;
   --accent-2: #16a34a;
 
   --link: #0ea5a4;
@@ -28,7 +28,16 @@
 
 /* ================= RESET ================= */
 *{ box-sizing: border-box; }
-html{ scroll-behavior: smooth; }
+
+/* Smooth global OK, mais neutralisé sur ancres plus bas */
+html{
+  scroll-behavior: smooth;
+  scroll-padding-top: 140px; /* navbar desktop */
+}
+
+@media (max-width: 991.98px){
+  html{ scroll-padding-top: 170px; } /* navbar mobile */
+}
 
 body{
   margin: 0;
@@ -37,7 +46,7 @@ body{
     radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.10), transparent 55%),
     var(--bg);
 
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text);
   line-height: 1.65;
   font-size: 16px;
@@ -69,15 +78,13 @@ h1, h2, h3{
   letter-spacing: -0.01em;
   margin: 0 0 10px;
   color: var(--text);
-  text-align: left;
 }
 
 h1{ font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); }
-h2{ font-size: clamp(1.35rem, 1.1rem + 1.0vw, 1.85rem); margin-top: 18px; }
+h2{ font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem); margin-top: 18px; }
 h3{ font-size: 1.15rem; margin-top: 10px; }
 
-p{ margin: 0 0 12px; color: var(--text); }
-
+p{ margin: 0 0 12px; }
 small, .muted, .text-muted{ color: var(--muted) !important; }
 strong{ font-weight: 750; }
 
@@ -92,8 +99,9 @@ a{
   color: var(--link);
   text-decoration: none;
   border-bottom: 1px solid rgba(14,165,164,.35);
-  transition: color .18s ease, border-color .18s ease, transform .18s ease;
+  transition: color .18s, border-color .18s, transform .18s;
 }
+
 a:hover{
   color: var(--link-hover);
   border-bottom-color: rgba(22,163,74,.45);
@@ -101,8 +109,6 @@ a:hover{
 
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
-.liens{ color: var(--link); }
-.liens:hover{ color: var(--link-hover); }
 
 /* ================= NAVBAR ================= */
 #navigation{
@@ -118,11 +124,8 @@ a:hover{
 .navbar-brand{
   color: var(--text);
   font-weight: 850;
-  letter-spacing: -0.01em;
   border-bottom: none;
 }
-
-nav{ text-align: left; }
 
 .nav-link{
   color: var(--muted);
@@ -130,40 +133,23 @@ nav{ text-align: left; }
   padding: 10px 12px;
   border-radius: 10px;
   border-bottom: none;
-  display: inline-block;
 }
+
 .nav-link:hover{
   color: var(--text);
   background: rgba(20,184,166,.10);
-  transform: translateY(-1px);
 }
+
 .nav-link.active{
-  color: var(--text);
   background: rgba(34,197,94,.12);
 }
 
 .navbar-toggler{
-  border: 1px solid rgba(15, 23, 42, 0.15);
+  border: 1px solid rgba(15,23,42,.15);
   border-radius: 12px;
-  padding: 8px 10px;
 }
 
-@media (max-width: 991.98px){
-  #navbarSupportedContent{
-    margin-top: 10px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 10px;
-  }
-  .nav-link{
-    padding: 10px 12px;
-    border-radius: 12px;
-  }
-}
-
-/* ================= LISTES GENERIQUES ================= */
+/* ================= LISTES ================= */
 ul{
   list-style: none;
   padding-left: 0;
@@ -182,22 +168,11 @@ section ul li::before,
   content: "";
   position: absolute;
   left: 6px;
-  top: 0.72em;
+  top: .72em;
   width: 10px;
   height: 10px;
-  border-radius: 999px;
+  border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), var(--accent));
-  box-shadow: 0 6px 14px rgba(20,184,166,.25);
-}
-
-/* Listes ordonnées : étapes plus lisibles */
-ol{
-  padding-left: 1.2rem;
-  margin: 0 0 14px;
-}
-ol li{
-  margin: 8px 0;
-  padding-left: 4px;
 }
 
 /* ================= TABLES ================= */
@@ -210,202 +185,73 @@ ol li{
   margin: 14px 0 18px;
 }
 
-table{
-  width: 100%;
-  border-collapse: collapse;
-}
+table{ width: 100%; border-collapse: collapse; }
 
 table th{
   text-align: left;
   font-size: .92rem;
   padding: 10px 12px;
-  color: var(--text);
   background: rgba(20,184,166,.10);
-  border-bottom: 1px solid var(--border);
 }
 
 table td{
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.07);
-  color: var(--text);
-}
-
-.table-striped tbody tr:nth-child(odd){
-  background: rgba(34,197,94,.06);
+  border-bottom: 1px solid rgba(15,23,42,.07);
 }
 
 /* ================= BOUTONS ================= */
-.btn, button, #clic{
-  display: inline-block;
+.btn, button{
   border: 1px solid rgba(20,184,166,.35);
   background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(34,197,94,.10));
-  color: var(--text);
-  padding: 10px 14px;
   border-radius: 12px;
-  box-shadow: 0 10px 24px rgba(2, 44, 44, 0.10);
-}
-
-.btn:hover, button:hover, #clic:hover{
-  border-color: rgba(22,163,74,.45);
-  transform: translateY(-1px);
 }
 
 /* ================= IMAGES ================= */
 img{
   max-width: 100%;
-  height: auto;
   border-radius: 12px;
 }
 
-/* ================= FOOTER ================= */
-#contact{ padding-bottom: 50px; }
-
 /* =========================================================
-   ACCUEIL (INDEX) — CARTES + GRILLE
+   ACCUEIL — CARTES RECETTES
    ========================================================= */
-
-.home #index h3{ margin-top: 22px; }
 
 .recipes-grid{
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 12px;
-  margin-top: 10px;
 }
 
 @media (max-width: 900px){
   .recipes-grid{ grid-template-columns: 1fr; }
 }
 
-.recipe-card{ margin: 0 !important; padding: 0; }
-
 .recipe-card-link{
   display: block;
-  border-bottom: none;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 14px 14px 12px;
-  color: var(--text);
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  padding: 14px;
 }
+
 .recipe-card-link:hover{
   transform: translateY(-2px);
-  border-color: rgba(20,184,166,.35);
   box-shadow: var(--shadow-strong);
 }
 
-.recipe-card-top{
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.recipe-card-title{
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.25;
-  font-weight: 850;
-  color: var(--text);
-}
-
-.recipe-card-subtitle{ margin-top: 6px; }
-
-.recipe-tags{
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tag{
-  display: inline-block;
-  background: rgba(20,184,166,.12);
-  border: 1px solid rgba(20,184,166,.18);
-  color: var(--text);
-  font-size: .75rem;
-  padding: 4px 8px;
-  border-radius: 999px;
-}
-
-.home .btn.btn-outline-primary{
-  border-color: rgba(20,184,166,.35) !important;
-  color: var(--text) !important;
-  background: transparent !important;
-  border-radius: 999px;
-}
-
-.home .btn.btn-outline-primary:hover{
-  background: rgba(20,184,166,.10) !important;
-  border-color: rgba(22,163,74,.45) !important;
-}
-
-.pick-card{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-.pick-card-body{ padding: 16px; }
-
-:target{ scroll-margin-top: 90px; }
-
 /* =========================================================
-   RECETTES — RENDU PLUS "PRO"
-   (sans changer ton HTML de recette)
+   RECETTES
    ========================================================= */
 
-/* En-tête recette (dans le layout recipe.html) */
-.recipe-head{
-  margin-top: 6px;
-  margin-bottom: 10px;
-}
-
-.recipe-title{
-  margin: 0;
-}
-
-.recipe-subtitle{
-  margin: 6px 0 10px;
-  color: var(--muted);
-  font-weight: 650;
-}
-
-/* Surface recette : un peu plus aérée */
-.recipe-surface{
-  padding-top: clamp(18px, 2.2vw, 30px);
-}
-
-/* Lead : transforme ton bloc <div class="recipe-lead"> en carte */
 .recipe-lead{
   background: rgba(20,184,166,.08);
   border: 1px solid rgba(20,184,166,.18);
   border-radius: var(--radius);
-  padding: 14px 16px;
-  margin: 0 0 18px;
+  padding: 14px;
+  margin-bottom: 18px;
 }
 
-/* Le UL dans le lead passe en grille (sans toucher au HTML) */
-.recipe-lead ul{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 14px;
-  margin-top: 10px;
-}
-
-@media (max-width: 700px){
-  .recipe-lead ul{ grid-template-columns: 1fr; }
-}
-
-/* Dans le lead, on retire les “puces” décoratives pour faire plus net */
-.recipe-lead ul li{
-  padding-left: 0;
-  margin: 0;
-}
-.recipe-lead ul li::before{ display: none; }
-
-/* Titres de section recette : petite barre/repère */
 .recipe-surface h2{
   position: relative;
   padding-top: 10px;
@@ -414,156 +260,45 @@ img{
 .recipe-surface h2::before{
   content: "";
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   width: 64px;
   height: 4px;
-  border-radius: 999px;
   background: linear-gradient(135deg, var(--primary), var(--accent));
-}
-
-/* Ingrédients : cartes et meilleure lisibilité sans changer la liste */
-.recipe-surface > ul{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px 14px;
-  margin: 10px 0 18px;
-}
-
-/* Préparation : on met en “steps” */
-.recipe-surface ol{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px 18px 14px 34px;
-  margin: 10px 0 18px;
-}
-
-/* Notes low carb : idem, mais sans puces fantaisie agressives */
-.recipe-surface h2 + ul{
-  /* pas fiable : on ne s'en sert pas */
-}
-
-/* Pour être sûr : style des UL après un h2 dans une recette */
-.recipe-surface h2 + ul,
-.recipe-surface h2 + p + ul{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px 14px;
-  margin: 10px 0 18px;
-}
-
-/* Tables déjà gérées : on garde cohérent */
-.recipe-surface .table-responsive{
-  margin-top: 10px;
-}
-
-/* Note en bas de tableau */
-.recipe-surface .small.text-muted{
-  margin-top: -8px;
-}
-
-/* Badges Bootstrap : cohérence légère */
-.badge{
   border-radius: 999px;
 }
-
 
 /* =========================================================
-   NAVBAR : panneau catégories "Recettes"
+   NAVBAR — PANNEAU CATÉGORIES
    ========================================================= */
 
-.nav-recipes-toggle{
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-}
-
-/* Le panneau (collapse) */
-.recipes-groups-collapse{
-  margin-top: 8px;
-}
-
-/* Une vraie surface "dropdown" */
 .recipes-groups-panel{
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 12px;
-  min-width: min(760px, 92vw);
 }
 
-.recipes-groups-title{
-  font-weight: 850;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-
-/* Grille de chips */
 .recipes-groups-grid{
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-/* Chips de catégorie */
 .recipes-group-chip{
-  display: inline-block;
-  border-bottom: none;
-  background: rgba(20,184,166,.10);
   border: 1px solid rgba(20,184,166,.28);
-  color: var(--text);
-  font-weight: 650;
-  padding: 8px 12px;
+  background: rgba(20,184,166,.10);
   border-radius: 999px;
-  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  padding: 8px 12px;
+  font-weight: 650;
 }
 
-.recipes-group-chip:hover{
-  transform: translateY(-1px);
-  border-color: rgba(22,163,74,.45);
-  background: rgba(34,197,94,.10);
-}
+/* =========================================================
+   IMPORTANT : ANCRES + SCROLL
+   ========================================================= */
 
-/* Sur desktop, on évite que ça fasse "pavé" trop large */
-@media (min-width: 992px){
-  .recipes-groups-panel{
-    margin-top: 10px;
-  }
+/* Empêche le smooth scroll d'écraser l'offset sticky */
+html:has(:target){
+  scroll-behavior: auto;
 }
-
-/* Sur mobile, le panneau prend toute la largeur du menu */
-@media (max-width: 991.98px){
-  .recipes-groups-panel{
-    min-width: auto;
-    width: 100%;
-  }
-}
-
-/* Option : sur mobile la navbar est souvent plus haute */
-@media (max-width: 991.98px){
-  :target{ scroll-margin-top: 160px; }
-}
-
-@media (max-width: 991.98px){
-  #recipes-index h3{ scroll-margin-top: 160px; }
-}
-
-/* Compensation sticky navbar pour TOUTES les ancres (y compris au chargement) */
-html{
-  scroll-padding-top: 140px;
-}
-
-/* Mobile : navbar plus haute */
-@media (max-width: 991.98px){
-  html{ scroll-padding-top: 170px; }
-}
-
-html{ scroll-padding-top: 140px; }
-@media (max-width: 991.98px){ html{ scroll-padding-top: 170px; } }
