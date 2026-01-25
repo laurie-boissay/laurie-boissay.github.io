@@ -5,66 +5,90 @@
 </script>
 
 <script>
-  // Mobile : fermer le burger + le panneau "Recettes" après clic sur une catégorie
-  document.addEventListener("click", function (e) {
-    const chip = e.target.closest(".recipes-group-chip");
-    if (!chip) return;
+  // Baseurl Jekyll ("" si site à la racine, sinon "/mon-repo")
+  const SITE_BASEURL = "{{ site.baseurl }}";
 
-    // Ferme le panneau catégories (collapse interne)
-    const groupsEl = document.getElementById("recipesGroupsCollapse");
-    if (groupsEl && window.bootstrap) {
-      const groupsInstance =
-        window.bootstrap.Collapse.getInstance(groupsEl) ||
-        new window.bootstrap.Collapse(groupsEl, { toggle: false });
-      groupsInstance.hide();
-    }
+  function closeCollapseById(id) {
+    const el = document.getElementById(id);
+    if (!el || !window.bootstrap) return;
 
-    // Ferme le menu mobile (burger)
-    const navEl = document.getElementById("navbarSupportedContent");
-    if (navEl && window.bootstrap) {
-      const navInstance =
-        window.bootstrap.Collapse.getInstance(navEl) ||
-        new window.bootstrap.Collapse(navEl, { toggle: false });
-      navInstance.hide();
-    }
-  });
+    const inst =
+      window.bootstrap.Collapse.getInstance(el) ||
+      new window.bootstrap.Collapse(el, { toggle: false });
 
-  // Corriger l'offset sticky navbar quand on arrive sur une ancre (/#groupe)
-  // ou quand le hash change : évite que le titre de catégorie soit caché.
-  function fixAnchorOffset() {
-    if (!location.hash) return;
+    inst.hide();
+  }
 
-    // Ne pas planter si le hash contient des caractères spéciaux non existants
+  function fixAnchorOffset(hash) {
+    const h = hash || location.hash;
+    if (!h) return;
+
     let target;
-    try {
-      target = document.querySelector(location.hash);
-    } catch (err) {
-      return;
-    }
+    try { target = document.querySelector(h); }
+    catch (e) { return; }
     if (!target) return;
 
     const nav = document.getElementById("navigation");
-    if (!nav) return;
+    const navH = nav ? nav.getBoundingClientRect().height : 0;
 
-    const navH = nav.getBoundingClientRect().height;
     const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
-
-    // "instant" n'est pas standard partout ; fallback sur auto
-    try {
-      window.scrollTo({ top: y, behavior: "instant" });
-    } catch (e) {
-      window.scrollTo({ top: y, behavior: "auto" });
-    }
+    window.scrollTo({ top: y, behavior: "auto" });
   }
 
-  // Au chargement : on laisse le layout se stabiliser (bootstrap + fonts)
+  function onRecipeGroupClick(e) {
+    const chip = e.target.closest(".recipes-group-chip");
+    if (!chip) return;
+
+    const href = chip.getAttribute("href") || "";
+    const hashIndex = href.indexOf("#");
+    if (hashIndex === -1) return;
+
+    const hash = href.slice(hashIndex); // "#plats-a-base-de-poissons"
+
+    // Fermer les panneaux (utile mobile)
+    closeCollapseById("recipesGroupsCollapse");
+    closeCollapseById("navbarSupportedContent");
+
+    // Si on est déjà sur l'index : on empêche le scroll natif et on scroll proprement
+    const path = location.pathname.replace(/\/+$/, "");
+    const base = (SITE_BASEURL || "").replace(/\/+$/, "");
+    const home1 = (base + "/").replace(/\/+$/, "");
+    const home2 = (base + "/index.html").replace(/\/+$/, "");
+
+    const isHome =
+      path === home1 ||
+      path === home2 ||
+      path === base; // cas racine
+
+    if (isHome) {
+      e.preventDefault();
+
+      // Met à jour l'URL sans déclencher le scroll natif
+      history.pushState(null, "", hash);
+
+      // On scroll après que Bootstrap ait fini ses animations/collapses
+      setTimeout(() => fixAnchorOffset(hash), 0);
+      setTimeout(() => fixAnchorOffset(hash), 80);
+      setTimeout(() => fixAnchorOffset(hash), 200);
+      return;
+    }
+
+    // Sinon (on vient d'une autre page), on laisse la navigation se faire
+    // et on corrige au load.
+  }
+
+  document.addEventListener("click", onRecipeGroupClick);
+
+  // Corriger l'offset quand on arrive sur /#groupe (navigation depuis une autre page)
   window.addEventListener("load", () => {
-    setTimeout(fixAnchorOffset, 0);
-    setTimeout(fixAnchorOffset, 150);
+    setTimeout(() => fixAnchorOffset(location.hash), 0);
+    setTimeout(() => fixAnchorOffset(location.hash), 150);
+    setTimeout(() => fixAnchorOffset(location.hash), 350);
   });
 
-  // Quand le hash change sans rechargement
+  // Si quelqu'un change le hash via back/forward
   window.addEventListener("hashchange", () => {
-    setTimeout(fixAnchorOffset, 0);
+    setTimeout(() => fixAnchorOffset(location.hash), 80);
+    setTimeout(() => fixAnchorOffset(location.hash), 200);
   });
 </script>
