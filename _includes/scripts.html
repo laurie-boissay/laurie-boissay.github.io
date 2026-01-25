@@ -32,7 +32,26 @@
     const navH = nav ? nav.getBoundingClientRect().height : 0;
 
     const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
-    window.scrollTo({ top: y, behavior: "auto" });
+
+    // IMPORTANT : neutraliser temporairement le smooth scroll
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+
+    window.scrollTo(0, y);
+
+    // Restore
+    html.style.scrollBehavior = prev || "";
+  }
+
+  function isHomePage() {
+    const path = location.pathname.replace(/\/+$/, "");
+    const base = (SITE_BASEURL || "").replace(/\/+$/, "");
+
+    const home1 = (base + "/").replace(/\/+$/, "");
+    const home2 = (base + "/index.html").replace(/\/+$/, "");
+
+    return path === home1 || path === home2 || path === base;
   }
 
   function onRecipeGroupClick(e) {
@@ -49,31 +68,19 @@
     closeCollapseById("recipesGroupsCollapse");
     closeCollapseById("navbarSupportedContent");
 
-    // Si on est déjà sur l'index : on empêche le scroll natif et on scroll proprement
-    const path = location.pathname.replace(/\/+$/, "");
-    const base = (SITE_BASEURL || "").replace(/\/+$/, "");
-    const home1 = (base + "/").replace(/\/+$/, "");
-    const home2 = (base + "/index.html").replace(/\/+$/, "");
-
-    const isHome =
-      path === home1 ||
-      path === home2 ||
-      path === base; // cas racine
-
-    if (isHome) {
+    // Si on est déjà sur l'index : empêcher le scroll natif et scroll proprement
+    if (isHomePage()) {
       e.preventDefault();
 
-      // Met à jour l'URL sans déclencher le scroll natif
+      // Met à jour l'URL sans scroll natif
       history.pushState(null, "", hash);
 
-      // On scroll après que Bootstrap ait fini ses animations/collapses
+      // Laisse le temps aux collapses/bootstrap de se fermer puis corrige l'offset
       setTimeout(() => fixAnchorOffset(hash), 0);
-      setTimeout(() => fixAnchorOffset(hash), 80);
-      setTimeout(() => fixAnchorOffset(hash), 200);
-      return;
+      setTimeout(() => fixAnchorOffset(hash), 120);
+      setTimeout(() => fixAnchorOffset(hash), 260);
     }
-
-    // Sinon (on vient d'une autre page), on laisse la navigation se faire
+    // Sinon : on laisse la navigation normale vers /#hash
     // et on corrige au load.
   }
 
@@ -82,13 +89,13 @@
   // Corriger l'offset quand on arrive sur /#groupe (navigation depuis une autre page)
   window.addEventListener("load", () => {
     setTimeout(() => fixAnchorOffset(location.hash), 0);
-    setTimeout(() => fixAnchorOffset(location.hash), 150);
-    setTimeout(() => fixAnchorOffset(location.hash), 350);
+    setTimeout(() => fixAnchorOffset(location.hash), 180);
+    setTimeout(() => fixAnchorOffset(location.hash), 420);
   });
 
-  // Si quelqu'un change le hash via back/forward
+  // Back/forward
   window.addEventListener("hashchange", () => {
-    setTimeout(() => fixAnchorOffset(location.hash), 80);
-    setTimeout(() => fixAnchorOffset(location.hash), 200);
+    setTimeout(() => fixAnchorOffset(location.hash), 120);
+    setTimeout(() => fixAnchorOffset(location.hash), 260);
   });
 </script>
