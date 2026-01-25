@@ -80,6 +80,11 @@ extra_head: |
   <li>Saler et poivrer en fin de cuisson. La sauce doit rester courte.</li>
 </ol>
 
+{% assign acc_bruxelles = site.pages | where: "layout", "recipe" | where: "recipe_sort", "choux-bruxelles-rotis-ail-herbes" | first %}
+{% assign acc_riz_nature = site.pages | where: "layout", "recipe" | where: "recipe_sort", "riz-chou-fleur-poele" | first %}
+{% assign acc_riz_soja = site.pages | where: "layout", "recipe" | where: "recipe_sort", "riz-chou-fleur-sesame-soja" | first %}
+{% assign acc_courgettes = site.pages | where: "layout", "recipe" | where: "recipe_sort", "courgettes-poelees-ail-citron" | first %}
+
 <h2>Proposition d’accompagnement</h2>
 <p>
   Pour rester cohérent avec le plat et le low carb modéré :
@@ -87,31 +92,39 @@ extra_head: |
 <ul>
   <li>
     <strong>
-      <a href="{{ site.baseurl }}/choux-bruxelles-rotis-ail-herbes.html">
+      {% if acc_bruxelles %}
+        <a href="{{ acc_bruxelles.url | relative_url }}">Choux de Bruxelles rôtis ail & herbes</a>
+      {% else %}
         Choux de Bruxelles rôtis ail & herbes
-      </a>
+      {% endif %}
     </strong><br>
     → Leur légère amertume équilibre parfaitement la moutarde.
   </li>
   <li>
     <strong>
-      <a href="{{ site.baseurl }}/riz-chou-fleur-poele.html">
+      {% if acc_riz_nature %}
+        <a href="{{ acc_riz_nature.url | relative_url }}">Riz de chou-fleur nature</a>
+      {% else %}
         Riz de chou-fleur nature
-      </a>
+      {% endif %}
     </strong>
     ou
     <strong>
-      <a href="{{ site.baseurl }}/riz-chou-fleur-sesame-soja.html">
+      {% if acc_riz_soja %}
+        <a href="{{ acc_riz_soja.url | relative_url }}">riz de chou-fleur sésame & soja</a>
+      {% else %}
         riz de chou-fleur sésame & soja
-      </a>
+      {% endif %}
     </strong><br>
     → Idéal pour absorber le jus sans ajouter de féculents.
   </li>
   <li>
     <strong>
-      <a href="{{ site.baseurl }}/courgettes-poelees-ail-citron.html">
+      {% if acc_courgettes %}
+        <a href="{{ acc_courgettes.url | relative_url }}">Courgettes poêlées ail & citron</a>
+      {% else %}
         Courgettes poêlées ail & citron
-      </a>
+      {% endif %}
     </strong><br>
     → Option plus légère si tu veux un repas moins hivernal.
   </li>
