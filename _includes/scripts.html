@@ -28,4 +28,43 @@
       navInstance.hide();
     }
   });
+
+  // Corriger l'offset sticky navbar quand on arrive sur une ancre (/#groupe)
+  // ou quand le hash change : évite que le titre de catégorie soit caché.
+  function fixAnchorOffset() {
+    if (!location.hash) return;
+
+    // Ne pas planter si le hash contient des caractères spéciaux non existants
+    let target;
+    try {
+      target = document.querySelector(location.hash);
+    } catch (err) {
+      return;
+    }
+    if (!target) return;
+
+    const nav = document.getElementById("navigation");
+    if (!nav) return;
+
+    const navH = nav.getBoundingClientRect().height;
+    const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+
+    // "instant" n'est pas standard partout ; fallback sur auto
+    try {
+      window.scrollTo({ top: y, behavior: "instant" });
+    } catch (e) {
+      window.scrollTo({ top: y, behavior: "auto" });
+    }
+  }
+
+  // Au chargement : on laisse le layout se stabiliser (bootstrap + fonts)
+  window.addEventListener("load", () => {
+    setTimeout(fixAnchorOffset, 0);
+    setTimeout(fixAnchorOffset, 150);
+  });
+
+  // Quand le hash change sans rechargement
+  window.addEventListener("hashchange", () => {
+    setTimeout(fixAnchorOffset, 0);
+  });
 </script>
