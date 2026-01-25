@@ -579,32 +579,30 @@ a, a *{
   .recipe-card-link:hover{ transform: none !important; }
 }
 
-/* Badge "Recette non testée" — cartes recettes */
-.recipe-card .badge-not-tested {
-  display: inline-block;
-  margin-top: .25rem;
-
+/* Badge "Recette non testée" dans les cartes recettes */
+.recipe-card .badge.bg-warning {
   font-size: .7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .03em;
 
-  color: #92400e;                 /* brun/orange foncé */
-  background-color: #fef3c7;      /* jaune pâle */
+  background-color: #fef3c7;
   border: 1px solid #f59e0b;
 
   padding: .15rem .45rem;
   border-radius: 999px;
 }
 
-/* Badge "Recette non testée" — bloc On mange quoi */
-#random-pick .badge-not-tested {
+/* Badge "Recette non testée" dans le tirage aléatoire */
+#random-pick .badge.bg-warning {
   font-size: .65rem;
   font-weight: 500;
 
-  color: #64748b;               /* gris bleuté */
-  background-color: #f1f5f9;    /* gris très clair */
+  color: #64748b;
+  background-color: #f1f5f9;
+  border: none;
 
   padding: .1rem .4rem;
   border-radius: 6px;
 }
+
