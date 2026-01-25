@@ -384,3 +384,18 @@ img{
 .recipes-dropdown-menu .dropdown-item:hover{
   background: rgba(20,184,166,.10);
 }
+/* Dropdown "Recettes" : forcer le scroll DANS le menu (mobile/iOS) */
+.recipes-dropdown-menu{
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;              /* empêche le scroll de "déborder" sur la page */
+  -webkit-overflow-scrolling: touch;         /* inertie iOS */
+  touch-action: pan-y;                       /* le geste vertical reste dans ce bloc */
+}
+
+/* Option : sur mobile, menu plus grand et plus confortable */
+@media (max-width: 991.98px){
+  .recipes-dropdown-menu{
+    max-height: 75vh;
+  }
+}
