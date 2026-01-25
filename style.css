@@ -1,5 +1,5 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET FINAL
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET
    Accueil + pages + recettes + navbar Bootstrap
    ========================================================= */
 
@@ -29,7 +29,8 @@
 /* ================= RESET ================= */
 *{ box-sizing: border-box; }
 
-/* Smooth global OK, mais neutralisé sur ancres plus bas */
+/* Smooth global : OK pour les scrolls “libres”.
+   Les scrolls d’ancres sont corrigés par JS (scripts.html). */
 html{
   scroll-behavior: smooth;
   scroll-padding-top: 140px; /* navbar desktop */
@@ -292,13 +293,4 @@ img{
   border-radius: 999px;
   padding: 8px 12px;
   font-weight: 650;
-}
-
-/* =========================================================
-   IMPORTANT : ANCRES + SCROLL
-   ========================================================= */
-
-/* Empêche le smooth scroll d'écraser l'offset sticky */
-html:has(:target){
-  scroll-behavior: auto;
 }
