@@ -8,25 +8,38 @@
   {%- endif -%}
 </head>
 
-<body class="container-fluid">
-
+<body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
   {% include recipe-header.html %}
   {% include navbar.html %}
 
   <main class="site-main">
-    <section class="site-section">
-      <div class="container site-container">
+    <div class="site-container">
 
-        {% include bandeau-non-teste.html %}
+      {% include bandeau-non-teste.html %}
 
-        <div class="content-surface">
-          {{ content }}
-        </div>
+      <header class="recipe-head">
+        <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
-        {% include footer.html %}
+        {% if page.recipe_subtitle %}
+          <p class="recipe-subtitle">{{ page.recipe_subtitle }}</p>
+        {% endif %}
 
+        {% if page.tags %}
+          <div class="recipe-tags">
+            {% for tag in page.tags %}
+              <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </header>
+
+      <div class="content-surface recipe-surface">
+        {{ content }}
       </div>
-    </section>
+
+      {% include footer.html %}
+
+    </div>
   </main>
 
   {% include scripts.html %}
