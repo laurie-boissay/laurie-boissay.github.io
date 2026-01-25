@@ -1,7 +1,14 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (NETTOYÉ)
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (CORRIGÉ)
    Accueil + pages + recettes + navbar Bootstrap
    Fichier : style.css
+
+   Objectifs de cette version :
+   - PLUS AUCUN soulignement (underline / border-bottom) sur les liens, y compris dans la navbar + dropdown
+   - Les cartes recettes ne prennent pas le hover global des <a>
+   - Les tags (chips) restent lisibles et espacés
+   - Le dropdown "Recettes" est scrollable sur mobile/iOS
+   - Styles propres, sans doublons inutiles, avec overrides ciblés
    ========================================================= */
 
 /* ================= VARIABLES ================= */
@@ -12,9 +19,9 @@
   --text: #0f172a;
   --muted: #475569;
 
-  --primary: #14b8a6;
+  --primary: #14b8a6;     /* turquoise */
   --primary-2: #0ea5a4;
-  --accent: #22c55e;
+  --accent: #22c55e;      /* vert */
   --accent-2: #16a34a;
 
   --link: #0ea5a4;
@@ -27,16 +34,16 @@
   --radius: 14px;
 }
 
-/* ================= RESET ================= */
+/* ================= RESET / BASE ================= */
 *{ box-sizing: border-box; }
 
 html{
   scroll-behavior: smooth;
-  scroll-padding-top: 140px; /* navbar desktop */
+  scroll-padding-top: 140px; /* hauteur navbar desktop */
 }
 
 @media (max-width: 991.98px){
-  html{ scroll-padding-top: 170px; } /* navbar mobile */
+  html{ scroll-padding-top: 170px; } /* hauteur navbar mobile */
 }
 
 body{
@@ -52,7 +59,7 @@ body{
   font-size: 16px;
 }
 
-/* ================= CONTAINERS ================= */
+/* ================= CONTAINERS (si utilisés) ================= */
 .site-container{
   max-width: 980px;
   margin: 0 auto;
@@ -94,26 +101,35 @@ hr{
   margin: 18px 0;
 }
 
-/* ================= LIENS (IMPORTANT : pas de souligné partout) ================= */
-/* Base : aucun soulignement, ni underline ni border-bottom */
+/* =========================================================
+   LIENS — IMPORTANT
+   On supprime le soulignement partout + on met un hover discret.
+   ========================================================= */
+
+/* Base : pas de underline, pas de border-bottom */
 a{
   color: var(--link);
-  text-decoration: none;
-  border-bottom: none;
+  text-decoration: none !important;   /* neutralise underline natif */
+  border-bottom: none !important;     /* neutralise ton ancien style */
+  background-image: none !important;  /* au cas où un thème ajoute un underline via background */
   transition: color .18s ease, background-color .18s ease;
 }
 
-/* Effet lien discret au hover : petit surlignage (pas un soulignement) */
+/* Hover global : léger fond (utile dans le texte) */
 a:hover{
   color: var(--link-hover);
   background: rgba(20,184,166,.10);
   border-radius: 6px;
 }
 
+/* Helpers historiques */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 
-/* ================= NAVBAR ================= */
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
 #navigation{
   position: sticky;
   top: 0;
@@ -124,12 +140,21 @@ a:hover{
   box-shadow: var(--shadow-nav);
 }
 
+/* IMPORTANT :
+   Dans la navbar, on ne veut PAS le hover global "fond" des liens,
+   sinon ça surligne tout en permanence quand tu passes la souris. */
+#navigation a:hover{
+  background: transparent;
+}
+
+/* Marque */
 .navbar-brand{
   color: var(--text) !important;
   font-weight: 850;
   text-decoration: none !important;
 }
 
+/* Liens nav */
 .nav-link{
   color: var(--muted) !important;
   font-weight: 700;
@@ -140,11 +165,11 @@ a:hover{
 
 .nav-link:hover{
   color: var(--text) !important;
-  background: rgba(20,184,166,.10);
+  background: rgba(20,184,166,.10) !important;
 }
 
 .nav-link.active{
-  background: rgba(34,197,94,.12);
+  background: rgba(34,197,94,.12) !important;
 }
 
 .navbar-toggler{
@@ -152,7 +177,33 @@ a:hover{
   border-radius: 12px;
 }
 
-/* ================= LISTES ================= */
+/* =========================================================
+   FIX ABSOLU : AUCUN SOULIGNEMENT DANS LA NAVBAR + DROPDOWN
+   (si un vieux CSS traîne, ça l’écrase)
+   ========================================================= */
+
+#navigation a,
+#navigation a:hover,
+#navigation a:focus,
+#navigation a:active,
+#navigation a:visited{
+  text-decoration: none !important;
+  border-bottom: none !important;
+  background-image: none !important;
+}
+
+/* Même chose pour tous les descendants du menu dropdown */
+#navigation .dropdown-menu,
+#navigation .dropdown-menu *{
+  text-decoration: none !important;
+  border-bottom: none !important;
+  background-image: none !important;
+}
+
+/* =========================================================
+   LISTES
+   ========================================================= */
+
 ul{
   list-style: none;
   padding-left: 0;
@@ -178,7 +229,10 @@ section ul li::before,
   background: linear-gradient(135deg, var(--primary), var(--accent));
 }
 
-/* ================= TABLES ================= */
+/* =========================================================
+   TABLES
+   ========================================================= */
+
 .table-responsive{
   background: var(--card);
   border: 1px solid var(--border);
@@ -202,27 +256,42 @@ table td{
   border-bottom: 1px solid rgba(15,23,42,.07);
 }
 
-/* ================= BOUTONS ================= */
+/* =========================================================
+   BOUTONS
+   ========================================================= */
+
+/* Base boutons Bootstrap : garde ta patte visuelle */
 .btn, button{
-  border: 1px solid rgba(20,184,166,.35);
-  background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(34,197,94,.10));
-  border-radius: 12px;
+  border: 1px solid rgba(20,184,166,.35) !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(34,197,94,.10)) !important;
+  border-radius: 12px !important;
 }
 
-/* Bouton Bootstrap primary (ex: "Ça me plaît") */
+/* Bouton Bootstrap primary (ex: "Ça me plaît") : texte lisible */
 .btn-primary{
   color: #0f172a !important;
-  background: linear-gradient(135deg, rgba(20,184,166,.35), rgba(34,197,94,.30)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(20,184,166,.35),
+    rgba(34,197,94,.30)
+  ) !important;
   border-color: rgba(20,184,166,.55) !important;
 }
 
 .btn-primary:hover{
   color: #0f172a !important;
-  background: linear-gradient(135deg, rgba(20,184,166,.55), rgba(34,197,94,.45)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(20,184,166,.55),
+    rgba(34,197,94,.45)
+  ) !important;
   border-color: rgba(22,163,74,.65) !important;
 }
 
-/* ================= IMAGES ================= */
+/* =========================================================
+   IMAGES
+   ========================================================= */
+
 img{
   max-width: 100%;
   border-radius: 12px;
@@ -230,6 +299,7 @@ img{
 
 /* =========================================================
    ACCUEIL — CARTES RECETTES
+   (HTML actuel : <a class="recipe-card-link"> ... </a>)
    ========================================================= */
 
 .recipes-grid{
@@ -242,6 +312,7 @@ img{
   .recipes-grid{ grid-template-columns: 1fr; }
 }
 
+/* Carte = lien cliquable */
 .recipe-card-link{
   display: block;
   background: var(--card);
@@ -249,26 +320,33 @@ img{
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 14px;
+
+  /* IMPORTANT : on neutralise l’effet hover global des <a> */
+  text-decoration: none !important;
+  border-bottom: none !important;
+  background-image: none !important;
 }
 
+/* Hover carte : élévation */
 .recipe-card-link:hover{
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
-  background: var(--card); /* évite l'effet surlignage global */
+  background: var(--card) !important; /* garde le fond blanc */
 }
 
-/* Titres de cartes */
-.recipe-card-title{
-  margin: 0;
-  color: var(--link);
-}
-
-/* AUCUN effet lien “souligné” dans les cartes */
+/* Tout ce qui est DANS une carte ne doit pas hériter du hover global */
 .recipe-card-link,
 .recipe-card-link *{
   text-decoration: none !important;
   border-bottom: none !important;
-  background: transparent; /* évite le hover global sur <a> */
+  background: transparent !important; /* empêche le hover global "fond" */
+  background-image: none !important;
+}
+
+/* Titre de carte */
+.recipe-card-title{
+  margin: 0;
+  color: var(--link);
 }
 
 /* Sous-titre */
@@ -297,8 +375,9 @@ img{
 }
 
 /* =========================================================
-   PICK CARD ("On mange quoi ?")
+   PICK CARD ("On mange quoi ?") — bloc injecté en JS
    ========================================================= */
+
 .pick-card{
   background: var(--card);
   border: 1px solid var(--border);
@@ -306,11 +385,13 @@ img{
   box-shadow: var(--shadow);
 }
 
+/* Pas d’effet lien dans la pick card */
 .pick-card a,
 .pick-card a *{
   text-decoration: none !important;
   border-bottom: none !important;
   background: transparent !important;
+  background-image: none !important;
 }
 
 /* =========================================================
@@ -343,6 +424,7 @@ img{
 
 /* =========================================================
    NAVBAR — DROPDOWN "RECETTES" (groupes)
+   Important : scroll interne mobile/iOS
    ========================================================= */
 
 .recipes-dropdown-menu{
@@ -362,40 +444,18 @@ img{
   .recipes-dropdown-menu{ max-height: 75vh; }
 }
 
+/* Items dropdown */
 .recipes-dropdown-menu .dropdown-item{
   border-radius: 12px;
   padding: 10px 12px;
   font-weight: 650;
-  text-decoration: none !important;
-}
 
-.recipes-dropdown-menu .dropdown-item:hover{
-  background: rgba(20,184,166,.10);
-}
-
-/* =========================================================
-   IMPORTANT : neutraliser les effets hover globaux dans la navbar
-   ========================================================= */
-#navigation a:hover{
-  background: transparent; /* sinon surlignage sur liens de nav */
-}
-
-/* =========================================================
-   FIX FINAL : AUCUN SOULIGNEMENT DANS LE DROPDOWN "RECETTES"
-   (force override, même si un ancien style traîne)
-   ========================================================= */
-
-#navigation .dropdown-menu a,
-#navigation .dropdown-menu .dropdown-item,
-#navigation .recipes-dropdown-menu a,
-#navigation .recipes-dropdown-menu .dropdown-item{
+  /* FIX underline */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
 }
 
-/* Évite aussi l'effet de surlignage global sur hover dans le dropdown */
-#navigation .dropdown-menu a:hover,
-#navigation .dropdown-menu .dropdown-item:hover{
+.recipes-dropdown-menu .dropdown-item:hover{
   background: rgba(20,184,166,.10) !important;
 }
