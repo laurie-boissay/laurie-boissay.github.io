@@ -7,17 +7,21 @@
 <body class="container-fluid{% if page.body_id %} {{ page.body_id }}{% endif %}">
   {% include navbar.html %}
 
+  {%- unless page.body_id == "home" -%}
   <header class="marge" id="top">
     <div class="site-container">
       <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
+
       {% if page.page_h3 %}
         <h3><span class="bleu">{{ page.page_h3 }}</span></h3>
       {% endif %}
+
       {% if page.page_h2_orange %}
         <h2><span class="orange">{{ page.page_h2_orange }}</span></h2>
       {% endif %}
     </div>
   </header>
+  {%- endunless -%}
 
   <main class="site-main">
     <div class="site-container">
