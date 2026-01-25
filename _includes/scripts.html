@@ -5,7 +5,6 @@
 </script>
 
 <script>
-  // Baseurl Jekyll ("" si site à la racine, sinon "/mon-repo")
   const SITE_BASEURL = "{{ site.baseurl }}";
 
   function closeCollapseById(id) {
@@ -33,14 +32,13 @@
 
     const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
 
-    // IMPORTANT : neutraliser temporairement le smooth scroll
+    // Neutraliser temporairement le smooth scroll
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
     html.style.scrollBehavior = "auto";
 
     window.scrollTo(0, y);
 
-    // Restore
     html.style.scrollBehavior = prev || "";
   }
 
@@ -54,7 +52,8 @@
     return path === home1 || path === home2 || path === base;
   }
 
-  function onRecipeGroupClick(e) {
+  // Fermer menu mobile après clic sur une catégorie + scroll propre (index)
+  document.addEventListener("click", function (e) {
     const chip = e.target.closest(".recipes-group-chip");
     if (!chip) return;
 
@@ -62,40 +61,49 @@
     const hashIndex = href.indexOf("#");
     if (hashIndex === -1) return;
 
-    const hash = href.slice(hashIndex); // "#plats-a-base-de-poissons"
+    const hash = href.slice(hashIndex);
 
-    // Fermer les panneaux (utile mobile)
-    closeCollapseById("recipesGroupsCollapse");
+    // Fermer le menu burger (mobile)
     closeCollapseById("navbarSupportedContent");
 
-    // Si on est déjà sur l'index : empêcher le scroll natif et scroll proprement
     if (isHomePage()) {
       e.preventDefault();
-
-      // Met à jour l'URL sans scroll natif
       history.pushState(null, "", hash);
 
-      // Laisse le temps aux collapses/bootstrap de se fermer puis corrige l'offset
       setTimeout(() => fixAnchorOffset(hash), 0);
       setTimeout(() => fixAnchorOffset(hash), 120);
       setTimeout(() => fixAnchorOffset(hash), 260);
     }
-    // Sinon : on laisse la navigation normale vers /#hash
-    // et on corrige au load.
-  }
+  });
 
-  document.addEventListener("click", onRecipeGroupClick);
-
-  // Corriger l'offset quand on arrive sur /#groupe (navigation depuis une autre page)
+  // Corriger l'offset quand on arrive sur /#groupe depuis une autre page
   window.addEventListener("load", () => {
     setTimeout(() => fixAnchorOffset(location.hash), 0);
     setTimeout(() => fixAnchorOffset(location.hash), 180);
     setTimeout(() => fixAnchorOffset(location.hash), 420);
   });
 
-  // Back/forward
   window.addEventListener("hashchange", () => {
     setTimeout(() => fixAnchorOffset(location.hash), 120);
     setTimeout(() => fixAnchorOffset(location.hash), 260);
+  });
+
+  // ===== IMPORTANT : empêcher le scroll de la page derrière quand le dropdown est ouvert (mobile)
+  function isMobileNav() {
+    return window.matchMedia("(max-width: 991.98px)").matches;
+  }
+
+  function lockBodyScroll(lock) {
+    if (!isMobileNav()) return;
+    document.body.style.overflow = lock ? "hidden" : "";
+    document.body.style.touchAction = lock ? "none" : "";
+  }
+
+  document.addEventListener("shown.bs.dropdown", function (e) {
+    if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(true);
+  });
+
+  document.addEventListener("hidden.bs.dropdown", function (e) {
+    if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(false);
   });
 </script>
