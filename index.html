@@ -75,12 +75,17 @@ body_id: "home"
 
 <script>
   const EXCLUDED_TAG = "gout-sucre";
-  const EXCLUDED_GROUP_PREFIX = "bases";
 
+  // Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules)
   const EXCLUDED_GROUPS = [
     "amuse-bouche",
     "boissons",
-    "barres pré-effort"
+    "pains & substituts",
+    "pâtes & fonds",
+    "sauces & assaisonnements",
+    "légumes & accompagnements",
+    "préparations & conservations",
+    "barres nutritionnelles"
   ];
 
   const indexRoot = document.getElementById("recipes-index");
@@ -113,12 +118,8 @@ body_id: "home"
     const groupEl = a.closest("[data-recipe-group]");
     if (!groupEl) return false;
 
-    const group = (groupEl.dataset.recipeGroup || "").toLowerCase();
-
-    if (group.startsWith(EXCLUDED_GROUP_PREFIX)) return true;
-    if (EXCLUDED_GROUPS.includes(group)) return true;
-
-    return false;
+    const group = (groupEl.dataset.recipeGroup || "").toLowerCase().trim();
+    return EXCLUDED_GROUPS.includes(group);
   }
 
   function getCandidates() {
