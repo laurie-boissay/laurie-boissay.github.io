@@ -19,13 +19,6 @@ body_id: "home"
   {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
   {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
-  <!-- Boutons catégories -->
-  <div class="text-center mb-4">
-    {% for g in grouped %}
-      <a class="btn btn-outline-primary m-1" href="#{{ g.name | slugify }}">{{ g.name }}</a>
-    {% endfor %}
-  </div>
-
   <!-- Sections catégories -->
   <div id="recipes-index">
     {% for g in grouped %}
