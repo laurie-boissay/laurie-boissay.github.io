@@ -596,3 +596,15 @@ a, a *{
   padding: .15rem .45rem;
   border-radius: 999px;
 }
+
+/* Badge "Recette non testée" — bloc On mange quoi */
+#random-pick .badge-not-tested {
+  font-size: .65rem;
+  font-weight: 500;
+
+  color: #64748b;               /* gris bleuté */
+  background-color: #f1f5f9;    /* gris très clair */
+
+  padding: .1rem .4rem;
+  border-radius: 6px;
+}
