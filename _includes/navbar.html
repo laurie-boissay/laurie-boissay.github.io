@@ -19,9 +19,36 @@
 
         {% assign current = page.url | replace: "index.html", "" %}
 
+        <!-- Recettes + accordéon/collapse des catégories -->
         <li class="nav-item">
-          <a class="nav-link {% if current == '/' or current == '' %}active{% endif %}"
-             href="{{ site.baseurl }}/">Recettes</a>
+          <button
+            class="nav-link nav-recipes-toggle {% if current == '/' or current == '' %}active{% endif %}"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#recipesGroupsCollapse"
+            aria-controls="recipesGroupsCollapse"
+            aria-expanded="false"
+          >
+            Recettes
+          </button>
+
+          {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+          {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+
+          <div class="collapse recipes-groups-collapse" id="recipesGroupsCollapse">
+            <div class="recipes-groups-panel">
+              <div class="recipes-groups-title">Catégories</div>
+
+              <div class="recipes-groups-grid">
+                {% for g in grouped %}
+                  <a class="recipes-group-chip"
+                     href="{{ site.baseurl }}/#{{ g.name | slugify }}">
+                    {{ g.name }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
         </li>
 
         <li class="nav-item">
