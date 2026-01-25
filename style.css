@@ -578,3 +578,21 @@ a, a *{
   *{ transition: none !important; }
   .recipe-card-link:hover{ transform: none !important; }
 }
+
+/* Badge "Recette non testée" — cartes recettes */
+.recipe-card .badge-not-tested {
+  display: inline-block;
+  margin-top: .25rem;
+
+  font-size: .7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+
+  color: #92400e;                 /* brun/orange foncé */
+  background-color: #fef3c7;      /* jaune pâle */
+  border: 1px solid #f59e0b;
+
+  padding: .15rem .45rem;
+  border-radius: 999px;
+}
