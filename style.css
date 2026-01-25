@@ -1,6 +1,6 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET FINAL
-   Accueil (index) + pages + recettes + navbar Bootstrap
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET
+   Accueil + pages + recettes + navbar Bootstrap
    ========================================================= */
 
 /* ================= VARIABLES ================= */
@@ -73,23 +73,19 @@ h1, h2, h3{
 }
 
 h1{ font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); }
-h2{ font-size: clamp(1.4rem, 1.1rem + 1.0vw, 1.9rem); margin-top: 6px; }
-h3{ font-size: 1.15rem; margin-top: 6px; }
+h2{ font-size: clamp(1.35rem, 1.1rem + 1.0vw, 1.85rem); margin-top: 18px; }
+h3{ font-size: 1.15rem; margin-top: 10px; }
 
-header.marge{
-  padding-top: 22px;
-  padding-bottom: 6px;
-}
+p{ margin: 0 0 12px; color: var(--text); }
 
-.marge{ padding-top: 22px; }
-
-p{
-  margin: 0 0 12px;
-  color: var(--text);
-}
-
-small, .muted{ color: var(--muted); }
+small, .muted, .text-muted{ color: var(--muted) !important; }
 strong{ font-weight: 750; }
+
+hr{
+  border: none;
+  border-top: 1px solid rgba(15,23,42,.10);
+  margin: 18px 0;
+}
 
 /* ================= LIENS ================= */
 a{
@@ -98,7 +94,6 @@ a{
   border-bottom: 1px solid rgba(14,165,164,.35);
   transition: color .18s ease, border-color .18s ease, transform .18s ease;
 }
-
 a:hover{
   color: var(--link-hover);
   border-bottom-color: rgba(22,163,74,.45);
@@ -137,13 +132,11 @@ nav{ text-align: left; }
   border-bottom: none;
   display: inline-block;
 }
-
 .nav-link:hover{
   color: var(--text);
   background: rgba(20,184,166,.10);
   transform: translateY(-1px);
 }
-
 .nav-link.active{
   color: var(--text);
   background: rgba(34,197,94,.12);
@@ -164,7 +157,6 @@ nav{ text-align: left; }
     box-shadow: var(--shadow);
     padding: 10px;
   }
-
   .nav-link{
     padding: 10px 12px;
     border-radius: 12px;
@@ -198,7 +190,17 @@ section ul li::before,
   box-shadow: 0 6px 14px rgba(20,184,166,.25);
 }
 
-/* ================= TABLES (nutrition) ================= */
+/* Listes ordonnées : étapes plus lisibles */
+ol{
+  padding-left: 1.2rem;
+  margin: 0 0 14px;
+}
+ol li{
+  margin: 8px 0;
+  padding-left: 4px;
+}
+
+/* ================= TABLES ================= */
 .table-responsive{
   background: var(--card);
   border: 1px solid var(--border);
@@ -259,14 +261,11 @@ img{
 #contact{ padding-bottom: 50px; }
 
 /* =========================================================
-   ACCUEIL (INDEX) — STYLE DES CARTES + GRILLE
+   ACCUEIL (INDEX) — CARTES + GRILLE
    ========================================================= */
 
-.home #index h3{
-  margin-top: 22px;
-}
+.home #index h3{ margin-top: 22px; }
 
-/* Grille des recettes à l'intérieur d'un groupe */
 .recipes-grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -278,13 +277,8 @@ img{
   .recipes-grid{ grid-template-columns: 1fr; }
 }
 
-/* Carte recette (index) */
-.recipe-card{
-  margin: 0 !important;  /* on neutralise mb-2 si Bootstrap met autre chose */
-  padding: 0;            /* l'ancre gère le padding */
-}
+.recipe-card{ margin: 0 !important; padding: 0; }
 
-/* Lien plein bloc (vraie carte cliquable) */
 .recipe-card-link{
   display: block;
   border-bottom: none;
@@ -296,7 +290,6 @@ img{
   color: var(--text);
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
-
 .recipe-card-link:hover{
   transform: translateY(-2px);
   border-color: rgba(20,184,166,.35);
@@ -317,11 +310,8 @@ img{
   color: var(--text);
 }
 
-.recipe-card-subtitle{
-  margin-top: 6px;
-}
+.recipe-card-subtitle{ margin-top: 6px; }
 
-/* Tags façon “chips” */
 .recipe-tags{
   margin-top: 10px;
   display: flex;
@@ -339,7 +329,6 @@ img{
   border-radius: 999px;
 }
 
-/* Boutons catégories : look plus cohérent (sans casser Bootstrap) */
 .home .btn.btn-outline-primary{
   border-color: rgba(20,184,166,.35) !important;
   color: var(--text) !important;
@@ -352,19 +341,134 @@ img{
   border-color: rgba(22,163,74,.45) !important;
 }
 
-/* Bloc “On mange quoi ?” (random pick) */
 .pick-card{
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+.pick-card-body{ padding: 16px; }
 
-.pick-card-body{
-  padding: 16px;
+:target{ scroll-margin-top: 90px; }
+
+/* =========================================================
+   RECETTES — RENDU PLUS "PRO"
+   (sans changer ton HTML de recette)
+   ========================================================= */
+
+/* En-tête recette (dans le layout recipe.html) */
+.recipe-head{
+  margin-top: 6px;
+  margin-bottom: 10px;
 }
 
-/* Rendre les ancres de groupes plus agréables (scroll) */
-:target{
-  scroll-margin-top: 90px;
+.recipe-title{
+  margin: 0;
+}
+
+.recipe-subtitle{
+  margin: 6px 0 10px;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+/* Surface recette : un peu plus aérée */
+.recipe-surface{
+  padding-top: clamp(18px, 2.2vw, 30px);
+}
+
+/* Lead : transforme ton bloc <div class="recipe-lead"> en carte */
+.recipe-lead{
+  background: rgba(20,184,166,.08);
+  border: 1px solid rgba(20,184,166,.18);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 0 0 18px;
+}
+
+/* Le UL dans le lead passe en grille (sans toucher au HTML) */
+.recipe-lead ul{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px){
+  .recipe-lead ul{ grid-template-columns: 1fr; }
+}
+
+/* Dans le lead, on retire les “puces” décoratives pour faire plus net */
+.recipe-lead ul li{
+  padding-left: 0;
+  margin: 0;
+}
+.recipe-lead ul li::before{ display: none; }
+
+/* Titres de section recette : petite barre/repère */
+.recipe-surface h2{
+  position: relative;
+  padding-top: 10px;
+}
+
+.recipe-surface h2::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 64px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+/* Ingrédients : cartes et meilleure lisibilité sans changer la liste */
+.recipe-surface > ul{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+  margin: 10px 0 18px;
+}
+
+/* Préparation : on met en “steps” */
+.recipe-surface ol{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px 14px 34px;
+  margin: 10px 0 18px;
+}
+
+/* Notes low carb : idem, mais sans puces fantaisie agressives */
+.recipe-surface h2 + ul{
+  /* pas fiable : on ne s'en sert pas */
+}
+
+/* Pour être sûr : style des UL après un h2 dans une recette */
+.recipe-surface h2 + ul,
+.recipe-surface h2 + p + ul{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+  margin: 10px 0 18px;
+}
+
+/* Tables déjà gérées : on garde cohérent */
+.recipe-surface .table-responsive{
+  margin-top: 10px;
+}
+
+/* Note en bas de tableau */
+.recipe-surface .small.text-muted{
+  margin-top: -8px;
+}
+
+/* Badges Bootstrap : cohérence légère */
+.badge{
+  border-radius: 999px;
 }
