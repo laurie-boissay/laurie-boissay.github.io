@@ -1,15 +1,17 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (CORRIGÉ)
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (NETTOYÉ + MODERNE)
    Accueil + pages + recettes + navbar Bootstrap
    Fichier : style.css
 
-   Objectifs de cette version :
-   - PLUS AUCUN soulignement (underline / border-bottom) sur les liens, y compris dans la navbar + dropdown
+   Objectifs :
+   - AUCUN soulignement (underline / border-bottom) sur les liens, y compris navbar + dropdown
    - Les cartes recettes ne prennent pas le hover global des <a>
    - Les tags (chips) restent lisibles et espacés
    - Le dropdown "Recettes" est scrollable sur mobile/iOS
-   - Styles propres, sans doublons inutiles, avec overrides ciblés
+   - Rendu plus joli et moderne (surfaces, ombres, focus, micro-anim)
+   - Pas de doublons inutiles, overrides ciblés
    ========================================================= */
+
 
 /* ================= VARIABLES ================= */
 :root{
@@ -28,11 +30,15 @@
   --link-hover: #16a34a;
 
   --border: rgba(15, 23, 42, 0.10);
-  --shadow: 0 10px 30px rgba(2, 44, 44, 0.08);
-  --shadow-strong: 0 16px 36px rgba(2,44,44,.12);
+
+  /* plus moderne */
+  --radius: 16px;
+  --shadow: 0 10px 28px rgba(2, 44, 44, 0.07);
+  --shadow-strong: 0 18px 46px rgba(2,44,44,.12);
   --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
-  --radius: 14px;
+  --ring: 0 0 0 4px rgba(20,184,166,.22);
 }
+
 
 /* ================= RESET / BASE ================= */
 *{ box-sizing: border-box; }
@@ -57,7 +63,10 @@ body{
   color: var(--text);
   line-height: 1.65;
   font-size: 16px;
+
+  text-rendering: optimizeLegibility;
 }
+
 
 /* ================= CONTAINERS (si utilisés) ================= */
 .site-container{
@@ -72,12 +81,13 @@ body{
 
 .content-surface{
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15,23,42,.09);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(16px, 2vw, 26px);
   margin: 14px 0 24px;
 }
+
 
 /* ================= TYPO ================= */
 h1, h2, h3{
@@ -85,13 +95,14 @@ h1, h2, h3{
   letter-spacing: -0.01em;
   margin: 0 0 10px;
   color: var(--text);
+  line-height: 1.18;
 }
 
 h1{ font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); }
 h2{ font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem); margin-top: 18px; }
 h3{ font-size: 1.15rem; margin-top: 10px; }
 
-p{ margin: 0 0 12px; }
+p{ margin: 0 0 12px; color: rgba(15,23,42,.92); }
 small, .muted, .text-muted{ color: var(--muted) !important; }
 strong{ font-weight: 750; }
 
@@ -101,30 +112,46 @@ hr{
   margin: 18px 0;
 }
 
+
 /* =========================================================
    LIENS — IMPORTANT
-   On supprime le soulignement partout + on met un hover discret.
+   - pas de soulignement partout
+   - hover discret (pas “surligneur” agressif)
    ========================================================= */
 
-/* Base : pas de underline, pas de border-bottom */
-a{
-  color: var(--link);
-  text-decoration: none !important;   /* neutralise underline natif */
-  border-bottom: none !important;     /* neutralise ton ancien style */
-  background-image: none !important;  /* au cas où un thème ajoute un underline via background */
-  transition: color .18s ease, background-color .18s ease;
+/* Bootstrap 5.3+ : supprime la déco via variables */
+:root{
+  --bs-link-decoration: none;
+  --bs-link-hover-decoration: none;
 }
 
-/* Hover global : léger fond (utile dans le texte) */
+a{
+  color: var(--link);
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  border-bottom: none !important;
+  background-image: none !important;
+  transition: color .18s ease, background-color .18s ease, transform .12s ease;
+}
+
 a:hover{
   color: var(--link-hover);
-  background: rgba(20,184,166,.10);
-  border-radius: 6px;
+  background: rgba(20,184,166,.08);
+  border-radius: 8px;
 }
 
 /* Helpers historiques */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
+
+
+/* ================= FOCUS (clavier) ================= */
+:focus-visible{
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: 10px;
+}
+
 
 /* =========================================================
    NAVBAR
@@ -134,18 +161,17 @@ a:hover{
   position: sticky;
   top: 0;
   z-index: 99;
-  background: rgba(246,250,249,.88);
-  backdrop-filter: blur(10px);
+
+  /* look moderne “verre léger” */
+  background: rgba(246,250,249,.78);
+  backdrop-filter: blur(14px);
+
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-nav);
 }
 
-/* IMPORTANT :
-   Dans la navbar, on ne veut PAS le hover global "fond" des liens,
-   sinon ça surligne tout en permanence quand tu passes la souris. */
-#navigation a:hover{
-  background: transparent;
-}
+/* Dans la navbar, pas le hover global “fond” */
+#navigation a:hover{ background: transparent; }
 
 /* Marque */
 .navbar-brand{
@@ -154,7 +180,7 @@ a:hover{
   text-decoration: none !important;
 }
 
-/* Liens nav */
+/* Liens nav : on garde simple (pas en boutons) */
 .nav-link{
   color: var(--muted) !important;
   font-weight: 700;
@@ -177,28 +203,19 @@ a:hover{
   border-radius: 12px;
 }
 
-/* =========================================================
-   FIX ABSOLU : AUCUN SOULIGNEMENT DANS LA NAVBAR + DROPDOWN
-   (si un vieux CSS traîne, ça l’écrase)
-   ========================================================= */
-
+/* FIX ABSOLU : aucun soulignement dans navbar + dropdown */
 #navigation a,
 #navigation a:hover,
 #navigation a:focus,
 #navigation a:active,
 #navigation a:visited{
   text-decoration: none !important;
+  text-decoration-line: none !important;
   border-bottom: none !important;
   background-image: none !important;
+  box-shadow: none !important;
 }
 
-/* Même chose pour tous les descendants du menu dropdown */
-#navigation .dropdown-menu,
-#navigation .dropdown-menu *{
-  text-decoration: none !important;
-  border-bottom: none !important;
-  background-image: none !important;
-}
 
 /* =========================================================
    LISTES
@@ -229,13 +246,14 @@ section ul li::before,
   background: linear-gradient(135deg, var(--primary), var(--accent));
 }
 
+
 /* =========================================================
    TABLES
    ========================================================= */
 
 .table-responsive{
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15,23,42,.09);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 6px;
@@ -248,7 +266,9 @@ table th{
   text-align: left;
   font-size: .92rem;
   padding: 10px 12px;
-  background: rgba(20,184,166,.10);
+  background: rgba(20,184,166,.12);
+  color: rgba(15,23,42,.92);
+  font-weight: 800;
 }
 
 table td{
@@ -256,37 +276,40 @@ table td{
   border-bottom: 1px solid rgba(15,23,42,.07);
 }
 
+table tr:hover td{
+  background: rgba(20,184,166,.05);
+}
+
+
 /* =========================================================
    BOUTONS
    ========================================================= */
 
-/* Base boutons Bootstrap : garde ta patte visuelle */
 .btn, button{
   border: 1px solid rgba(20,184,166,.35) !important;
   background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(34,197,94,.10)) !important;
   border-radius: 12px !important;
+  box-shadow: 0 10px 22px rgba(2,44,44,.10);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
 }
 
-/* Bouton Bootstrap primary (ex: "Ça me plaît") : texte lisible */
+.btn:hover, button:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(2,44,44,.14);
+}
+
 .btn-primary{
   color: #0f172a !important;
-  background: linear-gradient(
-    135deg,
-    rgba(20,184,166,.35),
-    rgba(34,197,94,.30)
-  ) !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.35), rgba(34,197,94,.30)) !important;
   border-color: rgba(20,184,166,.55) !important;
 }
 
 .btn-primary:hover{
   color: #0f172a !important;
-  background: linear-gradient(
-    135deg,
-    rgba(20,184,166,.55),
-    rgba(34,197,94,.45)
-  ) !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.55), rgba(34,197,94,.45)) !important;
   border-color: rgba(22,163,74,.65) !important;
 }
+
 
 /* =========================================================
    IMAGES
@@ -297,9 +320,10 @@ img{
   border-radius: 12px;
 }
 
+
 /* =========================================================
    ACCUEIL — CARTES RECETTES
-   (HTML actuel : <a class="recipe-card-link"> ... </a>)
+   (HTML : <a class="recipe-card-link"> ... </a>)
    ========================================================= */
 
 .recipes-grid{
@@ -315,23 +339,43 @@ img{
 /* Carte = lien cliquable */
 .recipe-card-link{
   display: block;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15,23,42,.09);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 14px;
 
-  /* IMPORTANT : on neutralise l’effet hover global des <a> */
+  /* neutralise effet hover global des <a> */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
+
+  transition: transform .15s ease, box-shadow .15s ease;
 }
+
+/* Glow léger */
+.recipe-card-link::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(600px 220px at 15% 0%, rgba(20,184,166,.18), transparent 55%),
+    radial-gradient(520px 220px at 90% 10%, rgba(34,197,94,.16), transparent 55%);
+  opacity: .32;
+  pointer-events:none;
+}
+
+.recipe-card-link > *{ position: relative; z-index: 1; }
 
 /* Hover carte : élévation */
 .recipe-card-link:hover{
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-strong);
-  background: var(--card) !important; /* garde le fond blanc */
+  background: var(--card) !important;
 }
 
 /* Tout ce qui est DANS une carte ne doit pas hériter du hover global */
@@ -339,19 +383,26 @@ img{
 .recipe-card-link *{
   text-decoration: none !important;
   border-bottom: none !important;
-  background: transparent !important; /* empêche le hover global "fond" */
+  background: transparent !important;
   background-image: none !important;
+  box-shadow: none !important;
 }
 
 /* Titre de carte */
 .recipe-card-title{
   margin: 0;
-  color: var(--link);
+  color: var(--text);
+  font-weight: 850;
+}
+
+.recipe-card-link:hover .recipe-card-title{
+  color: var(--primary-2);
 }
 
 /* Sous-titre */
 .recipe-card-subtitle{
   margin-top: 6px;
+  color: rgba(15,23,42,.78);
 }
 
 /* Tags (chips) */
@@ -364,9 +415,9 @@ img{
 
 .tag{
   display: inline-block;
-  background: rgba(20,184,166,.10);
-  border: 1px solid rgba(20,184,166,.22);
-  color: var(--text);
+  background: rgba(15,23,42,.04);
+  border: 1px solid rgba(15,23,42,.10);
+  color: rgba(15,23,42,.82);
   font-size: .78rem;
   padding: 4px 10px;
   border-radius: 999px;
@@ -374,25 +425,32 @@ img{
   white-space: nowrap;
 }
 
+.tag:hover{
+  border-color: rgba(20,184,166,.35);
+  background: rgba(20,184,166,.10);
+}
+
+
 /* =========================================================
    PICK CARD ("On mange quoi ?") — bloc injecté en JS
    ========================================================= */
 
 .pick-card{
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15,23,42,.09);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
 
-/* Pas d’effet lien dans la pick card */
 .pick-card a,
 .pick-card a *{
   text-decoration: none !important;
   border-bottom: none !important;
   background: transparent !important;
   background-image: none !important;
+  box-shadow: none !important;
 }
+
 
 /* =========================================================
    RECETTES
@@ -422,9 +480,11 @@ img{
   border-radius: 999px;
 }
 
+
 /* =========================================================
-   NAVBAR — DROPDOWN "RECETTES" (groupes)
-   Important : scroll interne mobile/iOS
+   NAVBAR — DROPDOWN "RECETTES"
+   - scroll interne mobile/iOS
+   - items en "boutons"
    ========================================================= */
 
 .recipes-dropdown-menu{
@@ -434,104 +494,37 @@ img{
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
 
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(10px);
+
+  border-radius: 18px;
+  border: 1px solid rgba(15,23,42,.09);
   box-shadow: var(--shadow);
-  padding: 8px;
+  padding: 10px;
 }
 
 @media (max-width: 991.98px){
   .recipes-dropdown-menu{ max-height: 75vh; }
 }
 
-/* Items dropdown */
+/* Items dropdown = boutons */
 .recipes-dropdown-menu .dropdown-item{
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-weight: 650;
-
-  /* FIX underline */
-  text-decoration: none !important;
-  border-bottom: none !important;
-  background-image: none !important;
-}
-
-.recipes-dropdown-menu .dropdown-item:hover{
-  background: rgba(20,184,166,.10) !important;
-}
-
-/* =========================================================
-   NO UNDERLINE — OVERRIDE FINAL (Bootstrap-safe)
-   À coller tout en bas du fichier
-   ========================================================= */
-
-/* Bootstrap 5.3+ : supprime la déco via variables */
-:root{
-  --bs-link-decoration: none;
-  --bs-link-hover-decoration: none;
-}
-
-/* Force absolue : aucun soulignement nulle part */
-a,
-a:hover,
-a:focus,
-a:active,
-a:visited{
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-  text-decoration-thickness: 0 !important;
-  text-decoration-skip-ink: auto;
-}
-
-/* Empêche aussi les “faux soulignements” faits en background/ombre */
-a,
-a *{
-  border-bottom: 0 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-}
-
-/* Cas Bootstrap : dropdown + nav */
-.navbar a,
-.dropdown-menu a,
-.dropdown-item,
-.nav-link,
-.navbar-brand{
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-  border-bottom: 0 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-}
-
-/* =========================================================
-   DROPDOWN "RECETTES" — ITEMS EN BOUTONS (UNIQUEMENT ICI)
-   ========================================================= */
-
-/* Le conteneur du dropdown (tu l'as déjà) : on garde, on améliore juste un peu */
-.recipes-dropdown-menu{
-  padding: 10px !important;
-  border-radius: 16px !important;
-}
-
-/* Les liens deviennent des "boutons" */
-.recipes-dropdown-menu .dropdown-item{
-  display: flex;                 /* meilleure zone cliquable */
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  margin: 6px 0;                 /* espace entre boutons */
-  padding: 10px 12px !important;
+  margin: 6px 0;
+  padding: 10px 12px;
 
-  border-radius: 12px !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
+  border-radius: 14px;
+  border: 1px solid rgba(15,23,42,.09);
 
-  background: rgba(255,255,255,.85) !important;
-  color: var(--text) !important;
+  background: rgba(255,255,255,.85);
+  color: var(--text);
 
-  font-weight: 700 !important;
+  font-weight: 700;
   line-height: 1.15;
 
-  /* pas de soulignement quoi qu'il arrive */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
@@ -539,33 +532,49 @@ a *{
   transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, border-color .12s ease;
 }
 
-/* Hover : effet bouton */
+/* chevron visuel */
+.recipes-dropdown-menu .dropdown-item::after{
+  content: "›";
+  opacity: .40;
+  font-size: 1.1rem;
+}
+
+/* Hover/focus */
 .recipes-dropdown-menu .dropdown-item:hover,
 .recipes-dropdown-menu .dropdown-item:focus{
-  background: linear-gradient(
-    135deg,
-    rgba(20,184,166,.16),
-    rgba(34,197,94,.12)
-  ) !important;
-
-  border-color: rgba(20,184,166,.35) !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.16), rgba(34,197,94,.12));
+  border-color: rgba(20,184,166,.35);
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(2,44,44,.10) !important;
+  box-shadow: 0 10px 22px rgba(2,44,44,.10);
 }
 
 /* Focus clavier propre */
 .recipes-dropdown-menu .dropdown-item:focus-visible{
-  outline: 3px solid rgba(20,184,166,.30);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--ring);
 }
 
-/* Actif (page actuelle si Bootstrap met .active) */
+/* Actif (si Bootstrap met .active) */
 .recipes-dropdown-menu .dropdown-item.active{
-  background: linear-gradient(
-    135deg,
-    rgba(34,197,94,.22),
-    rgba(20,184,166,.16)
-  ) !important;
+  background: linear-gradient(135deg, rgba(34,197,94,.22), rgba(20,184,166,.16));
+  border-color: rgba(34,197,94,.45);
+}
 
-  border-color: rgba(34,197,94,.45) !important;
+
+/* =========================================================
+   GARDE-FOU “ZÉRO SOULIGNEMENT” (global)
+   ========================================================= */
+
+a, a *{
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+
+/* =========================================================
+   ANIMATIONS : respect du réglage utilisateur
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
+  .recipe-card-link:hover{ transform: none !important; }
 }
