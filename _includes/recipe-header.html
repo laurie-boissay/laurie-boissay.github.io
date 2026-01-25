@@ -1,4 +1,9 @@
+{% if page.layout == "recipe" %}
 <header class="marge">
   <h1><strong>{{ page.recipe_title }}</strong></h1>
-  <h3><span class="bleu">{{ page.recipe_subtitle }}</span></h3>
+
+  {% if page.recipe_subtitle %}
+    <h3><span class="bleu">{{ page.recipe_subtitle }}</span></h3>
+  {% endif %}
 </header>
+{% endif %}
