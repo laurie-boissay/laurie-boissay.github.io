@@ -503,3 +503,5 @@ a *{
   background-image: none !important;
   box-shadow: none !important;
 }
+
+body { outline: 10px solid red !important; }
