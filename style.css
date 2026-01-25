@@ -416,3 +416,19 @@ img{
 .recipe-card-link .tags a{
   border-bottom: none !important;
 }
+
+/* Cartes recettes : pas de "soulignement" (border-bottom) */
+.recipe-card-link{
+  border-bottom: none !important;
+}
+
+/* Tout lien à l’intérieur des cartes : pas de border-bottom non plus */
+.recipe-card-link a,
+.recipe-card-link:hover{
+  border-bottom: none !important;
+}
+
+/* Bonus : survol de la carte = pas de soulignement */
+.recipe-card-link:hover{
+  text-decoration: none !important;
+}
