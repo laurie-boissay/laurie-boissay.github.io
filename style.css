@@ -432,3 +432,36 @@ img{
 .recipe-card-link:hover{
   text-decoration: none !important;
 }
+
+/* ============ STOP UNDERLINE DANS LES CARTES + PICK ============ */
+
+/* Cartes : aucun soulignement, ni border-bottom ni underline */
+.recipe-card-link,
+.recipe-card-link *{
+  text-decoration: none !important;
+}
+
+.recipe-card-link{
+  border-bottom: none !important;
+}
+
+.recipe-card-link:hover,
+.recipe-card-link:hover *{
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* Le bloc "On mange quoi ?" (pick-card) : idem */
+.pick-card a,
+.pick-card a *{
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* Navbar : pas de underline */
+#navigation a,
+#navigation a:hover{
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
