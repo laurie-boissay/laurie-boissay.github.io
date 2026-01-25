@@ -1,6 +1,7 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET
+   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (NETTOYÉ)
    Accueil + pages + recettes + navbar Bootstrap
+   Fichier : style.css
    ========================================================= */
 
 /* ================= VARIABLES ================= */
@@ -29,8 +30,6 @@
 /* ================= RESET ================= */
 *{ box-sizing: border-box; }
 
-/* Smooth global : OK pour les scrolls “libres”.
-   Les scrolls d’ancres sont corrigés par JS (scripts.html). */
 html{
   scroll-behavior: smooth;
   scroll-padding-top: 140px; /* navbar desktop */
@@ -95,17 +94,20 @@ hr{
   margin: 18px 0;
 }
 
-/* ================= LIENS ================= */
+/* ================= LIENS (IMPORTANT : pas de souligné partout) ================= */
+/* Base : aucun soulignement, ni underline ni border-bottom */
 a{
   color: var(--link);
   text-decoration: none;
-  border-bottom: 1px solid rgba(14,165,164,.35);
-  transition: color .18s, border-color .18s, transform .18s;
+  border-bottom: none;
+  transition: color .18s ease, background-color .18s ease;
 }
 
+/* Effet lien discret au hover : petit surlignage (pas un soulignement) */
 a:hover{
   color: var(--link-hover);
-  border-bottom-color: rgba(22,163,74,.45);
+  background: rgba(20,184,166,.10);
+  border-radius: 6px;
 }
 
 .bleu{ color: var(--link); }
@@ -123,21 +125,21 @@ a:hover{
 }
 
 .navbar-brand{
-  color: var(--text);
+  color: var(--text) !important;
   font-weight: 850;
-  border-bottom: none;
+  text-decoration: none !important;
 }
 
 .nav-link{
-  color: var(--muted);
+  color: var(--muted) !important;
   font-weight: 700;
   padding: 10px 12px;
   border-radius: 10px;
-  border-bottom: none;
+  text-decoration: none !important;
 }
 
 .nav-link:hover{
-  color: var(--text);
+  color: var(--text) !important;
   background: rgba(20,184,166,.10);
 }
 
@@ -207,6 +209,19 @@ table td{
   border-radius: 12px;
 }
 
+/* Bouton Bootstrap primary (ex: "Ça me plaît") */
+.btn-primary{
+  color: #0f172a !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.35), rgba(34,197,94,.30)) !important;
+  border-color: rgba(20,184,166,.55) !important;
+}
+
+.btn-primary:hover{
+  color: #0f172a !important;
+  background: linear-gradient(135deg, rgba(20,184,166,.55), rgba(34,197,94,.45)) !important;
+  border-color: rgba(22,163,74,.65) !important;
+}
+
 /* ================= IMAGES ================= */
 img{
   max-width: 100%;
@@ -239,6 +254,63 @@ img{
 .recipe-card-link:hover{
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
+  background: var(--card); /* évite l'effet surlignage global */
+}
+
+/* Titres de cartes */
+.recipe-card-title{
+  margin: 0;
+  color: var(--link);
+}
+
+/* AUCUN effet lien “souligné” dans les cartes */
+.recipe-card-link,
+.recipe-card-link *{
+  text-decoration: none !important;
+  border-bottom: none !important;
+  background: transparent; /* évite le hover global sur <a> */
+}
+
+/* Sous-titre */
+.recipe-card-subtitle{
+  margin-top: 6px;
+}
+
+/* Tags (chips) */
+.recipe-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag{
+  display: inline-block;
+  background: rgba(20,184,166,.10);
+  border: 1px solid rgba(20,184,166,.22);
+  color: var(--text);
+  font-size: .78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   PICK CARD ("On mange quoi ?")
+   ========================================================= */
+.pick-card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.pick-card a,
+.pick-card a *{
+  text-decoration: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
 }
 
 /* =========================================================
@@ -270,201 +342,40 @@ img{
 }
 
 /* =========================================================
-   NAVBAR — PANNEAU CATÉGORIES
+   NAVBAR — DROPDOWN "RECETTES" (groupes)
    ========================================================= */
 
-.recipes-groups-panel{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 12px;
-}
-
-.recipes-groups-grid{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.recipes-group-chip{
-  border: 1px solid rgba(20,184,166,.28);
-  background: rgba(20,184,166,.10);
-  border-radius: 999px;
-  padding: 8px 12px;
-  font-weight: 650;
-}
-
-/* ================= FIX BOUTONS PRIMAIRES ================= */
-
-/* Boutons Bootstrap primary (ex: "Ça me plaît") */
-.btn-primary{
-  color: #0f172a !important; /* texte foncé lisible */
-  background: linear-gradient(
-    135deg,
-    rgba(20,184,166,.35),
-    rgba(34,197,94,.30)
-  ) !important;
-  border-color: rgba(20,184,166,.55) !important;
-}
-
-/* Hover */
-.btn-primary:hover{
-  color: #0f172a !important;
-  background: linear-gradient(
-    135deg,
-    rgba(20,184,166,.55),
-    rgba(34,197,94,.45)
-  ) !important;
-  border-color: rgba(22,163,74,.65) !important;
-}
-
-/* ================= TAGS (index) : lisibles, espacés ================= */
-
-/* Si tes tags sont dans un conteneur .recipe-tags (mon HTML conseillé) */
-.recipe-tags{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-/* Si tes tags sont juste une ligne dans la card (cas le plus probable) :
-   on vise le dernier <p> contenant les tags */
-.recipe-card-link .tags,
-.recipe-card-link p.tags{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0 0;
-}
-
-/* Style "chip" pour chaque tag */
-.recipe-card-link .tag,
-.recipe-card-link .tags .tag,
-.recipe-card-link a.tag,
-.recipe-card-link .tags a{
-  display: inline-block;
-  border-bottom: none;
-  background: rgba(20,184,166,.10);
-  border: 1px solid rgba(20,184,166,.22);
-  color: var(--text);
-  font-size: .78rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-/* Hover */
-.recipe-card-link .tags a:hover{
-  background: rgba(34,197,94,.10);
-  border-color: rgba(22,163,74,.40);
-}
-
-/* Dropdown "Recettes" : liste longue scrollable */
 .recipes-dropdown-menu{
   max-height: 70vh;
-  overflow: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+
   border-radius: 14px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   padding: 8px;
 }
 
-/* Items plus lisibles */
+@media (max-width: 991.98px){
+  .recipes-dropdown-menu{ max-height: 75vh; }
+}
+
 .recipes-dropdown-menu .dropdown-item{
-  border-bottom: none;
   border-radius: 12px;
   padding: 10px 12px;
   font-weight: 650;
+  text-decoration: none !important;
 }
 
-/* Hover */
 .recipes-dropdown-menu .dropdown-item:hover{
   background: rgba(20,184,166,.10);
 }
-/* Dropdown "Recettes" : forcer le scroll DANS le menu (mobile/iOS) */
-.recipes-dropdown-menu{
-  max-height: 70vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;              /* empêche le scroll de "déborder" sur la page */
-  -webkit-overflow-scrolling: touch;         /* inertie iOS */
-  touch-action: pan-y;                       /* le geste vertical reste dans ce bloc */
-}
 
-/* Option : sur mobile, menu plus grand et plus confortable */
-@media (max-width: 991.98px){
-  .recipes-dropdown-menu{
-    max-height: 75vh;
-  }
-}
-
-/* Cartes recette : pas de soulignement partout */
-.recipe-card-link a,
-.recipe-card-link{
-  border-bottom: none !important;
-}
-
-/* Si titre cliquable (souvent un <a> sur le h3/titre) */
-.recipe-card-link a:hover{
-  border-bottom: none !important;
-}
-
-/* Tags (chips) : jamais soulignés */
-.recipe-card-link .tag,
-.recipe-card-link .tags a{
-  border-bottom: none !important;
-}
-
-/* Cartes recettes : pas de "soulignement" (border-bottom) */
-.recipe-card-link{
-  border-bottom: none !important;
-}
-
-/* Tout lien à l’intérieur des cartes : pas de border-bottom non plus */
-.recipe-card-link a,
-.recipe-card-link:hover{
-  border-bottom: none !important;
-}
-
-/* Bonus : survol de la carte = pas de soulignement */
-.recipe-card-link:hover{
-  text-decoration: none !important;
-}
-
-/* ============ STOP UNDERLINE DANS LES CARTES + PICK ============ */
-
-/* Cartes : aucun soulignement, ni border-bottom ni underline */
-.recipe-card-link,
-.recipe-card-link *{
-  text-decoration: none !important;
-}
-
-.recipe-card-link{
-  border-bottom: none !important;
-}
-
-.recipe-card-link:hover,
-.recipe-card-link:hover *{
-  text-decoration: none !important;
-  border-bottom: none !important;
-}
-
-/* Le bloc "On mange quoi ?" (pick-card) : idem */
-.pick-card a,
-.pick-card a *{
-  text-decoration: none !important;
-  border-bottom: none !important;
-}
-
-/* Navbar : pas de underline */
-#navigation a,
+/* =========================================================
+   IMPORTANT : neutraliser les effets hover globaux dans la navbar
+   ========================================================= */
 #navigation a:hover{
-  text-decoration: none !important;
-  border-bottom: none !important;
-}
-
-a, a:hover, a:focus{
-  text-decoration: none !important;
+  background: transparent; /* sinon surlignage sur liens de nav */
 }
