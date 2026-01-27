@@ -33,10 +33,6 @@ body_id: "home"
     .recipe-badges-wrap{
       margin-top:.35rem;
     }
-    .badge-placeholder{
-      opacity:.55;
-      font-size:.95rem;
-    }
   </style>
 
   <!-- Suggestion aléatoire -->
@@ -97,10 +93,10 @@ body_id: "home"
                     </ul>
                   {% endif %}
 
-                  <!-- Ligne 2 : micronutriments (placeholder si vide) -->
+                  <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
                   {% assign micros = r.badges_nutritionnels | default: "" %}
-                  <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                    {% if micros and micros.size > 0 %}
+                  {% if micros and micros.size > 0 %}
+                    <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
                       {% for m in micros %}
                         {% case m %}
                           {% when "omega-3" %}<li title="Oméga-3">🐟</li>
@@ -122,10 +118,8 @@ body_id: "home"
                           {% when "iode" %}<li title="Iode">🌊</li>
                         {% endcase %}
                       {% endfor %}
-                    {% else %}
-                      <li class="badge-placeholder" title="Micronutriments : à compléter">—</li>
-                    {% endif %}
-                  </ul>
+                    </ul>
+                  {% endif %}
                 </div>
 
               </a>
