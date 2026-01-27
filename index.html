@@ -13,14 +13,15 @@ body_id: "home"
 
   <!-- Styles locaux (index) -->
   <style>
+    /* Badges */
     .recipe-badges-line{
       display:flex;
-      flex-wrap:nowrap;            /* une seule ligne */
+      flex-wrap:nowrap;
       gap:.35rem;
       list-style:none;
       padding:0;
       margin:.25rem 0 0 0;
-      overflow-x:auto;             /* scroll horizontal si trop long */
+      overflow-x:auto;
       -webkit-overflow-scrolling: touch;
     }
     .recipe-badges-line li{
@@ -32,6 +33,23 @@ body_id: "home"
     }
     .recipe-badges-wrap{
       margin-top:.35rem;
+    }
+
+    /* Catégories plus visibles */
+    .recipe-category-title{
+      margin-top: 1.25rem;
+      margin-bottom: .75rem;
+      padding: .6rem .75rem;
+      border-left: .35rem solid currentColor;
+      background: rgba(0,0,0,.04);
+      border-radius: .35rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .recipe-category-title a{
+      text-decoration: none;
+      border-bottom: none;
+      color: inherit;
     }
   </style>
 
@@ -48,7 +66,9 @@ body_id: "home"
   <!-- Sections catégories -->
   <div id="recipes-index">
     {% for g in grouped %}
-      <h3 id="{{ g.name | slugify }}">{{ g.name }}</h3>
+      <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
+        <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
+      </h3>
 
       <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
         {% assign group_recipes = g.items | sort: "recipe_sort" %}
@@ -70,7 +90,7 @@ body_id: "home"
                   {% endif %}
                 </div>
 
-                <!-- Sous-titre temporairement masqué : on n'affiche plus recipe_subtitle -->
+                <!-- Sous-titre temporairement masqué -->
 
                 <div class="recipe-badges-wrap">
                   <!-- Ligne 1 : badges (tags) -->
