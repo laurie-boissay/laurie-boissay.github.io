@@ -6,6 +6,30 @@
   {%- if page.extra_head -%}
     {{ page.extra_head }}
   {%- endif -%}
+
+  <!-- Styles locaux (layout recipe) -->
+  <style>
+    .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;            /* une seule ligne */
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;             /* scroll horizontal si trop long */
+      -webkit-overflow-scrolling: touch;
+    }
+    .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .recipe-badges-wrap{
+      margin-top:.35rem;
+    }
+  </style>
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
@@ -17,20 +41,62 @@
 
       {% include bandeau-non-teste.html %}
 
+      {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+
       <header class="recipe-head">
         <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
-        {% if page.recipe_subtitle %}
-          <p class="recipe-subtitle">{{ page.recipe_subtitle }}</p>
-        {% endif %}
+        <!-- Sous-titre temporairement masqué : on n'affiche plus recipe_subtitle -->
 
-        {% if page.tags %}
-          <div class="recipe-tags">
-            {% for tag in page.tags %}
-              <span class="tag">{{ tag }}</span>
-            {% endfor %}
-          </div>
-        {% endif %}
+        <div class="recipe-badges-wrap">
+          <!-- Ligne 1 : badges (tags) -->
+          {% if page.tags %}
+            <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+              {% for tag in page.tags %}
+                {% unless hidden_tags contains tag %}
+                  {% case tag %}
+                    {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
+                    {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
+                    {% when "rapide" %}<li title="Rapide">⏱️</li>
+                    {% when "congelable" %}<li title="Congelable">❄️</li>
+                    {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
+                    {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
+                    {% when "calorique" %}<li title="Calorique">🔥</li>
+                    {% when "longue" %}<li title="Préparation longue">🐌</li>
+                  {% endcase %}
+                {% endunless %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
+          {% assign micros = page.badges_nutritionnels | default: "" %}
+          {% if micros and micros.size > 0 %}
+            <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
+              {% for m in micros %}
+                {% case m %}
+                  {% when "omega-3" %}<li title="Oméga-3">🐟</li>
+
+                  {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
+                  {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
+                  {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
+                  {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
+                  {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
+                  {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
+                  {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
+
+                  {% when "calcium" %}<li title="Calcium">🦴</li>
+                  {% when "fer" %}<li title="Fer">🧲</li>
+                  {% when "magnesium" %}<li title="Magnésium">⚡</li>
+                  {% when "potassium" %}<li title="Potassium">🍌</li>
+                  {% when "zinc" %}<li title="Zinc">🔩</li>
+                  {% when "selenium" %}<li title="Sélénium">🧪</li>
+                  {% when "iode" %}<li title="Iode">🌊</li>
+                {% endcase %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
       </header>
 
       <div class="content-surface recipe-surface">
