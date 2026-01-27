@@ -11,6 +11,36 @@ body_id: "home"
 <section id="index">
   <h2>Index</h2>
 
+  <!-- Styles locaux (index) -->
+  <style>
+    /* 2 lignes : badges tags puis micronutriments */
+    .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;            /* une seule ligne */
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;             /* si trop long, scroll horizontal */
+      -webkit-overflow-scrolling: touch;
+    }
+    .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .recipe-badges-wrap{
+      margin-top:.35rem;
+    }
+    /* Placeholder micronutriments (temporaire) */
+    .badge-placeholder{
+      opacity:.55;
+      font-size:.95rem;
+    }
+  </style>
+
   <!-- Suggestion aléatoire -->
   <div class="mb-4">
     <div id="random-pick"></div>
@@ -18,6 +48,39 @@ body_id: "home"
 
   {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
   {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+
+  {%- assign tag_badges = {
+    "tres-proteine": "💪",
+    "riche-en-fibres": "💩",
+    "rapide": "⏱️",
+    "congelable": "❄️",
+    "micro-ondable": "♨️",
+    "peu-calorique": "🪶",
+    "calorique": "🔥",
+    "longue": "🐌"
+  } -%}
+
+  {%- assign micro_badges = {
+    "omega-3": "🐟",
+
+    "vitamine-a": "👁️",
+    "vitamine-c": "🍋",
+    "vitamine-d": "🌤️",
+    "vitamine-e": "🛡️",
+    "vitamine-k": "🩸",
+    "vitamine-b9": "🌱",
+    "vitamine-b12": "🥩",
+
+    "calcium": "🦴",
+    "fer": "🧲",
+    "magnesium": "⚡",
+    "potassium": "🍌",
+    "zinc": "🔩",
+    "selenium": "🧪",
+    "iode": "🌊"
+  } -%}
 
   <!-- Sections catégories -->
   <div id="recipes-index">
@@ -44,19 +107,37 @@ body_id: "home"
                   {% endif %}
                 </div>
 
-                {% if r.recipe_subtitle %}
-                  <div class="text-muted small recipe-card-subtitle">
-                    {{ r.recipe_subtitle }}
-                  </div>
-                {% endif %}
+                <!-- Sous-titre temporairement masqué : on n'affiche plus recipe_subtitle -->
 
-                {% if r.tags %}
-                  <div class="recipe-tags">
-                    {% for tag in r.tags %}
-                      <span class="tag">{{ tag }}</span>
-                    {% endfor %}
-                  </div>
-                {% endif %}
+                <div class="recipe-badges-wrap">
+                  <!-- Ligne 1 : badges (tags) -->
+                  {% if r.tags %}
+                    <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+                      {% for tag in r.tags %}
+                        {% unless hidden_tags contains tag %}
+                          {% if tag_badges[tag] %}
+                            <li title="{{ tag }}">{{ tag_badges[tag] }}</li>
+                          {% endif %}
+                        {% endunless %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+
+                  <!-- Ligne 2 : micronutriments (placeholder si vide) -->
+                  {% assign micros = r.badges_nutritionnels | default: "" %}
+                  <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
+                    {% if micros and micros.size > 0 %}
+                      {% for m in micros %}
+                        {% if micro_badges[m] %}
+                          <li title="{{ m }}">{{ micro_badges[m] }}</li>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <li class="badge-placeholder" title="Micronutriments : à compléter">—</li>
+                    {% endif %}
+                  </ul>
+                </div>
+
               </a>
             </article>
           {% endfor %}
