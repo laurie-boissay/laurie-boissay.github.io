@@ -11,12 +11,12 @@
   <style>
     .recipe-badges-line{
       display:flex;
-      flex-wrap:nowrap;            /* une seule ligne */
+      flex-wrap:nowrap;
       gap:.35rem;
       list-style:none;
       padding:0;
       margin:.25rem 0 0 0;
-      overflow-x:auto;             /* scroll horizontal si trop long */
+      overflow-x:auto;
       -webkit-overflow-scrolling: touch;
     }
     .recipe-badges-line li{
@@ -28,6 +28,22 @@
     }
     .recipe-badges-wrap{
       margin-top:.35rem;
+    }
+    .badges-legend{
+      margin-top:.5rem;
+      font-size:.9rem;
+    }
+    .badges-legend summary{
+      cursor:pointer;
+      font-weight:600;
+    }
+    .badges-legend ul{
+      list-style:none;
+      padding-left:0;
+      margin:.4rem 0 0 0;
+    }
+    .badges-legend li{
+      line-height:1.4;
     }
   </style>
 </head>
@@ -46,7 +62,7 @@
       <header class="recipe-head">
         <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
-        <!-- Sous-titre temporairement masqué : on n'affiche plus recipe_subtitle -->
+        <!-- Sous-titre temporairement masqué -->
 
         <div class="recipe-badges-wrap">
           <!-- Ligne 1 : badges (tags) -->
@@ -69,7 +85,7 @@
             </ul>
           {% endif %}
 
-          <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
+          <!-- Ligne 2 : micronutriments -->
           {% assign micros = page.badges_nutritionnels | default: "" %}
           {% if micros and micros.size > 0 %}
             <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
@@ -96,6 +112,36 @@
               {% endfor %}
             </ul>
           {% endif %}
+
+          <!-- Légende des badges -->
+          <details class="badges-legend">
+            <summary>Légende des badges</summary>
+            <ul>
+              <li>💪 Très protéiné</li>
+              <li>💩 Riche en fibres</li>
+              <li>⏱️ Rapide à préparer</li>
+              <li>❄️ Congelable</li>
+              <li>♨️ Micro-ondable</li>
+              <li>🪶 Peu calorique</li>
+              <li>🔥 Calorique</li>
+              <li>🐌 Préparation longue / temps passif important</li>
+              <li>🐟 Oméga-3</li>
+              <li>👁️ Vitamine A</li>
+              <li>🍋 Vitamine C</li>
+              <li>🌤️ Vitamine D</li>
+              <li>🛡️ Vitamine E</li>
+              <li>🩸 Vitamine K</li>
+              <li>🌱 Vitamine B9</li>
+              <li>🥩 Vitamine B12</li>
+              <li>🦴 Calcium</li>
+              <li>🧲 Fer</li>
+              <li>⚡ Magnésium</li>
+              <li>🍌 Potassium</li>
+              <li>🔩 Zinc</li>
+              <li>🧪 Sélénium</li>
+              <li>🌊 Iode</li>
+            </ul>
+          </details>
         </div>
       </header>
 
