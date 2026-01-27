@@ -605,4 +605,22 @@ a, a *{
   padding: .1rem .4rem;
   border-radius: 6px;
 }
+.recipe-badges-line{
+  display:flex;
+  flex-wrap:nowrap;     /* une seule ligne */
+  gap:.35rem;
+  list-style:none;
+  padding:0;
+  margin:.25rem 0 0 0;
+  overflow-x:auto;      /* scroll horizontal si trop long */
+  -webkit-overflow-scrolling: touch;
+}
+
+.recipe-badges-line li{
+  display:flex;
+  align-items:center;
+  font-size:1.15rem;
+  line-height:1;
+  white-space:nowrap;
+}
 
