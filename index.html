@@ -75,7 +75,11 @@ body_id: "home"
 
         <div class="recipes-grid">
           {% for r in group_recipes %}
-            <article class="recipe-card mb-2" data-tags="{{ r.tags | join: ',' | escape }}">
+            <article
+              class="recipe-card mb-2"
+              data-tags="{{ r.tags | join: ',' | escape }}"
+              data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
+            >
               <a
                 class="recipe-card-link"
                 href="{{ r.url | relative_url }}"
@@ -161,6 +165,9 @@ body_id: "home"
 <script>
   const EXCLUDED_TAG = "gout-sucre";
 
+  // Tags masqués (pas affichés dans les badges "fonctionnels")
+  const HIDDEN_TAGS = new Set(["low-carb-modere","low-carb-strict","gout-sucre"]);
+
   // Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules)
   const EXCLUDED_GROUPS = [
     "amuse-bouche",
@@ -172,6 +179,39 @@ body_id: "home"
     "préparations & conservations",
     "barres nutritionnelles"
   ];
+
+  // Mapping tag -> { emoji, title }
+  const TAG_BADGES = {
+    "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
+    "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
+    "rapide":          { emoji: "⏱️", title: "Rapide" },
+    "congelable":      { emoji: "❄️", title: "Congelable" },
+    "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
+    "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
+    "calorique":       { emoji: "🔥", title: "Calorique" },
+    "longue":          { emoji: "🐌", title: "Préparation longue" }
+  };
+
+  // Mapping micronutriment -> { emoji, title }
+  const MICRO_BADGES = {
+    "omega-3":     { emoji: "🐟", title: "Oméga-3" },
+
+    "vitamine-a":  { emoji: "👁️", title: "Vitamine A" },
+    "vitamine-c":  { emoji: "🍋", title: "Vitamine C" },
+    "vitamine-d":  { emoji: "🌤️", title: "Vitamine D" },
+    "vitamine-e":  { emoji: "🛡️", title: "Vitamine E" },
+    "vitamine-k":  { emoji: "🩸", title: "Vitamine K" },
+    "vitamine-b9": { emoji: "🌱", title: "Vitamine B9" },
+    "vitamine-b12":{ emoji: "🥩", title: "Vitamine B12" },
+
+    "calcium":     { emoji: "🦴", title: "Calcium" },
+    "fer":         { emoji: "🧲", title: "Fer" },
+    "magnesium":   { emoji: "⚡", title: "Magnésium" },
+    "potassium":   { emoji: "🍌", title: "Potassium" },
+    "zinc":        { emoji: "🔩", title: "Zinc" },
+    "selenium":    { emoji: "🧪", title: "Sélénium" },
+    "iode":        { emoji: "🌊", title: "Iode" }
+  };
 
   const indexRoot = document.getElementById("recipes-index");
   const pickHost = document.getElementById("random-pick");
@@ -237,17 +277,61 @@ body_id: "home"
     return a;
   }
 
+  function parseList(str) {
+    return (str || "")
+      .split(",")
+      .map(s => s.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
+  function buildBadgeLine(items, map, ariaLabel) {
+    const lis = items
+      .map(id => {
+        const info = map[id];
+        if (!info) return "";
+        const title = (info.title || "").replace(/"/g, "&quot;");
+        return `<li title="${title}">${info.emoji}</li>`;
+      })
+      .filter(Boolean)
+      .join("");
+
+    if (!lis) return "";
+    return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
+  }
+
+  function buildPickBadges(card) {
+    const tagsAll = parseList(card?.dataset?.tags);
+    const tagsFunctional = tagsAll.filter(t => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
+
+    const microsAll = parseList(card?.dataset?.micros);
+    const micros = microsAll.filter(m => MICRO_BADGES[m]);
+
+    const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Badges");
+    const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments");
+
+    if (!line1 && !line2) return "";
+    return `
+      <div class="recipe-badges-wrap">
+        ${line1}
+        ${line2}
+      </div>
+    `;
+  }
+
   function renderPick(a) {
     const href = a.getAttribute("href");
     const title = (a.dataset.title || a.textContent || "").trim();
     const tested = a.dataset.tested === "true";
+
+    const card = a.closest(".recipe-card");
+    const badgesHtml = buildPickBadges(card);
 
     pickHost.innerHTML = `
       <div class="pick-card">
         <div class="pick-card-body text-center">
           <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
-          <h3 class="h5 mb-3">
+          <h3 class="h5 mb-2">
             ${title}
             ${tested ? "" : `
               <span class="badge bg-warning text-dark ms-2">
@@ -255,6 +339,8 @@ body_id: "home"
               </span>
             `}
           </h3>
+
+          ${badgesHtml}
 
           <div class="d-flex justify-content-center gap-2 mt-3">
             <a class="btn btn-primary" href="${href}">Ça me plaît</a>
@@ -291,3 +377,4 @@ body_id: "home"
 
   pickAndRender();
 </script>
+
