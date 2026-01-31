@@ -115,7 +115,7 @@ layout: page
       <li><a class="badge-link" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
       <li><a class="badge-link" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
       <li><a class="badge-link" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congelable">❄️</a></li>
       <li><a class="badge-link" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
       <li><a class="badge-link" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
       <li><a class="badge-link" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
@@ -155,6 +155,8 @@ layout: page
     Filtrage selon type.
   {%- endcomment -%}
   {%- assign filtered = "" | split: "" -%}
+  {%- assign displayed_tags = "" | split: "" -%}  <!-- Initialisation de la liste des tags affichés -->
+
   {%- for r in recipes -%}
     {%- if page.filter_type == "tag" -%}
       {%- if r.tags and r.tags contains page.filter_id -%}
@@ -182,6 +184,18 @@ layout: page
           {%- if r.description -%}
             <p class="recipe-card-desc">{{ r.description }}</p>
           {%- endif -%}
+
+          {%- if r.tags -%}
+            {%- for tag in r.tags -%}
+              {%- unless displayed_tags contains tag -%}
+                {%- assign displayed_tags = displayed_tags | push: tag -%}
+                <ul class="recipe-badges-line" aria-label="Tags">
+                  <li>{{ tag }}</li>  <!-- Affichage du tag -->
+                </ul>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+
         </article>
       {%- endfor -%}
     </div>
