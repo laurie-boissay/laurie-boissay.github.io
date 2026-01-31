@@ -741,3 +741,20 @@ min-width:2rem;
 .random-pick-links{
 margin-top:.5rem;
 }
+
+/* Catégories plus visibles */
+.recipe-category-title{
+margin-top: 1.25rem;
+margin-bottom: .75rem;
+padding: .6rem .75rem;
+border-left: .35rem solid currentColor;
+background: rgba(0,0,0,.04);
+border-radius: .35rem;
+font-weight: 800;
+letter-spacing: .2px;
+}
+.recipe-category-title a{
+text-decoration: none;
+border-bottom: none;
+color: inherit;
+}
