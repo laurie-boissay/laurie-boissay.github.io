@@ -12,6 +12,7 @@ layout: page
 {%- endcomment -%}
 
 {%- assign page_title = page.filter_title | default: "Recettes" -%}
+
 {%- if page.filter_id %}
   {%- assign page_title = page_title | append: " : " | append: page.filter_id -%}
 {%- endif -%}
