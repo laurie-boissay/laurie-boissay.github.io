@@ -8,8 +8,8 @@ page_h2_orange: "Travail en cours !"
 body_id: "home"
 ---
 
-<section id="index">
-  <h2>Index</h2>
+<section id="index :">
+  <h2>Index :</h2>
 
   <!-- Styles locaux (index) -->
   <style>
@@ -195,6 +195,6 @@ body_id: "home"
     if (a) renderPick(a);
   }
 
-  pickAndRender();
+  setTimeout(pickAndRender, 500); // Ajout d'un délai pour s'assurer que tout est bien chargé
 </script>
 
