@@ -11,7 +11,10 @@ layout: page
   - page.filter_title: titre humain (optionnel)
 {%- endcomment -%}
 
-{%- assign page_title = page.filter_title | default: "Recettes : " | append: page.filter_id -%}
+{%- assign page_title = page.filter_title | default: "Recettes" -%}
+{%- if page.filter_id %}
+  {%- assign page_title = page_title | append: " : " | append: page.filter_id -%}
+{%- endif -%}
 
 <section class="site-container" id="tag-index">
 
