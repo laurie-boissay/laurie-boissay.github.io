@@ -9,7 +9,7 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index :</h2>
+  <h2>Index</h2>
 
   <!-- Suggestion aléatoire -->
   <div class="mb-4">
@@ -49,6 +49,11 @@ body_id: "home"
                 >
                   <div class="recipe-card-top">
                     <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
+                    
+                    <!-- Affichage du sous-titre -->
+                    {% if r.recipe_subtitle %}
+                      <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
+                    {% endif %}
 
                     {% if r.recipe_tested == false %}
                       <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
