@@ -284,20 +284,24 @@ body_id: "home"
       .filter(Boolean);
   }
 
-  function buildBadgeLine(items, map, ariaLabel) {
-    const lis = items
-      .map(id => {
-        const info = map[id];
-        if (!info) return "";
-        const title = (info.title || "").replace(/"/g, "&quot;");
-        return `<li title="${title}">${info.emoji}</li>`;
-      })
-      .filter(Boolean)
-      .join("");
+ function buildBadgeLine(items, map, ariaLabel) {
+  const lis = items
+    .map(id => {
+      const info = map[id];
+      if (!info) return "";
+      const title = (info.title || "").replace(/"/g, "&quot;");
+      return `<li title="${title}">${info.emoji}</li>`;
+    })
+    .filter(Boolean)
+    .join("");
 
-    if (!lis) return "";
-    return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
+  if (!lis) {
+    return `<ul class="recipe-badges-line is-empty" aria-label="$	     	{ariaLabel}"></ul>`;
   }
+
+  return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
+}
+
 
   function buildPickBadges(card) {
     const tagsAll = parseList(card?.dataset?.tags);

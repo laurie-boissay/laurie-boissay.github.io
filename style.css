@@ -624,3 +624,8 @@ a, a *{
   white-space:nowrap;
 }
 
+.recipe-badges-line.is-empty {
+  min-height: 1.6rem;
+}
+
+
