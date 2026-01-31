@@ -9,7 +9,64 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index test</h2>
+  <h2>Index</h2>
+
+  <!-- Styles locaux (index) -->
+  <style>
+    /* Badges */
+    .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .recipe-badges-wrap{
+      margin-top:.35rem;
+    }
+
+    /* Liens badges (clicables) */
+    .recipe-badges-line a.badge-link-outside{
+      text-decoration:none;
+      border-bottom:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:2rem;
+    }
+
+    /* Blocs badges fixes sous le random pick */
+    .random-pick-links{
+      margin-top:.5rem;
+    }
+
+    /* Catégories plus visibles */
+    .recipe-category-title{
+      margin-top: 1.25rem;
+      margin-bottom: .75rem;
+      padding: .6rem .75rem;
+      border-left: .35rem solid currentColor;
+      background: rgba(0,0,0,.04);
+      border-radius: .35rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .recipe-category-title a{
+      text-decoration: none;
+      border-bottom: none;
+      color: inherit;
+    }
+  </style>
 
   <!-- Suggestion aléatoire -->
   <div class="mb-4">
@@ -17,23 +74,51 @@ body_id: "home"
 
     <!-- Liens fixes vers index filtrés (hors tirage) -->
     <div class="random-pick-links mt-2">
-      <!-- Tags fonctionnels -->
+
+      <!-- Ligne 1 : tags fonctionnels (inclut goût sucré, mais exclu du tirage aléatoire) -->
+      <!--
       <ul class="recipe-badges-line badges-tags-fixed" aria-label="Tags fonctionnels">
         <li><a class="badge-link-outside" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
         <li><a class="badge-link-outside" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
-        <!-- autres tags ici -->
+        <li><a class="badge-link-outside" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/congelable/' | relative_url }}" title="Congelable">❄️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
       </ul>
+      -->
 
-      <!-- Micronutriments -->
+      <!-- Ligne 2 : micronutriments -->
+      <!--
       <ul class="recipe-badges-line badges-micro-fixed" aria-label="Micronutriments">
         <li><a class="badge-link-outside" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
-        <!-- autres micronutriments ici -->
+
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
       </ul>
+      -->
     </div>
   </div>
 
   {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
   {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
   <!-- Sections catégories -->
   <div id="recipes-index">
@@ -47,40 +132,71 @@ body_id: "home"
 
         <div class="recipes-grid">
           {% for r in group_recipes %}
-            <article class="recipe-card mb-2" data-tags="{{ r.tags | join: ',' | escape }}" data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}">
-              <a class="recipe-card-link" href="{{ r.url | relative_url }}" data-tested="{{ r.recipe_tested }}" data-title="{{ r.recipe_title | escape }}">
+            <article
+              class="recipe-card mb-2"
+              data-tags="{{ r.tags | join: ',' | escape }}"
+              data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
+            >
+              <a
+                class="recipe-card-link"
+                href="{{ r.url | relative_url }}"
+                data-tested="{{ r.recipe_tested }}"
+                data-title="{{ r.recipe_title | escape }}"
+              >
                 <div class="recipe-card-top">
                   <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
+
                   {% if r.recipe_tested == false %}
                     <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
                   {% endif %}
                 </div>
 
+                <!-- Sous-titre temporairement masqué -->
+
                 <div class="recipe-badges-wrap">
-                  <!-- Badges et tags -->
+                  <!-- Ligne 1 : badges (tags) -->
                   {% if r.tags %}
                     <ul class="recipe-badges-line badges-tags" aria-label="Badges">
                       {% for tag in r.tags %}
                         {% unless hidden_tags contains tag %}
-                          <!-- Affichage des badges -->
                           {% case tag %}
                             {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
                             {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
-                            <!-- autres tags ici -->
+                            {% when "rapide" %}<li title="Rapide">⏱️</li>
+                            {% when "congelable" %}<li title="Congelable">❄️</li>
+                            {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
+                            {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
+                            {% when "calorique" %}<li title="Calorique">🔥</li>
+                            {% when "longue" %}<li title="Préparation longue">🐌</li>
                           {% endcase %}
                         {% endunless %}
                       {% endfor %}
                     </ul>
                   {% endif %}
 
-                  <!-- Micronutriments -->
+                  <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
                   {% assign micros = r.badges_nutritionnels | default: "" %}
                   {% if micros and micros.size > 0 %}
                     <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
                       {% for m in micros %}
                         {% case m %}
                           {% when "omega-3" %}<li title="Oméga-3">🐟</li>
-                          <!-- autres micronutriments ici -->
+
+                          {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
+                          {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
+                          {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
+                          {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
+                          {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
+                          {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
+                          {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
+
+                          {% when "calcium" %}<li title="Calcium">🦴</li>
+                          {% when "fer" %}<li title="Fer">🧲</li>
+                          {% when "magnesium" %}<li title="Magnésium">⚡</li>
+                          {% when "potassium" %}<li title="Potassium">🍌</li>
+                          {% when "zinc" %}<li title="Zinc">🔩</li>
+                          {% when "selenium" %}<li title="Sélénium">🧪</li>
+                          {% when "iode" %}<li title="Iode">🌊</li>
                         {% endcase %}
                       {% endfor %}
                     </ul>
@@ -91,11 +207,13 @@ body_id: "home"
             </article>
           {% endfor %}
         </div>
+
       </div>
     {% endfor %}
   </div>
 
   <hr class="my-4">
+
   <div class="text-center muted">
     Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
   </div>
