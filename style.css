@@ -10,6 +10,10 @@
    - Le dropdown "Recettes" est scrollable sur mobile/iOS
    - Rendu plus joli et moderne (surfaces, ombres, focus, micro-anim)
    - Pas de doublons inutiles, overrides ciblés
+
+   Correction demandée :
+   - Les tags/badges (emoji) doivent pouvoir aller à la ligne (wrap)
+   - Les lignes de badges doivent être centrées
    ========================================================= */
 
 
@@ -605,32 +609,94 @@ a, a *{
   padding: .1rem .4rem;
   border-radius: 6px;
 }
+
+
+/* =========================================================
+   BADGES (emoji) — CORRIGÉ : wrap + centré
+   Utilisé :
+   - dans les cartes (2 lignes tags/micros)
+   - sous le random pick (lignes)
+   - dans tes liens fixes (si tu réutilises la même classe)
+   ========================================================= */
+
 .recipe-badges-line{
   display:flex;
-  flex-wrap:nowrap;     /* une seule ligne */
-  gap:.35rem;
+  flex-wrap: wrap;          /* ✅ autorise retour à la ligne */
+  justify-content: center;  /* ✅ centre horizontalement */
+  align-items: center;
+
+  gap: .35rem;
   list-style:none;
-  padding:0;
-  margin:.25rem 0 0 0;
-  overflow-x:auto;      /* scroll horizontal si trop long */
-  -webkit-overflow-scrolling: touch;
+  padding: 0;
+  margin: .25rem 0 0 0;
+
+  overflow-x: visible;      /* ✅ plus de scroll horizontal */
+  -webkit-overflow-scrolling: auto;
 }
 
 .recipe-badges-line li{
   display:flex;
   align-items:center;
-  font-size:1.15rem;
-  line-height:1;
-  white-space:nowrap;
+  font-size: 1.15rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-.recipe-badges-line.is-empty {
+.recipe-badges-line.is-empty{
   min-height: 1.6rem;
 }
 
-/* Centrage horizontal des lignes de badges (random pick) */
-.pick-card .recipe-badges-line {
+/* Le random pick est déjà centré par design, on laisse (redondant mais OK) */
+.pick-card .recipe-badges-line{
   justify-content: center;
 }
 
+/* Si tu as des liens autour des emojis (badges cliquables) */
+.recipe-badges-line a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none !important;
+  border-bottom:none !important;
+  background: transparent !important;
+  padding: .1rem .2rem;
+  border-radius: 10px;
+}
+
+.recipe-badges-line a:hover{
+  background: rgba(20,184,166,.10) !important;
+}
+
+
+/* =========================================================
+   (Optionnel) Si tu utilises encore .random-pick-badges ailleurs
+   - conservé mais rendu cohérent avec le wrap/centrage
+   ========================================================= */
+
+.random-pick-badges{
+  display: block;
+  margin-top: .5rem;
+}
+
+.random-pick-badges .badges-line{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem;
+  margin: .15rem 0;
+}
+
+.random-pick-badges .badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: .15rem .4rem;
+  border-radius: .6rem;
+  text-decoration: none;
+}
+
+.random-pick-badges .badge-empty{
+  display: none;
+}
 

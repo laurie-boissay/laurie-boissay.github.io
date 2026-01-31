@@ -1,0 +1,82 @@
+---
+layout: default
+---
+
+{%- comment -%}
+  Layout d’index filtré (compatible GitHub Pages).
+  Paramètres attendus dans la page :
+  - page.filter_type : "tag" ou "micro"
+  - page.filter_id   : l’identifiant (ex: "rapide" ou "omega-3")
+  - page.filter_title: titre humain (optionnel)
+{%- endcomment -%}
+
+<div class="site-container">
+  <header class="page-head">
+    <h1 class="page-title">
+      {%- if page.filter_title -%}
+        {{ page.filter_title }}
+      {%- else -%}
+        Recettes : {{ page.filter_id }}
+      {%- endif -%}
+    </h1>
+
+    <p class="small text-muted">
+      Filtre :
+      {%- if page.filter_type == "tag" -%}
+        tag fonctionnel
+      {%- else -%}
+        micronutriment
+      {%- endif -%}
+      — <code>{{ page.filter_id }}</code>
+    </p>
+  </header>
+
+  {%- comment -%}
+    Récupère toutes les pages de recettes.
+    Hypothèse : tes recettes sont des pages avec layout: recipe.
+    Si tu as une collection dédiée, adapte (ex: site.recipes).
+  {%- endcomment -%}
+  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
+
+  {%- comment -%}
+    Filtrage selon type.
+  {%- endcomment -%}
+  {%- assign filtered = "" | split: "" -%}
+  {%- for r in recipes -%}
+    {%- if page.filter_type == "tag" -%}
+      {%- if r.tags and r.tags contains page.filter_id -%}
+        {%- assign filtered = filtered | push: r -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if r.badges_nutritionnels and r.badges_nutritionnels contains page.filter_id -%}
+        {%- assign filtered = filtered | push: r -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if filtered.size == 0 -%}
+    <p>Aucune recette trouvée.</p>
+  {%- else -%}
+    <p><strong>{{ filtered.size }}</strong> recette(s).</p>
+
+    <div class="recipe-grid">
+      {%- comment -%}
+        Rendu des cartes :
+        - Si tu as déjà un include de carte recette, utilise-le ici (recommandé).
+        - Sinon, rendu minimal.
+      {%- endcomment -%}
+
+      {%- for r in filtered -%}
+        <article class="recipe-card">
+          <h2 class="recipe-card-title">
+            <a href="{{ r.url | relative_url }}">{{ r.recipe_title | default: r.title }}</a>
+          </h2>
+          {%- if r.description -%}
+            <p class="recipe-card-desc">{{ r.description }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
