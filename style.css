@@ -628,4 +628,9 @@ a, a *{
   min-height: 1.6rem;
 }
 
+/* Centrage horizontal des lignes de badges (random pick) */
+.pick-card .recipe-badges-line {
+  justify-content: center;
+}
+
 
