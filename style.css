@@ -704,3 +704,40 @@ a, a *{
   display: none;
 }
 
+/* Page INDEX */
+/* Badges */
+.recipe-badges-line{
+display:flex;
+flex-wrap:nowrap;
+gap:.35rem;
+list-style:none;
+padding:0;
+margin:.25rem 0 0 0;
+overflow-x:auto;
+-webkit-overflow-scrolling: touch;
+}
+.recipe-badges-line li{
+display:flex;
+align-items:center;
+font-size:1.15rem;
+line-height:1;
+white-space:nowrap;
+}
+.recipe-badges-wrap{
+margin-top:.35rem;
+}
+
+/* Liens badges (clicables) */
+.recipe-badges-line a.badge-link-outside{
+text-decoration:none;
+border-bottom:none;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:2rem;
+}
+
+/* Blocs badges fixes sous le random pick */
+.random-pick-links{
+margin-top:.5rem;
+}
