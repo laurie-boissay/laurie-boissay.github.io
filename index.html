@@ -9,7 +9,7 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index</h2>
+  <h2>Index t</h2>
 
   <!-- Styles locaux (index) -->
   <style>
@@ -74,46 +74,6 @@ body_id: "home"
 
     <!-- Liens fixes vers index filtrés (hors tirage) -->
     <div class="random-pick-links mt-2">
-
-      <!-- Ligne 1 : tags fonctionnels (inclut goût sucré, mais exclu du tirage aléatoire) -->
-      <!--
-      <ul class="recipe-badges-line badges-tags-fixed" aria-label="Tags fonctionnels">
-        <li><a class="badge-link-outside" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/congelable/' | relative_url }}" title="Congelable">❄️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
-        <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
-      </ul>
-      -->
-
-      <!-- Ligne 2 : micronutriments -->
-      <!--
-      <ul class="recipe-badges-line badges-micro-fixed" aria-label="Micronutriments">
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
-
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
-
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
-        <li><a class="badge-link-outside" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
-      </ul>
-      -->
-    </div>
-  </div>
 
   {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
   {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
