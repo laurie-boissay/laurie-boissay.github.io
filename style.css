@@ -594,5 +594,165 @@ a, a *{
   border: 1px solid #f59e0b;
 
   padding: .15rem .45rem;
-  border-radius:
+  border-radius: 999px;
+}
+
+/* Badge "Recette non testée" dans le tirage aléatoire */
+#random-pick .badge.bg-warning {
+  font-size: .65rem;
+  font-weight: 500;
+
+  color: #64748b;
+  background-color: #f1f5f9;
+  border: none;
+
+  padding: .1rem .4rem;
+  border-radius: 6px;
+}
+
+
+/* =========================================================
+   BADGES (emoji) — CORRIGÉ : wrap + centré
+   Utilisé :
+   - dans les cartes (2 lignes tags/micros)
+   - sous le random pick (lignes)
+   - dans tes liens fixes (si tu réutilises la même classe)
+   ========================================================= */
+
+.recipe-badges-line{
+  display:flex;
+  flex-wrap: wrap;          /* ✅ autorise retour à la ligne */
+  justify-content: center;  /* ✅ centre horizontalement */
+  align-items: center;
+
+  gap: .35rem;
+  list-style:none;
+  padding: 0;
+  margin: .25rem 0 0 0;
+
+  overflow-x: visible;      /* ✅ plus de scroll horizontal */
+  -webkit-overflow-scrolling: auto;
+}
+
+.recipe-badges-line li{
+  display:flex;
+  align-items:center;
+  font-size: 1.15rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.recipe-badges-line.is-empty{
+  min-height: 1.6rem;
+}
+
+/* Le random pick est déjà centré par design, on laisse (redondant mais OK) */
+.pick-card .recipe-badges-line{
+  justify-content: center;
+}
+
+/* Si tu as des liens autour des emojis (badges cliquables) */
+.recipe-badges-line a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none !important;
+  border-bottom:none !important;
+  background: transparent !important;
+  padding: .1rem .2rem;
+  border-radius: 10px;
+}
+
+.recipe-badges-line a:hover{
+  background: rgba(20,184,166,.10) !important;
+}
+
+
+/* =========================================================
+   (Optionnel) Si tu utilises encore .random-pick-badges ailleurs
+   - conservé mais rendu cohérent avec le wrap/centrage
+   ========================================================= */
+
+.random-pick-badges{
+  display: block;
+  margin-top: .5rem;
+}
+
+.random-pick-badges .badges-line{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem;
+  margin: .15rem 0;
+}
+
+.random-pick-badges .badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: .15rem .4rem;
+  border-radius: .6rem;
+  text-decoration: none;
+}
+
+.random-pick-badges .badge-empty{
+  display: none;
+}
+
+/* Page INDEX */
+/* Badges */
+.recipe-badges-line{
+display:flex;
+flex-wrap:nowrap;
+gap:.35rem;
+list-style:none;
+padding:0;
+margin:.25rem 0 0 0;
+overflow-x:auto;
+-webkit-overflow-scrolling: touch;
+}
+.recipe-badges-line li{
+display:flex;
+align-items:center;
+font-size:1.15rem;
+line-height:1;
+white-space:nowrap;
+}
+.recipe-badges-wrap{
+margin-top:.35rem;
+}
+
+/* Liens badges (clicables) */
+.recipe-badges-line a.badge-link-outside{
+text-decoration:none;
+border-bottom:none;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:2rem;
+}
+
+/* Blocs badges fixes sous le random pick */
+.random-pick-links{
+margin-top:.5rem;
+}
+
+/* Catégories plus visibles */
+.recipe-category-title{
+margin-top: 1.25rem;
+margin-bottom: .75rem;
+padding: .6rem .75rem;
+border-left: .35rem solid currentColor;
+background: rgba(0,0,0,.04);
+border-radius: .35rem;
+font-weight: 800;
+letter-spacing: .2px;
+}
+.recipe-category-title a{
+text-decoration: none;
+border-bottom: none;
+color: inherit;
+}
+
 
