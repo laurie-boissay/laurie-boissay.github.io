@@ -1,54 +1,36 @@
 ---
 layout: recipe
-title: "Lapin à la moutarde"
-description: "Lapin entier découpé, mijoté à la moutarde sans crème. Recette traditionnelle, low carb modéré, plat familial."
+title: "Lapin à la moutarde (oignons & carottes)"
+description: "Lapin à la moutarde à l’ancienne, oignons et carottes, sans crème. Plat familial low carb modéré, très protéiné."
 recipe_title: "Lapin à la moutarde"
-recipe_subtitle: "Plat familial traditionnel — low carb modéré"
+recipe_subtitle: "Plat familial — low carb modéré — très protéiné"
 recipe_group: "Plats à base de viande"
-recipe_sort: "lapin-moutarde"
-recipe_tested: false
+recipe_sort: "lapin-moutarde-oignons-carottes"
+recipe_tested: true
 tags:
   - low-carb-modere
-
+  - tres-proteine
+  - longue
 extra_head: |
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "name": "Lapin à la moutarde",
-    "description": "Lapin entier découpé, mijoté à la moutarde sans crème. Recette traditionnelle low carb modéré.",
+    "name": "Lapin à la moutarde (oignons & carottes)",
+    "description": "Lapin découpé, badigeonné de moutarde à l’ancienne, mijoté avec oignons et carottes, sans crème.",
     "recipeYield": "4 portions",
     "prepTime": "PT20M",
     "cookTime": "PT50M",
     "totalTime": "PT1H10M",
-    "recipeCategory": "Plat",
-    "keywords": "low carb, lapin, moutarde, sans creme",
-    "author": { "@type": "Person", "name": "Laurie" },
-    "recipeIngredient": [
-      "1 lapin entier découpé (≈1,4 kg)",
-      "3 c. à soupe de moutarde",
-      "2 gousses d’ail",
-      "1 oignon",
-      "250 ml d’eau ou de bouillon",
-      "1 feuille de laurier",
-      "Thym",
-      "Sel, poivre"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Faire dorer les morceaux de lapin dans une cocotte, sans matière grasse ajoutée." },
-      { "@type": "HowToStep", "text": "Ajouter l’oignon émincé et l’ail, laisser revenir quelques minutes." },
-      { "@type": "HowToStep", "text": "Badigeonner les morceaux de moutarde." },
-      { "@type": "HowToStep", "text": "Ajouter l’eau ou le bouillon, le thym et le laurier." },
-      { "@type": "HowToStep", "text": "Couvrir et laisser mijoter 45 à 50 minutes à feu doux." }
-    ]
+    "recipeCategory": "Plats à base de viande"
   }
   </script>
 ---
-
 <div class="recipe-lead">
   <p>
-    Version <strong>traditionnelle et rustique</strong> du lapin à la moutarde.
-    Sauce courte, goût franc, digestion plus légère que la version crémée.
+    Version <strong>rustique et digeste</strong> du lapin à la moutarde,
+    <strong>sans crème</strong>, avec oignons et carottes.
+    Sauce courte, goût franc, plat familial rassasiant et très protéiné.
   </p>
   <ul>
     <li><strong>Portions :</strong> 4</li>
@@ -60,115 +42,72 @@ extra_head: |
 
 <h2>Ingrédients</h2>
 <ul>
-  <li>1 lapin entier découpé (≈1,4 kg)</li>
-  <li>3 c. à soupe de moutarde</li>
-  <li>1 oignon émincé</li>
-  <li>2 gousses d’ail écrasées</li>
-  <li>250 ml d’eau ou de bouillon</li>
-  <li>1 feuille de laurier</li>
-  <li>Thym</li>
+  <li>1 lapin entier découpé (≈ 1,4 kg)</li>
+  <li>3 c. à soupe de moutarde à l’ancienne</li>
+  <li>1 oignon moyen</li>
+  <li>3 carottes moyennes</li>
+  <li>1 filet d’huile neutre (colza ou tournesol)</li>
+  <li>20 g de beurre <em>ou</em> de ghee</li>
+  <li>300 ml d’eau ou de bouillon</li>
   <li>Sel, poivre</li>
 </ul>
 
 <h2>Préparation</h2>
 <ol>
-  <li>Dans une cocotte froide, disposer les morceaux de lapin et chauffer à feu moyen pour les faire dorer sur toutes les faces.</li>
-  <li>Ajouter l’oignon et l’ail, laisser suer quelques minutes.</li>
-  <li>Badigeonner chaque morceau de moutarde.</li>
-  <li>Verser l’eau ou le bouillon, ajouter thym et laurier.</li>
-  <li>Couvrir et laisser mijoter 45 à 50 minutes à feu doux, en retournant à mi-cuisson.</li>
+  <li>Badigeonner les morceaux de lapin avec la moutarde à l’ancienne.</li>
+  <li>Dans une cocotte, faire chauffer l’huile et le beurre (ou ghee).</li>
+  <li>Faire revenir le lapin sur toutes les faces jusqu’à légère coloration.</li>
+  <li>Ajouter l’oignon émincé et les carottes en rondelles. Faire revenir quelques minutes.</li>
+  <li>Verser l’eau ou le bouillon, couvrir partiellement.</li>
+  <li>Laisser mijoter <strong>45 à 50 minutes</strong> à feu doux.</li>
   <li>Saler et poivrer en fin de cuisson. La sauce doit rester courte.</li>
 </ol>
 
-{% assign acc_bruxelles = site.pages | where: "layout", "recipe" | where: "recipe_sort", "choux-bruxelles-rotis-ail-herbes" | first %}
-{% assign acc_riz_nature = site.pages | where: "layout", "recipe" | where: "recipe_sort", "riz-chou-fleur-poele" | first %}
-{% assign acc_riz_soja = site.pages | where: "layout", "recipe" | where: "recipe_sort", "riz-chou-fleur-sesame-soja" | first %}
-{% assign acc_courgettes = site.pages | where: "layout", "recipe" | where: "recipe_sort", "courgettes-poelees-ail-citron" | first %}
-
-<h2>Proposition d’accompagnement</h2>
-<p>
-  Pour rester cohérent avec le plat et le low carb modéré :
-</p>
-<ul>
-  <li>
-    <strong>
-      {% if acc_bruxelles %}
-        <a href="{{ acc_bruxelles.url | relative_url }}">Choux de Bruxelles rôtis ail & herbes</a>
-      {% else %}
-        Choux de Bruxelles rôtis ail & herbes
-      {% endif %}
-    </strong><br>
-    → Leur légère amertume équilibre parfaitement la moutarde.
-  </li>
-  <li>
-    <strong>
-      {% if acc_riz_nature %}
-        <a href="{{ acc_riz_nature.url | relative_url }}">Riz de chou-fleur nature</a>
-      {% else %}
-        Riz de chou-fleur nature
-      {% endif %}
-    </strong>
-    ou
-    <strong>
-      {% if acc_riz_soja %}
-        <a href="{{ acc_riz_soja.url | relative_url }}">riz de chou-fleur sésame & soja</a>
-      {% else %}
-        riz de chou-fleur sésame & soja
-      {% endif %}
-    </strong><br>
-    → Idéal pour absorber le jus sans ajouter de féculents.
-  </li>
-  <li>
-    <strong>
-      {% if acc_courgettes %}
-        <a href="{{ acc_courgettes.url | relative_url }}">Courgettes poêlées ail & citron</a>
-      {% else %}
-        Courgettes poêlées ail & citron
-      {% endif %}
-    </strong><br>
-    → Option plus légère si tu veux un repas moins hivernal.
-  </li>
-</ul>
-
 <h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par portion (lapin seul, hors accompagnement).</p>
+<p>Valeurs estimées par portion (¼ de la recette, lapin + sauce).</p>
+
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
       <tr>
         <th scope="row">Énergie</th>
-        <td>≈ 330 kcal</td>
+        <td>≈ 380 kcal</td>
       </tr>
       <tr>
         <th scope="row">Protéines</th>
-        <td>≈ 38 g</td>
+        <td>≈ 39 g</td>
       </tr>
       <tr>
         <th scope="row">Lipides</th>
-        <td>≈ 18 g</td>
+        <td>≈ 22 g</td>
       </tr>
       <tr>
         <th scope="row">Glucides</th>
-        <td>≈ 3 g</td>
+        <td>≈ 5,5 g</td>
       </tr>
       <tr>
         <th scope="row">Fibres</th>
-        <td>≈ 0 g</td>
+        <td>≈ 1,8 g</td>
       </tr>
       <tr>
         <th scope="row">Fructose</th>
-        <td>≈ 0 g</td>
+        <td>≈ 2 g</td>
       </tr>
     </tbody>
   </table>
 </div>
+
 <p class="small text-muted">
-  Glucides issus uniquement de la moutarde et de l’oignon. Aucun ajout de crème ou de sucre.
+  Glucides et fructose issus exclusivement de l’oignon et des carottes.
+  Aucune crème, aucun sucre ajouté.
 </p>
 
 <h2>Notes low carb</h2>
 <ul>
-  <li><strong>Compatible low carb modéré</strong> : plat protéiné, sauce courte.</li>
-  <li>Convient bien aux digestions sensibles (pas de crème).</li>
-  <li>Le lapin se réchauffe très bien le lendemain (sauce encore meilleure).</li>
+  <li><strong>Low carb modéré</strong> : compatible, mais non strict à cause des carottes.</li>
+  <li><strong>Très protéiné</strong> : idéal pour un plat principal rassasiant.</li>
+  <li>Digestion plus légère qu’une version crémée.</li>
+  <li>Le plat se réchauffe très bien le lendemain.</li>
 </ul>
+
+
