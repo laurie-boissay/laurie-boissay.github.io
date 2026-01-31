@@ -8,13 +8,8 @@ page_h2_orange: "Travail en cours !"
 body_id: "home"
 ---
 
-<section id="index">
-  <h2>Index</h2>
-
-  <!-- Styles locaux (index) -->
-  <style>
-    
-  </style>
+<section id="index :">
+  <h2>Index :</h2>
 
   <!-- Suggestion aléatoire -->
   <div class="mb-4">
@@ -141,8 +136,16 @@ body_id: "home"
   function getCandidates() {
     if (!indexRoot) return [];
     return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
-      .filter(isValidRecipeLink)
-      .filter(a => !hasExcludedTag(a.closest(".recipe-card")) && !isInExcludedGroup(a));
+      .filter(a => {
+        const card = a.closest(".recipe-card");
+        const tags = (card.dataset.tags || "").split(",");
+        return !tags.includes(EXCLUDED_TAG);
+      })
+      .filter(a => {
+        const groupEl = a.closest("[data-recipe-group]");
+        const group = groupEl ? groupEl.dataset.recipeGroup : "";
+        return !EXCLUDED_GROUPS.includes(group);
+      });
   }
 
   function pickRandom(links) {
