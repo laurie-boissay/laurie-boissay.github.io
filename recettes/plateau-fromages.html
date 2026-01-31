@@ -1,7 +1,7 @@
 ---
 layout: recipe
 title: "Plateau de fromages"
-description: "Plateau de fromages avec quantités par personne. Plat simple, sans pain, avec lien vers la salade d’endives (à servir à part)."
+description: "Plateau de fromages low carb avec quantités par personne et aide au choix des fromages. Plat simple, sans pain."
 recipe_title: "Plateau de fromages"
 recipe_subtitle: "Plat à base de fromages — low carb modéré"
 recipe_group: "Plats à base de fromages"
@@ -10,27 +10,25 @@ recipe_tested: true
 tags:
   - low-carb-modere
   - rapide
+  - peu-calorique
+
+badges_nutritionnels:
+  - calcium
+
 extra_head: |
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Recipe",
     "name": "Plateau de fromages",
-    "description": "Plateau de fromages low carb modéré avec quantités par personne, sans pain.",
+    "description": "Plateau de fromages low carb avec quantités par personne et conseils de sélection.",
     "recipeYield": "4 portions",
     "prepTime": "PT10M",
-    "cookTime": "PT0M",
     "totalTime": "PT10M",
     "recipeCategory": "Plat",
-    "keywords": "fromages, plateau de fromages, low carb, sans pain",
     "author": { "@type": "Person", "name": "Laurie" },
     "recipeIngredient": [
       "400 à 480 g de fromages variés (100 à 120 g par personne)"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Peser la quantité totale de fromage (400–480 g)." },
-      { "@type": "HowToStep", "text": "Couper en morceaux faciles à saisir (dégustation)." },
-      { "@type": "HowToStep", "text": "Dresser sur une planche ou une assiette et servir." }
     ]
   }
   </script>
@@ -38,127 +36,143 @@ extra_head: |
 
 <div class="recipe-lead">
   <p>
-    Un <strong>plateau de fromages</strong> peut être un plat low carb modéré, à condition de cadrer les quantités.
-    Accompagnement conseillé (à servir à part) :
-    {% assign salad = site.pages | where: "layout", "recipe" | where: "recipe_sort", "salade-endives-noix" | first %}
-    {% if salad %}
-      <a href="{{ salad.url | relative_url }}">salade d’endives aux noix</a>.
-    {% else %}
-      salade d’endives aux noix.
-    {% endif %}
+    Un <strong>plateau de fromages peut constituer un plat low carb modéré</strong>,
+    à condition de <strong>choisir les bons fromages</strong> et de <strong>maîtriser les quantités</strong>.
+    À accompagner idéalement de légumes crus ou d’une salade verte (servis à part).
   </p>
   <ul>
     <li><strong>Portions :</strong> 4</li>
+    <li><strong>Quantité :</strong> 100 à 120 g de fromage / personne</li>
     <li><strong>Préparation :</strong> 10 min</li>
-    <li><strong>Cuisson :</strong> 0 min</li>
     <li><strong>Niveau :</strong> très facile</li>
   </ul>
 </div>
 
-<h2>Ingrédients</h2>
+<h2>Quantités recommandées</h2>
 <ul>
-  <li><strong>Fromages : 400 à 480 g au total</strong> (soit <strong>100 à 120 g par personne</strong>)</li>
+  <li><strong>Entrée / fin de repas :</strong> 60–80 g par personne</li>
+  <li><strong>Plat principal :</strong> 100–120 g par personne</li>
+  <li>Au-delà : apport calorique élevé sans réel bénéfice nutritionnel</li>
 </ul>
 
-<h2>Choix des fromages</h2>
-<ul>
-  <li>Prendre <strong>3 à 4 fromages différents</strong> pour la variété.</li>
-  <li>Éviter les “trop grosses parts” : on vise la dégustation, pas l’excès.</li>
-  <li>Sortir les fromages <strong>20 à 30 minutes</strong> avant (meilleure texture et goût).</li>
-</ul>
+<h2>Comment bien choisir ses fromages (low carb)</h2>
 
-<h2>Quels fromages privilégier en low carb</h2>
-
-<h3>Pâtes dures et pressées (à privilégier)</h3>
-<ul>
-  <li>Comté, emmental, beaufort, abondance</li>
-  <li>Cantal, tomme, raclette</li>
-</ul>
+<h3>🟢 Pâtes dures et pressées — meilleurs choix</h3>
 <p>
-  Très pauvres en glucides, riches en protéines et en lipides.
-  Ce sont les fromages les plus simples à intégrer en low carb.
+  Très pauvres en glucides (lactose quasi absent), riches en protéines et rassasiantes.
 </p>
 
-<h3>Pâtes molles</h3>
-<ul>
-  <li>Brie, camembert, coulommiers</li>
-</ul>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fromage (100 g)</th>
+        <th>Calories</th>
+        <th>Protéines</th>
+        <th>Lipides</th>
+        <th>Glucides</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Comté</td><td>≈ 410 kcal</td><td>≈ 28 g</td><td>≈ 34 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Emmental</td><td>≈ 380 kcal</td><td>≈ 29 g</td><td>≈ 30 g</td><td>≈ 0 g</td></tr>
+      <tr><td>Beaufort</td><td>≈ 410 kcal</td><td>≈ 27 g</td><td>≈ 34 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Cantal affiné</td><td>≈ 390 kcal</td><td>≈ 26 g</td><td>≈ 32 g</td><td>≈ 0,5 g</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>🟡 Pâtes molles à croûte fleurie — compatibles mais à cadrer</h3>
 <p>
-  Toujours compatibles low carb, mais légèrement plus faciles à surconsommer.
-  À garder en portions raisonnables.
+  Toujours low carb, mais plus faciles à surconsommer (texture + palatabilité).
 </p>
 
-<h3>Chèvre et brebis</h3>
-<ul>
-  <li>Chèvres affinés</li>
-  <li>Ossau-Iraty, tomme de brebis</li>
-</ul>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fromage (100 g)</th>
+        <th>Calories</th>
+        <th>Protéines</th>
+        <th>Lipides</th>
+        <th>Glucides</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Camembert</td><td>≈ 300 kcal</td><td>≈ 19 g</td><td>≈ 24 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Brie</td><td>≈ 330 kcal</td><td>≈ 21 g</td><td>≈ 28 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Coulommiers</td><td>≈ 310 kcal</td><td>≈ 20 g</td><td>≈ 25 g</td><td>≈ 1 g</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>🟡 Chèvre et brebis — bons choix selon l’affinage</h3>
 <p>
-  Très bons choix en low carb.
-  Les versions <strong>affinées</strong> sont à privilégier par rapport aux fromages très frais,
-  légèrement plus riches en lactose.
+  Les versions <strong>affinées</strong> sont préférables (moins de lactose).
 </p>
 
-<h3>Fromages à limiter</h3>
-<ul>
-  <li>Fromages frais très jeunes</li>
-  <li>Fromages très transformés ou industriels</li>
-  <li>Fromages aromatisés ou sucrés (miel, fruits, etc.) — <strong>non low carb</strong></li>
-</ul>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fromage (100 g)</th>
+        <th>Calories</th>
+        <th>Protéines</th>
+        <th>Lipides</th>
+        <th>Glucides</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Chèvre affiné</td><td>≈ 360 kcal</td><td>≈ 22 g</td><td>≈ 30 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Ossau-Iraty</td><td>≈ 400 kcal</td><td>≈ 25 g</td><td>≈ 33 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Tomme de brebis</td><td>≈ 380 kcal</td><td>≈ 24 g</td><td>≈ 31 g</td><td>≈ 0,5 g</td></tr>
+    </tbody>
+  </table>
+</div>
 
-<h3>Autres conseils utiles</h3>
+<h3>🔴 Fromages à limiter ou éviter</h3>
 <ul>
-  <li>Éviter les confitures et pains, même « complets » : <strong>non low carb</strong>.</li>
-  <li>Couper les fromages en petits morceaux : aide à respecter les quantités.</li>
-  <li>Boire de l’eau : le fromage est salé et très dense.</li>
+  <li>Fromages très frais (ricotta, faisselle) → plus de lactose</li>
+  <li>Fromages industriels ultra-transformés</li>
+  <li>Fromages aromatisés (miel, fruits, noix sucrées) → <strong>non low carb</strong></li>
 </ul>
 
 <h2>Préparation</h2>
 <ol>
   <li>Peser la quantité totale (400–480 g).</li>
-  <li>Couper en morceaux faciles à saisir (dégustation).</li>
-  <li>Dresser sur une planche ou une assiette, puis servir.</li>
+  <li>Choisir 3 à 4 fromages de catégories différentes.</li>
+  <li>Couper en petits morceaux (meilleure gestion des portions).</li>
+  <li>Sortir les fromages 20–30 minutes avant service.</li>
 </ol>
 
-<h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par portion pour <strong>110 g de fromage</strong> (moyenne, selon le choix des fromages).</p>
+<h2>Informations nutritionnelles — repères utiles</h2>
+<p>
+  Exemple pour <strong>110 g de fromage</strong> selon la catégorie dominante :
+</p>
+
 <div class="table-responsive">
   <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Type dominant</th>
+        <th>Calories</th>
+        <th>Protéines</th>
+        <th>Lipides</th>
+        <th>Glucides</th>
+      </tr>
+    </thead>
     <tbody>
-      <tr>
-        <th scope="row">Énergie</th>
-        <td>≈ 380 kcal</td>
-      </tr>
-      <tr>
-        <th scope="row">Protéines</th>
-        <td>≈ 25 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Lipides</th>
-        <td>≈ 31 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Glucides</th>
-        <td>≈ 1,5 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fibres</th>
-        <td>≈ 0 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fructose</th>
-        <td>≈ 0 g</td>
-      </tr>
+      <tr><td>Pâtes dures</td><td>≈ 420 kcal</td><td>≈ 30 g</td><td>≈ 36 g</td><td>≈ 0,5 g</td></tr>
+      <tr><td>Pâtes molles</td><td>≈ 350 kcal</td><td>≈ 22 g</td><td>≈ 29 g</td><td>≈ 1 g</td></tr>
+      <tr><td>Chèvre / brebis</td><td>≈ 390 kcal</td><td>≈ 26 g</td><td>≈ 32 g</td><td>≈ 0,5 g</td></tr>
     </tbody>
   </table>
 </div>
-<p class="small text-muted">
-  Estimations pour le fromage uniquement. Les valeurs varient selon le type de lait
-  (vache, chèvre, brebis) et le niveau d’affinage.
-</p>
 
 <h2>Notes low carb</h2>
 <ul>
-  <li>Le fromage est naturellement <strong>très faible en glucides</strong>.</li>
-  <li>Le point critique est la <strong>densité calorique</strong>, pas la glycémie.</li>
+  <li>Le fromage est <strong>quasi sans glucides</strong>.</li>
+  <li>Le vrai enjeu est la <strong>densité calorique</strong>, pas la glycémie.</li>
+  <li>Couper petit et varier les textures aide à rester dans les clous.</li>
 </ul>
+
