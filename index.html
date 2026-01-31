@@ -188,7 +188,7 @@ body_id: "home"
 <script>
   const EXCLUDED_TAG = "gout-sucre";
 
-  const HIDDEN_TAGS = new Set(["low-carb-modere","low-carb-strict","gout-sucre"]);
+  const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
   const EXCLUDED_GROUPS = [
     "amuse-bouche",
     "boissons",
@@ -201,32 +201,32 @@ body_id: "home"
   ];
 
   const TAG_BADGES = {
-    "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
+    "tres-proteine": { emoji: "💪", title: "Très protéiné" },
     "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
-    "rapide":          { emoji: "⏱️", title: "Rapide" },
-    "congelable":      { emoji: "❄️", title: "Congelable" },
-    "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
-    "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
-    "calorique":       { emoji: "🔥", title: "Calorique" },
-    "longue":          { emoji: "🐌", title: "Préparation longue" }
+    "rapide": { emoji: "⏱️", title: "Rapide" },
+    "congelable": { emoji: "❄️", title: "Congelable" },
+    "micro-ondable": { emoji: "♨️", title: "Micro-ondable" },
+    "peu-calorique": { emoji: "🪶", title: "Peu calorique" },
+    "calorique": { emoji: "🔥", title: "Calorique" },
+    "longue": { emoji: "🐌", title: "Préparation longue" }
   };
 
   const MICRO_BADGES = {
-    "omega-3":     { emoji: "🐟", title: "Oméga-3" },
-    "vitamine-a":  { emoji: "👁️", title: "Vitamine A" },
-    "vitamine-c":  { emoji: "🍋", title: "Vitamine C" },
-    "vitamine-d":  { emoji: "🌤️", title: "Vitamine D" },
-    "vitamine-e":  { emoji: "🛡️", title: "Vitamine E" },
-    "vitamine-k":  { emoji: "🩸", title: "Vitamine K" },
+    "omega-3": { emoji: "🐟", title: "Oméga-3" },
+    "vitamine-a": { emoji: "👁️", title: "Vitamine A" },
+    "vitamine-c": { emoji: "🍋", title: "Vitamine C" },
+    "vitamine-d": { emoji: "🌤️", title: "Vitamine D" },
+    "vitamine-e": { emoji: "🛡️", title: "Vitamine E" },
+    "vitamine-k": { emoji: "🩸", title: "Vitamine K" },
     "vitamine-b9": { emoji: "🌱", title: "Vitamine B9" },
-    "vitamine-b12":{ emoji: "🥩", title: "Vitamine B12" },
-    "calcium":     { emoji: "🦴", title: "Calcium" },
-    "fer":         { emoji: "🧲", title: "Fer" },
-    "magnesium":   { emoji: "⚡", title: "Magnésium" },
-    "potassium":   { emoji: "🍌", title: "Potassium" },
-    "zinc":        { emoji: "🔩", title: "Zinc" },
-    "selenium":    { emoji: "🧪", title: "Sélénium" },
-    "iode":        { emoji: "🌊", title: "Iode" }
+    "vitamine-b12": { emoji: "🥩", title: "Vitamine B12" },
+    "calcium": { emoji: "🦴", title: "Calcium" },
+    "fer": { emoji: "🧲", title: "Fer" },
+    "magnesium": { emoji: "⚡", title: "Magnésium" },
+    "potassium": { emoji: "🍌", title: "Potassium" },
+    "zinc": { emoji: "🔩", title: "Zinc" },
+    "selenium": { emoji: "🧪", title: "Sélénium" },
+    "iode": { emoji: "🌊", title: "Iode" }
   };
 
   const indexRoot = document.getElementById("recipes-index");
@@ -276,7 +276,7 @@ body_id: "home"
         return true;
       });
 
-    console.log(candidates); // Ajoute ce log pour vérifier
+    console.log(candidates); // Log pour vérifier
     return candidates;
   }
 
