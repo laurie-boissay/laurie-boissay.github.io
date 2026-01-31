@@ -1,26 +1,92 @@
 ---
-layout: default
+layout: page
 ---
 
 {%- comment -%}
   Layout d’index filtré (compatible GitHub Pages).
+
   Paramètres attendus dans la page :
   - page.filter_type : "tag" ou "micro"
   - page.filter_id   : l’identifiant (ex: "rapide" ou "omega-3")
   - page.filter_title: titre humain (optionnel)
 {%- endcomment -%}
 
-<div class="site-container">
-  <header class="page-head">
-    <h1 class="page-title">
-      {%- if page.filter_title -%}
-        {{ page.filter_title }}
-      {%- else -%}
-        Recettes : {{ page.filter_id }}
-      {%- endif -%}
-    </h1>
+{%- assign page_title = page.filter_title | default: "Recettes : " | append: page.filter_id -%}
 
-    <p class="small text-muted">
+<section class="site-container" id="tag-index">
+
+  <style>
+    /* Layout tag/micro */
+    #tag-index .page-head{
+      margin-bottom: 1rem;
+    }
+    #tag-index .nav-badges{
+      margin: .75rem 0 1rem 0;
+    }
+    #tag-index .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #tag-index .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    #tag-index a.badge-link{
+      text-decoration:none;
+      border-bottom:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:2rem;
+      padding:.15rem .35rem;
+      border-radius:.6rem;
+      background: rgba(0,0,0,.05);
+    }
+
+    #tag-index .recipe-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: .65rem;
+    }
+    @media (min-width: 768px){
+      #tag-index .recipe-grid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    #tag-index .recipe-card{
+      padding: .75rem .85rem;
+      border-radius: .6rem;
+      background: rgba(0,0,0,.03);
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    #tag-index .recipe-card-title{
+      margin: 0 0 .25rem 0;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    #tag-index .recipe-card-title a{
+      text-decoration:none;
+      border-bottom:none;
+    }
+    #tag-index .recipe-card-desc{
+      margin: 0;
+      opacity: .9;
+    }
+  </style>
+
+  <header class="page-head">
+    <h1 class="page-title">{{ page_title }}</h1>
+
+    <p class="small text-muted" style="margin-bottom:.35rem;">
       Filtre :
       {%- if page.filter_type == "tag" -%}
         tag fonctionnel
@@ -29,12 +95,55 @@ layout: default
       {%- endif -%}
       — <code>{{ page.filter_id }}</code>
     </p>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-outline-secondary btn-sm" href="{{ '/' | relative_url }}">← Retour à l’index</a>
+    </div>
   </header>
+
+  {%- comment -%}
+    NAV “badges” (comme sous le random pick)
+  {%- endcomment -%}
+  <div class="nav-badges">
+
+    <div class="small text-muted" style="margin-bottom:.15rem;">Tags fonctionnels</div>
+    <ul class="recipe-badges-line" aria-label="Tags fonctionnels">
+      <li><a class="badge-link" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
+      <li><a class="badge-link" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
+      <li><a class="badge-link" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+      <li><a class="badge-link" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+      <li><a class="badge-link" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+      <li><a class="badge-link" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+    </ul>
+
+    <div class="small text-muted" style="margin:.6rem 0 .15rem 0;">Micronutriments</div>
+    <ul class="recipe-badges-line" aria-label="Micronutriments">
+      <li><a class="badge-link" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+
+      <li><a class="badge-link" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+    </ul>
+  </div>
 
   {%- comment -%}
     Récupère toutes les pages de recettes.
     Hypothèse : tes recettes sont des pages avec layout: recipe.
-    Si tu as une collection dédiée, adapte (ex: site.recipes).
   {%- endcomment -%}
   {%- assign recipes = site.pages | where: "layout", "recipe" -%}
 
@@ -57,20 +166,15 @@ layout: default
   {%- if filtered.size == 0 -%}
     <p>Aucune recette trouvée.</p>
   {%- else -%}
-    <p><strong>{{ filtered.size }}</strong> recette(s).</p>
+    <p class="small text-muted"><strong>{{ filtered.size }}</strong> recette(s).</p>
 
     <div class="recipe-grid">
-      {%- comment -%}
-        Rendu des cartes :
-        - Si tu as déjà un include de carte recette, utilise-le ici (recommandé).
-        - Sinon, rendu minimal.
-      {%- endcomment -%}
-
       {%- for r in filtered -%}
         <article class="recipe-card">
           <h2 class="recipe-card-title">
             <a href="{{ r.url | relative_url }}">{{ r.recipe_title | default: r.title }}</a>
           </h2>
+
           {%- if r.description -%}
             <p class="recipe-card-desc">{{ r.description }}</p>
           {%- endif -%}
@@ -78,5 +182,6 @@ layout: default
       {%- endfor -%}
     </div>
   {%- endif -%}
-</div>
+
+</section>
 
