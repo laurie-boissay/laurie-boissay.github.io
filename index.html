@@ -14,10 +14,7 @@ body_id: "home"
   <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" -->
   {% assign all_recipes = site.pages | where: "layout", "recipe" %}
 
-  <!-- Débogage : Affiche 'all_recipes' pour vérifier les pages récupérées 
-  <pre>{{ all_recipes | inspect }}</pre>-->
-
-  <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
+    <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
   {% if all_recipes.size > 0 %}
     <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
     {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
