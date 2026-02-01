@@ -8,19 +8,117 @@ page_h3: "Mes recettes low carb"
 body_id: "home"
 ---
 
-<section id="index">
-  <!-- Titre principal et sous-titre déjà affichés dans l'en-tête -->
-  <!-- On supprime le deuxième affichage des titres ici -->
+<section id="index" style="text-align: center;">
+  <h2>On mange quoi ?</h2>
+
+  <div id="recipe-container">
+    <p>Chargement d'une recette aléatoire...</p>
+  </div>
+
+  <!-- Boutons sous la recette -->
+  <div id="recipe-buttons" style="margin-top: 20px;">
+    <a id="view-recipe" href="#" style="margin-right: 20px; padding: 10px 20px; font-size: 16px; text-decoration: none; border-radius: 5px; background-color: #14b8a6; color: white; display: inline-block;">Voir la recette</a>
+    <button id="view-another" style="padding: 10px 20px; font-size: 16px;">Voir une autre</button>
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const recipeCards = document.querySelectorAll('.recipe-card');
+
+    if (recipeCards.length === 0) {
+      document.getElementById('recipe-container').innerHTML = '<p>Aucune recette disponible.</p>';
+      return;
+    }
+
+    // Choisir une recette au hasard parmi celles présentes sur la page
+    const randomIndex = Math.floor(Math.random() * recipeCards.length);
+    const randomRecipe = recipeCards[randomIndex];
+
+    const title = randomRecipe.querySelector('.recipe-card-title') ? randomRecipe.querySelector('.recipe-card-title').innerText : 'Titre non trouvé';
+
+    const recipeLink = randomRecipe.querySelector('a');  // Rechercher l'élément <a> de la carte de recette
+    const url = recipeLink ? recipeLink.href : '#'; // Si l'élément <a> existe, récupérer l'URL, sinon # par défaut
+
+    const subtitle = randomRecipe.querySelector('.recipe-card-subtitle') 
+      ? randomRecipe.querySelector('.recipe-card-subtitle').innerText 
+      : 'Pas de sous-titre disponible.';
+
+    const badgesLine = randomRecipe.querySelector('.recipe-badges-line') 
+      ? randomRecipe.querySelector('.recipe-badges-line').innerHTML 
+      : '';
+
+    const micronutrientTags = randomRecipe.dataset.micros 
+      ? randomRecipe.dataset.micros.split(',') 
+      : [];
+
+    const micronutrientBadges = {
+      "iode": "🌊",
+      "vitamine-b12": "🥩",
+      "vitamine-a": "👁️",
+      "vitamine-c": "🍋",
+      "vitamine-d": "🌤️",
+      "vitamine-e": "🛡️",
+      "calcium": "🦴",
+      "fer": "🧲",
+      "magnesium": "⚡",
+      "potassium": "🍌",
+      "zinc": "🔩",
+      "selenium": "🧪",
+      "vitamine-b9": "🌱",
+      "omega-3": "🐟",
+    };
+
+    const micronutrientBadgeTags = micronutrientTags.map(tag => {
+      const badge = micronutrientBadges[tag] || tag;
+      return `<li class="badge-micronutrient">${badge}</li>`;
+    }).join('');
+
+    const recipeContainer = document.getElementById('recipe-container');
+
+    recipeContainer.innerHTML = `
+      <div class="recipe-card" style="text-align: center;">
+        <h3 class="recipe-title">
+          <a href="${url}">${title}</a>
+        </h3>
+        <p class="recipe-subtitle">${subtitle}</p>
+        <ul class="recipe-badges-line">
+          ${badgesLine}
+        </ul>
+        ${micronutrientBadgeTags ? `
+        <ul class="recipe-badges-line badges-micro">
+          ${micronutrientBadgeTags}
+        </ul>
+        ` : ''}
+      </div>
+    `;
+
+    // Afficher le badge "Recette non testée" si la recette aléatoire n'a pas été testée
+    {% comment %}
+      On affiche le badge "Recette non testée" uniquement pour la recette aléatoire si elle est marquée comme non testée.
+    {% endcomment %}
+    {% if randomRecipe.recipe_tested == false %}
+      const badgeNonTestee = document.createElement('span');
+      badgeNonTestee.innerHTML = '<span class="badge" style="background-color: #f59e0b; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px;">⚠ Recette non testée</span>';
+      document.querySelector('.recipe-card').appendChild(badgeNonTestee);
+    {% endif %}
+
+    // Assigner l'URL correctement au bouton "Voir la recette"
+    const viewRecipeButton = document.getElementById('view-recipe');
+    viewRecipeButton.setAttribute('href', url); // Mettre à jour le href avec l'URL de la recette
+    console.log("URL du bouton 'Voir la recette' :", viewRecipeButton.getAttribute('href')); // Vérifier que l'URL a bien été mise à jour
+
+    // Ajouter l'événement pour le bouton "Voir une autre"
+    document.getElementById('view-another').addEventListener('click', function() {
+      location.reload(); // Recharger la page pour afficher une nouvelle recette aléatoire
+    });
+  });
+</script>
 
   <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" -->
   {% assign all_recipes = site.pages | where: "layout", "recipe" %}
 
-  <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
   {% if all_recipes.size > 0 %}
-    <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
     {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
-
-    <!-- Inclut le fichier des recettes par groupe en passant les variables 'grouped' et 'hidden_tags' -->
     {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
   {% else %}
     <p>Aucune recette disponible.</p>
@@ -28,7 +126,6 @@ body_id: "home"
 
   <hr class="my-4">
 
-  <!-- Affiche la date de dernière mise à jour du site -->
   <div class="text-center muted">
     Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
   </div>

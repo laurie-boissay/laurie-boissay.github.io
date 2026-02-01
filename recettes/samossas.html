@@ -1,110 +1,84 @@
----
-layout: recipe
-title: "Samossas low carb à la viande"
-description: "Alternative low carb aux samossas classiques : enveloppe à base d’omelette fine ou de nori, garniture viande épicée. Amuse-bouche salé sans pâte à blé."
-recipe_title: "Samossas low carb"
-recipe_subtitle: "Amuse-bouche protéiné, sans pâte à blé"
-recipe_group: "Amuse-bouche"
-recipe_sort: "samossas-low-carb"
-recipe_tested: false
+<section id="random-recipe">
+  <h2>Qu'est-ce qu'on mange ?</h2>
 
-tags:
-  - low-carb-modere
-  - tres-proteine
+  <div id="recipe-container"></div>
 
-badges_nutritionnels:
-  - vitamine-b12
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Liste des recettes avec leurs titres, descriptions, tags et le statut de test
+      const recipes = [
+        { 
+          "title": "Avocat farci œuf & saumon",
+          "description": "Avocat farci aux œufs et saumon fumé. Plat froid low carb modéré, simple et rassasiant.",
+          "recipe_tested": false,
+          "url": "/recettes/avocat-farci-oeuf-et-saumon.html",
+          "tags": ["low-carb-moderé", "tres-proteine", "rapide", "calorique"],
+          "badges": ["omega-3", "vitamine-b12"]
+        },
+        { 
+          "title": "Samossas low carb à la viande",
+          "description": "Alternative low carb aux samossas classiques : enveloppe à base d’omelette fine ou de nori, garniture viande épicée.",
+          "recipe_tested": false,
+          "url": "/recettes/samossas.html",
+          "tags": ["low-carb-moderé", "tres-proteine"],
+          "badges": ["vitamine-b12"]
+        },
+        // Assure-toi que toutes tes autres recettes sont également incluses ici
+      ];
 
-extra_head: |
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Recipe",
-    "name": "Samossas low carb",
-    "description": "Alternative low carb aux samossas classiques avec enveloppe omelette ou nori et farce à la viande.",
-    "recipeYield": "4 portions",
-    "recipeCategory": "Amuse-bouche",
-    "prepTime": "PT30M",
-    "cookTime": "PT10M",
-    "totalTime": "PT40M",
-    "recipeIngredient": [
-      "400 g de viande hachée (bœuf ou poulet)",
-      "1 petit oignon",
-      "1 gousse d’ail",
-      "2 œufs",
-      "4 feuilles de nori",
-      "1 c. à café de curry",
-      "1/2 c. à café de cumin",
-      "Sel, poivre",
-      "Huile pour cuisson"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Faire revenir l’oignon et l’ail, ajouter la viande et les épices, puis cuire complètement." },
-      { "@type": "HowToStep", "text": "Réaliser une omelette très fine avec les œufs." },
-      { "@type": "HowToStep", "text": "Découper l’omelette ou les feuilles de nori en bandes." },
-      { "@type": "HowToStep", "text": "Garnir et plier en forme de samossa." },
-      { "@type": "HowToStep", "text": "Dorer à la poêle ou au four jusqu’à texture ferme." }
-    ]
-  }
+      console.log("Nombre de recettes disponibles : ", recipes.length); // Vérifie si toutes les recettes sont présentes
+      console.log("Recettes récupérées : ", recipes); // Affiche toutes les recettes dans la console
+
+      // Fonction pour choisir une recette au hasard
+      function getRandomRecipe() {
+        const randomIndex = Math.floor(Math.random() * recipes.length);
+        return recipes[randomIndex];
+      }
+
+      // Sélectionner une recette au hasard
+      const randomRecipe = getRandomRecipe();
+
+      // Vérifier la recette choisie dans la console
+      console.log("Recette sélectionnée : ", randomRecipe);
+
+      // Fonction pour générer les badges
+      function generateBadges(badges) {
+        return badges.map(function(badge) {
+          switch (badge) {
+            case 'tres-proteine': return '💪';
+            case 'riche-en-fibres': return '💩';
+            case 'rapide': return '⏱️';
+            case 'congelable': return '❄️';
+            case 'micro-ondable': return '♨️';
+            case 'peu-calorique': return '🪶';
+            case 'calorique': return '🔥';
+            case 'longue': return '🐌';
+            case 'omega-3': return '🐟';
+            case 'vitamine-b12': return '🥩';
+            default: return '';
+          }
+        }).join(' ');
+      }
+
+      // Créer le HTML pour afficher la recette
+      const recipeContainer = document.getElementById('recipe-container');
+      
+      if (randomRecipe) {
+        recipeContainer.innerHTML = `
+          <div class="recipe-card">
+            <h3 class="recipe-title">
+              <a href="${randomRecipe.url}">${randomRecipe.title}</a>
+              ${randomRecipe.recipe_tested === false ? 
+                '<span class="badge bg-warning text-dark ms-2">Recette non testée</span>' : ''}
+            </h3>
+            <p>${randomRecipe.description}</p>
+            <div class="recipe-badges">${generateBadges(randomRecipe.badges)}</div>
+          </div>
+        `;
+      } else {
+        recipeContainer.innerHTML = `<p>Aucune recette disponible.</p>`;
+      }
+    });
   </script>
----
-
-<p class="lead">
-  <strong>Pour :</strong> 4 portions —
-  <strong>Temps :</strong> 30 min + 10 min cuisson —
-  <strong>Niveau :</strong> intermédiaire
-</p>
-
-<hr>
-
-<h2>Ingrédients</h2>
-<ul>
-  <li>400 g de viande hachée (bœuf ou poulet)</li>
-  <li>1 petit oignon (ou 1 c. à café d’oignon semoule)</li>
-  <li>1 gousse d’ail (ou 1/2 c. à café d’ail semoule)</li>
-  <li>2 œufs</li>
-  <li>4 feuilles de nori</li>
-  <li>1 c. à café de curry</li>
-  <li>1/2 c. à café de cumin</li>
-  <li>Sel, poivre</li>
-  <li>Un peu d’huile pour la cuisson</li>
-</ul>
-
-<h2>Préparation</h2>
-<ol>
-  <li>Faire revenir l’oignon et l’ail avec un peu d’huile.</li>
-  <li>Ajouter la viande, le curry et le cumin. Saler, poivrer et cuire complètement. Laisser tiédir.</li>
-  <li>Battre les œufs et réaliser une omelette <strong>très fine</strong> dans une grande poêle.</li>
-  <li>Découper l’omelette en bandes larges (ou utiliser les feuilles de nori).</li>
-  <li>Déposer un peu de farce et plier en triangle pour former des samossas.</li>
-  <li>Dorer à la poêle ou passer 5 à 10 minutes au four pour raffermir.</li>
-</ol>
-
-<h2>Informations nutritionnelles</h2>
-
-<p>Valeurs estimées par portion (1/4 de la recette) :</p>
-
-<div class="table-responsive">
-  <table class="table table-striped">
-    <tbody>
-      <tr><th>Calories</th><td>≈ 350 kcal</td></tr>
-      <tr><th>Protéines</th><td>≈ 28 g</td></tr>
-      <tr><th>Lipides</th><td>≈ 24 g</td></tr>
-      <tr><th>Glucides</th><td>≈ 5 g</td></tr>
-      <tr><th>Fibres</th><td>≈ 2 g</td></tr>
-      <tr><th>Fructose</th><td>≈ 1 g</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<p class="small text-muted">
-  Estimation pour 1 portion. Les glucides proviennent principalement de l’oignon et, en moindre quantité, des épices.
-</p>
-
-<h2>Notes low carb</h2>
-<ul>
-  <li>✔ Compatible <strong>low carb modéré</strong> : sans pâte à blé.</li>
-  <li>✔ <strong>Très protéiné</strong> : viande + œufs.</li>
-  <li>ℹ L’enveloppe <strong>nori</strong> est plus ferme, tandis que l’omelette est plus souple.</li>
-</ul>
+</section>
 
