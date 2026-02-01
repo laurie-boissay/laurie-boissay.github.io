@@ -1,0 +1,89 @@
+# _data/tags_fonctionnels.yml
+#
+# Fiches tags fonctionnels utilisées par _layouts/tag-index.html quand :
+#   page.filter_type == "tag" et page.filter_id == "<id>"
+
+tres-proteine:
+  titre: "Très protéiné 💪"
+  signification: "Recette pensée pour aider à atteindre un apport protéique élevé, sans augmenter inutilement les glucides."
+  criteres:
+    - "Le tag est mis si la recette apporte une quantité de protéines clairement élevée par portion."
+    - "En pratique sur le site : on se base sur les macros estimées affichées dans la recette."
+  notes:
+    - "Tag fonctionnel : vise la praticité, pas un label scientifique strict."
+    - "Si les macros sont recalculées et que la protéine n’est plus élevée, le tag doit être retiré."
+
+riche-en-fibres:
+  titre: "Riche en fibres 💩"
+  signification: "Recette orientée satiété/transit, avec un apport en fibres notable."
+  criteres:
+    - "Tag mis si les fibres estimées par portion sont clairement élevées."
+    - "Priorité aux fibres alimentaires “réelles” (légumes, graines, psyllium) plutôt qu’à des ajouts gimmick."
+  notes:
+    - "Attention : trop de fibres d’un coup peut gêner un estomac fragile (adapter)."
+
+rapide:
+  titre: "Rapide ⏱️"
+  signification: "Recette adaptée aux soirs de semaine : peu d’étapes, peu de temps actif."
+  criteres:
+    - "Temps actif faible, préparation simple."
+    - "Ingrédients faciles (pas de trucs introuvables)."
+  notes:
+    - "Si la recette demande beaucoup de surveillance/cuisson longue, ne pas mettre ce tag."
+
+congelable:
+  titre: "Congélable ❄️"
+  signification: "Recette qui se congèle bien sans perdre (trop) goût/texture."
+  criteres:
+    - "La recette supporte la congélation puis décongélation sans devenir mauvaise."
+    - "Les ingrédients sensibles (ex. certaines sauces émulsionnées) sont évités ou adaptés."
+  notes:
+    - "Les indications de décongélation/réchauffage doivent être mentionnées dans la recette."
+
+micro-ondable:
+  titre: "Micro-ondable ♨️"
+  signification: "Recette réchauffable au micro-ondes sans dégradation marquée."
+  criteres:
+    - "Après micro-ondes, texture et goût restent corrects."
+    - "Pas de composants qui deviennent spongieux/tristes (ou alors c’est assumé et testé)."
+  notes:
+    - "Idéal pour meal-prep / travail."
+
+peu-calorique:
+  titre: "Peu calorique 🪶"
+  signification: "Recette sous le seuil “peu calorique” défini pour sa catégorie."
+  criteres:
+    - "Le badge est calculé selon tes seuils par catégorie."
+  notes:
+    - "Ce tag dépend du calcul : si les portions changent, il peut changer."
+
+calorique:
+  titre: "Calorique 🔥"
+  signification: "Recette au-dessus du seuil “calorique” défini pour sa catégorie."
+  criteres:
+    - "Le badge est calculé selon tes seuils par catégorie."
+  notes:
+    - "Utile pour repérer les recettes à réserver aux grosses journées / gros appétit."
+
+longue:
+  titre: "Préparation longue 🐌"
+  signification: "Recette plus chronophage (temps actif et/ou étapes nombreuses)."
+  criteres:
+    - "Beaucoup d’étapes, ou cuisson longue avec plusieurs manipulations."
+  notes:
+    - "Ne pas confondre avec 'cuisson au four sans surveillance' : ce qui compte c’est la charge mentale/temps."
+
+gout-sucre:
+  titre: "Goût sucré 🍬"
+  signification: >
+    Recette à dominante sucrée (dessert, collation, ou plat à perception sucrée),
+    pensée pour préserver le plaisir tout en restant compatible avec une approche low carb.
+  criteres:
+    - "La recette a un goût clairement sucré, même si elle est faible en glucides."
+    - "Utilisation d’édulcorants ou d’ingrédients à perception sucrée (chocolat noir, fruits en quantité contrôlée, etc.)."
+    - "Le goût sucré est assumé comme un outil de satiété et de plaisir, pas comme un “cheat”."
+  notes:
+    - "Tag descriptif : il n’indique pas que la recette est plus ou moins saine."
+    - "Compatible avec le low carb tant que les glucides restent maîtrisés."
+    - "Les recettes avec ce tag sont exclues de certaines suggestions automatiques (ex. tirage aléatoire), par choix éditorial."
+

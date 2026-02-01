@@ -1,0 +1,339 @@
+# _data/micronutriments.yml
+#
+# Fiches micronutriments utilisées par _layouts/tag-index.html quand :
+#   page.filter_type == "micro" et page.filter_id == "<id>"
+#
+# Convention :
+# - "apports.adulte.cible_ug_j" est une chaîne (on met l’unité dedans : "55 µg/j", "800 mg/j", etc.)
+# - "apports.limite_sup.ul_ug_j" est optionnel (UL EFSA si dispo / utile)
+# - Les textes restent volontairement courts, lisibles, “site pratique”.
+
+omega-3:
+  titre: "Oméga-3"
+  resume: "Famille d’acides gras (ALA, EPA, DHA) impliqués notamment dans les membranes cellulaires. Le corps convertit mal l’ALA en EPA/DHA, donc les sources marines restent la façon la plus efficace d’augmenter EPA/DHA."
+  roles:
+    - "Constituants des membranes cellulaires."
+    - "EPA/DHA : participent à des fonctions cardio-métaboliques et neurologiques (selon les apports)."
+    - "Intérêt pratique : viser du poisson gras régulier plutôt que de compter au mg."
+  apports:
+    adulte:
+      cible_ug_j: "ALA : ~1,1 g/j (femme) ; ~1,6 g/j (homme)"
+      sources: "Référence : NIH ODS (apports conseillés pour l’ALA)."
+  ou_en_trouver:
+    - "Poissons gras : sardines, maquereau, hareng, saumon."
+    - "Fruits à coque/graines : noix, graines de lin/chia (ALA)."
+    - "Huiles : colza (ALA), soja (ALA)."
+  carence:
+    signes: "Carence franche rare, mais un apport faible en EPA/DHA est fréquent si peu de poisson/produits marins."
+    comment_verifier: "Pas d’auto-diagnostic fiable : si doute (alimentation très pauvre en poisson), ajuste l’alimentation ; bilan médical si contexte particulier."
+  exces:
+    risques: "Pas de UL (EFSA) pour DHA/EPA/DPA ; prudence si supplémentation forte (anticoagulants/saignements : avis médical)."
+    conseil: "Priorise l’alimentation. Si tu supplémentes, reste sur des doses modestes et stables, et vérifie les interactions."
+
+vitamine-a:
+  titre: "Vitamine A"
+  resume: "Vitamine liposoluble. Essentielle (vision, immunité). Attention au surdosage via compléments (rétinol)."
+  roles:
+    - "Vision (rétine), peau et muqueuses."
+    - "Immunité."
+  apports:
+    adulte:
+      cible_ug_j: "800 µg RE/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "3 000 µg RE/j (vitamine A préformée)"
+      note: "UL EFSA : surtout concerné par les compléments au rétinol."
+  ou_en_trouver:
+    - "Foie (très riche : attention), produits laitiers, œufs (rétinol)."
+    - "Caroténoïdes : carottes, patate douce, épinards (précurseurs)."
+  carence:
+    signes: "Baisse de vision nocturne, sécheresse oculaire (rare en population générale)."
+    comment_verifier: "Si symptômes ou contexte à risque : avis médical (bilan ciblé)."
+  exces:
+    risques: "Surdosage chronique possible (foie, peau, os), surtout via compléments au rétinol."
+    conseil: "Évite les compléments de rétinol “au long cours” sans suivi."
+
+vitamine-c:
+  titre: "Vitamine C"
+  resume: "Vitamine hydrosoluble. Antioxydant, participe au collagène."
+  roles:
+    - "Synthèse du collagène (peau, gencives, tissus)."
+    - "Aide l’absorption du fer non héminique (végétal)."
+  apports:
+    adulte:
+      cible_ug_j: "80 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+  ou_en_trouver:
+    - "Fruits : kiwi, agrumes."
+    - "Légumes : poivron, chou, brocoli."
+  carence:
+    signes: "Fatigue, fragilité gingivale, ecchymoses faciles (carence sévère rare)."
+    comment_verifier: "Si symptômes persistants : avis médical, surtout si alimentation pauvre en fruits/légumes."
+  exces:
+    risques: "Doses élevées : troubles digestifs possibles."
+    conseil: "En pratique, l’alimentation couvre bien si tu as des légumes/fruits réguliers."
+
+vitamine-d:
+  titre: "Vitamine D"
+  resume: "Vitamine/hormone liée au calcium et à l’os. Les apports dépendent beaucoup de l’exposition solaire."
+  roles:
+    - "Santé osseuse (avec calcium)."
+    - "Fonctions immunitaires (rôle complexe)."
+  apports:
+    adulte:
+      cible_ug_j: "5 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "100 µg/j"
+      note: "UL EFSA (adulte)."
+  ou_en_trouver:
+    - "Poissons gras, jaune d’œuf."
+    - "Synthèse cutanée via soleil (variable)."
+  carence:
+    signes: "Souvent silencieuse. Risque ↑ si faible soleil, peau couverte, hiver."
+    comment_verifier: "Dosage sanguin (25-OH-vitamine D) si suspicion/terrain à risque."
+  exces:
+    risques: "Surdosage via compléments (hypercalcémie)."
+    conseil: "Suppléments : éviter le “au hasard” à forte dose sur la durée."
+
+vitamine-e:
+  titre: "Vitamine E"
+  resume: "Vitamine liposoluble, antioxydante."
+  roles:
+    - "Protection des membranes cellulaires (antioxydant)."
+  apports:
+    adulte:
+      cible_ug_j: "12 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "300 mg/j"
+      note: "UL EFSA/SCF."
+  ou_en_trouver:
+    - "Huiles végétales, oléagineux (amandes, noisettes)."
+  carence:
+    signes: "Rare (plutôt malabsorption)."
+    comment_verifier: "Contexte digestif/malabsorption : avis médical."
+  exces:
+    risques: "Très fortes doses en compléments : risque hémorragique (selon contexte)."
+    conseil: "Évite les mégadoses sans suivi."
+
+vitamine-k:
+  titre: "Vitamine K"
+  resume: "Vitamine liposoluble impliquée dans la coagulation et l’os."
+  roles:
+    - "Coagulation sanguine."
+    - "Santé osseuse (rôle indirect)."
+  apports:
+    adulte:
+      cible_ug_j: "75 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+  ou_en_trouver:
+    - "Légumes verts (choux, épinards)."
+  carence:
+    signes: "Troubles de coagulation (rare hors contexte)."
+    comment_verifier: "Important si traitement anticoagulant : ne pas changer brutalement les apports sans avis médical."
+  exces:
+    risques: "Pas de UL EFSA/SCF établi pour l’alimentation courante."
+    conseil: "Attention surtout aux interactions avec anticoagulants."
+
+vitamine-b9:
+  titre: "Vitamine B9 (folates)"
+  resume: "Vitamine hydrosoluble. ADN, globules rouges. Importante en période périconceptionnelle."
+  roles:
+    - "Synthèse ADN, division cellulaire."
+    - "Globules rouges."
+  apports:
+    adulte:
+      cible_ug_j: "200 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "1 000 µg/j (folates en compléments/fortification)"
+      note: "UL EFSA : concerne l’acide folique/folates ajoutés, pas les folates naturels."
+  ou_en_trouver:
+    - "Légumes verts, légumineuses, abats."
+  carence:
+    signes: "Anémie, fatigue (non spécifique)."
+    comment_verifier: "Bilan sanguin si suspicion (B9 ± B12)."
+  exces:
+    risques: "Peut masquer une carence en B12 si supplémentation élevée."
+    conseil: "Si tu supplémentes fort, vérifie B12 aussi."
+
+vitamine-b12:
+  titre: "Vitamine B12"
+  resume: "Vitamine hydrosoluble. Système nerveux et globules rouges. Apport surtout via produits animaux."
+  roles:
+    - "Fonction neurologique."
+    - "Formation des globules rouges."
+  apports:
+    adulte:
+      cible_ug_j: "2,5 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+  ou_en_trouver:
+    - "Viandes, poissons, fruits de mer, œufs, produits laitiers."
+  carence:
+    signes: "Fatigue, fourmillements/neuropathies, anémie (possible)."
+    comment_verifier: "Bilan : B12 (± holo-TC, MMA selon contexte) via médecin."
+  exces:
+    risques: "Pas de UL défini (SCF)."
+    conseil: "Suppléments généralement sûrs aux doses usuelles."
+
+calcium:
+  titre: "Calcium"
+  resume: "Minéral majeur de l’os. L’équilibre dépend aussi de la vitamine D."
+  roles:
+    - "Os et dents."
+    - "Contraction musculaire (avec autres électrolytes)."
+  apports:
+    adulte:
+      cible_ug_j: "800 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "2 500 mg/j"
+      note: "UL EFSA (total)."
+  ou_en_trouver:
+    - "Produits laitiers, fromages."
+    - "Eaux minérales riches en calcium."
+  carence:
+    signes: "Souvent silencieuse ; risque à long terme (os) si apports bas + carence D."
+    comment_verifier: "Bilan selon contexte (densitométrie, vitamine D, etc.)."
+  exces:
+    risques: "Excès via compléments (risque selon contexte)."
+    conseil: "Si tu complètes, évite d’empiler calcium + vitamine D forte dose sans suivi."
+
+fer:
+  titre: "Fer"
+  resume: "Minéral essentiel (transport d’oxygène). Le déficit est fréquent (surtout règles abondantes)."
+  roles:
+    - "Hémoglobine (transport d’oxygène)."
+    - "Énergie (enzymes)."
+  apports:
+    adulte:
+      cible_ug_j: "14 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "Pas de UL (EFSA) ; niveau de sécurité = 40 mg/j (adultes)"
+      note: "EFSA fournit un “safe level” pour le fer (adultes) quand UL non dérivable."
+  ou_en_trouver:
+    - "Fer héminique (mieux absorbé) : viande rouge, abats."
+    - "Poissons/fruits de mer."
+    - "Fer non héminique : légumes secs, mais absorption moindre."
+  carence:
+    signes: "Fatigue, essoufflement, ongles cassants, chute de cheveux (non spécifique)."
+    comment_verifier: "Bilan : ferritine + NFS (et CRP selon contexte)."
+  exces:
+    risques: "Surdosage possible via compléments (digestif, surcharge)."
+    conseil: "Compléments de fer : uniquement si carence prouvée/suivie."
+
+magnesium:
+  titre: "Magnésium"
+  resume: "Minéral impliqué dans de nombreuses réactions enzymatiques. Le “manque” est souvent surestimé sans bilan."
+  roles:
+    - "Fonction nerveuse et musculaire."
+    - "Métabolisme énergétique."
+  apports:
+    adulte:
+      cible_ug_j: "375 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "250 mg/j (sels de Mg facilement dissociables en compléments)"
+      note: "UL EFSA/SCF : concerne le magnésium des compléments, pas celui des aliments."
+  ou_en_trouver:
+    - "Oléagineux (amandes, noix), cacao, légumineuses."
+    - "Eaux minérales riches en magnésium."
+  carence:
+    signes: "Crampes/irritabilité possibles mais non spécifiques."
+    comment_verifier: "Si symptômes persistants : avis médical (bilan selon contexte)."
+  exces:
+    risques: "Compléments : diarrhées fréquentes, surtout doses élevées."
+    conseil: "Si ça donne la diarrhée, c’est trop (ou forme mal tolérée)."
+
+potassium:
+  titre: "Potassium"
+  resume: "Électrolyte majeur. Surtout alimentaire. Attention si maladie rénale/traitements spécifiques."
+  roles:
+    - "Fonction musculaire et nerveuse."
+    - "Équilibre hydrique."
+  apports:
+    adulte:
+      cible_ug_j: "2 000 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+  ou_en_trouver:
+    - "Légumes, avocats, champignons."
+    - "Viandes/poissons en apportent aussi."
+  carence:
+    signes: "Faiblesse, crampes (souvent lié à causes médicales/diurétiques)."
+    comment_verifier: "Dosage sanguin si suspicion (surtout si traitement/terrain)."
+  exces:
+    risques: "Peut être dangereux en cas d’insuffisance rénale."
+    conseil: "Suppléments de potassium : prudence + avis médical si doute."
+
+zinc:
+  titre: "Zinc"
+  resume: "Oligo-élément (immunité, peau)."
+  roles:
+    - "Immunité."
+    - "Peau/ongles/cheveux (rôle multifactoriel)."
+  apports:
+    adulte:
+      cible_ug_j: "10 mg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "25 mg/j"
+      note: "UL EFSA/SCF."
+  ou_en_trouver:
+    - "Viandes, fruits de mer (huîtres très riches)."
+    - "Fromages, œufs."
+  carence:
+    signes: "Troubles cutanés, baisse du goût/odorat (possible)."
+    comment_verifier: "Bilan selon contexte (carence difficile à conclure sans avis médical)."
+  exces:
+    risques: "Excès chronique : peut perturber le cuivre."
+    conseil: "Évite les cures longues à dose élevée."
+
+selenium:
+  titre: "Sélénium"
+  resume: "Oligo-élément (sélénoprotéines), notamment impliqué dans la fonction thyroïdienne et la protection contre le stress oxydatif."
+  roles:
+    - "Fonction thyroïdienne (conversion hormones)."
+    - "Sélénoprotéines antioxydantes."
+  apports:
+    adulte:
+      cible_ug_j: "55 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "255 µg/j"
+      note: "UL EFSA (adulte)."
+  ou_en_trouver:
+    - "Poissons et fruits de mer."
+    - "Abats, viandes."
+    - "Noix du Brésil (très variable → prudence)."
+  carence:
+    signes: "Rare ; peut concerner des contextes particuliers (apports très faibles, zones pauvres)."
+    comment_verifier: "Si doute réel : avis médical (bilan orienté, thyroïde selon contexte)."
+  exces:
+    risques: "Surdosage chronique : troubles digestifs, haleine/odeur “ail”, ongles/cheveux fragiles (selenose)."
+    conseil: "Évite les compléments dosés fort + noix du Brésil au quotidien."
+
+iode:
+  titre: "Iode"
+  resume: "Oligo-élément indispensable à la fabrication des hormones thyroïdiennes."
+  roles:
+    - "Synthèse des hormones thyroïdiennes (T3/T4)."
+  apports:
+    adulte:
+      cible_ug_j: "150 µg/j"
+      sources: "VNR/NRV UE (étiquetage)."
+    limite_sup:
+      ul_ug_j: "600 µg/j"
+      note: "UL EFSA/SCF."
+  ou_en_trouver:
+    - "Produits de la mer (poissons, algues — très riches)."
+    - "Sel iodé (selon usage)."
+    - "Produits laitiers (variable)."
+  carence:
+    signes: "Goitre/hypothyroïdie (selon sévérité), fatigue (non spécifique)."
+    comment_verifier: "Bilan thyroïdien si suspicion (TSH, etc.) via médecin ; éviter l’auto-supplémentation forte."
+  exces:
+    risques: "Excès peut dérégler la thyroïde (hyper/hypo selon terrain)."
+    conseil: "Si tu as un doute thyroïde : pas de compléments iodés “au hasard”."
+
