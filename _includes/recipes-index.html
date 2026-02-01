@@ -1,14 +1,18 @@
 <!-- _includes/recipes-index.html -->
 <div id="recipes-index">
+  <!-- Boucle sur chaque groupe de recettes passé par l'include -->
   {% for g in include.grouped %}
     <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
+      <!-- Titre du groupe de recettes, cliquable pour accéder directement à la section du groupe -->
       <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
     </h3>
 
     <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
+      <!-- Trie les recettes dans le groupe par le champ 'recipe_sort' -->
       {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
       <div class="recipes-grid">
+        <!-- Boucle sur chaque recette dans le groupe -->
         {% for r in group_recipes %}
           <article
             class="recipe-card mb-2"
@@ -24,10 +28,12 @@
               <div class="recipe-card-top">
                 <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
                 
+                <!-- Affiche le sous-titre de la recette si présent -->
                 {% if r.recipe_subtitle %}
                   <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
                 {% endif %}
 
+                <!-- Affiche un badge "Recette non testée" si la recette n'a pas encore été testée -->
                 {% if r.recipe_tested == false %}
                   <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
                 {% endif %}
@@ -36,6 +42,7 @@
               <div class="recipe-badges-wrap">
                 {% if r.tags %}
                   <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+                    <!-- Boucle sur les tags de la recette et les affiche s'ils ne sont pas dans 'hidden_tags' -->
                     {% for tag in r.tags %}
                       {% unless include.hidden_tags contains tag %}
                         {% case tag %}
@@ -54,6 +61,7 @@
                   </ul>
                 {% endif %}
 
+                <!-- Ligne 2 : affichage des badges de micronutriments (s'ils sont présents) -->
                 {% assign micros = r.badges_nutritionnels | default: "" %}
                 {% if micros and micros.size > 0 %}
                   <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
