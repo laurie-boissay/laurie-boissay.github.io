@@ -11,14 +11,22 @@ body_id: "home"
 <section id="index">
   <h2>Index</h2>
 
-  <!-- Débogage : Affiche 'all_recipes' pour vérifier les pages récupérées -->
-  <pre>{{ all_recipes | inspect }}</pre>
+  <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" -->
+  {% assign all_recipes = site.pages | where: "layout", "recipe" %}
 
-  <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
-  {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+  <!-- Débogage : Affiche 'all_recipes' pour vérifier les pages récupérées 
+  <pre>{{ all_recipes | inspect }}</pre>-->
 
-  <!-- Inclut le fichier des recettes par groupe en passant les variables 'grouped' et 'hidden_tags' -->
-  {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
+  <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
+  {% if all_recipes.size > 0 %}
+    <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
+    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+
+    <!-- Inclut le fichier des recettes par groupe en passant les variables 'grouped' et 'hidden_tags' -->
+    {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
+  {% else %}
+    <p>Aucune recette disponible.</p>
+  {% endif %}
 
   <hr class="my-4">
 

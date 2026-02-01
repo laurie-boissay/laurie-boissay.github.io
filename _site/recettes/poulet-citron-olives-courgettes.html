@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+
+<!-- Viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- SEO -->
+<meta name="robots" content="index, follow">
+<meta name="description" content="Poulet mijoté au citron avec olives et courgettes. Plat low carb modéré, complet, léger et parfumé.">
+
+<title>Poulet citron, olives & courgettes</title>
+
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+  crossorigin="anonymous"
+>
+
+<!-- CSS principal du site (CHEMIN CORRECT PARTOUT) -->
+<link
+  rel="stylesheet"
+  href="/style.css"
+>
+
+<!-- Favicon -->
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/bunny1.png"
+>
+
+<!-- Head spécifique à certaines pages (JSON-LD recettes, etc.) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": "Poulet citron, olives & courgettes",
+  "description": "Poulet mijoté au citron avec olives et courgettes. Plat low carb modéré, complet et parfumé.",
+  "recipeYield": "4 portions",
+  "prepTime": "PT15M",
+  "cookTime": "PT25M",
+  "totalTime": "PT40M",
+  "recipeCategory": "Plat",
+  "keywords": "low carb, poulet, citron, olives, courgettes",
+  "author": { "@type": "Person", "name": "Laurie" },
+  "recipeIngredient": [
+    "700 g de blancs de poulet",
+    "600 g de courgettes",
+    "120 g d’olives vertes dénoyautées",
+    "1 citron (zeste + jus)",
+    "1 gousse d’ail",
+    "1 c. à soupe d’huile",
+    "Sel (léger)",
+    "Poivre",
+    "Thym ou herbes de Provence (optionnel)"
+  ],
+  "recipeInstructions": [
+    { "@type": "HowToStep", "text": "Couper le poulet en morceaux et les courgettes en demi-rondelles." },
+    { "@type": "HowToStep", "text": "Faire dorer le poulet dans l’huile à feu moyen." },
+    { "@type": "HowToStep", "text": "Ajouter l’ail, le zeste et le jus de citron." },
+    { "@type": "HowToStep", "text": "Ajouter les courgettes et les olives." },
+    { "@type": "HowToStep", "text": "Couvrir et laisser mijoter environ 20 minutes à feu doux." }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": "Poulet citron, olives & courgettes",
+  "description": "Poulet mijoté au citron avec olives et courgettes. Plat low carb modéré, complet et parfumé.",
+  "recipeYield": "4 portions",
+  "prepTime": "PT15M",
+  "cookTime": "PT25M",
+  "totalTime": "PT40M",
+  "recipeCategory": "Plat",
+  "keywords": "low carb, poulet, citron, olives, courgettes",
+  "author": { "@type": "Person", "name": "Laurie" },
+  "recipeIngredient": [
+    "700 g de blancs de poulet",
+    "600 g de courgettes",
+    "120 g d’olives vertes dénoyautées",
+    "1 citron (zeste + jus)",
+    "1 gousse d’ail",
+    "1 c. à soupe d’huile",
+    "Sel (léger)",
+    "Poivre",
+    "Thym ou herbes de Provence (optionnel)"
+  ],
+  "recipeInstructions": [
+    { "@type": "HowToStep", "text": "Couper le poulet en morceaux et les courgettes en demi-rondelles." },
+    { "@type": "HowToStep", "text": "Faire dorer le poulet dans l’huile à feu moyen." },
+    { "@type": "HowToStep", "text": "Ajouter l’ail, le zeste et le jus de citron." },
+    { "@type": "HowToStep", "text": "Ajouter les courgettes et les olives." },
+    { "@type": "HowToStep", "text": "Couvrir et laisser mijoter environ 20 minutes à feu doux." }
+  ]
+}
+</script>
+<!-- Styles locaux (layout recipe) -->
+  <style>
+    .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .recipe-badges-wrap{
+      margin-top:.35rem;
+    }
+    .badges-legend{
+      margin-top:.5rem;
+      font-size:.9rem;
+    }
+    .badges-legend summary{
+      cursor:pointer;
+      font-weight:600;
+    }
+    .badges-legend ul{
+      list-style:none;
+      padding-left:0;
+      margin:.4rem 0 0 0;
+    }
+    .badges-legend li{
+      line-height:1.4;
+    }
+  </style>
+</head>
+
+<body class="container-fluid recipe">
+  
+<header class="marge">
+  <h1><strong>Poulet citron, olives & courgettes</strong></h1>
+
+  
+    <h3><span class="bleu">Plat méditerranéen aux saveurs de citron et olives</span></h3>
+  
+</header>
+
+
+  <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
+  <div class="container-fluid site-container">
+
+    <a class="navbar-brand fw-bold" href="/" style="border-bottom:none;">
+      Recettes low carb
+    </a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Ouvrir le menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-lg-auto me-lg-auto mb-2 mb-lg-0 gap-lg-1">
+
+        
+
+        <!-- RECETTES (dropdown catégories) -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle "
+             href="/"
+             id="recipesDropdown"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">
+            Recettes
+          </a>
+
+          
+          
+
+          <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
+
+            <!-- Accès direct : On mange quoi ? -->
+            <li>
+              <a class="dropdown-item"
+                 href="/#random-pick">
+                On mange quoi ?
+              </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#amuse-bouche">
+                  Amuse-bouche
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#barres-nutritionnelles">
+                  Barres nutritionnelles
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#boissons">
+                  Boissons
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#cake">
+                  Cake
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#desserts-crèmes">
+                  Desserts & crèmes
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#gâteaux-biscuits">
+                  Gâteaux & biscuits
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#légumes-accompagnements">
+                  Légumes & accompagnements
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#pains-substituts">
+                  Pains & substituts
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#plats-à-base-de-fromages">
+                  Plats à base de fromages
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#plats-à-base-de-fruits-de-mer">
+                  Plats à base de fruits de mer
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#plats-à-base-de-poissons">
+                  Plats à base de poissons
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#plats-à-base-de-viande">
+                  Plats à base de viande
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#plats-à-base-d-œufs">
+                  Plats à base d’œufs
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#préparations-conservations">
+                  Préparations & conservations
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#pâtes-fonds">
+                  Pâtes & fonds
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#pâtés">
+                  Pâtés
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#salades-bols">
+                  Salades & bols
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#sauces-assaisonnements">
+                  Sauces & assaisonnements
+                </a>
+              </li>
+            
+              <li>
+                <a class="dropdown-item recipes-group-chip"
+                   href="/#soupe">
+                  Soupe
+                </a>
+              </li>
+            
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link "
+             href="/reperes-low-carb.html">Repères low carb</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link "
+             href="/sucres-caches.html">Sucres cachés</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link "
+             href="/edulcorants.html">Édulcorants</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link "
+             href="/apropos.html">À propos</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link "
+             href="/mentions.html">Mentions légales</a>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+
+  <main class="site-main">
+    <div class="site-container">
+
+      
+
+
+  <div class="alert alert-warning" role="alert">
+    <strong>⚠ Recette non testée</strong><br>
+    Cette recette n’a pas encore été cuisinée. Les proportions, textures ou temps peuvent nécessiter des ajustements.
+  </div>
+
+<header class="recipe-head">
+        <h1 class="recipe-title">Poulet citron, olives & courgettes</h1>
+
+        <!-- Sous-titre temporairement masqué -->
+
+        <div class="recipe-badges-wrap">
+          <!-- Ligne 1 : badges (tags) -->
+          
+            <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+              
+                
+              
+                
+                  <li title="Très protéiné">💪</li>
+                    
+                
+              
+                
+                  <li title="Rapide">⏱️</li>
+                    
+                
+              
+                
+                  <li title="Peu calorique">🪶</li>
+                    
+                
+              
+            </ul>
+          
+
+          <!-- Ligne 2 : micronutriments -->
+          
+          
+
+          <!-- Légende des badges -->
+          <details class="badges-legend">
+            <summary>Légende des badges</summary>
+            <ul>
+              <li>💪 Très protéiné</li>
+              <li>💩 Riche en fibres</li>
+              <li>⏱️ Rapide à préparer</li>
+              <li>❄️ Congelable</li>
+              <li>♨️ Micro-ondable</li>
+              <li>🪶 Peu calorique</li>
+              <li>🔥 Calorique</li>
+              <li>🐌 Préparation longue / temps passif important</li>
+              <li>🐟 Oméga-3</li>
+              <li>👁️ Vitamine A</li>
+              <li>🍋 Vitamine C</li>
+              <li>🌤️ Vitamine D</li>
+              <li>🛡️ Vitamine E</li>
+              <li>🩸 Vitamine K</li>
+              <li>🌱 Vitamine B9</li>
+              <li>🥩 Vitamine B12</li>
+              <li>🦴 Calcium</li>
+              <li>🧲 Fer</li>
+              <li>⚡ Magnésium</li>
+              <li>🍌 Potassium</li>
+              <li>🔩 Zinc</li>
+              <li>🧪 Sélénium</li>
+              <li>🌊 Iode</li>
+            </ul>
+          </details>
+        </div>
+      </header>
+
+      <div class="content-surface recipe-surface">
+        <p class="lead">
+  <strong>Pour :</strong> 4 personnes —
+  <strong>Préparation :</strong> 15 min —
+  <strong>Cuisson :</strong> 25 min —
+  <strong>Niveau :</strong> facile
+</p>
+
+<hr>
+
+<h2>Ingrédients</h2>
+
+<ul>
+  <li>700 g de blancs de poulet</li>
+  <li>600 g de courgettes</li>
+  <li>120 g d’olives vertes dénoyautées</li>
+  <li>1 citron (zeste + jus)</li>
+  <li>1 gousse d’ail (ou ail semoule)</li>
+  <li>1 c. à soupe d’huile (colza ou tournesol)</li>
+  <li>Sel (léger), poivre</li>
+  <li><em>Option :</em> thym ou herbes de Provence</li>
+</ul>
+
+<h2>Préparation</h2>
+
+<ol>
+  <li>Couper le poulet en morceaux réguliers.</li>
+  <li>Laver les courgettes et les couper en demi-rondelles.</li>
+  <li>Chauffer l’huile dans une grande poêle ou une sauteuse.</li>
+  <li>Faire dorer le poulet à feu moyen sur toutes les faces.</li>
+  <li>Ajouter l’ail, le zeste et le jus de citron. Mélanger.</li>
+  <li>Ajouter les courgettes et les olives.</li>
+  <li>Couvrir et laisser mijoter <strong>20 minutes</strong> à feu doux.</li>
+  <li>Poivrer, ajuster le sel en fin de cuisson et servir.</li>
+</ol>
+
+<h2>Informations nutritionnelles</h2>
+<p>Valeurs estimées par portion (pour 4 portions).</p>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr><th scope="row">Énergie</th><td>≈ 380 kcal</td></tr>
+      <tr><th scope="row">Protéines</th><td>≈ 39 g</td></tr>
+      <tr><th scope="row">Lipides</th><td>≈ 22 g</td></tr>
+      <tr><th scope="row">Glucides</th><td>≈ 7 g</td></tr>
+      <tr><th scope="row">Fibres</th><td>≈ 4 g</td></tr>
+      <tr><th scope="row">Fructose</th><td>≈ 1,5 g</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="small text-muted">
+  Estimation pour 1 portion. Glucides issus principalement des courgettes, du citron et des olives.
+</p>
+
+<h2>Notes low carb</h2>
+
+<ul>
+  <li><strong>Plat complet</strong> : protéines + légumes intégrés.</li>
+  <li><strong>Low carb modéré</strong> : pas de féculents.</li>
+  <li><strong>Peu calorique</strong> : ≈ 380 kcal par portion.</li>
+  <li><strong>Point d’attention :</strong> olives souvent salées → saler avec parcimonie.</li>
+</ul>
+
+
+      </div>
+
+      <footer class="mt-4">
+  
+    <a class="btn btn-outline-primary" href="/#index">
+      ← Retour à l’index
+    </a>
+  
+</footer>
+
+
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous">
+</script>
+
+<script>
+  const SITE_BASEURL = "";
+
+  function closeCollapseById(id) {
+    const el = document.getElementById(id);
+    if (!el || !window.bootstrap) return;
+
+    const inst =
+      window.bootstrap.Collapse.getInstance(el) ||
+      new window.bootstrap.Collapse(el, { toggle: false });
+
+    inst.hide();
+  }
+
+  function fixAnchorOffset(hash) {
+    const h = hash || location.hash;
+    if (!h) return;
+
+    let target;
+    try { target = document.querySelector(h); }
+    catch (e) { return; }
+    if (!target) return;
+
+    const nav = document.getElementById("navigation");
+    const navH = nav ? nav.getBoundingClientRect().height : 0;
+
+    const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+
+    // Neutraliser temporairement le smooth scroll
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+
+    window.scrollTo(0, y);
+
+    html.style.scrollBehavior = prev || "";
+  }
+
+  function isHomePage() {
+    const path = location.pathname.replace(/\/+$/, "");
+    const base = (SITE_BASEURL || "").replace(/\/+$/, "");
+
+    const home1 = (base + "/").replace(/\/+$/, "");
+    const home2 = (base + "/index.html").replace(/\/+$/, "");
+
+    return path === home1 || path === home2 || path === base;
+  }
+
+  // Fermer menu mobile après clic sur une catégorie + scroll propre (index)
+  document.addEventListener("click", function (e) {
+    const chip = e.target.closest(".recipes-group-chip");
+    if (!chip) return;
+
+    const href = chip.getAttribute("href") || "";
+    const hashIndex = href.indexOf("#");
+    if (hashIndex === -1) return;
+
+    const hash = href.slice(hashIndex);
+
+    // Fermer le menu burger (mobile)
+    closeCollapseById("navbarSupportedContent");
+
+    if (isHomePage()) {
+      e.preventDefault();
+      history.pushState(null, "", hash);
+
+      setTimeout(() => fixAnchorOffset(hash), 0);
+      setTimeout(() => fixAnchorOffset(hash), 120);
+      setTimeout(() => fixAnchorOffset(hash), 260);
+    }
+  });
+
+  // Corriger l'offset quand on arrive sur /#groupe depuis une autre page
+  window.addEventListener("load", () => {
+    setTimeout(() => fixAnchorOffset(location.hash), 0);
+    setTimeout(() => fixAnchorOffset(location.hash), 180);
+    setTimeout(() => fixAnchorOffset(location.hash), 420);
+  });
+
+  window.addEventListener("hashchange", () => {
+    setTimeout(() => fixAnchorOffset(location.hash), 120);
+    setTimeout(() => fixAnchorOffset(location.hash), 260);
+  });
+
+  // ===== IMPORTANT : empêcher le scroll de la page derrière quand le dropdown est ouvert (mobile)
+  function isMobileNav() {
+    return window.matchMedia("(max-width: 991.98px)").matches;
+  }
+
+  function lockBodyScroll(lock) {
+    if (!isMobileNav()) return;
+    document.body.style.overflow = lock ? "hidden" : "";
+    document.body.style.touchAction = lock ? "none" : "";
+  }
+
+  document.addEventListener("shown.bs.dropdown", function (e) {
+    if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(true);
+  });
+
+  document.addEventListener("hidden.bs.dropdown", function (e) {
+    if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(false);
+  });
+</script>
+
+</body>
+</html>
