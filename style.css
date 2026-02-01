@@ -755,4 +755,43 @@ border-bottom: none;
 color: inherit;
 }
 
+/* index.html */
+    /* Badges */
+    .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .recipe-badges-wrap{
+      margin-top:.35rem;
+    }
+
+    /* Catégories plus visibles */
+    .recipe-category-title{
+      margin-top: 1.25rem;
+      margin-bottom: .75rem;
+      padding: .6rem .75rem;
+      border-left: .35rem solid currentColor;
+      background: rgba(0,0,0,.04);
+      border-radius: .35rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .recipe-category-title a{
+      text-decoration: none;
+      border-bottom: none;
+      color: inherit;
+    }
 
