@@ -1,12 +1,28 @@
 ---
 layout: recipe
+
+# Titre affiché (site + SEO)
 title: "Madeleines"
+
+# Description courte (listes / SEO)
 description: "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium, texture plus aérienne."
+
+# Titre affiché dans la page recette (souvent identique à title)
 recipe_title: "Madeleines"
+
+# Sous-titre (courte promesse)
 recipe_subtitle: "Madeleines légères au beurre noisette, sans farine de blé"
+
+# Groupe officiel (OK)
 recipe_group: "Gâteaux & biscuits"
+
+# Identifiant fonctionnel (doit être entre guillemets)
 recipe_sort: "madeleines"
+
+# Recette testée : OK
 recipe_tested: true
+
+# Tags officiels uniquement (OK)
 tags:
   - gout-sucre
   - low-carb-modere
@@ -15,22 +31,24 @@ tags:
   - riche-en-fibres
   - calorique
 
+# Micronutriments (à utiliser uniquement si justifié)
 badges_nutritionnels:
   - vitamine-b12
 
+# JSON-LD (Schema.org)
 extra_head: |
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "name": "Madeleines low carb (beurre noisette)",
+    "name": "Madeleines",
     "description": "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium.",
     "recipeCategory": "Gâteaux & biscuits",
     "recipeCuisine": "Française",
     "recipeYield": "12 madeleines (4 portions)",
-    "prepTime": "PT15M",
+    "prepTime": "PT25M",
     "cookTime": "PT12M",
-    "totalTime": "PT27M",
+    "totalTime": "PT37M",
     "recipeIngredient": [
       "3 œufs (jaunes et blancs séparés)",
       "70 g de beurre (pour beurre noisette)",
@@ -54,22 +72,29 @@ extra_head: |
   </script>
 ---
 
+<!-- Bandeau d’infos (utilise la classe .recipe-lead présente dans ton CSS) -->
 <div class="recipe-lead">
-  <div class="recipe-lead__grid">
-    <div><strong>Pour :</strong> 4 portions</div>
-    <div><strong>Rendement :</strong> 12 madeleines</div>
-    <div><strong>Portion :</strong> 3 madeleines</div>
-    <div><strong>Temps :</strong> 15 min</div>
-    <div><strong>Cuisson :</strong> 11–12 min</div>
-    <div><strong>Type :</strong> goûter sucré</div>
-  </div>
+  <p class="mb-0">
+    <strong>Pour :</strong> 4 portions — <strong>Rendement :</strong> 12 madeleines — <strong>Portion :</strong> 3 madeleines<br>
+    <strong>Temps :</strong> 25 min — <strong>Cuisson :</strong> 11–12 min — <strong>Total :</strong> 37 min<br>
+    <strong>Type :</strong> goûter sucré
+  </p>
 </div>
+
+<hr>
+
+<!-- Intro courte (comme sur le modèle) -->
+<p>
+  Version low carb modéré des madeleines classiques : on remplace la <strong>farine de blé (non compatible low carb)</strong>
+  par de la <strong>poudre d’amandes</strong>, et le <strong>sucre (non compatible low carb)</strong> par un édulcorant.
+  Le <strong>beurre noisette</strong> apporte le goût principal, donc on évite de surdoser l’édulcorant pour ne pas le masquer.
+</p>
 
 <hr>
 
 <h2>Ingrédients</h2>
 
-<ul class="recipe-ingredients">
+<ul>
   <li><strong>3</strong> œufs (séparés)</li>
   <li><strong>70 g</strong> de beurre (pour beurre noisette)</li>
   <li><strong>85 g</strong> de poudre d’amandes fine</li>
@@ -79,15 +104,17 @@ extra_head: |
   <li><strong>1</strong> pincée de sel</li>
 </ul>
 
-<p class="recipe-tip">
-  <strong>Sucrant :</strong> 15 g suffisent. Au-delà, la stévia masque le goût du beurre noisette.
+<!-- Astuce sucrant : alignée avec ta règle “pas d’arrière-goût d’édulcorant” -->
+<p>
+  <strong>Sucrant :</strong> 15 g suffisent. Au-delà, la stévia risque de masquer le goût du beurre noisette
+  (et de laisser un arrière-goût).
 </p>
 
 <hr>
 
 <h2>Préparation</h2>
 
-<ol class="recipe-steps">
+<ol>
   <li>Faire fondre le beurre à feu moyen jusqu’à obtenir une odeur de noisette. Laisser tiédir.</li>
   <li>Monter les blancs en neige ferme avec la pincée de sel.</li>
   <li>Mélanger les jaunes avec l’édulcorant.</li>
@@ -105,35 +132,34 @@ extra_head: |
 <hr>
 
 <h2>Informations nutritionnelles</h2>
-<p>
-  Valeurs estimées pour <strong>1 portion</strong> (3 madeleines, soit 1/4 de la recette).
-  L’édulcorant est compté à 0.
-</p>
+
+<p>Valeurs estimées <strong>par portion</strong> (3 madeleines, soit 1/4 de la recette). L’édulcorant est compté à 0.</p>
 
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
       <tr><th>Calories</th><td>≈ 300 kcal</td></tr>
       <tr><th>Protéines</th><td>≈ 9,4 g</td></tr>
-      <tr><th>Lipides</th><td>≈ 28,4 g</td></tr>
-      <tr><th>Glucides (total, étiquette UE)</th><td>≈ 5,3 g</td></tr>
-      <tr><th>Fibres</th><td>≈ 3,3 g</td></tr>
-      <tr><th>Glucides nets</th><td>≈ 2,0 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 5,3 g</td></tr>
       <tr><th>Fructose</th><td>≈ 0 g</td></tr>
+      <tr><th>Lipides</th><td>≈ 28,4 g</td></tr>
+      <tr><th>Fibres</th><td>≈ 3,3 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
-  Valeurs <strong>estimées</strong>.  
-  Les glucides proviennent surtout de la poudre d’amandes ; le psyllium contribue principalement aux fibres.
+  Valeurs <strong>estimées</strong>. Les glucides proviennent surtout de la poudre d’amandes ; le psyllium contribue principalement aux fibres.
+  <br>
+  À titre indicatif : <strong>glucides nets</strong> ≈ 2,0 g (glucides totaux − fibres). (Ce n’est pas un affichage “standard UE”.)
 </p>
 
 <hr>
 
 <h2>Notes low carb</h2>
 
-<ul class="recipe-notes">
+<ul>
+  <li><strong>Substitutions :</strong> <strong>farine de blé (non compatible low carb)</strong> → poudre d’amandes ; <strong>sucre (non compatible low carb)</strong> → édulcorant.</li>
   <li><strong>Low carb modéré :</strong> compatible.</li>
   <li><strong>Calories :</strong> <strong>calorique</strong> (≈ 300 kcal par portion, seuil dessert ≥ 300).</li>
   <li><strong>Texture :</strong> si trop dense, réduire légèrement le psyllium (≈ 2 g).</li>
@@ -144,7 +170,7 @@ extra_head: |
 
 <h2>Conservation</h2>
 
-<ul class="recipe-notes">
+<ul>
   <li>2–3 jours dans une boîte hermétique.</li>
   <li>Congélation possible après refroidissement complet.</li>
 </ul>
