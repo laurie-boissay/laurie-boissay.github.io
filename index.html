@@ -9,7 +9,7 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index</h2>
+  <h2>Index :</h2>
 
   <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" et ont bien un groupe défini -->
   {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
