@@ -66,12 +66,18 @@ calorique:
     - "Utile pour repérer les recettes à réserver aux grosses journées / gros appétit."
 
 longue:
-  titre: "Préparation longue 🐌"
-  signification: "Recette plus chronophage (temps actif et/ou étapes nombreuses)."
+  titre: "Préparation longue"
+  signification: >
+    Recette nécessitant un temps d’attente incompressible
+    (trempage, repos, refroidissement, marinade, prise au froid…).
+    La recette ne peut pas être réalisée à l’improviste.
   criteres:
-    - "Beaucoup d’étapes, ou cuisson longue avec plusieurs manipulations."
+    - Temps de repos ou d’attente obligatoire (plusieurs heures ou plus)
+    - Nécessite d’anticiper la préparation
   notes:
-    - "Ne pas confondre avec 'cuisson au four sans surveillance' : ce qui compte c’est la charge mentale/temps."
+    - Ne signifie pas que la recette est compliquée
+    - Ne correspond pas à un grand nombre d’étapes
+    - Souvent compatible avec une organisation “veille pour le lendemain”
 
 gout-sucre:
   titre: "Goût sucré 🍬"

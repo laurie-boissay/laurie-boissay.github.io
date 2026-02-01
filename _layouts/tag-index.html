@@ -3,7 +3,7 @@ layout: page
 ---
 
 {%- comment -%}
-  Layout d’index filtré (compatible GitHub Pages).
+  Layout d’index filtré (tags fonctionnels / micronutriments)
 
   Paramètres attendus dans la page :
   - page.filter_type : "tag" ou "micro"
@@ -13,16 +13,12 @@ layout: page
 <section class="site-container" id="tag-index">
 
   <style>
-    /*
-      Ajustements locaux (tag-index)
-      - On s'appuie sur le style global (.recipe-badges-line) défini dans style.css.
-      - Ici, on ne garde que la mise en page spécifique à cette page.
-    */
+    /* ===== Ajustements locaux au layout tag-index ===== */
 
     #tag-index .page-head{ margin-bottom: 1rem; }
     #tag-index .nav-badges{ margin: .75rem 0 1rem 0; }
 
-    /* Bloc descriptif (micro OU tag) */
+    /* Bloc descriptif (tag OU micronutriment) */
     #tag-index .micro-desc{
       margin: 1rem 0 1.25rem 0;
       padding: .9rem 1rem;
@@ -40,11 +36,8 @@ layout: page
       font-size: 1rem;
       font-weight: 800;
     }
-    #tag-index .micro-desc ul{
-      margin: .25rem 0 .25rem 0;
-    }
 
-    /* Grille des recettes filtrées */
+    /* Grille des recettes */
     #tag-index .recipe-grid{
       display:grid;
       grid-template-columns: 1fr;
@@ -70,7 +63,7 @@ layout: page
 
     #tag-index .recipe-card-desc{ margin: 0; opacity: .9; }
 
-    /* Liens autour des emojis (badges cliquables dans la nav) */
+    /* Liens emoji cliquables */
     #tag-index a.badge-link{
       text-decoration:none;
       border-bottom:none;
@@ -84,10 +77,7 @@ layout: page
     }
   </style>
 
-  {%- comment -%}
-    Bouton de retour.
-    (Tu ne voulais pas de texte “Filtre…” et autres, donc on reste minimal.)
-  {%- endcomment -%}
+  {%- comment -%} Bouton retour index {%- endcomment -%}
   <header class="page-head">
     <a class="btn btn-outline-secondary btn-sm" href="{{ '/' | relative_url }}">
       ← Retour à l’index
@@ -95,293 +85,123 @@ layout: page
   </header>
 
   {%- comment -%}
-    NAV “badges” (comme sous le random pick)
-    - Tu as demandé à ne pas afficher de titres ("Tags fonctionnels", "Micronutriments")
+    Barre de navigation par badges
+    (sans titres visibles, comme demandé)
   {%- endcomment -%}
   <div class="nav-badges">
 
-    <ul class="recipe-badges-line" aria-label="Tags fonctionnels">
-      <li><a class="badge-link" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
-      <li><a class="badge-link" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
-      <li><a class="badge-link" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
-      <li><a class="badge-link" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
-      <li><a class="badge-link" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
-      <li><a class="badge-link" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+    <!-- Tags fonctionnels -->
+    <ul class="recipe-badges-line">
+      <li><a class="badge-link" href="/tags/tres-proteine/" title="Très protéiné">💪</a></li>
+      <li><a class="badge-link" href="/tags/riche-en-fibres/" title="Riche en fibres">💩</a></li>
+      <li><a class="badge-link" href="/tags/rapide/" title="Rapide">⏱️</a></li>
+      <li><a class="badge-link" href="/tags/congelable/" title="Congélable">❄️</a></li>
+      <li><a class="badge-link" href="/tags/micro-ondable/" title="Micro-ondable">♨️</a></li>
+      <li><a class="badge-link" href="/tags/peu-calorique/" title="Peu calorique">🪶</a></li>
+      <li><a class="badge-link" href="/tags/calorique/" title="Calorique">🔥</a></li>
+      <li><a class="badge-link" href="/tags/longue/" title="Préparation longue">🐌</a></li>
+      <li><a class="badge-link" href="/tags/gout-sucre/" title="Goût sucré">🍬</a></li>
     </ul>
 
-    <ul class="recipe-badges-line" aria-label="Micronutriments">
-      <li><a class="badge-link" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
-
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
-
-      <li><a class="badge-link" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+    <!-- Micronutriments -->
+    <ul class="recipe-badges-line">
+      <li><a class="badge-link" href="/micronutriments/omega-3/" title="Oméga-3">🐟</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-a/" title="Vitamine A">👁️</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-c/" title="Vitamine C">🍋</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-d/" title="Vitamine D">🌤️</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-e/" title="Vitamine E">🛡️</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-k/" title="Vitamine K">🩸</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-b9/" title="Vitamine B9">🌱</a></li>
+      <li><a class="badge-link" href="/micronutriments/vitamine-b12/" title="Vitamine B12">🥩</a></li>
+      <li><a class="badge-link" href="/micronutriments/calcium/" title="Calcium">🦴</a></li>
+      <li><a class="badge-link" href="/micronutriments/fer/" title="Fer">🧲</a></li>
+      <li><a class="badge-link" href="/micronutriments/magnesium/" title="Magnésium">⚡</a></li>
+      <li><a class="badge-link" href="/micronutriments/potassium/" title="Potassium">🍌</a></li>
+      <li><a class="badge-link" href="/micronutriments/zinc/" title="Zinc">🔩</a></li>
+      <li><a class="badge-link" href="/micronutriments/selenium/" title="Sélénium">🧪</a></li>
+      <li><a class="badge-link" href="/micronutriments/iode/" title="Iode">🌊</a></li>
     </ul>
   </div>
 
   {%- comment -%}
-    BLOC DESCRIPTIF TAG FONCTIONNEL
-    - S'affiche seulement sur les pages "tag"
-    - Le contenu vient de _data/tags_fonctionnels.yml (clé = page.filter_id)
+    ===== Bloc descriptif TAG FONCTIONNEL =====
   {%- endcomment -%}
   {%- if page.filter_type == "tag" and page.filter_id -%}
     {%- assign taginfo = site.data.tags_fonctionnels[page.filter_id] -%}
     {%- if taginfo -%}
-      <section class="micro-desc" aria-label="Description du tag fonctionnel">
+      <section class="micro-desc">
+        <h2>{{ taginfo.titre }}</h2>
+        <p>{{ taginfo.signification }}</p>
 
-        <h2>{{ taginfo.titre | default: page.title }}</h2>
-
-        {%- if taginfo.signification -%}
-          <p>{{ taginfo.signification }}</p>
-        {%- endif -%}
-
-        {%- if taginfo.criteres and taginfo.criteres.size > 0 -%}
+        {%- if taginfo.criteres -%}
           <h3>Critères d’attribution</h3>
           <ul>
-            {%- for item in taginfo.criteres -%}
-              <li>{{ item }}</li>
-            {%- endfor -%}
+            {%- for c in taginfo.criteres -%}<li>{{ c }}</li>{%- endfor -%}
           </ul>
         {%- endif -%}
-
-        {%- if taginfo.notes and taginfo.notes.size > 0 -%}
-          <h3>Notes</h3>
-          <ul>
-            {%- for item in taginfo.notes -%}
-              <li>{{ item }}</li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-
       </section>
     {%- endif -%}
   {%- endif -%}
 
   {%- comment -%}
-    BLOC DESCRIPTIF MICRONUTRIMENT
-    - S'affiche seulement sur les pages "micro"
-    - Le contenu vient de _data/micronutriments.yml (clé = page.filter_id)
-
-    Robustesse :
-    - dose adulte : accepte micro.apports.adulte.cible_ug_j OU micro.apports.adulte.cible
-    - UL          : accepte micro.apports.limite_sup.ul_ug_j OU micro.apports.limite_sup.ul
+    ===== Bloc descriptif MICRONUTRIMENT =====
   {%- endcomment -%}
   {%- if page.filter_type == "micro" and page.filter_id -%}
     {%- assign micro = site.data.micronutriments[page.filter_id] -%}
     {%- if micro -%}
+      <section class="micro-desc">
+        <h2>{{ micro.titre }}</h2>
+        <p>{{ micro.resume }}</p>
 
-      {%- comment -%} Normalise la “dose adulte” si disponible {%- endcomment -%}
-      {%- assign adulte_cible = "" -%}
-      {%- if micro.apports and micro.apports.adulte -%}
-        {%- if micro.apports.adulte.cible_ug_j -%}
-          {%- assign adulte_cible = micro.apports.adulte.cible_ug_j -%}
-        {%- elsif micro.apports.adulte.cible -%}
-          {%- assign adulte_cible = micro.apports.adulte.cible -%}
-        {%- endif -%}
-      {%- endif -%}
+        <h3>À quoi ça sert ?</h3>
+        <ul>{% for r in micro.roles %}<li>{{ r }}</li>{% endfor %}</ul>
 
-      {%- comment -%} Normalise l’UL si disponible {%- endcomment -%}
-      {%- assign ul_val = "" -%}
-      {%- if micro.apports and micro.apports.limite_sup -%}
-        {%- if micro.apports.limite_sup.ul_ug_j -%}
-          {%- assign ul_val = micro.apports.limite_sup.ul_ug_j -%}
-        {%- elsif micro.apports.limite_sup.ul -%}
-          {%- assign ul_val = micro.apports.limite_sup.ul -%}
-        {%- endif -%}
-      {%- endif -%}
+        <h3>Quelle dose ?</h3>
+        <p><strong>Adulte :</strong> {{ micro.apports.adulte.cible }}</p>
 
-      <section class="micro-desc" aria-label="Description du micronutriment">
+        <h3>Où en trouver ?</h3>
+        <ul>{% for f in micro.ou_en_trouver %}<li>{{ f }}</li>{% endfor %}</ul>
 
-        <h2>{{ micro.titre | default: page.title }}</h2>
-
-        {%- if micro.resume -%}
-          <p>{{ micro.resume }}</p>
-        {%- endif -%}
-
-        {%- if micro.roles and micro.roles.size > 0 -%}
-          <h3>À quoi ça sert ?</h3>
-          <ul>
-            {%- for item in micro.roles -%}
-              <li>{{ item }}</li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-
-        {%- if micro.apports -%}
-          {%- if adulte_cible != "" or micro.apports.adulte.sources -%}
-            <h3>Quelle dose ?</h3>
-            {%- if adulte_cible != "" -%}
-              <p>
-                <strong>Adulte :</strong> {{ adulte_cible }}.
-                {%- if micro.apports.adulte.sources -%}
-                  <br>
-                  <span class="small text-muted">{{ micro.apports.adulte.sources }}</span>
-                {%- endif -%}
-              </p>
-            {%- else -%}
-              {%- comment -%}
-                Cas rare : apports présents mais pas de “cible” renseignée.
-                On évite d’afficher “Adulte : .”
-              {%- endcomment -%}
-              {%- if micro.apports.adulte.sources -%}
-                <p class="small text-muted">{{ micro.apports.adulte.sources }}</p>
-              {%- endif -%}
-            {%- endif -%}
-          {%- endif -%}
-
-          {%- if micro.apports.limite_sup and ul_val != "" -%}
-            <p class="small text-muted" style="margin-top:.35rem;">
-              <strong>Limite supérieure :</strong> {{ ul_val }}.
-              {%- if micro.apports.limite_sup.note -%}
-                {{ micro.apports.limite_sup.note }}
-              {%- endif -%}
-            </p>
-          {%- endif -%}
-        {%- endif -%}
-
-        {%- if micro.ou_en_trouver and micro.ou_en_trouver.size > 0 -%}
-          <h3>Où en trouver ?</h3>
-          <ul>
-            {%- for item in micro.ou_en_trouver -%}
-              <li>{{ item }}</li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-
-        {%- if micro.carence -%}
-          <h3>Comment savoir si j’en manque ?</h3>
-          {%- if micro.carence.signes -%}
-            <p>{{ micro.carence.signes }}</p>
-          {%- endif -%}
-          {%- if micro.carence.comment_verifier -%}
-            <p class="small text-muted">{{ micro.carence.comment_verifier }}</p>
-          {%- endif -%}
-        {%- endif -%}
-
-        {%- if micro.exces -%}
-          <h3>Attention au surdosage</h3>
-          {%- if micro.exces.risques -%}
-            <p>{{ micro.exces.risques }}</p>
-          {%- endif -%}
-          {%- if micro.exces.conseil -%}
-            <p class="small text-muted">{{ micro.exces.conseil }}</p>
-          {%- endif -%}
-        {%- endif -%}
-
+        <h3>Comment savoir si j’en manque ?</h3>
+        <p>{{ micro.carence.signes }}</p>
       </section>
     {%- endif -%}
   {%- endif -%}
 
   {%- comment -%}
-    Récupère toutes les pages de recettes.
-    Hypothèse : tes recettes sont des pages avec layout: recipe.
+    ===== Liste des recettes filtrées =====
   {%- endcomment -%}
   {%- assign recipes = site.pages | where: "layout", "recipe" -%}
-
-  {%- comment -%}
-    Tags "techniques" à cacher dans l'affichage (comme sur l'index).
-  {%- endcomment -%}
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
-  {%- comment -%}
-    Filtrage selon type.
-    - si page.filter_type == "tag"  => filtre sur r.tags
-    - sinon (micro)                => filtre sur r.badges_nutritionnels
-  {%- endcomment -%}
   {%- assign filtered = "" | split: "" -%}
   {%- for r in recipes -%}
-    {%- if page.filter_type == "tag" -%}
-      {%- if r.tags and r.tags contains page.filter_id -%}
-        {%- assign filtered = filtered | push: r -%}
-      {%- endif -%}
-    {%- else -%}
-      {%- if r.badges_nutritionnels and r.badges_nutritionnels contains page.filter_id -%}
-        {%- assign filtered = filtered | push: r -%}
-      {%- endif -%}
+    {%- if page.filter_type == "tag" and r.tags contains page.filter_id -%}
+      {%- assign filtered = filtered | push: r -%}
+    {%- elsif page.filter_type == "micro" and r.badges_nutritionnels contains page.filter_id -%}
+      {%- assign filtered = filtered | push: r -%}
     {%- endif -%}
   {%- endfor -%}
 
-  {%- if filtered.size == 0 -%}
-    <p>Aucune recette trouvée.</p>
-  {%- else -%}
-    <p class="small text-muted"><strong>{{ filtered.size }}</strong> recette(s).</p>
+  <p class="small text-muted"><strong>{{ filtered.size }}</strong> recette(s).</p>
 
-    <div class="recipe-grid">
-      {%- for r in filtered -%}
-        <article class="recipe-card">
-          <h2 class="recipe-card-title">
-            <a href="{{ r.url | relative_url }}">{{ r.recipe_title | default: r.title }}</a>
-          </h2>
+  <div class="recipe-grid">
+    {%- for r in filtered -%}
+      <article class="recipe-card">
 
-          {%- if r.description -%}
-            <p class="recipe-card-desc">{{ r.description }}</p>
-          {%- endif -%}
+        <h2 class="recipe-card-title">
+          <a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a>
+        </h2>
 
-          <div class="recipe-badges-wrap">
+        {%- if r.recipe_tested == false -%}
+          <span class="badge bg-warning text-dark mb-2">Recette non testée</span>
+        {%- endif -%}
 
-            {%- if r.tags -%}
-              <ul class="recipe-badges-line badges-tags" aria-label="Badges">
-                {%- for tag in r.tags -%}
-                  {%- unless hidden_tags contains tag -%}
-                    {%- case tag -%}
-                      {%- when "tres-proteine" -%}<li title="Très protéiné">💪</li>
-                      {%- when "riche-en-fibres" -%}<li title="Riche en fibres">💩</li>
-                      {%- when "rapide" -%}<li title="Rapide">⏱️</li>
-                      {%- when "congelable" -%}<li title="Congélable">❄️</li>
-                      {%- when "micro-ondable" -%}<li title="Micro-ondable">♨️</li>
-                      {%- when "peu-calorique" -%}<li title="Peu calorique">🪶</li>
-                      {%- when "calorique" -%}<li title="Calorique">🔥</li>
-                      {%- when "longue" -%}<li title="Préparation longue">🐌</li>
-                    {%- endcase -%}
-                  {%- endunless -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
+        <p class="recipe-card-desc">{{ r.description }}</p>
 
-            {%- if r.badges_nutritionnels and r.badges_nutritionnels.size > 0 -%}
-              <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                {%- for m in r.badges_nutritionnels -%}
-                  {%- case m -%}
-                    {%- when "omega-3" -%}<li title="Oméga-3">🐟</li>
-
-                    {%- when "vitamine-a" -%}<li title="Vitamine A">👁️</li>
-                    {%- when "vitamine-c" -%}<li title="Vitamine C">🍋</li>
-                    {%- when "vitamine-d" -%}<li title="Vitamine D">🌤️</li>
-                    {%- when "vitamine-e" -%}<li title="Vitamine E">🛡️</li>
-                    {%- when "vitamine-k" -%}<li title="Vitamine K">🩸</li>
-                    {%- when "vitamine-b9" -%}<li title="Vitamine B9">🌱</li>
-                    {%- when "vitamine-b12" -%}<li title="Vitamine B12">🥩</li>
-
-                    {%- when "calcium" -%}<li title="Calcium">🦴</li>
-                    {%- when "fer" -%}<li title="Fer">🧲</li>
-                    {%- when "magnesium" -%}<li title="Magnésium">⚡</li>
-                    {%- when "potassium" -%}<li title="Potassium">🍌</li>
-                    {%- when "zinc" -%}<li title="Zinc">🔩</li>
-                    {%- when "selenium" -%}<li title="Sélénium">🧪</li>
-                    {%- when "iode" -%}<li title="Iode">🌊</li>
-                  {%- endcase -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
-        </article>
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
 
 </section>
 
