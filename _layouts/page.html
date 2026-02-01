@@ -7,7 +7,7 @@
 <body class="container-fluid{% if page.body_id %} {{ page.body_id }}{% endif %}">
   {% include navbar.html %}
 
-  {%- unless page.body_id == "home" -%}
+  <!-- Enlève la condition "unless" qui exclut l'affichage sur la page index -->
   <header class="marge" id="top">
     <div class="site-container">
       <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
@@ -21,7 +21,6 @@
       {% endif %}
     </div>
   </header>
-  {%- endunless -%}
 
   <main class="site-main">
     <div class="site-container">

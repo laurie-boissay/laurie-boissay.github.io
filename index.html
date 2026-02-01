@@ -3,18 +3,19 @@ layout: page
 title: "Recettes low carb"
 filter_title: "Recettes"
 description: "Mes recettes low carb (recettes faibles en glucides). Index par catégories."
-page_h1: Index
+page_h1: "Index"
 page_h3: "Mes recettes low carb"
 body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index</h2>
+  <!-- Titre principal et sous-titre déjà affichés dans l'en-tête -->
+  <!-- On supprime le deuxième affichage des titres ici -->
 
   <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" -->
   {% assign all_recipes = site.pages | where: "layout", "recipe" %}
 
-    <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
+  <!-- Vérifie si 'all_recipes' contient des éléments avant de les regrouper et trier -->
   {% if all_recipes.size > 0 %}
     <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
     {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
