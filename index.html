@@ -20,7 +20,6 @@ body_id: "home"
 
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
-  <!-- Sections catégories -->
   <div id="recipes-index">
     {% for g in grouped %}
       <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
@@ -42,90 +41,63 @@ body_id: "home"
                 href="{{ r.url | relative_url }}"
                 data-tested="{{ r.recipe_tested }}"
                 data-title="{{ r.recipe_title | escape }}"
+                data-subtitle="{{ r.recipe_subtitle | default: '' | strip_html | escape }}"
               >
                 <div class="recipe-card-top">
                   <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
-
-                  {% if r.recipe_tested == false %}
-                    <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
-                  {% endif %}
                 </div>
 
-                <!-- Sous-titre temporairement masqué -->
+                {% if r.recipe_subtitle %}
+                  <p class="recipe-card-subtitle mb-1">{{ r.recipe_subtitle }}</p>
+                {% endif %}
+
+                {% if r.recipe_tested == false %}
+                  <span class="badge bg-warning text-dark mb-2">Recette non testée</span>
+                {% endif %}
 
                 <div class="recipe-badges-wrap">
-                  <!-- Ligne 1 : badges (tags) -->
                   {% if r.tags %}
-                    <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+                    <ul class="recipe-badges-line badges-tags">
                       {% for tag in r.tags %}
                         {% unless hidden_tags contains tag %}
                           {% case tag %}
-                            {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
-                            {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
-                            {% when "rapide" %}<li title="Rapide">⏱️</li>
-                            {% when "congelable" %}<li title="Congelable">❄️</li>
-                            {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
-                            {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
-                            {% when "calorique" %}<li title="Calorique">🔥</li>
-                            {% when "longue" %}<li title="Préparation longue">🐌</li>
+                            {% when "tres-proteine" %}<li>💪</li>
+                            {% when "riche-en-fibres" %}<li>💩</li>
+                            {% when "rapide" %}<li>⏱️</li>
+                            {% when "congelable" %}<li>❄️</li>
+                            {% when "micro-ondable" %}<li>♨️</li>
+                            {% when "peu-calorique" %}<li>🪶</li>
+                            {% when "calorique" %}<li>🔥</li>
+                            {% when "longue" %}<li>🐌</li>
                           {% endcase %}
                         {% endunless %}
                       {% endfor %}
                     </ul>
                   {% endif %}
 
-                  <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
-                  {% assign micros = r.badges_nutritionnels | default: "" %}
-                  {% if micros and micros.size > 0 %}
-                    <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                      {% for m in micros %}
+                  {% if r.badges_nutritionnels and r.badges_nutritionnels.size > 0 %}
+                    <ul class="recipe-badges-line badges-micro">
+                      {% for m in r.badges_nutritionnels %}
                         {% case m %}
-                          {% when "omega-3" %}<li title="Oméga-3">🐟</li>
-
-                          {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
-                          {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
-                          {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
-                          {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
-                          {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
-                          {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
-                          {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
-
-                          {% when "calcium" %}<li title="Calcium">🦴</li>
-                          {% when "fer" %}<li title="Fer">🧲</li>
-                          {% when "magnesium" %}<li title="Magnésium">⚡</li>
-                          {% when "potassium" %}<li title="Potassium">🍌</li>
-                          {% when "zinc" %}<li title="Zinc">🔩</li>
-                          {% when "selenium" %}<li title="Sélénium">🧪</li>
-                          {% when "iode" %}<li title="Iode">🌊</li>
+                          {% when "omega-3" %}<li>🐟</li>
+                          {% when "calcium" %}<li>🦴</li>
                         {% endcase %}
                       {% endfor %}
                     </ul>
                   {% endif %}
                 </div>
-
               </a>
             </article>
           {% endfor %}
         </div>
-
       </div>
     {% endfor %}
-  </div>
-
-  <hr class="my-4">
-
-  <div class="text-center muted">
-    Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
   </div>
 </section>
 
 <script>
   const EXCLUDED_TAG = "gout-sucre";
-
-  // Tags masqués (pas affichés dans les badges "fonctionnels")
   const HIDDEN_TAGS = new Set(["low-carb-modere","low-carb-strict","gout-sucre"]);
-
-  // Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules)
   const EXCLUDED_GROUPS = [
     "amuse-bouche",
     "boissons",
@@ -137,162 +109,69 @@ body_id: "home"
     "barres nutritionnelles"
   ];
 
-  // Mapping tag -> { emoji, title }
   const TAG_BADGES = {
-    "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
-    "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
-    "rapide":          { emoji: "⏱️", title: "Rapide" },
-    "congelable":      { emoji: "❄️", title: "Congelable" },
-    "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
-    "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
-    "calorique":       { emoji: "🔥", title: "Calorique" },
-    "longue":          { emoji: "🐌", title: "Préparation longue" }
+    "tres-proteine": "💪",
+    "riche-en-fibres": "💩",
+    "rapide": "⏱️",
+    "congelable": "❄️",
+    "micro-ondable": "♨️",
+    "peu-calorique": "🪶",
+    "calorique": "🔥",
+    "longue": "🐌"
   };
 
-  // Mapping micronutriment -> { emoji, title }
   const MICRO_BADGES = {
-    "omega-3":     { emoji: "🐟", title: "Oméga-3" },
-
-    "vitamine-a":  { emoji: "👁️", title: "Vitamine A" },
-    "vitamine-c":  { emoji: "🍋", title: "Vitamine C" },
-    "vitamine-d":  { emoji: "🌤️", title: "Vitamine D" },
-    "vitamine-e":  { emoji: "🛡️", title: "Vitamine E" },
-    "vitamine-k":  { emoji: "🩸", title: "Vitamine K" },
-    "vitamine-b9": { emoji: "🌱", title: "Vitamine B9" },
-    "vitamine-b12":{ emoji: "🥩", title: "Vitamine B12" },
-
-    "calcium":     { emoji: "🦴", title: "Calcium" },
-    "fer":         { emoji: "🧲", title: "Fer" },
-    "magnesium":   { emoji: "⚡", title: "Magnésium" },
-    "potassium":   { emoji: "🍌", title: "Potassium" },
-    "zinc":        { emoji: "🔩", title: "Zinc" },
-    "selenium":    { emoji: "🧪", title: "Sélénium" },
-    "iode":        { emoji: "🌊", title: "Iode" }
+    "omega-3": "🐟",
+    "calcium": "🦴"
   };
 
   const indexRoot = document.getElementById("recipes-index");
   const pickHost = document.getElementById("random-pick");
-
   let lastHref = null;
 
-  function isValidRecipeLink(a) {
-    const href = (a.getAttribute("href") || "").trim();
-    if (!href) return false;
-    if (href.startsWith("#")) return false;
-    if (!href.endsWith(".html")) return false;
-
-    const title = (a.dataset.title || a.textContent || "").trim();
-    if (!title) return false;
-
-    return true;
-  }
-
-  function hasExcludedTag(card) {
-    const tags = (card.dataset.tags || "")
-      .split(",")
-      .map(t => t.trim().toLowerCase())
-      .filter(Boolean);
-
-    return tags.includes(EXCLUDED_TAG);
-  }
-
-  function isInExcludedGroup(a) {
-    const groupEl = a.closest("[data-recipe-group]");
-    if (!groupEl) return false;
-
-    const group = (groupEl.dataset.recipeGroup || "").toLowerCase().trim();
-    return EXCLUDED_GROUPS.includes(group);
+  function parseList(str) {
+    return (str || "").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
   }
 
   function getCandidates() {
-    if (!indexRoot) return [];
-
     return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
-      .filter(isValidRecipeLink)
       .filter(a => {
         const card = a.closest(".recipe-card");
         if (!card) return false;
 
-        if (hasExcludedTag(card)) return false;
-        if (isInExcludedGroup(a)) return false;
+        const tags = parseList(card.dataset.tags);
+        if (tags.includes(EXCLUDED_TAG)) return false;
+
+        const group = a.closest("[data-recipe-group]")?.dataset.recipeGroup?.toLowerCase();
+        if (EXCLUDED_GROUPS.includes(group)) return false;
 
         return true;
       });
   }
 
   function pickRandom(links) {
-    if (links.length === 0) return null;
-
-    let a;
-    let tries = 0;
+    if (!links.length) return null;
+    let a, tries = 0;
     do {
       a = links[Math.floor(Math.random() * links.length)];
       tries++;
     } while (a.getAttribute("href") === lastHref && tries < 20);
-
     lastHref = a.getAttribute("href");
     return a;
   }
 
-  function parseList(str) {
-    return (str || "")
-      .split(",")
-      .map(s => s.trim().toLowerCase())
-      .filter(Boolean);
-  }
-
- function buildBadgeLine(items, map, ariaLabel) {
-  const lis = items
-    .map(id => {
-      const info = map[id];
-      if (!info) return "";
-      const title = (info.title || "").replace(/"/g, "&quot;");
-      return `<li title="${title}">${info.emoji}</li>`;
-    })
-    .filter(Boolean)
-    .join("");
-
-  if (!lis) {
-    return `<ul class="recipe-badges-line is-empty" aria-label="$	     	{ariaLabel}"></ul>`;
-  }
-
-  return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
-}
-
-
-  function buildPickBadges(card) {
-    const tagsAll = parseList(card?.dataset?.tags);
-    const tagsFunctional = tagsAll.filter(t => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
-
-    const microsAll = parseList(card?.dataset?.micros);
-    const micros = microsAll.filter(m => MICRO_BADGES[m]);
-
-    const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Badges");
-    const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments");
-
-    if (!line1 && !line2) return "";
-    return `
-      <div class="recipe-badges-wrap">
-        ${line1}
-        ${line2}
-      </div>
-    `;
-  }
-
   function renderPick(a) {
-    const href = a.getAttribute("href");
-    const title = (a.dataset.title || a.textContent || "").trim();
+    const title = a.dataset.title;
+    const subtitle = a.dataset.subtitle;
     const tested = a.dataset.tested === "true";
-
-    const card = a.closest(".recipe-card");
-    const badgesHtml = buildPickBadges(card);
+    const href = a.getAttribute("href");
 
     pickHost.innerHTML = `
       <div class="pick-card">
         <div class="pick-card-body text-center">
           <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
 
-          <h3 class="h5 mb-2">
+          <h3 class="h5 mb-1">
             ${title}
             ${tested ? "" : `
               <span class="badge bg-warning text-dark ms-2">
@@ -301,40 +180,25 @@ body_id: "home"
             `}
           </h3>
 
-          ${badgesHtml}
+          ${subtitle ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>` : ""}
 
           <div class="d-flex justify-content-center gap-2 mt-3">
             <a class="btn btn-primary" href="${href}">Ça me plaît</a>
-            <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
-              Autre idée
-            </button>
+            <button id="btn-reroll" class="btn btn-outline-secondary">Autre idée</button>
           </div>
         </div>
       </div>
     `;
 
-    document
-      .getElementById("btn-reroll")
-      .addEventListener("click", pickAndRender);
-  }
-
-  function renderEmpty() {
-    pickHost.innerHTML = `
-      <div class="alert alert-warning mb-0">
-        Aucune recette disponible.
-      </div>
-    `;
+    document.getElementById("btn-reroll").onclick = pickAndRender;
   }
 
   function pickAndRender() {
-    const links = getCandidates();
-    if (links.length === 0) return renderEmpty();
-
-    const a = pickRandom(links);
-    if (!a) return renderEmpty();
-
+    const a = pickRandom(getCandidates());
+    if (!a) return;
     renderPick(a);
   }
 
   pickAndRender();
 </script>
+
