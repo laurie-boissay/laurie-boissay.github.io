@@ -11,183 +11,121 @@ body_id: "home"
 <section id="index">
   <h2>Index</h2>
 
-  <!-- Suggestion aléatoire -->
-  <div class="mb-4">
-    <div id="random-pick"></div>
-  </div>
+  <!-- Récupère toutes les pages du site qui utilisent le layout "recipe" et ont bien un groupe défini -->
+  {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+  
+  <!-- Crée une variable 'grouped' contenant les recettes regroupées par leur groupe et triées par le nom du groupe -->
+  {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
-  <!-- Liens fixes vers index filtrés (hors tirage) -->
-  <div class="random-pick-links mt-2">
+  <!-- Crée un tableau 'hidden_tags' contenant les tags "low-carb-modere" et "low-carb-strict" que nous voulons masquer -->
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
 
-    {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
-    {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+  <!-- Début de la section de l'index des recettes -->
+  <div id="recipes-index">
+    <!-- Boucle sur chaque groupe de recettes -->
+    {% for g in grouped %}
+      <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
+        <!-- Titre du groupe de recettes, cliquable pour accéder directement à la section du groupe -->
+        <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
+      </h3>
 
-    {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+      <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
+        <!-- Récupère les recettes de ce groupe et les trie par leur champ 'recipe_sort' -->
+        {% assign group_recipes = g.items | sort: "recipe_sort" %}
 
-    <!-- Sections catégories -->
-    <div id="recipes-index">
-      {% for g in grouped %}
-        <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
-          <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
-        </h3>
-
-        <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
-          {% assign group_recipes = g.items | sort: "recipe_sort" %}
-
-          <div class="recipes-grid">
-            {% for r in group_recipes %}
-              <article
-                class="recipe-card mb-2"
-                data-tags="{{ r.tags | join: ',' | escape }}"
-                data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
+        <div class="recipes-grid">
+          <!-- Boucle sur chaque recette dans le groupe -->
+          {% for r in group_recipes %}
+            <article
+              class="recipe-card mb-2"
+              data-tags="{{ r.tags | join: ',' | escape }}"
+              data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
+            >
+              <a
+                class="recipe-card-link"
+                href="{{ r.url | relative_url }}"
+                data-tested="{{ r.recipe_tested }}"
+                data-title="{{ r.recipe_title | escape }}"
               >
-                <a
-                  class="recipe-card-link"
-                  href="{{ r.url | relative_url }}"
-                  data-tested="{{ r.recipe_tested }}"
-                  data-title="{{ r.recipe_title | escape }}"
-                >
-                  <div class="recipe-card-top">
-                    <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
-                    
-                    <!-- Affichage du sous-titre -->
-                    {% if r.recipe_subtitle %}
-                      <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
-                    {% endif %}
+                <div class="recipe-card-top">
+                  <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
+                  
+                  <!-- Affiche le sous-titre de la recette si présent -->
+                  {% if r.recipe_subtitle %}
+                    <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
+                  {% endif %}
 
-                    {% if r.recipe_tested == false %}
-                      <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
-                    {% endif %}
-                  </div>
+                  <!-- Affiche un badge "Recette non testée" si la recette n'a pas encore été testée -->
+                  {% if r.recipe_tested == false %}
+                    <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
+                  {% endif %}
+                </div>
 
-                  <div class="recipe-badges-wrap">
-                    <!-- Ligne 1 : badges (tags) -->
-                    {% if r.tags %}
-                      <ul class="recipe-badges-line badges-tags" aria-label="Badges">
-                        {% for tag in r.tags %}
-                          {% unless hidden_tags contains tag %}
-                            {% case tag %}
-                              {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
-                              {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
-                              {% when "rapide" %}<li title="Rapide">⏱️</li>
-                              {% when "congelable" %}<li title="Congelable">❄️</li>
-                              {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
-                              {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
-                              {% when "calorique" %}<li title="Calorique">🔥</li>
-                              {% when "longue" %}<li title="Préparation longue">🐌</li>
-                            {% endcase %}
-                          {% endunless %}
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-
-                    <!-- Ligne 2 : micronutriments (affichée seulement si présents) -->
-                    {% assign micros = r.badges_nutritionnels | default: "" %}
-                    {% if micros and micros.size > 0 %}
-                      <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                        {% for m in micros %}
-                          {% case m %}
-                            {% when "omega-3" %}<li title="Oméga-3">🐟</li>
-                            {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
-                            {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
-                            {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
-                            {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
-                            {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
-                            {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
-                            {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
-                            {% when "calcium" %}<li title="Calcium">🦴</li>
-                            {% when "fer" %}<li title="Fer">🧲</li>
-                            {% when "magnesium" %}<li title="Magnésium">⚡</li>
-                            {% when "potassium" %}<li title="Potassium">🍌</li>
-                            {% when "zinc" %}<li title="Zinc">🔩</li>
-                            {% when "selenium" %}<li title="Sélénium">🧪</li>
-                            {% when "iode" %}<li title="Iode">🌊</li>
+                <div class="recipe-badges-wrap">
+                  <!-- Ligne 1 : affichage des badges de tags -->
+                  {% if r.tags %}
+                    <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+                      {% for tag in r.tags %}
+                        <!-- Vérifie si le tag est dans les 'hidden_tags', et ne l'affiche pas s'il y est -->
+                        {% unless hidden_tags contains tag %}
+                          {% case tag %}
+                            {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
+                            {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
+                            {% when "rapide" %}<li title="Rapide">⏱️</li>
+                            {% when "congelable" %}<li title="Congelable">❄️</li>
+                            {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
+                            {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
+                            {% when "calorique" %}<li title="Calorique">🔥</li>
+                            {% when "longue" %}<li title="Préparation longue">🐌</li>
+                            {% when "gout-sucre" %}<li title="Goût sucré">🍬</li> <!-- Badge pour le tag "gout-sucre" -->
                           {% endcase %}
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-                  </div>
+                        {% endunless %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
 
-                </a>
-              </article>
-            {% endfor %}
-          </div>
+                  <!-- Ligne 2 : affichage des badges de micronutriments (s'ils sont présents) -->
+                  {% assign micros = r.badges_nutritionnels | default: "" %}
+                  {% if micros and micros.size > 0 %}
+                    <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
+                      {% for m in micros %}
+                        {% case m %}
+                          {% when "omega-3" %}<li title="Oméga-3">🐟</li>
+                          {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
+                          {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
+                          {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
+                          {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
+                          {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
+                          {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
+                          {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
+                          {% when "calcium" %}<li title="Calcium">🦴</li>
+                          {% when "fer" %}<li title="Fer">🧲</li>
+                          {% when "magnesium" %}<li title="Magnésium">⚡</li>
+                          {% when "potassium" %}<li title="Potassium">🍌</li>
+                          {% when "zinc" %}<li title="Zinc">🔩</li>
+                          {% when "selenium" %}<li title="Sélénium">🧪</li>
+                          {% when "iode" %}<li title="Iode">🌊</li>
+                        {% endcase %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
 
+              </a>
+            </article>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
 
-    <hr class="my-4">
-
-    <div class="text-center muted">
-      Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
-    </div>
+      </div>
+    {% endfor %}
   </div>
 
+  <hr class="my-4">
+
+  <!-- Affiche la date de dernière mise à jour du site -->
+  <div class="text-center muted">
+    Dernière mise à jour le {{ site.time | date: "%d/%m/%Y" }}
+  </div>
 </section>
 
-<script>
-  // Script pour afficher une recette tirée au hasard
-  const EXCLUDED_TAG = "gout-sucre";
-  const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
-  const EXCLUDED_GROUPS = [
-    "amuse-bouche", "boissons", "pains & substituts", "pâtes & fonds", "sauces & assaisonnements",
-    "légumes & accompagnements", "préparations & conservations", "barres nutritionnelles"
-  ];
-
-  const indexRoot = document.getElementById("recipes-index");
-  const pickHost = document.getElementById("random-pick");
-
-  function getCandidates() {
-    if (!indexRoot) return [];
-    return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
-      .filter(a => {
-        const card = a.closest(".recipe-card");
-        const tags = (card.dataset.tags || "").split(",");
-        return !tags.includes(EXCLUDED_TAG);
-      })
-      .filter(a => {
-        const groupEl = a.closest("[data-recipe-group]");
-        const group = groupEl ? groupEl.dataset.recipeGroup : "";
-        return !EXCLUDED_GROUPS.includes(group);
-      });
-  }
-
-  function pickRandom(links) {
-    if (links.length === 0) return null;
-    let a;
-    do {
-      a = links[Math.floor(Math.random() * links.length)];
-    } while (a.getAttribute("href") === lastHref);
-    lastHref = a.getAttribute("href");
-    return a;
-  }
-
-  function renderPick(a) {
-    const href = a.getAttribute("href");
-    const title = a.dataset.title.trim();
-    pickHost.innerHTML = `
-      <div class="pick-card">
-        <div class="pick-card-body text-center">
-          <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
-          <h3 class="h5 mb-2">${title}</h3>
-          <div class="d-flex justify-content-center gap-2 mt-3">
-            <a class="btn btn-primary" href="${href}">Ça me plaît</a>
-            <button id="btn-reroll" class="btn btn-outline-secondary">Autre idée</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.getElementById("btn-reroll").addEventListener("click", pickAndRender);
-  }
-
-  function pickAndRender() {
-    const links = getCandidates();
-    if (links.length === 0) return;
-    const a = pickRandom(links);
-    if (a) renderPick(a);
-  }
-
-  setTimeout(pickAndRender, 500); // Ajout d'un délai pour s'assurer que tout est bien chargé
-</script>
 

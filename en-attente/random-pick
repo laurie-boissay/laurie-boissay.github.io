@@ -1,0 +1,73 @@
+<!-- Suggestion aléatoire -->
+  <div class="mb-4">
+    <div id="random-pick"></div>
+  </div>
+
+  <!-- Liens fixes vers index filtrés (hors tirage) -->
+  <div class="random-pick-links mt-2">
+
+
+<script>
+  // Script pour afficher une recette tirée au hasard
+  const EXCLUDED_TAG = "gout-sucre";
+  const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
+  const EXCLUDED_GROUPS = [
+    "amuse-bouche", "boissons", "pains & substituts", "pâtes & fonds", "sauces & assaisonnements",
+    "légumes & accompagnements", "préparations & conservations", "barres nutritionnelles"
+  ];
+
+  const indexRoot = document.getElementById("recipes-index");
+  const pickHost = document.getElementById("random-pick");
+
+  function getCandidates() {
+    if (!indexRoot) return [];
+    return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
+      .filter(a => {
+        const card = a.closest(".recipe-card");
+        const tags = (card.dataset.tags || "").split(",");
+        return !tags.includes(EXCLUDED_TAG);
+      })
+      .filter(a => {
+        const groupEl = a.closest("[data-recipe-group]");
+        const group = groupEl ? groupEl.dataset.recipeGroup : "";
+        return !EXCLUDED_GROUPS.includes(group);
+      });
+  }
+
+  function pickRandom(links) {
+    if (links.length === 0) return null;
+    let a;
+    do {
+      a = links[Math.floor(Math.random() * links.length)];
+    } while (a.getAttribute("href") === lastHref);
+    lastHref = a.getAttribute("href");
+    return a;
+  }
+
+  function renderPick(a) {
+    const href = a.getAttribute("href");
+    const title = a.dataset.title.trim();
+    pickHost.innerHTML = `
+      <div class="pick-card">
+        <div class="pick-card-body text-center">
+          <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
+          <h3 class="h5 mb-2">${title}</h3>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <a class="btn btn-primary" href="${href}">Ça me plaît</a>
+            <button id="btn-reroll" class="btn btn-outline-secondary">Autre idée</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById("btn-reroll").addEventListener("click", pickAndRender);
+  }
+
+  function pickAndRender() {
+    const links = getCandidates();
+    if (links.length === 0) return;
+    const a = pickRandom(links);
+    if (a) renderPick(a);
+  }
+
+  setTimeout(pickAndRender, 500); // Ajout d'un délai pour s'assurer que tout est bien chargé
+</script>
