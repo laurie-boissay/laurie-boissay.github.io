@@ -9,9 +9,12 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index :</h2>
+  <h2>Index</h2>
 
-  <!-- Inclut le fichier des recettes par groupe -->
+  <!-- Débogage : Affiche la variable 'grouped' pour vérifier son contenu -->
+  <pre>{{ grouped | inspect }}</pre>
+
+  <!-- Inclut le fichier des recettes par groupe en passant la variable 'grouped' -->
   {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
 
   <hr class="my-4">
