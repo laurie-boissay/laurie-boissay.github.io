@@ -1,6 +1,6 @@
-<!-- _includes/recipes_index.html -->
+<!-- _includes/recipes-index.html -->
 <div id="recipes-index">
-  {% for g in grouped %}
+  {% for g in include.grouped %}
     <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
       <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
     </h3>
@@ -37,7 +37,7 @@
                 {% if r.tags %}
                   <ul class="recipe-badges-line badges-tags" aria-label="Badges">
                     {% for tag in r.tags %}
-                      {% unless hidden_tags contains tag %}
+                      {% unless include.hidden_tags contains tag %}
                         {% case tag %}
                           {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
                           {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
