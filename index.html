@@ -9,12 +9,15 @@ body_id: "home"
 ---
 
 <section id="index">
-  <h2>Index :</h2>
+  <h2>Index</h2>
 
-  <!-- Affichage du contenu de 'grouped' pour déboguer -->
-  <pre>{{ grouped | inspect }}</pre>
+  <!-- Débogage : Affiche 'all_recipes' pour vérifier les pages récupérées -->
+  <pre>{{ all_recipes | inspect }}</pre>
 
-  <!-- Inclut le fichier des recettes par groupe en passant la variable 'grouped' -->
+  <!-- Regroupement des recettes par 'recipe_group' après avoir récupéré les pages -->
+  {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+
+  <!-- Inclut le fichier des recettes par groupe en passant les variables 'grouped' et 'hidden_tags' -->
   {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
 
   <hr class="my-4">
