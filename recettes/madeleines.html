@@ -1,24 +1,28 @@
 ---
 layout: recipe
 
-# =========================
-# MÉTADONNÉES PAGE (Jekyll)
-# =========================
+# Titre affiché (site + SEO)
 title: "Madeleines"
+
+# Description courte (listes / SEO)
 description: "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium, texture plus aérienne."
+
+# Titre affiché dans la page recette (souvent identique à title)
 recipe_title: "Madeleines"
+
+# Sous-titre (courte promesse)
 recipe_subtitle: "Madeleines légères au beurre noisette, sans farine de blé"
 
 # Groupe officiel (OK)
 recipe_group: "Gâteaux & biscuits"
 
-# Identifiant fonctionnel : toujours entre guillemets (règle du site)
+# Identifiant fonctionnel (doit être entre guillemets)
 recipe_sort: "madeleines"
 
-# Statut de test (affichage géré par le layout, pas dans le HTML)
+# Recette testée : OK
 recipe_tested: true
 
-# Tags officiels uniquement
+# Tags officiels uniquement (OK)
 tags:
   - gout-sucre
   - low-carb-modere
@@ -27,15 +31,11 @@ tags:
   - riche-en-fibres
   - calorique
 
-# Micronutriments (affichés via une catégorie séparée)
+# Micronutriments (à utiliser uniquement si justifié)
 badges_nutritionnels:
   - vitamine-b12
 
-# =========================
 # JSON-LD (Schema.org)
-# - Le "name" est aligné sur recipe_title
-# - Les temps incluent le repos (10 min) pour être cohérents
-# =========================
 extra_head: |
   <script type="application/ld+json">
   {
@@ -72,26 +72,21 @@ extra_head: |
   </script>
 ---
 
-<!-- =========================================================
-     LEAD (FORMAT MODÈLE)
-     - On reste sur <p class="lead"> … </p> comme tes recettes conformes
-     ========================================================= -->
-<p class="lead">
-  <strong>Pour :</strong> 4 portions (12 madeleines, 3 par portion) —
-  <strong>Temps :</strong> 25 min + 11–12 min cuisson (repos inclus) —
-  <strong>Type :</strong> goûter sucré
-</p>
+<!-- Bandeau d’infos (utilise la classe .recipe-lead présente dans ton CSS) -->
+<div class="recipe-lead">
+  <p class="mb-0">
+    <strong>Pour :</strong> 4 portions — <strong>Rendement :</strong> 12 madeleines — <strong>Portion :</strong> 3 madeleines<br>
+    <strong>Temps :</strong> 25 min — <strong>Cuisson :</strong> 11–12 min — <strong>Total :</strong> 37 min<br>
+    <strong>Type :</strong> goûter sucré
+  </p>
+</div>
 
 <hr>
 
-<!-- =========================================================
-     INTRO COURTE (FORMAT MODÈLE)
-     - Signalement explicite des ingrédients non compatibles low carb
-     ========================================================= -->
+<!-- Intro courte (comme sur le modèle) -->
 <p>
-  Remplacement low carb modéré des madeleines classiques : on remplace la
-  <strong>farine de blé (non compatible low carb)</strong> par de la <strong>poudre d’amandes</strong>, et le
-  <strong>sucre (non compatible low carb)</strong> par un édulcorant.
+  Version low carb modéré des madeleines classiques : on remplace la <strong>farine de blé (non compatible low carb)</strong>
+  par de la <strong>poudre d’amandes</strong>, et le <strong>sucre (non compatible low carb)</strong> par un édulcorant.
   Le <strong>beurre noisette</strong> apporte le goût principal, donc on évite de surdoser l’édulcorant pour ne pas le masquer.
 </p>
 
@@ -109,10 +104,10 @@ extra_head: |
   <li><strong>1</strong> pincée de sel</li>
 </ul>
 
-<!-- Astuce alignée avec ta règle “pas d’arrière-goût d’édulcorant” -->
+<!-- Astuce sucrant : alignée avec ta règle “pas d’arrière-goût d’édulcorant” -->
 <p>
-  <strong>Sucrant :</strong> 15 g suffisent. Au-delà, la stévia peut masquer le goût du beurre noisette
-  (et laisser un arrière-goût).
+  <strong>Sucrant :</strong> 15 g suffisent. Au-delà, la stévia risque de masquer le goût du beurre noisette
+  (et de laisser un arrière-goût).
 </p>
 
 <hr>
@@ -140,7 +135,6 @@ extra_head: |
 
 <p>Valeurs estimées <strong>par portion</strong> (3 madeleines, soit 1/4 de la recette). L’édulcorant est compté à 0.</p>
 
-<!-- Table au format standard du modèle (noyau) -->
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
@@ -154,11 +148,10 @@ extra_head: |
   </table>
 </div>
 
-<!-- Note “hors table” pour rester conforme au modèle -->
 <p class="small text-muted">
   Valeurs <strong>estimées</strong>. Les glucides proviennent surtout de la poudre d’amandes ; le psyllium contribue principalement aux fibres.
   <br>
-  À titre indicatif : <strong>glucides nets</strong> ≈ 2,0 g (glucides totaux − fibres).
+  À titre indicatif : <strong>glucides nets</strong> ≈ 2,0 g (glucides totaux − fibres). (Ce n’est pas un affichage “standard UE”.)
 </p>
 
 <hr>
