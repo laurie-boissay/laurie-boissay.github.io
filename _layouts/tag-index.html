@@ -75,6 +75,22 @@ layout: page
       border-radius:.6rem;
       background: rgba(0,0,0,.05);
     }
+    
+    /* Badge discret "RECETTE NON TESTÉE" (fallback si pas déjà défini    globalement) */
+    #tag-index .recipe-card-untested{
+      display:inline-block;
+      margin: .15rem 0 .5rem 0;
+      padding: .1rem .45rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,165,0,.9);
+      color: rgba(120,70,0,1);
+      background: rgba(255,165,0,.08);
+}
+
   </style>
 
   {%- comment -%} Bouton retour index {%- endcomment -%}
@@ -193,9 +209,12 @@ layout: page
           <a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a>
         </h2>
 
-        {%- if r.recipe_tested == false -%}
-          <span class="badge bg-warning text-dark mb-2">Recette non testée</span>
-        {%- endif -%}
+        {%- comment -%}
+	  Badge "RECETTE NON TESTÉE" (version discrète comme sur l’index)
+	{%- endcomment -%}
+	{%- if r.recipe_tested == false -%}
+	  <span class="recipe-card-untested">RECETTE NON TESTÉE</span>
+	{%- endif -%}
 
         <p class="recipe-card-desc">{{ r.description }}</p>
 

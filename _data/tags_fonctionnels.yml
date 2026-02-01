@@ -53,7 +53,7 @@ peu-calorique:
   titre: "Peu calorique 🪶"
   signification: "Recette sous le seuil “peu calorique” défini pour sa catégorie."
   criteres:
-    - "Le badge est calculé selon tes seuils par catégorie."
+    - "Le badge est calculé selon les seuils par catégorie."
   notes:
     - "Ce tag dépend du calcul : si les portions changent, il peut changer."
 
@@ -61,7 +61,7 @@ calorique:
   titre: "Calorique 🔥"
   signification: "Recette au-dessus du seuil “calorique” défini pour sa catégorie."
   criteres:
-    - "Le badge est calculé selon tes seuils par catégorie."
+    - "Le badge est calculé selon les seuils par catégorie."
   notes:
     - "Utile pour repérer les recettes à réserver aux grosses journées / gros appétit."
 
