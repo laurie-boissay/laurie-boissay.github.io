@@ -337,22 +337,30 @@
       document.getElementById("btn-reroll").onclick = pickAndRender;
     }
 
-    // Cas où aucun candidat n’existe
-    function renderEmpty() {
-      pickHost.innerHTML = `
-        <div class="alert alert-warning mb-0">
-          Aucune recette disponible.
-        </div>
-      `;
-    }
+    /*
+      ✅ IMPORTANT (ta demande) :
+      - Si aucun candidat n’existe, on n’affiche RIEN.
+      - Donc : pas de message "Aucune recette disponible."
+      - On vide juste la zone #random-pick et on sort.
+    */
 
     // Orchestration : récupère candidats -> tire -> rend
     function pickAndRender() {
       const links = getCandidates();
-      if (!links.length) return renderEmpty();
+
+      // Aucun candidat => rien à afficher (silencieux)
+      if (!links.length) {
+        pickHost.innerHTML = "";
+        return;
+      }
 
       const a = pickRandom(links);
-      if (!a) return renderEmpty();
+
+      // Sécurité : si le tirage échoue, on n’affiche rien non plus
+      if (!a) {
+        pickHost.innerHTML = "";
+        return;
+      }
 
       renderPick(a);
     }

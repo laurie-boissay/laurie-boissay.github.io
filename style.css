@@ -971,3 +971,69 @@ BADGES (emoji) — index.html
 }
 
 
+/* tag-index.html */
+ /* Layout tag/micro */
+    #tag-index .page-head{
+      margin-bottom: 1rem;
+    }
+    #tag-index .nav-badges{
+      margin: .75rem 0 1rem 0;
+    }
+    #tag-index .recipe-badges-line{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:.35rem;
+      list-style:none;
+      padding:0;
+      margin:.25rem 0 0 0;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #tag-index .recipe-badges-line li{
+      display:flex;
+      align-items:center;
+      font-size:1.15rem;
+      line-height:1;
+      white-space:nowrap;
+    }
+    #tag-index a.badge-link{
+      text-decoration:none;
+      border-bottom:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:2rem;
+      padding:.15rem .35rem;
+      border-radius:.6rem;
+      background: rgba(0,0,0,.05);
+    }
+
+    #tag-index .recipe-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: .65rem;
+    }
+    @media (min-width: 768px){
+      #tag-index .recipe-grid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    #tag-index .recipe-card{
+      padding: .75rem .85rem;
+      border-radius: .6rem;
+      background: rgba(0,0,0,.03);
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    #tag-index .recipe-card-title{
+      margin: 0 0 .25rem 0;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    #tag-index .recipe-card-title a{
+      text-decoration:none;
+      border-bottom:none;
+    }
+    #tag-index .recipe-card-desc{
+      margin: 0;
+      opacity: .9;
+    }
