@@ -127,13 +127,19 @@ layout: page
     group_by fabrique une structure compatible avec recipes-index.html :
     - g.name
     - g.items
+    GitHub Pages (Jekyll 3.10) est plus strict : on évite where_exp ici.
   {%- endcomment -%}
-  {%- assign grouped = filtered | group_by: "recipe_group" -%}
+  {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
 
   {%- comment -%}
-    Sécurité : on retire les entrées sans nom de groupe (nil / vide)
+    Nettoyage : on exclut les groupes sans nom (nil / vide) sans where_exp
   {%- endcomment -%}
-  {%- assign grouped = grouped | where_exp: "g", "g.name != nil and g.name != ''" -%}
+  {%- assign grouped = "" | split: "" -%}
+  {%- for g in grouped_raw -%}
+    {%- if g.name and g.name != "" -%}
+      {%- assign grouped = grouped | push: g -%}
+    {%- endif -%}
+  {%- endfor -%}
 
   {%- include recipes-index.html grouped=grouped hidden_tags=hidden_tags -%}
 
