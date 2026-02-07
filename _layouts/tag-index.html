@@ -5,6 +5,9 @@ layout: page
 {%- comment -%}
   Layout d’index filtré (tags fonctionnels / micronutriments)
 
+  Objectif (UX) :
+  - Sur ces pages, le bloc "Random pick" doit apparaître AU-DESSUS des 2 lignes de badges cliquables.
+
   Paramètres attendus dans la page :
   - page.filter_type : "tag" ou "micro"
   - page.filter_id   : ID technique (ex: "selenium", "tres-proteine")
@@ -13,19 +16,27 @@ layout: page
 <section class="site-container" id="tag-index">
 
   {%- comment -%}
-    Random pick (include) : mode page filtrée
-    - On copie filter_type / filter_id sur <body> via dataset
-    - Le random pick lit document.body.dataset.filterType / filterId
-    - On le fait ici car on ne contrôle pas la balise <body> depuis ce layout
+    Random pick (include) : mode "page filtrée"
+
+    Important :
+    - On doit passer le filtre au JS du random pick via document.body.dataset.*
+    - On le fait ici car on ne contrôle pas la balise <body> depuis ce layout.
+    - Le JS du random pick lit :
+        document.body.dataset.filterType
+        document.body.dataset.filterId
   {%- endcomment -%}
   <script>
+    // On attend le DOM, puis on copie les paramètres de page dans <body>.
+    // Le random pick s'appuie dessus pour filtrer le tirage.
     document.addEventListener("DOMContentLoaded", () => {
       document.body.dataset.filterType = "{{ page.filter_type | escape }}";
       document.body.dataset.filterId = "{{ page.filter_id | escape }}";
     });
   </script>
 
-  {%- comment -%} Bouton retour index {%- endcomment -%}
+  {%- comment -%}
+    Bouton retour index
+  {%- endcomment -%}
   <header class="page-head">
     <a class="btn btn-outline-secondary btn-sm" href="{{ '/' | relative_url }}">
       ← Retour à l’index
@@ -33,8 +44,17 @@ layout: page
   </header>
 
   {%- comment -%}
-    Barre de navigation par badges
-    (sans titres visibles, comme demandé)
+    ✅ Random pick sur page badges — POSITIONNÉ AVANT la nav des badges
+    - hide_links=true : on masque les liens fixes internes du random pick
+      (doublon avec la barre nav-badges juste en dessous).
+    - Le filtre est appliqué via document.body.dataset.*
+  {%- endcomment -%}
+  {% include random-pick.html hide_links=true %}
+
+  {%- comment -%}
+    Barre de navigation par badges (2 lignes cliquables)
+    - Tags fonctionnels
+    - Micronutriments
   {%- endcomment -%}
   <div class="nav-badges">
 
@@ -72,13 +92,6 @@ layout: page
       <li><a class="badge-link" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
     </ul>
   </div>
-
-  {%- comment -%}
-    ✅ Random pick sur page badges
-    - On masque les liens fixes (doublon avec la nav-badges)
-    - Le filtre est appliqué via document.body.dataset.*
-  {%- endcomment -%}
-  {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
     ===== Bloc descriptif TAG FONCTIONNEL =====
