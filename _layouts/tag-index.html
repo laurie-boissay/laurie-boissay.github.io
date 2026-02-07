@@ -12,6 +12,19 @@ layout: page
 
 <section class="site-container" id="tag-index">
 
+  {%- comment -%}
+    Random pick (include) : mode page filtrée
+    - On copie filter_type / filter_id sur <body> via dataset
+    - Le random pick lit document.body.dataset.filterType / filterId
+    - On le fait ici car on ne contrôle pas la balise <body> depuis ce layout
+  {%- endcomment -%}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.dataset.filterType = "{{ page.filter_type | escape }}";
+      document.body.dataset.filterId = "{{ page.filter_id | escape }}";
+    });
+  </script>
+
   {%- comment -%} Bouton retour index {%- endcomment -%}
   <header class="page-head">
     <a class="btn btn-outline-secondary btn-sm" href="{{ '/' | relative_url }}">
@@ -26,37 +39,46 @@ layout: page
   <div class="nav-badges">
 
     <!-- Tags fonctionnels -->
-    <ul class="recipe-badges-line">
-      <li><a class="badge-link" href="/tags/tres-proteine/" title="Très protéiné">💪</a></li>
-      <li><a class="badge-link" href="/tags/riche-en-fibres/" title="Riche en fibres">💩</a></li>
-      <li><a class="badge-link" href="/tags/rapide/" title="Rapide">⏱️</a></li>
-      <li><a class="badge-link" href="/tags/congelable/" title="Congélable">❄️</a></li>
-      <li><a class="badge-link" href="/tags/micro-ondable/" title="Micro-ondable">♨️</a></li>
-      <li><a class="badge-link" href="/tags/peu-calorique/" title="Peu calorique">🪶</a></li>
-      <li><a class="badge-link" href="/tags/calorique/" title="Calorique">🔥</a></li>
-      <li><a class="badge-link" href="/tags/longue/" title="Préparation longue">🐌</a></li>
-      <li><a class="badge-link" href="/tags/gout-sucre/" title="Goût sucré">🍬</a></li>
+    <ul class="recipe-badges-line" aria-label="Tags fonctionnels">
+      <li><a class="badge-link" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
+      <li><a class="badge-link" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
+      <li><a class="badge-link" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+      <li><a class="badge-link" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+      <li><a class="badge-link" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+      <li><a class="badge-link" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+      <li><a class="badge-link" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
     </ul>
 
     <!-- Micronutriments -->
-    <ul class="recipe-badges-line">
-      <li><a class="badge-link" href="/micronutriments/omega-3/" title="Oméga-3">🐟</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-a/" title="Vitamine A">👁️</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-c/" title="Vitamine C">🍋</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-d/" title="Vitamine D">🌤️</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-e/" title="Vitamine E">🛡️</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-k/" title="Vitamine K">🩸</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-b9/" title="Vitamine B9">🌱</a></li>
-      <li><a class="badge-link" href="/micronutriments/vitamine-b12/" title="Vitamine B12">🥩</a></li>
-      <li><a class="badge-link" href="/micronutriments/calcium/" title="Calcium">🦴</a></li>
-      <li><a class="badge-link" href="/micronutriments/fer/" title="Fer">🧲</a></li>
-      <li><a class="badge-link" href="/micronutriments/magnesium/" title="Magnésium">⚡</a></li>
-      <li><a class="badge-link" href="/micronutriments/potassium/" title="Potassium">🍌</a></li>
-      <li><a class="badge-link" href="/micronutriments/zinc/" title="Zinc">🔩</a></li>
-      <li><a class="badge-link" href="/micronutriments/selenium/" title="Sélénium">🧪</a></li>
-      <li><a class="badge-link" href="/micronutriments/iode/" title="Iode">🌊</a></li>
+    <ul class="recipe-badges-line" aria-label="Micronutriments">
+      <li><a class="badge-link" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+
+      <li><a class="badge-link" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+      <li><a class="badge-link" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
     </ul>
   </div>
+
+  {%- comment -%}
+    ✅ Random pick sur page badges
+    - On masque les liens fixes (doublon avec la nav-badges)
+    - Le filtre est appliqué via document.body.dataset.*
+  {%- endcomment -%}
+  {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
     ===== Bloc descriptif TAG FONCTIONNEL =====

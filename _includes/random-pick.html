@@ -7,11 +7,16 @@
   - Affiche une suggestion aléatoire de recette (hors "gout-sucre")
   - Exclut certains recipe_group du tirage
   - Affiche les badges (tags + micronutriments) de la recette tirée
-  - Affiche aussi deux lignes de navigation rapide (liens tags/micros)
 
-  Pré-requis :
-  - La page qui inclut ce fichier doit contenir un bloc #recipes-index
-    (car le script scanne les cartes recettes à l’intérieur).
+  Options (include.*) :
+  - include.hide_links : si true, masque les 2 lignes de liens fixes (tags + micros)
+    (utile sur les pages badges qui ont déjà une navigation par badges)
+
+  Mode "page filtrée" (auto) :
+  - Si document.body.dataset.filterType = "tag"|"micro"
+    ET document.body.dataset.filterId = "<id>"
+    alors le random pick ne tire que dans les cartes qui matchent ce filtre.
+    (utile pour les pages /tags/* et /micronutriments/*)
   =========================================================
 {%- endcomment -%}
 
@@ -23,51 +28,53 @@
   <!-- Zone où la “pick-card” est injectée par JS -->
   <div id="random-pick"></div>
 
-  <!--
+  {%- comment -%}
     ✅ Bloc “infos tags + micronutriments”
-    - Ce bloc est HORS tirage : navigation rapide.
+    - HORS tirage : navigation rapide.
     - On inclut volontairement "gout-sucre" ici, même s’il est exclu du tirage.
-    - URLs : pages /tags/<id>/ et /micronutriments/<id>/.
-  -->
-  <div class="random-pick-links mt-2">
+    - Masquable via include.hide_links pour éviter les doublons.
+  {%- endcomment -%}
+  {%- unless include.hide_links -%}
+    <div class="random-pick-links mt-2">
 
-    <!-- Ligne 1 : tags fonctionnels -->
-    <ul class="recipe-badges-line badges-tags-fixed" aria-label="Tags fonctionnels">
-      <li><a class="badge-link-outside" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
-      <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+      <!-- Ligne 1 : tags fonctionnels -->
+      <ul class="recipe-badges-line badges-tags-fixed" aria-label="Tags fonctionnels">
+        <li><a class="badge-link-outside" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+        <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
 
-      <!-- Tag caché dans les badges des cartes, mais OK en navigation -->
-      <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
-    </ul>
+        <!-- Tag caché dans les badges des cartes, mais OK en navigation -->
+        <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+      </ul>
 
-    <!-- Ligne 2 : micronutriments -->
-    <ul class="recipe-badges-line badges-micro-fixed" aria-label="Micronutriments">
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+      <!-- Ligne 2 : micronutriments -->
+      <ul class="recipe-badges-line badges-micro-fixed" aria-label="Micronutriments">
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
 
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
 
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
-      <li><a class="badge-link-outside" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
-    </ul>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+        <li><a class="badge-link-outside" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+      </ul>
 
-  </div>
+    </div>
+  {%- endunless -%}
 </div>
 
 <script>
@@ -77,11 +84,28 @@
     - Exclut toutes les recettes taguées "gout-sucre"
     - Exclut certains recipe_group du tirage
     - Affiche aussi les badges (tags + micronutriments) de la recette tirée
-    =========================================================
+    - Mode page filtrée :
+        body[data-filter-type="tag|micro"][data-filter-id="..."]
+      =========================================================
   */
 
-  // On attend que TOUT le DOM soit chargé (car #recipes-index est plus bas dans la page).
+  // On attend que TOUT le DOM soit chargé (car #recipes-index peut être plus bas).
   document.addEventListener("DOMContentLoaded", () => {
+
+    // Racine : index des recettes (cartes)
+    const indexRoot = document.getElementById("recipes-index");
+
+    // Cible : où on injecte la “pick-card”
+    const pickHost = document.getElementById("random-pick");
+
+    // Si l’un des éléments est absent, on ne fait rien (évite erreurs console)
+    if (!indexRoot || !pickHost) return;
+
+    // ----------------------------
+    // MODE "PAGE FILTRÉE" (tags/micros)
+    // ----------------------------
+    const FILTER_TYPE = (document.body?.dataset?.filterType || "").toLowerCase().trim(); // "tag"|"micro"|"" 
+    const FILTER_ID = (document.body?.dataset?.filterId || "").toLowerCase().trim();     // ex: "selenium"
 
     // Tag exclu du tirage
     const EXCLUDED_TAG = "gout-sucre";
@@ -91,8 +115,8 @@
 
     /*
       Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules).
-      IMPORTANT : "data-recipe-group" contient le nom humain exact (ex: "Plats à base de viande")
-      donc ici on compare en minuscules.
+      IMPORTANT : data-recipe-group contient le nom humain (ex: "Plats à base de viande")
+      => on compare en minuscules ici.
     */
     const EXCLUDED_GROUPS = [
       "amuse-bouche",
@@ -138,12 +162,6 @@
       "iode":         { emoji: "🌊", title: "Iode" }
     };
 
-    // Racine : index des recettes (cartes)
-    const indexRoot = document.getElementById("recipes-index");
-
-    // Cible : où on injecte la “pick-card”
-    const pickHost = document.getElementById("random-pick");
-
     // Pour éviter de retomber sur la même recette trop souvent
     let lastHref = null;
 
@@ -163,8 +181,7 @@
       // On ignore les ancres
       if (href.startsWith("#")) return false;
 
-      // Si ton site a des URLs propres (sans .html), supprime ce test.
-      // Ici, on le laisse désactivé (commenté) pour éviter d’exclure à tort.
+      // Si tu utilises des URLs propres (sans .html), laisse commenté.
       // if (!href.endsWith(".html")) return false;
 
       const title = (a.dataset.title || a.textContent || "").trim();
@@ -188,18 +205,39 @@
       return EXCLUDED_GROUPS.includes(group);
     }
 
+    // Vérifie que la carte correspond au filtre courant (si présent)
+    function matchesPageFilter(card) {
+      // Pas de filtre => tout passe
+      if (!FILTER_TYPE || !FILTER_ID) return true;
+
+      if (FILTER_TYPE === "tag") {
+        const tags = parseList(card?.dataset?.tags);
+        return tags.includes(FILTER_ID);
+      }
+
+      if (FILTER_TYPE === "micro") {
+        const micros = parseList(card?.dataset?.micros);
+        return micros.includes(FILTER_ID);
+      }
+
+      // Type inconnu => on ne filtre pas (sécurité)
+      return true;
+    }
+
     // Liste des candidats au tirage
     function getCandidates() {
-      if (!indexRoot) return [];
-
       return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
         .filter(isValidRecipeLink)
         .filter(a => {
           const card = a.closest(".recipe-card");
           if (!card) return false;
 
+          // Exclusions globales
           if (hasExcludedTag(card)) return false;
           if (isInExcludedGroup(a)) return false;
+
+          // Filtre de page (tags/micros)
+          if (!matchesPageFilter(card)) return false;
 
           return true;
         });
