@@ -1,19 +1,12 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — CSS COMPLET (NETTOYÉ + MODERNE)
-   Accueil + pages + recettes + navbar Bootstrap
-   Fichier : style.css
-
-   Objectifs :
-   - AUCUN soulignement (underline / border-bottom) sur les liens, y compris navbar + dropdown
-   - Les cartes recettes ne prennent pas le hover global des <a>
-   - Les tags (chips) restent lisibles et espacés
-   - Le dropdown "Recettes" est scrollable sur mobile/iOS
-   - Rendu plus joli et moderne (surfaces, ombres, focus, micro-anim)
-   - Pas de doublons inutiles, overrides ciblés
-
-   Correction demandée :
-   - Les tags/badges (emoji) doivent pouvoir aller à la ligne (wrap)
-   - Les lignes de badges doivent être centrées
+   THEME CLAIR TURQUOISE / VERT — style.css (NETTOYÉ)
+   Objectifs conservés :
+   - ZÉRO soulignement sur les liens (navbar + dropdown inclus)
+   - Hover global des <a> sans casser les cartes recettes
+   - Dropdown "Recettes" scrollable mobile/iOS
+   - Tags (chips) lisibles + espacés
+   - Badges (emoji) : WRAP + lignes centrées
+   - Moins de doublons / moins de surcharges inutiles
    ========================================================= */
 
 
@@ -35,12 +28,15 @@
 
   --border: rgba(15, 23, 42, 0.10);
 
-  /* plus moderne */
   --radius: 16px;
   --shadow: 0 10px 28px rgba(2, 44, 44, 0.07);
   --shadow-strong: 0 18px 46px rgba(2,44,44,.12);
   --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
   --ring: 0 0 0 4px rgba(20,184,166,.22);
+
+  /* Bootstrap 5.3+ : désactive décorations de lien via variables */
+  --bs-link-decoration: none;
+  --bs-link-hover-decoration: none;
 }
 
 
@@ -118,21 +114,13 @@ hr{
 
 
 /* =========================================================
-   LIENS — IMPORTANT
-   - pas de soulignement partout
-   - hover discret (pas “surligneur” agressif)
+   LIENS — ZÉRO soulignement + hover discret
    ========================================================= */
 
-/* Bootstrap 5.3+ : supprime la déco via variables */
-:root{
-  --bs-link-decoration: none;
-  --bs-link-hover-decoration: none;
-}
-
+/* Base liens : pas de soulignement, hover léger */
 a{
   color: var(--link);
   text-decoration: none !important;
-  text-decoration-line: none !important;
   border-bottom: none !important;
   background-image: none !important;
   transition: color .18s ease, background-color .18s ease, transform .12s ease;
@@ -144,7 +132,14 @@ a:hover{
   border-radius: 8px;
 }
 
-/* Helpers historiques */
+/* Garde-fou global : certains thèmes/bootstrap rajoutent parfois du border-bottom via pseudo styles */
+a, a *{
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+
+/* Helpers historiques (si encore utilisés) */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 
@@ -174,23 +169,21 @@ a:hover{
   box-shadow: var(--shadow-nav);
 }
 
-/* Dans la navbar, pas le hover global “fond” */
+/* Dans la navbar, ne pas appliquer le hover global “fond” */
 #navigation a:hover{ background: transparent; }
 
 /* Marque */
 .navbar-brand{
   color: var(--text) !important;
   font-weight: 850;
-  text-decoration: none !important;
 }
 
-/* Liens nav : on garde simple (pas en boutons) */
+/* Liens nav */
 .nav-link{
   color: var(--muted) !important;
   font-weight: 700;
   padding: 10px 12px;
   border-radius: 10px;
-  text-decoration: none !important;
 }
 
 .nav-link:hover{
@@ -207,14 +200,13 @@ a:hover{
   border-radius: 12px;
 }
 
-/* FIX ABSOLU : aucun soulignement dans navbar + dropdown */
+/* Dans la navbar + dropdown : jamais d’effet "soulignement" ni ombres parasites */
 #navigation a,
 #navigation a:hover,
 #navigation a:focus,
 #navigation a:active,
 #navigation a:visited{
   text-decoration: none !important;
-  text-decoration-line: none !important;
   border-bottom: none !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -353,7 +345,7 @@ img{
   box-shadow: var(--shadow);
   padding: 14px;
 
-  /* neutralise effet hover global des <a> */
+  /* Neutralise le hover global des <a> */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
@@ -382,7 +374,7 @@ img{
   background: var(--card) !important;
 }
 
-/* Tout ce qui est DANS une carte ne doit pas hériter du hover global */
+/* Tout ce qui est DANS une carte ne doit pas prendre le hover global */
 .recipe-card-link,
 .recipe-card-link *{
   text-decoration: none !important;
@@ -446,6 +438,7 @@ img{
   box-shadow: var(--shadow);
 }
 
+/* Empêche le hover global d'ajouter un fond dans le bloc random pick */
 .pick-card a,
 .pick-card a *{
   text-decoration: none !important;
@@ -468,6 +461,7 @@ img{
   margin-bottom: 18px;
 }
 
+/* Soulignement décoratif des h2 de recette (si .recipe-surface est présent) */
 .recipe-surface h2{
   position: relative;
   padding-top: 10px;
@@ -482,6 +476,35 @@ img{
   height: 4px;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   border-radius: 999px;
+}
+
+/* Photo de recette (si `image:` dans le front-matter) */
+.recipe-photo{
+  margin: .75rem 0 1rem 0;
+}
+.recipe-photo img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:12px;
+}
+
+/* Légende / détails badges (si présent sur recipe.html) */
+.badges-legend{
+  margin-top:.5rem;
+  font-size:.9rem;
+}
+.badges-legend summary{
+  cursor:pointer;
+  font-weight:600;
+}
+.badges-legend ul{
+  list-style:none;
+  padding-left:0;
+  margin:.4rem 0 0 0;
+}
+.badges-legend li{
+  line-height:1.4;
 }
 
 
@@ -511,7 +534,6 @@ img{
   .recipes-dropdown-menu{ max-height: 75vh; }
 }
 
-/* Items dropdown = boutons */
 .recipes-dropdown-menu .dropdown-item{
   display: flex;
   align-items: center;
@@ -536,14 +558,12 @@ img{
   transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, border-color .12s ease;
 }
 
-/* chevron visuel */
 .recipes-dropdown-menu .dropdown-item::after{
   content: "›";
   opacity: .40;
   font-size: 1.1rem;
 }
 
-/* Hover/focus */
 .recipes-dropdown-menu .dropdown-item:hover,
 .recipes-dropdown-menu .dropdown-item:focus{
   background: linear-gradient(135deg, rgba(20,184,166,.16), rgba(34,197,94,.12));
@@ -552,13 +572,11 @@ img{
   box-shadow: 0 10px 22px rgba(2,44,44,.10);
 }
 
-/* Focus clavier propre */
 .recipes-dropdown-menu .dropdown-item:focus-visible{
   outline: none;
   box-shadow: var(--ring);
 }
 
-/* Actif (si Bootstrap met .active) */
 .recipes-dropdown-menu .dropdown-item.active{
   background: linear-gradient(135deg, rgba(34,197,94,.22), rgba(20,184,166,.16));
   border-color: rgba(34,197,94,.45);
@@ -566,63 +584,17 @@ img{
 
 
 /* =========================================================
-   GARDE-FOU “ZÉRO SOULIGNEMENT” (global)
-   ========================================================= */
-
-a, a *{
-  border-bottom: 0 !important;
-  background-image: none !important;
-}
-
-/* =========================================================
-   ANIMATIONS : respect du réglage utilisateur
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce){
-  *{ transition: none !important; }
-  .recipe-card-link:hover{ transform: none !important; }
-}
-
-/* Badge "Recette non testée" dans les cartes recettes */
-.recipe-card .badge.bg-warning {
-  font-size: .7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .03em;
-
-  background-color: #fef3c7;
-  border: 1px solid #f59e0b;
-
-  padding: .15rem .45rem;
-  border-radius: 999px;
-}
-
-/* Badge "Recette non testée" dans le tirage aléatoire */
-#random-pick .badge.bg-warning {
-  font-size: .65rem;
-  font-weight: 500;
-
-  color: #64748b;
-  background-color: #f1f5f9;
-  border: none;
-
-  padding: .1rem .4rem;
-  border-radius: 6px;
-}
-
-
-/* =========================================================
-   BADGES (emoji) — CORRIGÉ : wrap + centré
-   Utilisé :
-   - dans les cartes (2 lignes tags/micros)
-   - sous le random pick (lignes)
-   - dans tes liens fixes (si tu réutilises la même classe)
+   BADGES (emoji) — WRAP + CENTRÉ (version unique)
+   Utilisé typiquement :
+   - cartes (lignes tags/micros)
+   - random pick
+   - blocs de liens (badges cliquables)
    ========================================================= */
 
 .recipe-badges-line{
   display:flex;
-  flex-wrap: wrap;          /* ✅ autorise retour à la ligne */
-  justify-content: center;  /* ✅ centre horizontalement */
+  flex-wrap: wrap;          /* autorise retour à la ligne */
+  justify-content: center;  /* centre horizontalement */
   align-items: center;
 
   gap: .35rem;
@@ -630,7 +602,7 @@ a, a *{
   padding: 0;
   margin: .25rem 0 0 0;
 
-  overflow-x: visible;      /* ✅ plus de scroll horizontal */
+  overflow-x: visible;      /* pas de scroll horizontal */
   -webkit-overflow-scrolling: auto;
 }
 
@@ -642,16 +614,12 @@ a, a *{
   white-space: nowrap;
 }
 
+/* Espace réservé quand une ligne est vide (optionnel) */
 .recipe-badges-line.is-empty{
   min-height: 1.6rem;
 }
 
-/* Le random pick est déjà centré par design, on laisse (redondant mais OK) */
-.pick-card .recipe-badges-line{
-  justify-content: center;
-}
-
-/* Si tu as des liens autour des emojis (badges cliquables) */
+/* Badges cliquables (lien autour de l’emoji) */
 .recipe-badges-line a{
   display:inline-flex;
   align-items:center;
@@ -667,373 +635,165 @@ a, a *{
   background: rgba(20,184,166,.10) !important;
 }
 
+/* Wrapper optionnel autour des lignes de badges */
+.recipe-badges-wrap{
+  margin-top: .35rem;
+}
 
-/* =========================================================
-   (Optionnel) Si tu utilises encore .random-pick-badges ailleurs
-   - conservé mais rendu cohérent avec le wrap/centrage
-   ========================================================= */
-
-.random-pick-badges{
-  display: block;
+/* Bloc badges fixes sous le random pick (si utilisé) */
+.random-pick-links{
   margin-top: .5rem;
 }
 
-.random-pick-badges .badges-line{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .35rem;
-  margin: .15rem 0;
-}
-
-.random-pick-badges .badge{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2rem;
-  padding: .15rem .4rem;
-  border-radius: .6rem;
-  text-decoration: none;
-}
-
-.random-pick-badges .badge-empty{
-  display: none;
-}
-
-/* Page INDEX */
-/* Badges */
-.recipe-badges-line{
-display:flex;
-flex-wrap:nowrap;
-gap:.35rem;
-list-style:none;
-padding:0;
-margin:.25rem 0 0 0;
-overflow-x:auto;
--webkit-overflow-scrolling: touch;
-}
-.recipe-badges-line li{
-display:flex;
-align-items:center;
-font-size:1.15rem;
-line-height:1;
-white-space:nowrap;
-}
-.recipe-badges-wrap{
-margin-top:.35rem;
-}
-
-/* Liens badges (clicables) */
-.recipe-badges-line a.badge-link-outside{
-text-decoration:none;
-border-bottom:none;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-min-width:2rem;
-}
-
-/* Blocs badges fixes sous le random pick */
-.random-pick-links{
-margin-top:.5rem;
-}
-
-/* Catégories plus visibles */
+/* Titres de catégories (index) */
 .recipe-category-title{
-margin-top: 1.25rem;
-margin-bottom: .75rem;
-padding: .6rem .75rem;
-border-left: .35rem solid currentColor;
-background: rgba(0,0,0,.04);
-border-radius: .35rem;
-font-weight: 800;
-letter-spacing: .2px;
+  margin-top: 1.25rem;
+  margin-bottom: .75rem;
+  padding: .6rem .75rem;
+  border-left: .35rem solid currentColor;
+  background: rgba(0,0,0,.04);
+  border-radius: .35rem;
+  font-weight: 800;
+  letter-spacing: .2px;
 }
+
 .recipe-category-title a{
-text-decoration: none;
-border-bottom: none;
-color: inherit;
+  text-decoration: none;
+  border-bottom: none;
+  color: inherit;
 }
 
-/* index.html */
-    /* Badges */
-    .recipe-badges-line{
-      display:flex;
-      flex-wrap:nowrap;
-      gap:.35rem;
-      list-style:none;
-      padding:0;
-      margin:.25rem 0 0 0;
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .recipe-badges-line li{
-      display:flex;
-      align-items:center;
-      font-size:1.15rem;
-      line-height:1;
-      white-space:nowrap;
-    }
-    .recipe-badges-wrap{
-      margin-top:.35rem;
-    }
 
-    /* Catégories plus visibles */
-    .recipe-category-title{
-      margin-top: 1.25rem;
-      margin-bottom: .75rem;
-      padding: .6rem .75rem;
-      border-left: .35rem solid currentColor;
-      background: rgba(0,0,0,.04);
-      border-radius: .35rem;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .recipe-category-title a{
-      text-decoration: none;
-      border-bottom: none;
-      color: inherit;
-    }
-       
-    
 /* =========================================================
-BADGES (emoji) — index.html
-- NB : style.css a déjà une version "wrap + centered".
-- Ici, on ne met que le minimum pour les liens du bloc random pick.
-========================================================= */
+   BADGE "Recette non testée" (Bootstrap .badge.bg-warning)
+   - 2 contexts différents : cartes recettes + random pick
+   ========================================================= */
 
-    /* Liens autour des emojis (badges cliquables sous le random pick) */
-    .recipe-badges-line a.badge-link-outside{
-      text-decoration: none;
-      border-bottom: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 2rem;
-      padding: .1rem .2rem;
-      border-radius: 10px;
-    }
+/* Dans les cartes (si tu as un conteneur .recipe-card) */
+.recipe-card .badge.bg-warning{
+  font-size: .7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
 
-    /* Bloc badges fixes sous le random pick */
-    .random-pick-links{
-      margin-top: .5rem;
-    }
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
 
-    /* Titres de catégories plus visibles */
-    .recipe-category-title{
-      margin-top: 1.25rem;
-      margin-bottom: .75rem;
-      padding: .6rem .75rem;
-      border-left: .35rem solid currentColor;
-      background: rgba(0,0,0,.04);
-      border-radius: .35rem;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .recipe-category-title a{
-      text-decoration: none;
-      border-bottom: none;
-      color: inherit;
-    }
+  padding: .15rem .45rem;
+  border-radius: 999px;
+}
 
+/* Dans le random pick (id #random-pick) */
+#random-pick .badge.bg-warning{
+  font-size: .65rem;
+  font-weight: 500;
 
-    /*recipe.html*/
+  color: #64748b;
+  background-color: #f1f5f9;
+  border: none;
 
-    /* Badges (inchangé) */
-    .recipe-badges-line{
-      display:flex;
-      flex-wrap:nowrap;
-      gap:.35rem;
-      list-style:none;
-      padding:0;
-      margin:.25rem 0 0 0;
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .recipe-badges-line li{
-      display:flex;
-      align-items:center;
-      font-size:1.15rem;
-      line-height:1;
-      white-space:nowrap;
-    }
-    .recipe-badges-wrap{
-      margin-top:.35rem;
-    }
-    .badges-legend{
-      margin-top:.5rem;
-      font-size:.9rem;
-    }
-    .badges-legend summary{
-      cursor:pointer;
-      font-weight:600;
-    }
-    .badges-legend ul{
-      list-style:none;
-      padding-left:0;
-      margin:.4rem 0 0 0;
-    }
-    .badges-legend li{
-      line-height:1.4;
-    }
-
-    /* =========================================================
-       Photo de recette (optionnelle)
-       - affichée seulement si `image:` est défini dans le front-matter
-       ========================================================= */
-    .recipe-photo{
-      margin: .75rem 0 1rem 0;
-    }
-    .recipe-photo img{
-      display:block;
-      width:100%;
-      height:auto;
-      border-radius:12px;
-    }
-
-
-     /* ===== Ajustements locaux au layout tag-index ===== */
-
-    #tag-index .page-head{ margin-bottom: 1rem; }
-    #tag-index .nav-badges{ margin: .75rem 0 1rem 0; }
-
-    /* Bloc descriptif (tag OU micronutriment) */
-    #tag-index .micro-desc{
-      margin: 1rem 0 1.25rem 0;
-      padding: .9rem 1rem;
-      border-radius: .75rem;
-      background: rgba(0,0,0,.035);
-      border: 1px solid rgba(0,0,0,.06);
-    }
-    #tag-index .micro-desc h2{
-      margin: 0 0 .5rem 0;
-      font-size: 1.15rem;
-      font-weight: 800;
-    }
-    #tag-index .micro-desc h3{
-      margin: .75rem 0 .25rem 0;
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    /* Grille des recettes */
-    #tag-index .recipe-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: .65rem;
-    }
-    @media (min-width: 768px){
-      #tag-index .recipe-grid{ grid-template-columns: 1fr 1fr; }
-    }
-
-    #tag-index .recipe-card{
-      padding: .75rem .85rem;
-      border-radius: .6rem;
-      background: rgba(0,0,0,.03);
-      border: 1px solid rgba(0,0,0,.06);
-    }
-
-    #tag-index .recipe-card-title{
-      margin: 0 0 .25rem 0;
-      font-weight: 800;
-      font-size: 1.05rem;
-    }
-    #tag-index .recipe-card-title a{ text-decoration:none; border-bottom:none; }
-
-    #tag-index .recipe-card-desc{ margin: 0; opacity: .9; }
-
-    /* Liens emoji cliquables */
-    #tag-index a.badge-link{
-      text-decoration:none;
-      border-bottom:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:2rem;
-      padding:.15rem .35rem;
-      border-radius:.6rem;
-      background: rgba(0,0,0,.05);
-    }
-    
-    /* Badge discret "RECETTE NON TESTÉE" (fallback si pas déjà défini    globalement) */
-    #tag-index .recipe-card-untested{
-      display:inline-block;
-      margin: .15rem 0 .5rem 0;
-      padding: .1rem .45rem;
-      border-radius: 999px;
-      font-size: .7rem;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,165,0,.9);
-      color: rgba(120,70,0,1);
-      background: rgba(255,165,0,.08);
+  padding: .1rem .4rem;
+  border-radius: 6px;
 }
 
 
-/* tag-index.html */
- /* Layout tag/micro */
-    #tag-index .page-head{
-      margin-bottom: 1rem;
-    }
-    #tag-index .nav-badges{
-      margin: .75rem 0 1rem 0;
-    }
-    #tag-index .recipe-badges-line{
-      display:flex;
-      flex-wrap:nowrap;
-      gap:.35rem;
-      list-style:none;
-      padding:0;
-      margin:.25rem 0 0 0;
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    #tag-index .recipe-badges-line li{
-      display:flex;
-      align-items:center;
-      font-size:1.15rem;
-      line-height:1;
-      white-space:nowrap;
-    }
-    #tag-index a.badge-link{
-      text-decoration:none;
-      border-bottom:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:2rem;
-      padding:.15rem .35rem;
-      border-radius:.6rem;
-      background: rgba(0,0,0,.05);
-    }
+/* =========================================================
+   TAG-INDEX (layout #tag-index)
+   - isolé pour éviter d’impacter le reste
+   ========================================================= */
 
-    #tag-index .recipe-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: .65rem;
-    }
-    @media (min-width: 768px){
-      #tag-index .recipe-grid{
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    #tag-index .recipe-card{
-      padding: .75rem .85rem;
-      border-radius: .6rem;
-      background: rgba(0,0,0,.03);
-      border: 1px solid rgba(0,0,0,.06);
-    }
-    #tag-index .recipe-card-title{
-      margin: 0 0 .25rem 0;
-      font-weight: 800;
-      font-size: 1.05rem;
-    }
-    #tag-index .recipe-card-title a{
-      text-decoration:none;
-      border-bottom:none;
-    }
-    #tag-index .recipe-card-desc{
-      margin: 0;
-      opacity: .9;
-    }
+#tag-index .page-head{ margin-bottom: 1rem; }
+#tag-index .nav-badges{ margin: .75rem 0 1rem 0; }
+
+/* Bloc descriptif (tag OU micronutriment) */
+#tag-index .micro-desc{
+  margin: 1rem 0 1.25rem 0;
+  padding: .9rem 1rem;
+  border-radius: .75rem;
+  background: rgba(0,0,0,.035);
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+#tag-index .micro-desc h2{
+  margin: 0 0 .5rem 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+#tag-index .micro-desc h3{
+  margin: .75rem 0 .25rem 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* Grille des recettes */
+#tag-index .recipe-grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: .65rem;
+}
+
+@media (min-width: 768px){
+  #tag-index .recipe-grid{ grid-template-columns: 1fr 1fr; }
+}
+
+#tag-index .recipe-card{
+  padding: .75rem .85rem;
+  border-radius: .6rem;
+  background: rgba(0,0,0,.03);
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+#tag-index .recipe-card-title{
+  margin: 0 0 .25rem 0;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+#tag-index .recipe-card-title a{
+  text-decoration:none;
+  border-bottom:none;
+}
+
+#tag-index .recipe-card-desc{
+  margin: 0;
+  opacity: .9;
+}
+
+/* Liens emoji cliquables (si tu utilises a.badge-link sur cette page) */
+#tag-index a.badge-link{
+  text-decoration:none;
+  border-bottom:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:2rem;
+  padding:.15rem .35rem;
+  border-radius:.6rem;
+  background: rgba(0,0,0,.05);
+}
+
+/* Badge discret "RECETTE NON TESTÉE" (fallback si besoin sur tag-index) */
+#tag-index .recipe-card-untested{
+  display:inline-block;
+  margin: .15rem 0 .5rem 0;
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,165,0,.9);
+  color: rgba(120,70,0,1);
+  background: rgba(255,165,0,.08);
+}
+
+
+/* =========================================================
+   ACCESSIBILITÉ : respect du réglage utilisateur
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
+  .recipe-card-link:hover{ transform: none !important; }
+}
