@@ -105,7 +105,10 @@ layout: page
 
   {%- comment -%}
     ===== Liste des recettes filtrées =====
+    Objectif : réutiliser exactement le même affichage que la page index.html
+    via l'include _includes/recipes-index.html
   {%- endcomment -%}
+
   {%- assign recipes = site.pages | where: "layout", "recipe" -%}
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
@@ -120,26 +123,18 @@ layout: page
 
   <p class="small text-muted"><strong>{{ filtered.size }}</strong> recette(s).</p>
 
-  <div class="recipe-grid">
-    {%- for r in filtered -%}
-      <article class="recipe-card">
+  {%- comment -%}
+    group_by fabrique une structure compatible avec recipes-index.html :
+    - g.name
+    - g.items
+  {%- endcomment -%}
+  {%- assign grouped = filtered | group_by: "recipe_group" -%}
 
-        <h2 class="recipe-card-title">
-          <a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a>
-        </h2>
+  {%- comment -%}
+    Sécurité : on retire les entrées sans nom de groupe (nil / vide)
+  {%- endcomment -%}
+  {%- assign grouped = grouped | where_exp: "g", "g.name != nil and g.name != ''" -%}
 
-        {%- comment -%}
-	  Badge "RECETTE NON TESTÉE" (version discrète comme sur l’index)
-	{%- endcomment -%}
-	{%- if r.recipe_tested == false -%}
-	  <span class="recipe-card-untested">RECETTE NON TESTÉE</span>
-	{%- endif -%}
-
-        <p class="recipe-card-desc">{{ r.description }}</p>
-
-      </article>
-    {%- endfor -%}
-  </div>
+  {%- include recipes-index.html grouped=grouped hidden_tags=hidden_tags -%}
 
 </section>
-
