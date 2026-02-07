@@ -10,9 +10,10 @@
    - Badges (emoji) : WRAP + lignes centrées (pas de scroll horizontal)
    - Pas de doublons : une seule définition par composant
 
-   Notes de maintenance :
-   - Tout ce qui était “recollé” (index.html / recipe.html / tag-index.html) a été supprimé
-     car ça créait des conflits (nowrap + overflow-x) et écrasait le comportement attendu.
+   Corrections appliquées :
+   - Listes : reset SCOPÉ (uniquement section + content-surface), pas global
+   - Badges : suppression de redondances (#tag-index a.badge-link + overflow scrolling inutile)
+   - Liens : garde-fou global réduit (évite d’écraser des composants Bootstrap)
    ========================================================= */
 
 
@@ -74,7 +75,7 @@ body{
 }
 
 
-/* ================= CONTAINERS (si utilisés) ================= */
+/* ================= CONTAINERS ================= */
 .site-container{
   max-width: 980px;
   margin: 0 auto;
@@ -125,30 +126,30 @@ hr{
    - Hover léger (fond doux)
    ========================================================= */
 
-/* Style de base des liens */
 a{
   color: var(--link);
   text-decoration: none !important;
   border-bottom: none !important;
-  background-image: none !important;
   transition: color .18s ease, background-color .18s ease, transform .12s ease;
 }
 
-/* Hover global (hors zones explicitement neutralisées plus bas) */
 a:hover{
   color: var(--link-hover);
   background: rgba(20,184,166,.08);
   border-radius: 8px;
 }
 
-/* Garde-fou global : empêche des styles “hérités” (thèmes, markdown, etc.) */
+/*
+  Garde-fou global minimal :
+  - On supprime uniquement les décorations (underline / border-bottom).
+  - On évite d’écraser des styles Bootstrap via background-image sur TOUS les enfants.
+*/
 a, a *{
   text-decoration: none !important;
   border-bottom: 0 !important;
-  background-image: none !important;
 }
 
-/* Helpers historiques (si encore utilisés dans du contenu) */
+/* Helpers historiques (utilisés dans le header global) */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 
@@ -222,10 +223,12 @@ a, a *{
 
 
 /* =========================================================
-   LISTES
+   LISTES (SCOPÉES)
+   - On évite de casser des <ul> hors contenu (header, nav, etc.)
    ========================================================= */
 
-ul{
+.content-surface ul,
+section ul{
   list-style: none;
   padding-left: 0;
   margin: 0 0 14px;
@@ -326,8 +329,7 @@ img{
 
 
 /* =========================================================
-   ACCUEIL — CARTES RECETTES
-   (HTML : <a class="recipe-card-link"> ... </a>)
+   ACCUEIL / INDEX — CARTES RECETTES
    ========================================================= */
 
 .recipes-grid{
@@ -340,7 +342,6 @@ img{
   .recipes-grid{ grid-template-columns: 1fr; }
 }
 
-/* Carte = lien cliquable */
 .recipe-card-link{
   display: block;
   position: relative;
@@ -353,7 +354,6 @@ img{
   box-shadow: var(--shadow);
   padding: 14px;
 
-  /* Neutralise l’effet hover global des <a> */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
@@ -361,7 +361,6 @@ img{
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* Glow léger décoratif */
 .recipe-card-link::before{
   content:"";
   position:absolute;
@@ -375,18 +374,13 @@ img{
 
 .recipe-card-link > *{ position: relative; z-index: 1; }
 
-/* Hover carte : élévation */
 .recipe-card-link:hover{
   transform: translateY(-3px);
   box-shadow: var(--shadow-strong);
   background: var(--card) !important;
 }
 
-/*
-  Important :
-  - Tout ce qui est DANS une carte ne doit pas prendre le hover global (fond).
-  - On force un fond transparent et on supprime les décorations.
-*/
+/* Neutralise le hover global des <a> à l’intérieur des cartes */
 .recipe-card-link,
 .recipe-card-link *{
   text-decoration: none !important;
@@ -396,7 +390,6 @@ img{
   box-shadow: none !important;
 }
 
-/* Titre de carte */
 .recipe-card-title{
   margin: 0;
   color: var(--text);
@@ -407,7 +400,6 @@ img{
   color: var(--primary-2);
 }
 
-/* Sous-titre */
 .recipe-card-subtitle{
   margin-top: 6px;
   color: rgba(15,23,42,.78);
@@ -415,7 +407,7 @@ img{
 
 
 /* =========================================================
-   (Optionnel) TAGS (chips) — si une page les utilise encore
+   (Optionnel) TAGS (chips)
    ========================================================= */
 
 .recipe-tags{
@@ -445,7 +437,6 @@ img{
 
 /* =========================================================
    PICK CARD ("On mange quoi ?") — bloc injecté en JS
-   - HTML injecté utilise .pick-card + #random-pick
    ========================================================= */
 
 .pick-card{
@@ -455,7 +446,6 @@ img{
   box-shadow: var(--shadow);
 }
 
-/* Empêche le hover global d’ajouter un fond dans le bloc random pick */
 .pick-card a,
 .pick-card a *{
   text-decoration: none !important;
@@ -478,7 +468,6 @@ img{
   margin-bottom: 18px;
 }
 
-/* Soulignement décoratif des h2 de recette (si .recipe-surface est présent) */
 .recipe-surface h2{
   position: relative;
   padding-top: 10px;
@@ -495,7 +484,6 @@ img{
   border-radius: 999px;
 }
 
-/* Photo de recette (si `image:` dans le front-matter) */
 .recipe-photo{
   margin: .75rem 0 1rem 0;
 }
@@ -507,32 +495,29 @@ img{
   border-radius:12px;
 }
 
-/* Légende / détails badges (si présent sur recipe.html) */
 .badges-legend{
-  margin-top:.5rem;
-  font-size:.9rem;
+  margin-top: .5rem;
+  font-size: .9rem;
 }
 
 .badges-legend summary{
-  cursor:pointer;
-  font-weight:600;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .badges-legend ul{
-  list-style:none;
-  padding-left:0;
-  margin:.4rem 0 0 0;
+  list-style: none;
+  padding-left: 0;
+  margin: .4rem 0 0 0;
 }
 
 .badges-legend li{
-  line-height:1.4;
+  line-height: 1.4;
 }
 
 
 /* =========================================================
    NAVBAR — DROPDOWN "RECETTES"
-   - scroll interne mobile/iOS
-   - items en "boutons"
    ========================================================= */
 
 .recipes-dropdown-menu{
@@ -606,25 +591,20 @@ img{
 
 /* =========================================================
    BADGES (emoji) — WRAP + CENTRÉ (définition unique)
-   Utilisé par :
-   - index.html (badges dans les cartes)
-   - random-pick.html (liens fixes + badges de la recette tirée)
-   - tag-index.html (si tu réutilises les mêmes classes)
    ========================================================= */
 
 .recipe-badges-line{
   display:flex;
-  flex-wrap: wrap;          /* ✅ retour à la ligne */
-  justify-content: center;  /* ✅ centré */
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
 
   gap: .35rem;
-  list-style:none;
+  list-style: none;
   padding: 0;
   margin: .25rem 0 0 0;
 
-  overflow-x: visible;      /* ✅ pas de scroll horizontal */
-  -webkit-overflow-scrolling: auto;
+  overflow-x: visible;
 }
 
 .recipe-badges-line li{
@@ -635,20 +615,18 @@ img{
   white-space: nowrap;
 }
 
-/* Espace réservé si une ligne est vide (optionnel, utile en layout) */
 .recipe-badges-line.is-empty{
   min-height: 1.6rem;
 }
 
-/* Wrapper optionnel autour des lignes (index + random pick) */
 .recipe-badges-wrap{
   margin-top: .35rem;
 }
 
 /*
   Liens autour des emojis :
-  - Dans les cartes : parfois <a> simple
-  - Sous le random pick : <a class="badge-link-outside">
+  - .badge-link (tag-index)
+  - .badge-link-outside (random pick)
 */
 .recipe-badges-line a,
 .recipe-badges-line a.badge-link-outside{
@@ -660,7 +638,7 @@ img{
   border-bottom:none !important;
   background: transparent !important;
 
-  min-width: 2rem;          /* rend la zone cliquable confortable */
+  min-width: 2rem;
   padding: .1rem .2rem;
   border-radius: 10px;
 }
@@ -670,7 +648,6 @@ img{
   background: rgba(20,184,166,.10) !important;
 }
 
-/* Bloc de liens fixes sous le random pick */
 .random-pick-links{
   margin-top: .5rem;
 }
@@ -700,10 +677,8 @@ img{
 
 /* =========================================================
    BADGE "Recette non testée" (Bootstrap .badge.bg-warning)
-   - 2 contextes : cartes + random pick
    ========================================================= */
 
-/* Dans les cartes */
 .recipe-card .badge.bg-warning{
   font-size: .7rem;
   font-weight: 600;
@@ -717,7 +692,6 @@ img{
   border-radius: 999px;
 }
 
-/* Dans le random pick */
 #random-pick .badge.bg-warning{
   font-size: .65rem;
   font-weight: 500;
@@ -733,13 +707,11 @@ img{
 
 /* =========================================================
    TAG-INDEX (layout #tag-index)
-   - Isolé pour éviter d’impacter le reste
    ========================================================= */
 
 #tag-index .page-head{ margin-bottom: 1rem; }
 #tag-index .nav-badges{ margin: .75rem 0 1rem 0; }
 
-/* Bloc descriptif (tag OU micronutriment) */
 #tag-index .micro-desc{
   margin: 1rem 0 1.25rem 0;
   padding: .9rem 1rem;
@@ -758,68 +730,6 @@ img{
   margin: .75rem 0 .25rem 0;
   font-size: 1rem;
   font-weight: 800;
-}
-
-/* Grille des recettes */
-#tag-index .recipe-grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: .65rem;
-}
-
-@media (min-width: 768px){
-  #tag-index .recipe-grid{ grid-template-columns: 1fr 1fr; }
-}
-
-#tag-index .recipe-card{
-  padding: .75rem .85rem;
-  border-radius: .6rem;
-  background: rgba(0,0,0,.03);
-  border: 1px solid rgba(0,0,0,.06);
-}
-
-#tag-index .recipe-card-title{
-  margin: 0 0 .25rem 0;
-  font-weight: 800;
-  font-size: 1.05rem;
-}
-
-#tag-index .recipe-card-title a{
-  text-decoration:none;
-  border-bottom:none;
-}
-
-#tag-index .recipe-card-desc{
-  margin: 0;
-  opacity: .9;
-}
-
-/* Liens emoji cliquables (si tu utilises a.badge-link sur cette page) */
-#tag-index a.badge-link{
-  text-decoration:none;
-  border-bottom:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:2rem;
-  padding:.15rem .35rem;
-  border-radius:.6rem;
-  background: rgba(0,0,0,.05);
-}
-
-/* Badge discret "RECETTE NON TESTÉE" (fallback sur tag-index si besoin) */
-#tag-index .recipe-card-untested{
-  display:inline-block;
-  margin: .15rem 0 .5rem 0;
-  padding: .1rem .45rem;
-  border-radius: 999px;
-  font-size: .7rem;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  border: 1px solid rgba(255,165,0,.9);
-  color: rgba(120,70,0,1);
-  background: rgba(255,165,0,.08);
 }
 
 

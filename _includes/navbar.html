@@ -1,54 +1,92 @@
+<!-- _includes/navbar.html -->
 <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
   <div class="container-fluid site-container">
 
-    <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/" style="border-bottom:none;">
+    {%- comment -%}
+      Marque / retour accueil
+      - On évite les styles inline : le CSS global supprime déjà les soulignements.
+    {%- endcomment -%}
+    <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/">
       Recettes low carb
     </a>
 
-    <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Ouvrir le menu">
+    {%- comment -%}
+      Bouton mobile (Bootstrap)
+      - navbar-toggler-icon est géré par Bootstrap.
+    {%- endcomment -%}
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Ouvrir le menu"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-lg-auto me-lg-auto mb-2 mb-lg-0 gap-lg-1">
 
+        {%- comment -%}
+          Détermination de la page courante
+          - On normalise l'URL pour que "/" et "/index.html" soient traités pareil.
+        {%- endcomment -%}
         {% assign current = page.url | replace: "index.html", "" %}
 
-        <!-- RECETTES (dropdown catégories) -->
+        {%- comment -%}
+          RECETTES (dropdown catégories)
+          IMPORTANT compat GitHub Pages :
+          - On évite where_exp ici (plus strict selon config).
+          - On reconstruit manuellement la liste des recettes ayant un recipe_group.
+        {%- endcomment -%}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if current == '/' or current == '' %}active{% endif %}"
-             href="{{ site.baseurl }}/"
-             id="recipesDropdown"
-             role="button"
-             data-bs-toggle="dropdown"
-             aria-expanded="false">
+          <a
+            class="nav-link dropdown-toggle {% if current == '/' or current == '' %}active{% endif %}"
+            href="{{ site.baseurl }}/"
+            id="recipesDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             Recettes
           </a>
 
-          {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+          {%- comment -%}
+            1) Récupère toutes les pages "recipe"
+            2) Filtre celles qui ont recipe_group
+            3) Groupe par recipe_group puis tri par nom de groupe
+          {%- endcomment -%}
+          {% assign all_recipes_raw = site.pages | where: "layout", "recipe" %}
+          {% assign all_recipes = "" | split: "" %}
+          {% for p in all_recipes_raw %}
+            {% if p.recipe_group and p.recipe_group != "" %}
+              {% assign all_recipes = all_recipes | push: p %}
+            {% endif %}
+          {% endfor %}
           {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
 
           <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
 
-            <!-- Accès direct : On mange quoi ? -->
+            {%- comment -%}
+              Accès direct : On mange quoi ?
+              - Ancre sur la page d’accueil (index).
+            {%- endcomment -%}
             <li>
-              <a class="dropdown-item"
-                 href="{{ site.baseurl }}/#random-pick">
+              <a class="dropdown-item" href="{{ site.baseurl }}/#random-pick">
                 On mange quoi ?
               </a>
             </li>
 
             <li><hr class="dropdown-divider"></li>
 
+            {%- comment -%}
+              Liens vers les sections de l’index (ancres par groupes)
+            {%- endcomment -%}
             {% for g in grouped %}
               <li>
-                <a class="dropdown-item recipes-group-chip"
-                   href="{{ site.baseurl }}/#{{ g.name | slugify }}">
+                <a class="dropdown-item" href="{{ site.baseurl }}/#{{ g.name | slugify }}">
                   {{ g.name }}
                 </a>
               </li>
@@ -56,6 +94,10 @@
           </ul>
         </li>
 
+        {%- comment -%}
+          Pages fixes
+          - On garde un test simple sur l'URL courante.
+        {%- endcomment -%}
         <li class="nav-item">
           <a class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
              href="{{ site.baseurl }}/reperes-low-carb.html">Repères low carb</a>
