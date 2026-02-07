@@ -1,18 +1,36 @@
 ---
 layout: recipe
+
+# =========================================================
+# Recette (format site) — Pains & substituts
+# =========================================================
+
 title: "Crêpes salées low carb"
 description: "Crêpes salées low carb, sans farine de blé. Base souple et neutre pour wraps, crêpes garnies ou roulés."
 recipe_title: "Crêpes salées"
 recipe_subtitle: "Base souple et neutre pour wraps et crêpes garnies low carb"
 recipe_group: "Pains & substituts"
+
+# Règle site : recipe_sort = nom fonctionnel court, sans accents/ponctuation, toujours entre guillemets
 recipe_sort: "crepes-salees"
+
+# Recette testée
 recipe_tested: true
+
+# Photo (affichée par le layout recipe.html si présent)
+image: "/images/recettes/crepes-salees.webp"
+image_alt: "Crêpes salées low carb (base pour wraps)"
+
+# Tags techniques (low carb + tags fonctionnels)
 tags:
   - low-carb-modere
   - riche-en-fibres
   - micro-ondable
+  - congelable
   - longue
+  - peu-calorique
 
+# Micronutriments (champ dédié, pas des tags)
 badges_nutritionnels:
   - magnesium
 
@@ -48,6 +66,9 @@ extra_head: |
   </script>
 ---
 
+<!-- =========================================================
+     Intro / lead
+     ========================================================= -->
 <div class="recipe-lead">
   <p>
     Base <strong>souple, neutre et stable</strong> pour crêpes salées et wraps low carb.
@@ -70,8 +91,21 @@ extra_head: |
 <ol>
   <li>Mettre tous les ingrédients dans un blender.</li>
   <li>Mixer jusqu’à obtenir une pâte parfaitement lisse.</li>
+
+  <!--
+    Repos :
+    - indispensable pour hydrater le psyllium (texture pliable, moins cassante)
+    - ne pas raccourcir si tu veux des wraps qui se tiennent
+  -->
   <li>Laisser reposer <strong>45 minutes</strong> à température ambiante pour permettre l’hydratation complète des fibres.</li>
+
+  <!--
+    Ajustement texture :
+    - le psyllium épaissit beaucoup après repos
+    - ajouter le lait d’amande par petites touches pour garder une pâte nappante mais fluide
+  -->
   <li>Après repos, mélanger rapidement. Si la pâte a trop épaissi, ajouter un peu de lait d’amande (petites quantités) jusqu’à obtenir une pâte nappante mais fluide.</li>
+
   <li>Chauffer une poêle antiadhésive légèrement huilée.</li>
   <li>Verser une petite louche de pâte et étaler finement.</li>
   <li>Cuire 1 à 2 minutes par face, jusqu’à légère coloration.</li>
@@ -79,37 +113,21 @@ extra_head: |
 </ol>
 
 <h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par crêpe (1 sur 12).</p>
+<p>Valeurs estimées par <strong>crêpe (1 sur 12)</strong>.</p>
+
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
-      <tr>
-        <th scope="row">Énergie</th>
-        <td>≈ 110 kcal</td>
-      </tr>
-      <tr>
-        <th scope="row">Protéines</th>
-        <td>≈ 5 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Lipides</th>
-        <td>≈ 8 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Glucides</th>
-        <td>≈ 2 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fibres</th>
-        <td>≈ 3 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fructose</th>
-        <td>≈ 0 g</td>
-      </tr>
+      <tr><th>Énergie</th><td>≈ 110 kcal</td></tr>
+      <tr><th>Protéines</th><td>≈ 5 g</td></tr>
+      <tr><th>Lipides</th><td>≈ 8 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 2 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 0 g</td></tr>
+      <tr><th>Fibres</th><td>≈ 3 g</td></tr>
     </tbody>
   </table>
 </div>
+
 <p class="small text-muted">
   Estimation pour 1 crêpe. Les fibres proviennent principalement du psyllium.
 </p>
@@ -121,6 +139,6 @@ extra_head: |
   <li>Le repos long améliore la texture et réduit nettement le goût d’œuf.</li>
   <li>Idéal pour wraps garnis (viande, poisson, fromage).</li>
   <li><strong>Micro-ondable</strong> : réchauffage doux possible.</li>
+  <li><strong>Congélation</strong> : congeler les crêpes séparées par papier cuisson, puis réchauffer doucement.</li>
   <li>Conservation : jusqu’à 48 h au réfrigérateur, crêpes séparées par papier cuisson.</li>
 </ul>
-

@@ -7,8 +7,31 @@
     {{ page.extra_head }}
   {%- endif -%}
 
-  <!-- Styles locaux (layout recipe) -->
+  <!--
+    Styles locaux (layout recipe) :
+    - Badges (tags + micronutriments) en ligne, scroll horizontal si nécessaire
+    - Photo recette (optionnelle) avec une taille propre et responsive
+
+    Note : si tu préfères, on pourra déplacer tout ça dans style.css,
+    mais là c’est “one-shot” et sans impact sur le reste du site.
+  -->
   <style>
+    /* =========================
+       Photo recette
+       ========================= */
+    .recipe-photo{
+      margin: .75rem 0 1rem 0;
+    }
+    .recipe-photo img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:.75rem;
+    }
+
+    /* =========================
+       Badges (ligne 1 + ligne 2)
+       ========================= */
     .recipe-badges-line{
       display:flex;
       flex-wrap:nowrap;
@@ -29,6 +52,10 @@
     .recipe-badges-wrap{
       margin-top:.35rem;
     }
+
+    /* =========================
+       Légende badges
+       ========================= */
     .badges-legend{
       margin-top:.5rem;
       font-size:.9rem;
@@ -49,7 +76,16 @@
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
-  {% include recipe-header.html %}
+  {% comment %}
+    On évite le doublon de titres :
+    - recipe-header.html affiche déjà un h1
+    - recipe.html affiche aussi un h1 (.recipe-title)
+    => on retire l'include recipe-header.html ici.
+
+    Si tu veux absolument garder recipe-header.html, il faudra supprimer
+    le h1 ci-dessous (ou passer recipe-header.html en h2/h3).
+  {% endcomment %}
+
   {% include navbar.html %}
 
   <main class="site-main">
@@ -62,7 +98,29 @@
       <header class="recipe-head">
         <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
-        <!-- Sous-titre temporairement masqué -->
+        {% comment %}
+          Photo optionnelle (centralisée dans le layout) :
+          - À activer par recette avec :
+              image: "/images/recettes/mon-fichier.webp"
+              image_alt: "Texte alternatif"
+          - Si image_alt est absent, on retombe sur recipe_title/title.
+          - relative_url garantit que ça marche même si baseurl change.
+        {% endcomment %}
+        {% if page.image %}
+          <figure class="recipe-photo">
+            <img
+              src="{{ page.image | relative_url }}"
+              alt="{{ page.image_alt | default: page.recipe_title | default: page.title | escape }}"
+              loading="lazy"
+            >
+          </figure>
+        {% endif %}
+
+        <!-- Sous-titre (si un jour tu veux l’afficher ici plutôt que dans le contenu)
+        {% if page.recipe_subtitle %}
+          <p class="recipe-subtitle">{{ page.recipe_subtitle }}</p>
+        {% endif %}
+        -->
 
         <div class="recipe-badges-wrap">
           <!-- Ligne 1 : badges (tags) -->

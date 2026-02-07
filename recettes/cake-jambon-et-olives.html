@@ -1,20 +1,35 @@
 ---
 layout: recipe
+
+# =========================================================
+# Recette (format site) — Cake
+# =========================================================
+
 title: "Cake jambon & olives"
 description: "Cake salé low carb modéré au jambon et aux olives, sans farine de blé. Plat complet pratique, chaud ou froid, idéal avec une salade."
 recipe_title: "Cake jambon & olives"
 recipe_subtitle: "Cake salé low carb – portion repas, chaud ou froid"
 recipe_group: "Cake"
+
+# Règle site : recipe_sort = nom fonctionnel court, sans accents/ponctuation, toujours entre guillemets
 recipe_sort: "cake-jambon-olives"
+
+# Recette testée
 recipe_tested: true
 
+# Photo (affichée par le layout recipe.html si présent)
+image: "/images/recettes/cake-jambon-olives.webp"
+image_alt: "Cake jambon et olives (low carb)"
+
+# Tags techniques (low carb + tags fonctionnels)
 tags:
   - low-carb-modere
   - congelable
   - micro-ondable
   - rapide
-  - calorique
+  - peu-calorique
 
+# Micronutriments (champ dédié, pas des tags)
 badges_nutritionnels:
   - calcium
   - vitamine-b12
@@ -36,6 +51,9 @@ extra_head: |
   </script>
 ---
 
+<!-- =========================================================
+     Intro / lead
+     ========================================================= -->
 <div class="recipe-lead">
   <p>
     Cake salé <strong>simple et nourrissant</strong>, sans farine de blé,
@@ -74,30 +92,12 @@ extra_head: |
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
-      <tr>
-        <th>Énergie</th>
-        <td>≈ 460 kcal</td>
-      </tr>
-      <tr>
-        <th>Protéines</th>
-        <td>≈ 19 g</td>
-      </tr>
-      <tr>
-        <th>Lipides</th>
-        <td>≈ 36 g</td>
-      </tr>
-      <tr>
-        <th>Glucides</th>
-        <td>≈ 7,6 g</td>
-      </tr>
-      <tr>
-        <th>dont fructose</th>
-        <td>≈ 0,8 g</td>
-      </tr>
-      <tr>
-        <th>Fibres</th>
-        <td>≈ 4,4 g</td>
-      </tr>
+      <tr><th>Énergie</th><td>≈ 460 kcal</td></tr>
+      <tr><th>Protéines</th><td>≈ 19 g</td></tr>
+      <tr><th>Lipides</th><td>≈ 36 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 7,6 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 0,8 g</td></tr>
+      <tr><th>Fibres</th><td>≈ 4,4 g</td></tr>
     </tbody>
   </table>
 </div>
@@ -115,4 +115,3 @@ extra_head: |
   <li><strong>Congélation</strong> possible en parts individuelles.</li>
   <li><strong>Micro-ondable</strong> sans perte notable de texture.</li>
 </ul>
-

@@ -1,41 +1,37 @@
 ---
 layout: recipe
 
-# Titre affiché (site + SEO)
+# =========================================================
+# Recette (format site) — Gâteaux & biscuits
+# =========================================================
+
 title: "Madeleines"
-
-# Description courte (listes / SEO)
 description: "Remplacement low carb modéré des madeleines classiques : beurre noisette, sans farine de blé, sans whey, avec psyllium, texture plus aérienne."
-
-# Titre affiché dans la page recette (souvent identique à title)
 recipe_title: "Madeleines"
-
-# Sous-titre (courte promesse)
 recipe_subtitle: "Madeleines légères au beurre noisette, sans farine de blé"
-
-# Groupe officiel (OK)
 recipe_group: "Gâteaux & biscuits"
 
-# Identifiant fonctionnel (doit être entre guillemets)
+# Règle site
 recipe_sort: "madeleines"
 
-# Recette testée : OK
+# Recette testée
 recipe_tested: true
 
-# Tags officiels uniquement (OK)
+# Photo (affichée par le layout recipe.html)
+image: "/images/recettes/madeleines.webp"
+image_alt: "Madeleines low carb au beurre noisette"
+
+# Tags techniques
 tags:
   - gout-sucre
   - low-carb-modere
   - congelable
   - rapide
-  - riche-en-fibres
-  - calorique
+  - calorique   # dessert ≥ 300 kcal / portion
 
-# Micronutriments (à utiliser uniquement si justifié)
-badges_nutritionnels:
-  - vitamine-b12
+# Micronutriments : aucun justifié ici
+badges_nutritionnels: []
 
-# JSON-LD (Schema.org)
 extra_head: |
   <script type="application/ld+json">
   {
@@ -72,7 +68,6 @@ extra_head: |
   </script>
 ---
 
-<!-- Bandeau d’infos (utilise la classe .recipe-lead présente dans ton CSS) -->
 <div class="recipe-lead">
   <p class="mb-0">
     <strong>Pour :</strong> 4 portions — <strong>Rendement :</strong> 12 madeleines — <strong>Portion :</strong> 3 madeleines<br>
@@ -81,19 +76,14 @@ extra_head: |
   </p>
 </div>
 
-<hr>
-
-<!-- Intro courte (comme sur le modèle) -->
 <p>
-  Version low carb modéré des madeleines classiques : on remplace la <strong>farine de blé (non compatible low carb)</strong>
-  par de la <strong>poudre d’amandes</strong>, et le <strong>sucre (non compatible low carb)</strong> par un édulcorant.
-  Le <strong>beurre noisette</strong> apporte le goût principal, donc on évite de surdoser l’édulcorant pour ne pas le masquer.
+  Version low carb modéré des madeleines classiques : on remplace la
+  <strong>farine de blé (non compatible low carb)</strong> par de la
+  <strong>poudre d’amandes</strong>, et le <strong>sucre</strong> par un édulcorant.
+  Le <strong>beurre noisette</strong> apporte l’arôme principal : l’édulcorant est volontairement dosé bas.
 </p>
 
-<hr>
-
 <h2>Ingrédients</h2>
-
 <ul>
   <li><strong>3</strong> œufs (séparés)</li>
   <li><strong>70 g</strong> de beurre (pour beurre noisette)</li>
@@ -104,74 +94,62 @@ extra_head: |
   <li><strong>1</strong> pincée de sel</li>
 </ul>
 
-<!-- Astuce sucrant : alignée avec ta règle “pas d’arrière-goût d’édulcorant” -->
 <p>
-  <strong>Sucrant :</strong> 15 g suffisent. Au-delà, la stévia risque de masquer le goût du beurre noisette
-  (et de laisser un arrière-goût).
+  <strong>Psyllium :</strong> dosage volontairement <strong>minimal</strong>.
+  Il sert uniquement de <strong>structurant léger</strong> (sans farine),
+  sans effet “gélifié”.
 </p>
 
-<hr>
-
 <h2>Préparation</h2>
-
 <ol>
-  <li>Faire fondre le beurre à feu moyen jusqu’à obtenir une odeur de noisette. Laisser tiédir.</li>
-  <li>Monter les blancs en neige ferme avec la pincée de sel.</li>
+  <li>Faire fondre le beurre à feu moyen jusqu’à odeur de noisette. Laisser tiédir.</li>
+  <li>Monter les blancs en neige ferme avec le sel.</li>
   <li>Mélanger les jaunes avec l’édulcorant.</li>
   <li>Ajouter le beurre noisette tiède.</li>
-  <li>Incorporer la poudre d’amandes, la levure et le psyllium.</li>
+  <li>Incorporer poudre d’amandes, levure et psyllium.</li>
   <li>Incorporer délicatement les blancs en 3 fois.</li>
   <li>Laisser reposer la pâte <strong>10 minutes maximum</strong>.</li>
   <li>
     Remplir les moules aux ¾.<br>
-    Enfourner à <strong>190&nbsp;°C</strong> puis baisser immédiatement à <strong>180&nbsp;°C</strong>.<br>
-    Cuire <strong>11 à 12 minutes</strong>.
+    Enfourner à <strong>190&nbsp;°C</strong>, puis baisser immédiatement à
+    <strong>180&nbsp;°C</strong> pour <strong>11 à 12 minutes</strong>.
   </li>
 </ol>
 
-<hr>
-
 <h2>Informations nutritionnelles</h2>
-
-<p>Valeurs estimées <strong>par portion</strong> (3 madeleines, soit 1/4 de la recette). L’édulcorant est compté à 0.</p>
+<p>Valeurs estimées <strong>par portion</strong> (3 madeleines = ¼ de la recette).</p>
 
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
-      <tr><th>Calories</th><td>≈ 300 kcal</td></tr>
+      <tr><th>Énergie</th><td>≈ 300 kcal</td></tr>
       <tr><th>Protéines</th><td>≈ 9,4 g</td></tr>
-      <tr><th>Glucides</th><td>≈ 5,3 g</td></tr>
-      <tr><th>Fructose</th><td>≈ 0 g</td></tr>
       <tr><th>Lipides</th><td>≈ 28,4 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 5,3 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 0 g</td></tr>
       <tr><th>Fibres</th><td>≈ 3,3 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
-  Valeurs <strong>estimées</strong>. Les glucides proviennent surtout de la poudre d’amandes ; le psyllium contribue principalement aux fibres.
-  <br>
-  À titre indicatif : <strong>glucides nets</strong> ≈ 2,0 g (glucides totaux − fibres). (Ce n’est pas un affichage “standard UE”.)
+  Valeurs estimées. Les glucides proviennent majoritairement de la poudre d’amandes.
 </p>
 
-<hr>
-
 <h2>Notes low carb</h2>
-
 <ul>
-  <li><strong>Substitutions :</strong> <strong>farine de blé (non compatible low carb)</strong> → poudre d’amandes ; <strong>sucre (non compatible low carb)</strong> → édulcorant.</li>
-  <li><strong>Low carb modéré :</strong> compatible.</li>
-  <li><strong>Calories :</strong> <strong>calorique</strong> (≈ 300 kcal par portion, seuil dessert ≥ 300).</li>
-  <li><strong>Texture :</strong> si trop dense, réduire légèrement le psyllium (≈ 2 g).</li>
-  <li><strong>Moules :</strong> pas besoin de beurrer.</li>
+  <li><strong>Low carb modéré</strong> : compatible.</li>
+  <li><strong>Dessert calorique</strong> : ≈ 300 kcal par portion (seuil dessert atteint).</li>
+  <li>
+    <strong>Texture :</strong> l’aération dépend surtout
+    de l’incorporation des blancs et du <strong>repos court</strong>.
+    Un repos plus long densifie la pâte (effet fibres).
+  </li>
+  <li><strong>Congélation</strong> possible par portions de 3 madeleines.</li>
 </ul>
-
-<hr>
 
 <h2>Conservation</h2>
-
 <ul>
-  <li>2–3 jours dans une boîte hermétique.</li>
-  <li>Congélation possible après refroidissement complet.</li>
+  <li>2–3 jours en boîte hermétique.</li>
+  <li>Congélation après refroidissement complet.</li>
 </ul>
-
