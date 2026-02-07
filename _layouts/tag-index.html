@@ -3,7 +3,7 @@ layout: page
 ---
 
 {%- comment -%}
-  Layout d’index filtré (tags fonctionnels / micronutriments)
+  Page “index filtré” (tags fonctionnels / micronutriments)
 
   Objectif (UX) :
   - Sur ces pages, le bloc "Random pick" doit apparaître AU-DESSUS des 2 lignes de badges cliquables.
@@ -11,27 +11,23 @@ layout: page
   Paramètres attendus dans la page :
   - page.filter_type : "tag" ou "micro"
   - page.filter_id   : ID technique (ex: "selenium", "tres-proteine")
+
+  Notes techniques :
+  - Le JS du random pick lit document.body.dataset.filterType / filterId.
+  - Ici, on renseigne ces attributs le plus tôt possible (sans attendre DOMContentLoaded),
+    pour éviter tout effet d’ordre d’exécution si d’autres scripts changent.
 {%- endcomment -%}
 
 <section class="site-container" id="tag-index">
 
   {%- comment -%}
-    Random pick (include) : mode "page filtrée"
-
-    Important :
-    - On doit passer le filtre au JS du random pick via document.body.dataset.*
-    - On le fait ici car on ne contrôle pas la balise <body> depuis ce layout.
-    - Le JS du random pick lit :
-        document.body.dataset.filterType
-        document.body.dataset.filterId
+    Initialise immédiatement le filtre sur <body> pour que le random pick puisse le lire.
+    (Le <body> existe déjà à ce stade du parsing.)
   {%- endcomment -%}
   <script>
-    // On attend le DOM, puis on copie les paramètres de page dans <body>.
-    // Le random pick s'appuie dessus pour filtrer le tirage.
-    document.addEventListener("DOMContentLoaded", () => {
-      document.body.dataset.filterType = "{{ page.filter_type | escape }}";
-      document.body.dataset.filterId = "{{ page.filter_id | escape }}";
-    });
+    // Filtre du tirage aléatoire : utilisé par _includes/random-pick.html
+    document.body.dataset.filterType = "{{ page.filter_type | escape }}";
+    document.body.dataset.filterId = "{{ page.filter_id | escape }}";
   </script>
 
   {%- comment -%}
@@ -140,8 +136,8 @@ layout: page
 
   {%- comment -%}
     ===== Liste des recettes filtrées =====
-    Objectif : réutiliser exactement le même affichage que la page index.html
-    via l'include _includes/recipes-index.html
+    - On reconstruit un "grouped" compatible avec _includes/recipes-index.html
+    - GitHub Pages (Jekyll 3.10) étant strict, on évite where_exp ici.
   {%- endcomment -%}
 
   {%- assign recipes = site.pages | where: "layout", "recipe" -%}
@@ -158,12 +154,6 @@ layout: page
 
   <p class="small text-muted"><strong>{{ filtered.size }}</strong> recette(s).</p>
 
-  {%- comment -%}
-    group_by fabrique une structure compatible avec recipes-index.html :
-    - g.name
-    - g.items
-    GitHub Pages (Jekyll 3.10) est plus strict : on évite where_exp ici.
-  {%- endcomment -%}
   {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
 
   {%- comment -%}
