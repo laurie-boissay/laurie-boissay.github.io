@@ -7,72 +7,14 @@
     {{ page.extra_head }}
   {%- endif -%}
 
-  <!--
-    Styles locaux (layout recipe) :
-    - Badges (tags + micronutriments) en ligne, scroll horizontal si nécessaire
-    - Photo recette (optionnelle) avec une taille propre et responsive
-
-    Note : si tu préfères, on pourra déplacer tout ça dans style.css,
-    mais là c’est “one-shot” et sans impact sur le reste du site.
-  -->
-  <style>
-    /* =========================
-       Photo recette
-       ========================= */
-    .recipe-photo{
-      margin: .75rem 0 1rem 0;
-    }
-    .recipe-photo img{
-      display:block;
-      width:100%;
-      height:auto;
-      border-radius:.75rem;
-    }
-
-    /* =========================
-       Badges (ligne 1 + ligne 2)
-       ========================= */
-    .recipe-badges-line{
-      display:flex;
-      flex-wrap:nowrap;
-      gap:.35rem;
-      list-style:none;
-      padding:0;
-      margin:.25rem 0 0 0;
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .recipe-badges-line li{
-      display:flex;
-      align-items:center;
-      font-size:1.15rem;
-      line-height:1;
-      white-space:nowrap;
-    }
-    .recipe-badges-wrap{
-      margin-top:.35rem;
-    }
-
-    /* =========================
-       Légende badges
-       ========================= */
-    .badges-legend{
-      margin-top:.5rem;
-      font-size:.9rem;
-    }
-    .badges-legend summary{
-      cursor:pointer;
-      font-weight:600;
-    }
-    .badges-legend ul{
-      list-style:none;
-      padding-left:0;
-      margin:.4rem 0 0 0;
-    }
-    .badges-legend li{
-      line-height:1.4;
-    }
-  </style>
+  {%- comment -%}
+    IMPORTANT :
+    - On ne met plus de CSS local ici.
+    - Tout est centralisé dans style.css pour éviter les contradictions :
+      * badges : wrap + centré (PAS de scroll horizontal)
+      * photo : .recipe-photo
+      * légende : .badges-legend
+  {%- endcomment -%}
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
@@ -93,6 +35,11 @@
 
       {% include bandeau-non-teste.html %}
 
+      {%- comment -%}
+        Tags "techniques" / cachés :
+        - pas affichés dans les badges sur la page
+        - mais ils restent utiles en metadata (filtre, organisation, etc.)
+      {%- endcomment -%}
       {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
       <header class="recipe-head">
@@ -116,13 +63,14 @@
           </figure>
         {% endif %}
 
-        <!-- Sous-titre (si un jour tu veux l’afficher ici plutôt que dans le contenu)
-        {% if page.recipe_subtitle %}
-          <p class="recipe-subtitle">{{ page.recipe_subtitle }}</p>
-        {% endif %}
-        -->
-
+        {%- comment -%}
+          Badges :
+          - Ligne 1 : tags fonctionnels (on ignore les tags cachés)
+          - Ligne 2 : micronutriments (si présents)
+          NB : Le style (wrap + centré) est géré dans style.css via .recipe-badges-line
+        {%- endcomment -%}
         <div class="recipe-badges-wrap">
+
           <!-- Ligne 1 : badges (tags) -->
           {% if page.tags %}
             <ul class="recipe-badges-line badges-tags" aria-label="Badges">
@@ -132,7 +80,7 @@
                     {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
                     {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
                     {% when "rapide" %}<li title="Rapide">⏱️</li>
-                    {% when "congelable" %}<li title="Congelable">❄️</li>
+                    {% when "congelable" %}<li title="Congélable">❄️</li>
                     {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
                     {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
                     {% when "calorique" %}<li title="Calorique">🔥</li>
@@ -171,14 +119,18 @@
             </ul>
           {% endif %}
 
-          <!-- Légende des badges -->
+          {%- comment -%}
+            Légende des badges :
+            - Le style est géré dans style.css via .badges-legend
+            - Important : on laisse la liste en <ul> pour être lisible/accessibilité.
+          {%- endcomment -%}
           <details class="badges-legend">
             <summary>Légende des badges</summary>
             <ul>
               <li>💪 Très protéiné</li>
               <li>💩 Riche en fibres</li>
               <li>⏱️ Rapide à préparer</li>
-              <li>❄️ Congelable</li>
+              <li>❄️ Congélable</li>
               <li>♨️ Micro-ondable</li>
               <li>🪶 Peu calorique</li>
               <li>🔥 Calorique</li>
@@ -200,6 +152,7 @@
               <li>🌊 Iode</li>
             </ul>
           </details>
+
         </div>
       </header>
 

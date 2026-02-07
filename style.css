@@ -1,12 +1,18 @@
 /* =========================================================
-   THEME CLAIR TURQUOISE / VERT — style.css (NETTOYÉ)
+   THEME CLAIR TURQUOISE / VERT — style.css (NETTOYÉ + COHÉRENT)
+   Cible : site Jekyll + Bootstrap (navbar, pages, index, recettes, tag-index)
+
    Objectifs conservés :
-   - ZÉRO soulignement sur les liens (navbar + dropdown inclus)
-   - Hover global des <a> sans casser les cartes recettes
-   - Dropdown "Recettes" scrollable mobile/iOS
-   - Tags (chips) lisibles + espacés
-   - Badges (emoji) : WRAP + lignes centrées
-   - Moins de doublons / moins de surcharges inutiles
+   - ZÉRO soulignement (underline / border-bottom) sur les liens (navbar + dropdown inclus)
+   - Le hover global des <a> ne doit PAS “salir” les cartes recettes
+   - Dropdown "Recettes" scrollable sur mobile/iOS
+   - Tags (chips) lisibles et espacés
+   - Badges (emoji) : WRAP + lignes centrées (pas de scroll horizontal)
+   - Pas de doublons : une seule définition par composant
+
+   Notes de maintenance :
+   - Tout ce qui était “recollé” (index.html / recipe.html / tag-index.html) a été supprimé
+     car ça créait des conflits (nowrap + overflow-x) et écrasait le comportement attendu.
    ========================================================= */
 
 
@@ -34,7 +40,7 @@
   --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
   --ring: 0 0 0 4px rgba(20,184,166,.22);
 
-  /* Bootstrap 5.3+ : désactive décorations de lien via variables */
+  /* Bootstrap 5.3+ : supprime les décorations par variables */
   --bs-link-decoration: none;
   --bs-link-hover-decoration: none;
 }
@@ -114,10 +120,12 @@ hr{
 
 
 /* =========================================================
-   LIENS — ZÉRO soulignement + hover discret
+   LIENS
+   - Zéro soulignement
+   - Hover léger (fond doux)
    ========================================================= */
 
-/* Base liens : pas de soulignement, hover léger */
+/* Style de base des liens */
 a{
   color: var(--link);
   text-decoration: none !important;
@@ -126,20 +134,21 @@ a{
   transition: color .18s ease, background-color .18s ease, transform .12s ease;
 }
 
+/* Hover global (hors zones explicitement neutralisées plus bas) */
 a:hover{
   color: var(--link-hover);
   background: rgba(20,184,166,.08);
   border-radius: 8px;
 }
 
-/* Garde-fou global : certains thèmes/bootstrap rajoutent parfois du border-bottom via pseudo styles */
+/* Garde-fou global : empêche des styles “hérités” (thèmes, markdown, etc.) */
 a, a *{
   text-decoration: none !important;
   border-bottom: 0 !important;
   background-image: none !important;
 }
 
-/* Helpers historiques (si encore utilisés) */
+/* Helpers historiques (si encore utilisés dans du contenu) */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 
@@ -161,7 +170,6 @@ a, a *{
   top: 0;
   z-index: 99;
 
-  /* look moderne “verre léger” */
   background: rgba(246,250,249,.78);
   backdrop-filter: blur(14px);
 
@@ -169,7 +177,7 @@ a, a *{
   box-shadow: var(--shadow-nav);
 }
 
-/* Dans la navbar, ne pas appliquer le hover global “fond” */
+/* Dans la navbar, on neutralise le hover global “fond” */
 #navigation a:hover{ background: transparent; }
 
 /* Marque */
@@ -200,7 +208,7 @@ a, a *{
   border-radius: 12px;
 }
 
-/* Dans la navbar + dropdown : jamais d’effet "soulignement" ni ombres parasites */
+/* Fix strict : aucun soulignement / ombre parasite dans la navbar + dropdown */
 #navigation a,
 #navigation a:hover,
 #navigation a:focus,
@@ -345,7 +353,7 @@ img{
   box-shadow: var(--shadow);
   padding: 14px;
 
-  /* Neutralise le hover global des <a> */
+  /* Neutralise l’effet hover global des <a> */
   text-decoration: none !important;
   border-bottom: none !important;
   background-image: none !important;
@@ -353,7 +361,7 @@ img{
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* Glow léger */
+/* Glow léger décoratif */
 .recipe-card-link::before{
   content:"";
   position:absolute;
@@ -374,7 +382,11 @@ img{
   background: var(--card) !important;
 }
 
-/* Tout ce qui est DANS une carte ne doit pas prendre le hover global */
+/*
+  Important :
+  - Tout ce qui est DANS une carte ne doit pas prendre le hover global (fond).
+  - On force un fond transparent et on supprime les décorations.
+*/
 .recipe-card-link,
 .recipe-card-link *{
   text-decoration: none !important;
@@ -401,7 +413,11 @@ img{
   color: rgba(15,23,42,.78);
 }
 
-/* Tags (chips) */
+
+/* =========================================================
+   (Optionnel) TAGS (chips) — si une page les utilise encore
+   ========================================================= */
+
 .recipe-tags{
   display: flex;
   flex-wrap: wrap;
@@ -429,6 +445,7 @@ img{
 
 /* =========================================================
    PICK CARD ("On mange quoi ?") — bloc injecté en JS
+   - HTML injecté utilise .pick-card + #random-pick
    ========================================================= */
 
 .pick-card{
@@ -438,7 +455,7 @@ img{
   box-shadow: var(--shadow);
 }
 
-/* Empêche le hover global d'ajouter un fond dans le bloc random pick */
+/* Empêche le hover global d’ajouter un fond dans le bloc random pick */
 .pick-card a,
 .pick-card a *{
   text-decoration: none !important;
@@ -482,6 +499,7 @@ img{
 .recipe-photo{
   margin: .75rem 0 1rem 0;
 }
+
 .recipe-photo img{
   display:block;
   width:100%;
@@ -494,15 +512,18 @@ img{
   margin-top:.5rem;
   font-size:.9rem;
 }
+
 .badges-legend summary{
   cursor:pointer;
   font-weight:600;
 }
+
 .badges-legend ul{
   list-style:none;
   padding-left:0;
   margin:.4rem 0 0 0;
 }
+
 .badges-legend li{
   line-height:1.4;
 }
@@ -584,17 +605,17 @@ img{
 
 
 /* =========================================================
-   BADGES (emoji) — WRAP + CENTRÉ (version unique)
-   Utilisé typiquement :
-   - cartes (lignes tags/micros)
-   - random pick
-   - blocs de liens (badges cliquables)
+   BADGES (emoji) — WRAP + CENTRÉ (définition unique)
+   Utilisé par :
+   - index.html (badges dans les cartes)
+   - random-pick.html (liens fixes + badges de la recette tirée)
+   - tag-index.html (si tu réutilises les mêmes classes)
    ========================================================= */
 
 .recipe-badges-line{
   display:flex;
-  flex-wrap: wrap;          /* autorise retour à la ligne */
-  justify-content: center;  /* centre horizontalement */
+  flex-wrap: wrap;          /* ✅ retour à la ligne */
+  justify-content: center;  /* ✅ centré */
   align-items: center;
 
   gap: .35rem;
@@ -602,7 +623,7 @@ img{
   padding: 0;
   margin: .25rem 0 0 0;
 
-  overflow-x: visible;      /* pas de scroll horizontal */
+  overflow-x: visible;      /* ✅ pas de scroll horizontal */
   -webkit-overflow-scrolling: auto;
 }
 
@@ -614,38 +635,51 @@ img{
   white-space: nowrap;
 }
 
-/* Espace réservé quand une ligne est vide (optionnel) */
+/* Espace réservé si une ligne est vide (optionnel, utile en layout) */
 .recipe-badges-line.is-empty{
   min-height: 1.6rem;
 }
 
-/* Badges cliquables (lien autour de l’emoji) */
-.recipe-badges-line a{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  text-decoration:none !important;
-  border-bottom:none !important;
-  background: transparent !important;
-  padding: .1rem .2rem;
-  border-radius: 10px;
-}
-
-.recipe-badges-line a:hover{
-  background: rgba(20,184,166,.10) !important;
-}
-
-/* Wrapper optionnel autour des lignes de badges */
+/* Wrapper optionnel autour des lignes (index + random pick) */
 .recipe-badges-wrap{
   margin-top: .35rem;
 }
 
-/* Bloc badges fixes sous le random pick (si utilisé) */
+/*
+  Liens autour des emojis :
+  - Dans les cartes : parfois <a> simple
+  - Sous le random pick : <a class="badge-link-outside">
+*/
+.recipe-badges-line a,
+.recipe-badges-line a.badge-link-outside{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  text-decoration:none !important;
+  border-bottom:none !important;
+  background: transparent !important;
+
+  min-width: 2rem;          /* rend la zone cliquable confortable */
+  padding: .1rem .2rem;
+  border-radius: 10px;
+}
+
+.recipe-badges-line a:hover,
+.recipe-badges-line a.badge-link-outside:hover{
+  background: rgba(20,184,166,.10) !important;
+}
+
+/* Bloc de liens fixes sous le random pick */
 .random-pick-links{
   margin-top: .5rem;
 }
 
-/* Titres de catégories (index) */
+
+/* =========================================================
+   TITRES DE CATÉGORIES (index)
+   ========================================================= */
+
 .recipe-category-title{
   margin-top: 1.25rem;
   margin-bottom: .75rem;
@@ -666,10 +700,10 @@ img{
 
 /* =========================================================
    BADGE "Recette non testée" (Bootstrap .badge.bg-warning)
-   - 2 contexts différents : cartes recettes + random pick
+   - 2 contextes : cartes + random pick
    ========================================================= */
 
-/* Dans les cartes (si tu as un conteneur .recipe-card) */
+/* Dans les cartes */
 .recipe-card .badge.bg-warning{
   font-size: .7rem;
   font-weight: 600;
@@ -683,7 +717,7 @@ img{
   border-radius: 999px;
 }
 
-/* Dans le random pick (id #random-pick) */
+/* Dans le random pick */
 #random-pick .badge.bg-warning{
   font-size: .65rem;
   font-weight: 500;
@@ -699,7 +733,7 @@ img{
 
 /* =========================================================
    TAG-INDEX (layout #tag-index)
-   - isolé pour éviter d’impacter le reste
+   - Isolé pour éviter d’impacter le reste
    ========================================================= */
 
 #tag-index .page-head{ margin-bottom: 1rem; }
@@ -773,7 +807,7 @@ img{
   background: rgba(0,0,0,.05);
 }
 
-/* Badge discret "RECETTE NON TESTÉE" (fallback si besoin sur tag-index) */
+/* Badge discret "RECETTE NON TESTÉE" (fallback sur tag-index si besoin) */
 #tag-index .recipe-card-untested{
   display:inline-block;
   margin: .15rem 0 .5rem 0;
@@ -790,7 +824,7 @@ img{
 
 
 /* =========================================================
-   ACCESSIBILITÉ : respect du réglage utilisateur
+   ACCESSIBILITÉ : respecte le réglage utilisateur
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce){
