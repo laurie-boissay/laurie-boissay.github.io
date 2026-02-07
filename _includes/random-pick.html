@@ -1,0 +1,325 @@
+{%- comment -%}
+  =========================================================
+  INCLUDE : RANDOM PICK (On mange quoi ?)
+  Fichier : _includes/random-pick.html
+
+  Rôle :
+  - Affiche une suggestion aléatoire de recette (hors "gout-sucre")
+  - Exclut certains recipe_group du tirage
+  - Affiche les badges (tags + micronutriments) de la recette tirée
+  - Affiche aussi deux lignes de navigation rapide (liens tags/micros)
+
+  Pré-requis :
+  - La page qui inclut ce fichier doit contenir un bloc #recipes-index
+    (car le script scanne les cartes recettes à l’intérieur).
+  =========================================================
+{%- endcomment -%}
+
+<!-- =========================================================
+     SUGGESTION ALÉATOIRE
+     ========================================================= -->
+<div class="mb-4">
+
+  <!-- Zone où la “pick-card” est injectée par JS -->
+  <div id="random-pick"></div>
+
+  <!--
+    ✅ Bloc “infos tags + micronutriments”
+    - Ce bloc est HORS tirage : navigation rapide.
+    - On inclut volontairement "gout-sucre" ici, même s’il est exclu du tirage.
+    - URLs : pages /tags/<id>/ et /micronutriments/<id>/.
+  -->
+  <div class="random-pick-links mt-2">
+
+    <!-- Ligne 1 : tags fonctionnels -->
+    <ul class="recipe-badges-line badges-tags-fixed" aria-label="Tags fonctionnels">
+      <li><a class="badge-link-outside" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+      <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+
+      <!-- Tag caché dans les badges des cartes, mais OK en navigation -->
+      <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+    </ul>
+
+    <!-- Ligne 2 : micronutriments -->
+    <ul class="recipe-badges-line badges-micro-fixed" aria-label="Micronutriments">
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+      <li><a class="badge-link-outside" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+    </ul>
+
+  </div>
+</div>
+
+<script>
+  /*
+    =========================================================
+    RANDOM PICK
+    - Exclut toutes les recettes taguées "gout-sucre"
+    - Exclut certains recipe_group du tirage
+    - Affiche aussi les badges (tags + micronutriments) de la recette tirée
+    =========================================================
+  */
+
+  // On attend que TOUT le DOM soit chargé (car #recipes-index est plus bas dans la page).
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // Tag exclu du tirage
+    const EXCLUDED_TAG = "gout-sucre";
+
+    // Tags cachés (utiles côté data, mais pas affichés comme badges “fonctionnels”)
+    const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
+
+    /*
+      Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules).
+      IMPORTANT : "data-recipe-group" contient le nom humain exact (ex: "Plats à base de viande")
+      donc ici on compare en minuscules.
+    */
+    const EXCLUDED_GROUPS = [
+      "amuse-bouche",
+      "boissons",
+      "pains & substituts",
+      "pâtes & fonds",
+      "sauces & assaisonnements",
+      "légumes & accompagnements",
+      "préparations & conservations",
+      "barres nutritionnelles"
+    ];
+
+    // Mapping tag -> { emoji, title }
+    const TAG_BADGES = {
+      "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
+      "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
+      "rapide":          { emoji: "⏱️", title: "Rapide" },
+      "congelable":      { emoji: "❄️", title: "Congélable" },
+      "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
+      "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
+      "calorique":       { emoji: "🔥", title: "Calorique" },
+      "longue":          { emoji: "🐌", title: "Préparation longue" }
+    };
+
+    // Mapping micronutriment -> { emoji, title }
+    const MICRO_BADGES = {
+      "omega-3":      { emoji: "🐟", title: "Oméga-3" },
+
+      "vitamine-a":   { emoji: "👁️", title: "Vitamine A" },
+      "vitamine-c":   { emoji: "🍋", title: "Vitamine C" },
+      "vitamine-d":   { emoji: "🌤️", title: "Vitamine D" },
+      "vitamine-e":   { emoji: "🛡️", title: "Vitamine E" },
+      "vitamine-k":   { emoji: "🩸", title: "Vitamine K" },
+      "vitamine-b9":  { emoji: "🌱", title: "Vitamine B9" },
+      "vitamine-b12": { emoji: "🥩", title: "Vitamine B12" },
+
+      "calcium":      { emoji: "🦴", title: "Calcium" },
+      "fer":          { emoji: "🧲", title: "Fer" },
+      "magnesium":    { emoji: "⚡", title: "Magnésium" },
+      "potassium":    { emoji: "🍌", title: "Potassium" },
+      "zinc":         { emoji: "🔩", title: "Zinc" },
+      "selenium":     { emoji: "🧪", title: "Sélénium" },
+      "iode":         { emoji: "🌊", title: "Iode" }
+    };
+
+    // Racine : index des recettes (cartes)
+    const indexRoot = document.getElementById("recipes-index");
+
+    // Cible : où on injecte la “pick-card”
+    const pickHost = document.getElementById("random-pick");
+
+    // Pour éviter de retomber sur la même recette trop souvent
+    let lastHref = null;
+
+    // Convertit "a,b,c" -> ["a","b","c"] en minuscules
+    function parseList(str) {
+      return (str || "")
+        .split(",")
+        .map(s => s.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    // Vérifie si le lien correspond à une recette exploitable
+    function isValidRecipeLink(a) {
+      const href = (a.getAttribute("href") || "").trim();
+      if (!href) return false;
+
+      // On ignore les ancres
+      if (href.startsWith("#")) return false;
+
+      // Si ton site a des URLs propres (sans .html), supprime ce test.
+      // Ici, on le laisse désactivé (commenté) pour éviter d’exclure à tort.
+      // if (!href.endsWith(".html")) return false;
+
+      const title = (a.dataset.title || a.textContent || "").trim();
+      if (!title) return false;
+
+      return true;
+    }
+
+    // Exclut les cartes taguées "gout-sucre"
+    function hasExcludedTag(card) {
+      const tags = parseList(card?.dataset?.tags);
+      return tags.includes(EXCLUDED_TAG);
+    }
+
+    // Exclut certains recipe_group
+    function isInExcludedGroup(a) {
+      const groupEl = a.closest("[data-recipe-group]");
+      if (!groupEl) return false;
+
+      const group = (groupEl.dataset.recipeGroup || "").toLowerCase().trim();
+      return EXCLUDED_GROUPS.includes(group);
+    }
+
+    // Liste des candidats au tirage
+    function getCandidates() {
+      if (!indexRoot) return [];
+
+      return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
+        .filter(isValidRecipeLink)
+        .filter(a => {
+          const card = a.closest(".recipe-card");
+          if (!card) return false;
+
+          if (hasExcludedTag(card)) return false;
+          if (isInExcludedGroup(a)) return false;
+
+          return true;
+        });
+    }
+
+    // Tirage aléatoire (évite de répéter la même recette)
+    function pickRandom(links) {
+      if (!links.length) return null;
+
+      let a, tries = 0;
+      do {
+        a = links[Math.floor(Math.random() * links.length)];
+        tries++;
+      } while (a.getAttribute("href") === lastHref && tries < 20);
+
+      lastHref = a.getAttribute("href");
+      return a;
+    }
+
+    // Construit une ligne de badges (UL) à partir d’une liste d’IDs et d’un mapping
+    function buildBadgeLine(items, map, ariaLabel) {
+      const lis = items
+        .map(id => {
+          const info = map[id];
+          if (!info) return "";
+          const title = (info.title || "").replace(/"/g, "&quot;");
+          return `<li title="${title}">${info.emoji}</li>`;
+        })
+        .filter(Boolean)
+        .join("");
+
+      if (!lis) return "";
+      return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
+    }
+
+    // Badges à afficher dans le random pick pour UNE recette
+    function buildPickBadges(card) {
+      const tagsAll = parseList(card?.dataset?.tags);
+
+      // Tags fonctionnels : on enlève les tags cachés + on garde seulement ceux connus
+      const tagsFunctional = tagsAll.filter(t => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
+
+      const microsAll = parseList(card?.dataset?.micros);
+      const micros = microsAll.filter(m => MICRO_BADGES[m]);
+
+      const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Badges");
+      const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments");
+
+      if (!line1 && !line2) return "";
+      return `
+        <div class="recipe-badges-wrap">
+          ${line1}
+          ${line2}
+        </div>
+      `;
+    }
+
+    // Affiche la carte “On mange quoi ?”
+    function renderPick(a) {
+      const title = (a.dataset.title || a.textContent || "").trim();
+      const subtitle = (a.dataset.subtitle || "").trim();
+      const tested = a.dataset.tested === "true";
+      const href = a.getAttribute("href");
+
+      const card = a.closest(".recipe-card");
+      const badgesHtml = buildPickBadges(card);
+
+      pickHost.innerHTML = `
+        <div class="pick-card">
+          <div class="pick-card-body text-center">
+            <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
+
+            <h3 class="h5 mb-1">
+              ${title}
+              ${tested ? "" : `
+                <span class="badge bg-warning text-dark ms-2">
+                  Recette non testée
+                </span>
+              `}
+            </h3>
+
+            ${subtitle ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>` : ""}
+
+            ${badgesHtml}
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <a class="btn btn-primary" href="${href}">Ça me plaît</a>
+              <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
+                Autre idée
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Bouton “Autre idée” : relance un tirage
+      document.getElementById("btn-reroll").onclick = pickAndRender;
+    }
+
+    // Cas où aucun candidat n’existe
+    function renderEmpty() {
+      pickHost.innerHTML = `
+        <div class="alert alert-warning mb-0">
+          Aucune recette disponible.
+        </div>
+      `;
+    }
+
+    // Orchestration : récupère candidats -> tire -> rend
+    function pickAndRender() {
+      const links = getCandidates();
+      if (!links.length) return renderEmpty();
+
+      const a = pickRandom(links);
+      if (!a) return renderEmpty();
+
+      renderPick(a);
+    }
+
+    // Lancement initial
+    pickAndRender();
+  });
+</script>
