@@ -3,9 +3,9 @@
      Footer global du site
 
      Contenu :
-     - Mentions légales
-     - Date de dernière mise à jour du site
-     - Affichage sur une seule ligne
+     - Lien vers les mentions légales
+     - Copyright (année automatique)
+     - Date de dernière mise à jour du site (build GitHub Pages)
      ========================================================= -->
 
 <footer class="mt-4 py-3 border-top">
@@ -13,13 +13,21 @@
 
     {%- comment -%}
       Footer en ligne :
-      - Séparateur typographique simple
-      - Lisible, discret, sans CSS spécifique
+      - Mentions légales
+      - Copyright avec année automatique
+      - Date de dernière mise à jour
     {%- endcomment -%}
+
     <span>
       <a href="{{ site.baseurl }}/mentions.html">
         Mentions légales
       </a>
+    </span>
+
+    <span class="mx-2 text-muted">•</span>
+
+    <span>
+      © {{ site.time | date: "%Y" }} Laurie Boissay
     </span>
 
     <span class="mx-2 text-muted">•</span>
