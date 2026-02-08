@@ -1,0 +1,54 @@
+<!-- =========================================================
+     Filtre UI + JS : afficher uniquement les recettes testées
+     - Usage : pages de tags
+     - Dépendance : wrapper .recipe-item[data-tested]
+     ========================================================= -->
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="tested-filter">
+  <button
+    type="button"
+    class="btn btn-sm btn-outline-primary"
+    id="btn-only-tested"
+    aria-pressed="false"
+  >
+    Seulement les recettes testées
+  </button>
+
+ </div>
+
+<script>
+/* =========================================================
+   Filtre "Seulement recettes testées"
+   - Toggle simple
+   - Basé sur data-tested="true|false"
+   ========================================================= */
+(function () {
+  const btn = document.getElementById("btn-only-tested");
+  const items = document.querySelectorAll(".recipe-item[data-tested]");
+
+  if (!btn || items.length === 0) return;
+
+  function applyFilter(onlyTested) {
+    items.forEach((el) => {
+      const isTested = el.getAttribute("data-tested") === "true";
+      el.style.display = (onlyTested && !isTested) ? "none" : "";
+    });
+
+    btn.setAttribute("aria-pressed", String(onlyTested));
+    btn.classList.toggle("btn-primary", onlyTested);
+    btn.classList.toggle("btn-outline-primary", !onlyTested);
+    btn.textContent = onlyTested
+      ? "Voir toutes les recettes"
+      : "Seulement les recettes testées";
+  }
+
+  let onlyTested = false;
+  applyFilter(onlyTested);
+
+  btn.addEventListener("click", () => {
+    onlyTested = !onlyTested;
+    applyFilter(onlyTested);
+  });
+})();
+</script>
+

@@ -14,82 +14,86 @@
       <div class="recipes-grid">
         <!-- Boucle sur chaque recette dans le groupe -->
         {% for r in group_recipes %}
-          <article
-            class="recipe-card mb-2"
-            data-tags="{{ r.tags | join: ',' | escape }}"
-            data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
+
+          <div
+            class="recipe-item"
+            data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
           >
-            <a
-              class="recipe-card-link"
-              href="{{ r.url | relative_url }}"
-              data-tested="{{ r.recipe_tested }}"
-              data-title="{{ r.recipe_title | escape }}"
+
+            <article
+              class="recipe-card mb-2"
+              data-tags="{{ r.tags | join: ',' | escape }}"
+              data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
             >
-              <div class="recipe-card-top">
-                <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
-                
-                <!-- Affiche le sous-titre de la recette si présent -->
-                {% if r.recipe_subtitle %}
-                  <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
-                {% endif %}
+              <a
+                class="recipe-card-link"
+                href="{{ r.url | relative_url }}"
+                data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
+                data-title="{{ r.recipe_title | escape }}"
+              >
+                <div class="recipe-card-top">
+                  <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
 
-                <!-- Affiche un badge "Recette non testée" si la recette n'a pas encore été testée -->
-                {% if r.recipe_tested == false %}
-                  <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
-                {% endif %}
-              </div>
+                  {% if r.recipe_subtitle %}
+                    <h5 class="recipe-card-subtitle">{{ r.recipe_subtitle }}</h5>
+                  {% endif %}
 
-              <div class="recipe-badges-wrap">
-                {% if r.tags %}
-                  <ul class="recipe-badges-line badges-tags" aria-label="Badges">
-                    <!-- Boucle sur les tags de la recette et les affiche s'ils ne sont pas dans 'hidden_tags' -->
-                    {% for tag in r.tags %}
-                      {% unless include.hidden_tags contains tag %}
-                        {% case tag %}
-                          {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
-                          {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
-                          {% when "rapide" %}<li title="Rapide">⏱️</li>
-                          {% when "congelable" %}<li title="Congélable">❄️</li>
-                          {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
-                          {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
-                          {% when "calorique" %}<li title="Calorique">🔥</li>
-                          {% when "longue" %}<li title="Préparation longue">🐌</li>
-                          {% when "gout-sucre" %}<li title="Goût sucré">🍬</li>
+                  {% if r.recipe_tested == false %}
+                    <span class="badge bg-warning text-dark ms-2">Recette non testée</span>
+                  {% endif %}
+                </div>
+
+                <div class="recipe-badges-wrap">
+                  {% if r.tags %}
+                    <ul class="recipe-badges-line badges-tags" aria-label="Badges">
+                      {% for tag in r.tags %}
+                        {% unless include.hidden_tags contains tag %}
+                          {% case tag %}
+                            {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
+                            {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
+                            {% when "rapide" %}<li title="Rapide">⏱️</li>
+                            {% when "congelable" %}<li title="Congélable">❄️</li>
+                            {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
+                            {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
+                            {% when "calorique" %}<li title="Calorique">🔥</li>
+                            {% when "longue" %}<li title="Préparation longue">🐌</li>
+                            {% when "gout-sucre" %}<li title="Goût sucré">🍬</li>
+                          {% endcase %}
+                        {% endunless %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+
+                  {% assign micros = r.badges_nutritionnels | default: "" %}
+                  {% if micros and micros.size > 0 %}
+                    <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
+                      {% for m in micros %}
+                        {% case m %}
+                          {% when "omega-3" %}<li title="Oméga-3">🐟</li>
+                          {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
+                          {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
+                          {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
+                          {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
+                          {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
+                          {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
+                          {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
+                          {% when "calcium" %}<li title="Calcium">🦴</li>
+                          {% when "fer" %}<li title="Fer">🧲</li>
+                          {% when "magnesium" %}<li title="Magnésium">⚡</li>
+                          {% when "potassium" %}<li title="Potassium">🍌</li>
+                          {% when "zinc" %}<li title="Zinc">🔩</li>
+                          {% when "selenium" %}<li title="Sélénium">🧪</li>
+                          {% when "iode" %}<li title="Iode">🌊</li>
                         {% endcase %}
-                      {% endunless %}
-                    {% endfor %}
-                  </ul>
-                {% endif %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
 
-                <!-- Ligne 2 : affichage des badges de micronutriments (s'ils sont présents) -->
-                {% assign micros = r.badges_nutritionnels | default: "" %}
-                {% if micros and micros.size > 0 %}
-                  <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                    {% for m in micros %}
-                      {% case m %}
-                        {% when "omega-3" %}<li title="Oméga-3">🐟</li>
-                        {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
-                        {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
-                        {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
-                        {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
-                        {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
-                        {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
-                        {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
-                        {% when "calcium" %}<li title="Calcium">🦴</li>
-                        {% when "fer" %}<li title="Fer">🧲</li>
-                        {% when "magnesium" %}<li title="Magnésium">⚡</li>
-                        {% when "potassium" %}<li title="Potassium">🍌</li>
-                        {% when "zinc" %}<li title="Zinc">🔩</li>
-                        {% when "selenium" %}<li title="Sélénium">🧪</li>
-                        {% when "iode" %}<li title="Iode">🌊</li>
-                      {% endcase %}
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
+              </a>
+            </article>
 
-            </a>
-          </article>
+          </div>
         {% endfor %}
       </div>
 

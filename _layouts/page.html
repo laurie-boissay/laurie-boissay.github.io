@@ -34,16 +34,6 @@
     <div class="site-container">
       <div class="content-surface">
 
-        {%- comment -%}
-          IMPORTANT
-          ---------
-          Avant : on construisait un "page_title" vide auquel on ajoutait " : <filter_id>"
-          puis on affichait un second <h1>. Résultat : ": selenium", ": tres-proteine", etc.
-
-          Maintenant : on ne fabrique PLUS ce titre technique et on n'affiche plus de 2e <h1>.
-          Le titre affiché reste celui du header global (page.page_h1 / page.title).
-        {%- endcomment -%}
-
         {{ content }}
       </div>
     </div>
