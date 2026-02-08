@@ -14,7 +14,6 @@
 {%- endcomment -%}
 <meta name="description" content="{% if page.meta_description %}{{ page.meta_description | strip_html | strip_newlines | escape }}{% elsif page.description %}{{ page.description | strip_html | strip_newlines | escape }}{% else %}Site personnel de Laurie Boissay : recettes low carb, projets et parcours. Contenu structuré et mis à jour.{% endif %}">
 
-
 <title>{{ page.title }}</title>
 
 <!-- Bootstrap CSS -->
@@ -37,6 +36,19 @@
   type="image/png"
   href="{{ '/images/bunny1.png' | relative_url }}"
 >
+
+{%- comment -%}
+  =========================================================
+  Badges map (JS global)
+  ---------------------------------------------------------
+  - Centralise les mappings :
+      * tags fonctionnels
+      * micronutriments
+  - Utilisé par random-pick.html (et potentiellement d’autres scripts)
+  - DOIT être chargé AVANT tout script inline qui l’exploite
+  =========================================================
+{%- endcomment -%}
+<script src="{{ '/assets/js/badges-map.js' | relative_url }}"></script>
 
 <!-- Head spécifique à certaines pages (JSON-LD recettes, etc.) -->
 {{ page.extra_head }}

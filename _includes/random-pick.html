@@ -25,6 +25,10 @@
   - Les 2 lignes de liens fixes (navigation badges) ne sont PLUS écrites en dur ici.
   - Elles sont rendues via _includes/nav-badges.html (source unique),
     ce qui évite les doublons avec index.html / tag-index.html.
+
+  IMPORTANT (factorisation JS) :
+  - Les mappings TAG_BADGES / MICRO_BADGES ne sont PLUS définis ici.
+  - Ils viennent de assets/js/badges-map.js chargé dans le <head>.
   =========================================================
 {%- endcomment -%}
 
@@ -110,38 +114,14 @@
       "barres nutritionnelles"
     ];
 
-    // Mapping tag -> { emoji, title }
-    const TAG_BADGES = {
-      "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
-      "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
-      "rapide":          { emoji: "⏱️", title: "Rapide" },
-      "congelable":      { emoji: "❄️", title: "Congélable" },
-      "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
-      "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
-      "calorique":       { emoji: "🔥", title: "Calorique" },
-      "longue":          { emoji: "🐌", title: "Préparation longue" }
-    };
-
-    // Mapping micronutriment -> { emoji, title }
-    const MICRO_BADGES = {
-      "omega-3":      { emoji: "🐟", title: "Oméga-3" },
-
-      "vitamine-a":   { emoji: "👁️", title: "Vitamine A" },
-      "vitamine-c":   { emoji: "🍋", title: "Vitamine C" },
-      "vitamine-d":   { emoji: "🌤️", title: "Vitamine D" },
-      "vitamine-e":   { emoji: "🛡️", title: "Vitamine E" },
-      "vitamine-k":   { emoji: "🩸", title: "Vitamine K" },
-      "vitamine-b9":  { emoji: "🌱", title: "Vitamine B9" },
-      "vitamine-b12": { emoji: "🥩", title: "Vitamine B12" },
-
-      "calcium":      { emoji: "🦴", title: "Calcium" },
-      "fer":          { emoji: "🧲", title: "Fer" },
-      "magnesium":    { emoji: "⚡", title: "Magnésium" },
-      "potassium":    { emoji: "🍌", title: "Potassium" },
-      "zinc":         { emoji: "🔩", title: "Zinc" },
-      "selenium":     { emoji: "🧪", title: "Sélénium" },
-      "iode":         { emoji: "🌊", title: "Iode" }
-    };
+    // =========================================================
+    // MAPPINGS BADGES (centralisés)
+    // - Définis dans assets/js/badges-map.js (chargé dans le <head>)
+    // - Fallback safe si le fichier n'est pas chargé / erreur 404
+    // =========================================================
+    const BADGES_MAP = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
+    const TAG_BADGES = BADGES_MAP.TAG_BADGES || {};
+    const MICRO_BADGES = BADGES_MAP.MICRO_BADGES || {};
 
     // Pour éviter de retomber sur la même recette trop souvent
     let lastHref = null;
