@@ -3,6 +3,9 @@ layout: page
 ---
 
 {%- comment -%}
+  tag-index.html
+  =============
+
   Page “index filtré” (tags fonctionnels / micronutriments)
 
   Objectif (UX) :
@@ -14,7 +17,7 @@ layout: page
 
   Notes techniques :
   - Le JS du random pick lit document.body.dataset.filterType / filterId.
-  - Ici, on renseigne ces attributs le plus tôt possible (sans attendre DOMContentLoaded),
+  - On renseigne ces attributs le plus tôt possible (sans attendre DOMContentLoaded),
     pour éviter tout effet d’ordre d’exécution si d’autres scripts changent.
 
   Ajout : filtre “Seulement les recettes testées”
@@ -27,7 +30,6 @@ layout: page
   - Le JS filtre des éléments HTML qui doivent exister dans le DOM.
   - Il faut donc que _includes/recipes-index.html enveloppe chaque carte recette avec :
       <div class="recipe-item" data-tested="true|false"> ... </div>
-    Sinon, le bouton s’affiche mais ne peut rien masquer.
 {%- endcomment -%}
 
 <section class="site-container" id="tag-index">
@@ -52,65 +54,42 @@ layout: page
 
   {%- comment -%}
     Barre de navigation par badges (2 lignes cliquables)
-    - Tags fonctionnels
-    - Micronutriments
+    - Factorisée dans un include pour éviter la duplication.
   {%- endcomment -%}
-  <div class="nav-badges">
-
-    <!-- Tags fonctionnels -->
-    <ul class="recipe-badges-line" aria-label="Tags fonctionnels">
-      <li><a class="badge-link" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
-      <li><a class="badge-link" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
-      <li><a class="badge-link" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
-      <li><a class="badge-link" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
-      <li><a class="badge-link" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
-      <li><a class="badge-link" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
-      <li><a class="badge-link" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
-    </ul>
-
-    <!-- Micronutriments -->
-    <ul class="recipe-badges-line" aria-label="Micronutriments">
-      <li><a class="badge-link" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
-
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
-
-      <li><a class="badge-link" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
-      <li><a class="badge-link" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
-    </ul>
-  </div>
+  {% include nav-badges.html %}
 
   {%- comment -%}
     ✅ UX demandé :
     - Compteur + bouton JUSTE SOUS les 2 lignes de tags
-    - On calcule filtered + tested_count ici (avant les blocs descriptifs),
+    - On calcule filtered + tested_count ici,
       puis on affiche compteur + include du filtre.
   {%- endcomment -%}
 
-  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
+  {%- comment -%}
+    Tags techniques masqués dans l’affichage des badges sur les cartes.
+    (Ces tags restent utilisables ailleurs, mais ne doivent pas polluer l’UI des cartes.)
+  {%- endcomment -%}
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+
+  {%- comment -%}
+    Construction de la liste filtrée :
+    - Si page.filter_type == "tag"  : r.tags contient page.filter_id
+    - Si page.filter_type == "micro": r.badges_nutritionnels contient page.filter_id
+  {%- endcomment -%}
+  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
 
   {%- assign filtered = "" | split: "" -%}
   {%- for r in recipes -%}
-    {%- if page.filter_type == "tag" and r.tags contains page.filter_id -%}
+    {%- if page.filter_type == "tag" and page.filter_id and r.tags contains page.filter_id -%}
       {%- assign filtered = filtered | push: r -%}
-    {%- elsif page.filter_type == "micro" and r.badges_nutritionnels contains page.filter_id -%}
+    {%- elsif page.filter_type == "micro" and page.filter_id and r.badges_nutritionnels contains page.filter_id -%}
       {%- assign filtered = filtered | push: r -%}
     {%- endif -%}
   {%- endfor -%}
 
+  {%- comment -%}
+    Compte recettes testées (recipe_tested: true) dans la liste filtrée.
+  {%- endcomment -%}
   {%- assign tested_count = 0 -%}
   {%- for r in filtered -%}
     {%- if r.recipe_tested == true -%}
@@ -123,6 +102,11 @@ layout: page
     <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
   </p>
 
+  {%- comment -%}
+    Filtre “Seulement les recettes testées”
+    - On ne l’affiche que si au moins 1 recette est non testée.
+    - Dépend de `.recipe-item[data-tested]` rendu par _includes/recipes-index.html
+  {%- endcomment -%}
   {%- if filtered.size > tested_count -%}
     {% include filter-tested.html %}
   {%- endif -%}
@@ -174,13 +158,14 @@ layout: page
 
   {%- comment -%}
     ===== Rendu des recettes filtrées =====
-    - On regroupe puis on passe à _includes/recipes-index.html
+    - On regroupe par recipe_group, on nettoie les groupes sans nom,
+      puis on rend via l’include factorisé _includes/recipes-index.html
   {%- endcomment -%}
 
   {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
 
   {%- comment -%}
-    Nettoyage : on exclut les groupes sans nom (nil / vide) sans where_exp
+    Nettoyage : on exclut les groupes sans nom (nil / vide) sans where_exp.
   {%- endcomment -%}
   {%- assign grouped = "" | split: "" -%}
   {%- for g in grouped_raw -%}
@@ -190,7 +175,7 @@ layout: page
   {%- endfor -%}
 
   {%- comment -%}
-    ✅ Rendu via l’include existant
+    ✅ Rendu via l’include commun (évite la duplication du HTML des cartes)
   {%- endcomment -%}
   {%- include recipes-index.html grouped=grouped hidden_tags=hidden_tags -%}
 

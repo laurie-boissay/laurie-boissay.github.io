@@ -10,16 +10,33 @@ body_id: "home"
 <section id="index">
   <h2>Index des recettes</h2>
 
-  {% include random-pick.html %}
+  {%- comment -%}
+    Tirage aléatoire (toutes recettes)
+    - hide_links=true : on masque les liens fixes internes du random pick
+      car la barre nav-badges est affichée juste en dessous.
+  {%- endcomment -%}
+  {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
-    Récupération de toutes les recettes
+    Navigation par badges (tags fonctionnels + micronutriments)
+    - Source unique des 2 lignes cliquables
   {%- endcomment -%}
-  {% assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" %}
+  {% include nav-badges.html %}
+
+  {%- comment -%}
+    Récupération de toutes les recettes :
+    - Pages avec layout: recipe
+    - recipe_group obligatoire
+  {%- endcomment -%}
+  {%- assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" -%}
+
+  {%- comment -%}
+    Tags techniques masqués dans l’UI des cartes
+  {%- endcomment -%}
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
   {%- comment -%}
-    Compte recettes testées (recipe_tested: true)
+    Comptage des recettes testées
   {%- endcomment -%}
   {%- assign tested_count = 0 -%}
   {%- for r in all_recipes -%}
@@ -35,115 +52,20 @@ body_id: "home"
 
   {%- comment -%}
     Filtre “Seulement les recettes testées”
-    - Même include que tag-index.html
-    - Dépend de .recipe-item[data-tested]
+    - Dépend de `.recipe-item[data-tested]` rendu par _includes/recipes-index.html
   {%- endcomment -%}
   {%- if all_recipes.size > tested_count -%}
     {% include filter-tested.html %}
   {%- endif -%}
 
   {%- comment -%}
-    Regroupement par catégorie
+    Regroupement par catégorie (recipe_group)
   {%- endcomment -%}
-  {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
+  {%- assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" -%}
 
-  <div id="recipes-index">
-    {% for g in grouped %}
-      <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
-        <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
-      </h3>
-
-      <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
-        {% assign group_recipes = g.items | sort: "recipe_sort" %}
-
-        <div class="recipes-grid">
-          {% for r in group_recipes %}
-
-            <!-- =========================================================
-                 Wrapper requis pour filter-tested.html
-                 ========================================================= -->
-            <div
-              class="recipe-item"
-              data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
-            >
-
-              <article
-                class="recipe-card mb-2"
-                data-tags="{{ r.tags | join: ',' | escape }}"
-                data-micros="{{ r.badges_nutritionnels | join: ',' | escape }}"
-              >
-                <a
-                  class="recipe-card-link"
-                  href="{{ r.url | relative_url }}"
-                  data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
-                  data-title="{{ r.recipe_title | escape }}"
-                  data-subtitle="{{ r.recipe_subtitle | default: '' | strip_html | escape }}"
-                >
-                  <div class="recipe-card-top">
-                    <h4 class="recipe-card-title">{{ r.recipe_title }}</h4>
-                  </div>
-
-                  {% if r.recipe_subtitle %}
-                    <p class="recipe-card-subtitle mb-1">{{ r.recipe_subtitle }}</p>
-                  {% endif %}
-
-                  {% if r.recipe_tested == false %}
-                    <span class="badge bg-warning text-dark mb-2">Recette non testée</span>
-                  {% endif %}
-
-                  <div class="recipe-badges-wrap">
-                    {% if r.tags %}
-                      <ul class="recipe-badges-line badges-tags" aria-label="Badges">
-                        {% for tag in r.tags %}
-                          {% unless hidden_tags contains tag %}
-                            {% case tag %}
-                              {% when "tres-proteine" %}<li title="Très protéiné">💪</li>
-                              {% when "riche-en-fibres" %}<li title="Riche en fibres">💩</li>
-                              {% when "rapide" %}<li title="Rapide">⏱️</li>
-                              {% when "congelable" %}<li title="Congélable">❄️</li>
-                              {% when "micro-ondable" %}<li title="Micro-ondable">♨️</li>
-                              {% when "peu-calorique" %}<li title="Peu calorique">🪶</li>
-                              {% when "calorique" %}<li title="Calorique">🔥</li>
-                              {% when "longue" %}<li title="Préparation longue">🐌</li>
-                            {% endcase %}
-                          {% endunless %}
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-
-                    {% assign micros = r.badges_nutritionnels | default: "" %}
-                    {% if micros and micros.size > 0 %}
-                      <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
-                        {% for m in micros %}
-                          {% case m %}
-                            {% when "omega-3" %}<li title="Oméga-3">🐟</li>
-                            {% when "vitamine-a" %}<li title="Vitamine A">👁️</li>
-                            {% when "vitamine-c" %}<li title="Vitamine C">🍋</li>
-                            {% when "vitamine-d" %}<li title="Vitamine D">🌤️</li>
-                            {% when "vitamine-e" %}<li title="Vitamine E">🛡️</li>
-                            {% when "vitamine-k" %}<li title="Vitamine K">🩸</li>
-                            {% when "vitamine-b9" %}<li title="Vitamine B9">🌱</li>
-                            {% when "vitamine-b12" %}<li title="Vitamine B12">🥩</li>
-                            {% when "calcium" %}<li title="Calcium">🦴</li>
-                            {% when "fer" %}<li title="Fer">🧲</li>
-                            {% when "magnesium" %}<li title="Magnésium">⚡</li>
-                            {% when "potassium" %}<li title="Potassium">🍌</li>
-                            {% when "zinc" %}<li title="Zinc">🔩</li>
-                            {% when "selenium" %}<li title="Sélénium">🧪</li>
-                            {% when "iode" %}<li title="Iode">🌊</li>
-                          {% endcase %}
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-                  </div>
-                </a>
-              </article>
-
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+  {%- comment -%}
+    Rendu des cartes via include factorisé
+  {%- endcomment -%}
+  {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
 </section>
 

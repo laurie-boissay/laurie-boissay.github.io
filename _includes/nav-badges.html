@@ -1,0 +1,62 @@
+{%- comment -%}
+  =========================================================
+  INCLUDE : NAV BADGES (tags + micronutriments)
+  Fichier : _includes/nav-badges.html
+
+  Rôle :
+  - Affiche 2 lignes de badges cliquables :
+      1) Tags fonctionnels
+      2) Micronutriments
+
+  Paramètres optionnels (include.*) :
+  - include.link_class  : classe CSS appliquée aux <a> (défaut : "badge-link")
+  - include.wrapper_class : classe(s) ajoutée(s) au wrapper <div> (défaut : "")
+    Exemple : wrapper_class="random-pick-links mt-2"
+
+  Notes :
+  - Ce fichier est la SOURCE UNIQUE des liens badges.
+  - Il est réutilisé par random-pick.html et par les pages (index/tag-index).
+  =========================================================
+{%- endcomment -%}
+
+{%- assign link_class = include.link_class | default: "badge-link" -%}
+{%- assign wrapper_class = include.wrapper_class | default: "" -%}
+
+<div class="nav-badges{% if wrapper_class != "" %} {{ wrapper_class }}{% endif %}">
+
+  <!-- Tags fonctionnels -->
+  <ul class="recipe-badges-line" aria-label="Tags fonctionnels">
+    <li><a class="{{ link_class }}" href="{{ '/tags/tres-proteine/' | relative_url }}" title="Très protéiné">💪</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/riche-en-fibres/' | relative_url }}" title="Riche en fibres">💩</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/rapide/' | relative_url }}" title="Rapide">⏱️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/congelable/' | relative_url }}" title="Congélable">❄️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/micro-ondable/' | relative_url }}" title="Micro-ondable">♨️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+  </ul>
+
+  <!-- Micronutriments -->
+  <ul class="recipe-badges-line" aria-label="Micronutriments">
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+    <li><a class="{{ link_class }}" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+  </ul>
+
+</div>
+
