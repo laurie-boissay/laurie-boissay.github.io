@@ -10,13 +10,16 @@
 
   Options (include.*) :
   - include.hide_links : si true, masque les 2 lignes de liens fixes (tags + micros)
-    (utile sur les pages badges qui ont déjà une navigation par badges)
 
   Mode "page filtrée" (auto) :
   - Si document.body.dataset.filterType = "tag"|"micro"
     ET document.body.dataset.filterId = "<id>"
     alors le random pick ne tire que dans les cartes qui matchent ce filtre.
-    (utile pour les pages /tags/* et /micronutriments/*)
+
+  Ajout :
+  - Si document.body.dataset.onlyTested == "true"
+    alors le random pick ne tire QUE dans les recettes testées.
+    (Synchronisé par _includes/filter-tested.html)
   =========================================================
 {%- endcomment -%}
 
@@ -47,8 +50,6 @@
         <li><a class="badge-link-outside" href="{{ '/tags/peu-calorique/' | relative_url }}" title="Peu calorique">🪶</a></li>
         <li><a class="badge-link-outside" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
         <li><a class="badge-link-outside" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
-
-        <!-- Tag caché dans les badges des cartes, mais OK en navigation -->
         <li><a class="badge-link-outside" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
       </ul>
 
@@ -86,6 +87,8 @@
     - Affiche aussi les badges (tags + micronutriments) de la recette tirée
     - Mode page filtrée :
         body[data-filter-type="tag|micro"][data-filter-id="..."]
+    - Ajout : filtre global "testées seulement"
+        body[data-only-tested="true"]
       =========================================================
   */
 
@@ -106,6 +109,14 @@
     // ----------------------------
     const FILTER_TYPE = (document.body?.dataset?.filterType || "").toLowerCase().trim(); // "tag"|"micro"|"" 
     const FILTER_ID = (document.body?.dataset?.filterId || "").toLowerCase().trim();     // ex: "selenium"
+
+    // ----------------------------
+    // FILTRE GLOBAL "TESTÉES SEULEMENT"
+    // (piloté par _includes/filter-tested.html)
+    // ----------------------------
+    function isOnlyTestedActive() {
+      return (document.body?.dataset?.onlyTested || "").toLowerCase().trim() === "true";
+    }
 
     // Tag exclu du tirage
     const EXCLUDED_TAG = "gout-sucre";
@@ -181,9 +192,6 @@
       // On ignore les ancres
       if (href.startsWith("#")) return false;
 
-      // Si tu utilises des URLs propres (sans .html), laisse commenté.
-      // if (!href.endsWith(".html")) return false;
-
       const title = (a.dataset.title || a.textContent || "").trim();
       if (!title) return false;
 
@@ -224,6 +232,12 @@
       return true;
     }
 
+    // Filtre global : si "testées seulement" est actif, on ne garde que data-tested="true"
+    function matchesOnlyTested(a) {
+      if (!isOnlyTestedActive()) return true;
+      return (a.dataset.tested || "").toLowerCase().trim() === "true";
+    }
+
     // Liste des candidats au tirage
     function getCandidates() {
       return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
@@ -238,6 +252,9 @@
 
           // Filtre de page (tags/micros)
           if (!matchesPageFilter(card)) return false;
+
+          // Filtre global (testées seulement)
+          if (!matchesOnlyTested(a)) return false;
 
           return true;
         });
@@ -338,17 +355,12 @@
     }
 
     /*
-      ✅ IMPORTANT (ta demande) :
       - Si aucun candidat n’existe, on n’affiche RIEN.
-      - Donc : pas de message "Aucune recette disponible."
       - On vide juste la zone #random-pick et on sort.
     */
-
-    // Orchestration : récupère candidats -> tire -> rend
     function pickAndRender() {
       const links = getCandidates();
 
-      // Aucun candidat => rien à afficher (silencieux)
       if (!links.length) {
         pickHost.innerHTML = "";
         return;
@@ -356,7 +368,6 @@
 
       const a = pickRandom(links);
 
-      // Sécurité : si le tirage échoue, on n’affiche rien non plus
       if (!a) {
         pickHost.innerHTML = "";
         return;
@@ -367,5 +378,11 @@
 
     // Lancement initial
     pickAndRender();
+
+    // Réagit au changement du filtre "testées seulement"
+    document.addEventListener("testedFilterChanged", function () {
+      pickAndRender();
+    });
   });
 </script>
+

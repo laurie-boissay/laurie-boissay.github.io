@@ -1,8 +1,20 @@
 <!-- =========================================================
-     Filtre UI : afficher uniquement les recettes testées
-     Dépendance :
-     - chaque carte DOIT être enveloppée par :
-       <div class="recipe-item" data-tested="true|false">...</div>
+     INCLUDE : FILTER TESTED
+     Fichier : _includes/filter-tested.html
+
+     Rôle :
+     - Bouton toggle "Seulement les recettes testées"
+     - Masque/affiche les .recipe-item[data-tested]
+     - Expose l'état global via document.body.dataset.onlyTested
+     - Notifie les autres scripts via l'évènement "testedFilterChanged"
+
+     Dépendances :
+     - Chaque carte recette doit être enveloppée par :
+         <div class="recipe-item" data-tested="true|false"> ... </div>
+
+     IMPORTANT :
+     - L'include peut être placé AVANT la liste des recettes.
+       => On attend DOMContentLoaded pour que les .recipe-item existent.
      ========================================================= -->
 
 <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="tested-filter">
@@ -21,15 +33,30 @@
    Filtre "Seulement recettes testées"
    - Toggle simple
    - Basé sur data-tested="true|false"
+   - Expose l'état dans document.body.dataset.onlyTested
+   - Déclenche l'évènement "testedFilterChanged" à chaque changement
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("btn-only-tested");
+  if (!btn) return;
+
+  // Les items existent maintenant (liste des recettes déjà parsée).
   const items = document.querySelectorAll(".recipe-item[data-tested]");
 
-  // Sécurité : si le wrapping n’existe pas, on masque le bouton
-  if (!btn || items.length === 0) {
-    if (btn) btn.style.display = "none";
+  // Sécurité : si pas de wrapper, on masque le bouton.
+  if (items.length === 0) {
+    btn.style.display = "none";
     return;
+  }
+
+  function notifyChange(onlyTested) {
+    // État global lisible par d'autres scripts (ex: random-pick).
+    document.body.dataset.onlyTested = onlyTested ? "true" : "false";
+
+    // Notification (le random-pick peut se recalcule).
+    document.dispatchEvent(new CustomEvent("testedFilterChanged", {
+      detail: { onlyTested: onlyTested }
+    }));
   }
 
   function applyFilter(onlyTested) {
@@ -41,12 +68,14 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.setAttribute("aria-pressed", String(onlyTested));
     btn.classList.toggle("btn-primary", onlyTested);
     btn.classList.toggle("btn-outline-primary", !onlyTested);
-
     btn.textContent = onlyTested
       ? "Voir toutes les recettes"
       : "Voir seulement les recettes testées";
+
+    notifyChange(onlyTested);
   }
 
+  // État initial : tout afficher.
   let onlyTested = false;
   applyFilter(onlyTested);
 

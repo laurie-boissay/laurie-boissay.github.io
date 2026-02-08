@@ -93,6 +93,41 @@ layout: page
   </div>
 
   {%- comment -%}
+    ✅ UX demandé :
+    - Compteur + bouton JUSTE SOUS les 2 lignes de tags
+    - On calcule filtered + tested_count ici (avant les blocs descriptifs),
+      puis on affiche compteur + include du filtre.
+  {%- endcomment -%}
+
+  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+
+  {%- assign filtered = "" | split: "" -%}
+  {%- for r in recipes -%}
+    {%- if page.filter_type == "tag" and r.tags contains page.filter_id -%}
+      {%- assign filtered = filtered | push: r -%}
+    {%- elsif page.filter_type == "micro" and r.badges_nutritionnels contains page.filter_id -%}
+      {%- assign filtered = filtered | push: r -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign tested_count = 0 -%}
+  {%- for r in filtered -%}
+    {%- if r.recipe_tested == true -%}
+      {%- assign tested_count = tested_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  <p class="small text-muted mb-2">
+    <strong>{{ filtered.size }}</strong> recette(s).
+    <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
+  </p>
+
+  {%- if filtered.size > tested_count -%}
+    {% include filter-tested.html %}
+  {%- endif -%}
+
+  {%- comment -%}
     ===== Bloc descriptif TAG FONCTIONNEL =====
   {%- endcomment -%}
   {%- if page.filter_type == "tag" and page.filter_id -%}
@@ -138,48 +173,9 @@ layout: page
   {%- endif -%}
 
   {%- comment -%}
-    ===== Liste des recettes filtrées =====
-    - On reconstruit un "grouped" compatible avec _includes/recipes-index.html
-    - GitHub Pages (Jekyll 3.10) étant strict, on évite where_exp ici.
+    ===== Rendu des recettes filtrées =====
+    - On regroupe puis on passe à _includes/recipes-index.html
   {%- endcomment -%}
-
-  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
-  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
-
-  {%- assign filtered = "" | split: "" -%}
-  {%- for r in recipes -%}
-    {%- if page.filter_type == "tag" and r.tags contains page.filter_id -%}
-      {%- assign filtered = filtered | push: r -%}
-    {%- elsif page.filter_type == "micro" and r.badges_nutritionnels contains page.filter_id -%}
-      {%- assign filtered = filtered | push: r -%}
-    {%- endif -%}
-  {%- endfor -%}
-
-  {%- comment -%}
-    Compte recettes testées (recipe_tested: true)
-    - Utile pour afficher "Testées : X" + décider si le bouton est pertinent.
-  {%- endcomment -%}
-  {%- assign tested_count = 0 -%}
-  {%- for r in filtered -%}
-    {%- if r.recipe_tested == true -%}
-      {%- assign tested_count = tested_count | plus: 1 -%}
-    {%- endif -%}
-  {%- endfor -%}
-
-  <p class="small text-muted">
-    <strong>{{ filtered.size }}</strong> recette(s).
-    <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
-  </p>
-
-  {%- comment -%}
-    Filtre “Seulement les recettes testées”
-    - On garde la même condition d’affichage qu’avant.
-    - Contenu + JS déportés dans _includes/filter-tested.html
-    - Dépendance : .recipe-item[data-tested] produit par _includes/recipes-index.html
-  {%- endcomment -%}
-  {%- if filtered.size > tested_count -%}
-    {% include filter-tested.html %}
-  {%- endif -%}
 
   {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
 
