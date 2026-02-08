@@ -14,6 +14,7 @@
    - Listes : reset SCOPÉ (uniquement section + content-surface), pas global
    - Badges : suppression de redondances (#tag-index a.badge-link + overflow scrolling inutile)
    - Liens : garde-fou global réduit (évite d’écraser des composants Bootstrap)
+   - ✅ Suppression des “puces vertes” : suppression des puces custom en ::before
    ========================================================= */
 
 
@@ -225,6 +226,7 @@ a, a *{
 /* =========================================================
    LISTES (SCOPÉES)
    - On évite de casser des <ul> hors contenu (header, nav, etc.)
+   - ✅ Suppression des “puces vertes” partout : suppression de la puce custom ::before
    ========================================================= */
 
 .content-surface ul,
@@ -236,21 +238,15 @@ section ul{
 
 section ul li,
 .content-surface ul li{
-  position: relative;
-  padding-left: 26px;
+  position: static;     /* plus besoin de positionnement pour une puce */
+  padding-left: 0;      /* supprime le retrait prévu pour la puce */
   margin: 7px 0;
 }
 
+/* Supprime explicitement la puce custom (rond vert/turquoise) */
 section ul li::before,
 .content-surface ul li::before{
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: .72em;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  content: none;
 }
 
 
