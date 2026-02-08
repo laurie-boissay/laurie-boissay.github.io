@@ -1,7 +1,33 @@
-<footer class="mt-4">
-  {% unless page.body_id == "home" %}
-    <a class="btn btn-outline-primary" href="{{ site.baseurl }}/#index">
-      ← Retour à l’index
-    </a>
-  {% endunless %}
+<!-- =========================================================
+     _includes/footer.html
+     Footer global du site
+
+     Contenu :
+     - Mentions légales
+     - Date de dernière mise à jour du site
+     - Affichage sur une seule ligne
+     ========================================================= -->
+
+<footer class="mt-4 py-3 border-top">
+  <div class="container site-container text-center small">
+
+    {%- comment -%}
+      Footer en ligne :
+      - Séparateur typographique simple
+      - Lisible, discret, sans CSS spécifique
+    {%- endcomment -%}
+    <span>
+      <a href="{{ site.baseurl }}/mentions.html">
+        Mentions légales
+      </a>
+    </span>
+
+    <span class="mx-2 text-muted">•</span>
+
+    <span class="text-muted">
+      Dernière mise à jour :
+      {{ site.time | date: "%d/%m/%Y" }}
+    </span>
+
+  </div>
 </footer>

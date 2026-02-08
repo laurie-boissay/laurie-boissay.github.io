@@ -1,4 +1,10 @@
-<!-- _includes/navbar.html -->
+<!-- =========================================================
+     _includes/navbar.html
+     Navigation principale (Bootstrap)
+     Modifs demandées :
+     - Suppression du lien "Mentions légales" (déplacé dans le footer)
+     ========================================================= -->
+
 <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
   <div class="container-fluid site-container">
 
@@ -99,29 +105,37 @@
           - On garde un test simple sur l'URL courante.
         {%- endcomment -%}
         <li class="nav-item">
-          <a class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
-             href="{{ site.baseurl }}/reperes-low-carb.html">Repères low carb</a>
+          <a
+            class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
+            href="{{ site.baseurl }}/reperes-low-carb.html"
+          >Repères low carb</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if current contains 'sucres-caches' %}active{% endif %}"
-             href="{{ site.baseurl }}/sucres-caches.html">Sucres cachés</a>
+          <a
+            class="nav-link {% if current contains 'sucres-caches' %}active{% endif %}"
+            href="{{ site.baseurl }}/sucres-caches.html"
+          >Sucres cachés</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if current contains 'edulcorants' %}active{% endif %}"
-             href="{{ site.baseurl }}/edulcorants.html">Édulcorants</a>
+          <a
+            class="nav-link {% if current contains 'edulcorants' %}active{% endif %}"
+            href="{{ site.baseurl }}/edulcorants.html"
+          >Édulcorants</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if current contains 'apropos' %}active{% endif %}"
-             href="{{ site.baseurl }}/apropos.html">À propos</a>
+          <a
+            class="nav-link {% if current contains 'apropos' %}active{% endif %}"
+            href="{{ site.baseurl }}/apropos.html"
+          >À propos</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link {% if current contains 'mentions' %}active{% endif %}"
-             href="{{ site.baseurl }}/mentions.html">Mentions légales</a>
-        </li>
+        {%- comment -%}
+          "Mentions légales" supprimé ici :
+          - Le lien est désormais dans le footer.
+        {%- endcomment -%}
 
       </ul>
     </div>
