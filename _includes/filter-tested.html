@@ -1,7 +1,8 @@
 <!-- =========================================================
-     Filtre UI + JS : afficher uniquement les recettes testées
-     - Usage : pages de tags
-     - Dépendance : wrapper .recipe-item[data-tested]
+     Filtre UI : afficher uniquement les recettes testées
+     Dépendance :
+     - chaque carte DOIT être enveloppée par :
+       <div class="recipe-item" data-tested="true|false">...</div>
      ========================================================= -->
 
 <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="tested-filter">
@@ -11,10 +12,9 @@
     id="btn-only-tested"
     aria-pressed="false"
   >
-    Seulement les recettes testées
+    Voir seulement les recettes testées
   </button>
-
- </div>
+</div>
 
 <script>
 /* =========================================================
@@ -22,11 +22,15 @@
    - Toggle simple
    - Basé sur data-tested="true|false"
    ========================================================= */
-(function () {
+document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("btn-only-tested");
   const items = document.querySelectorAll(".recipe-item[data-tested]");
 
-  if (!btn || items.length === 0) return;
+  // Sécurité : si le wrapping n’existe pas, on masque le bouton
+  if (!btn || items.length === 0) {
+    if (btn) btn.style.display = "none";
+    return;
+  }
 
   function applyFilter(onlyTested) {
     items.forEach((el) => {
@@ -37,18 +41,19 @@
     btn.setAttribute("aria-pressed", String(onlyTested));
     btn.classList.toggle("btn-primary", onlyTested);
     btn.classList.toggle("btn-outline-primary", !onlyTested);
+
     btn.textContent = onlyTested
       ? "Voir toutes les recettes"
-      : "Seulement les recettes testées";
+      : "Voir seulement les recettes testées";
   }
 
   let onlyTested = false;
   applyFilter(onlyTested);
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", function () {
     onlyTested = !onlyTested;
     applyFilter(onlyTested);
   });
-})();
+});
 </script>
 

@@ -172,20 +172,13 @@ layout: page
   </p>
 
   {%- comment -%}
-    Bouton filtre “Seulement les recettes testées”
-    - On l’affiche uniquement si ça sert à quelque chose (au moins une non testée existe).
+    Filtre “Seulement les recettes testées”
+    - On garde la même condition d’affichage qu’avant.
+    - Contenu + JS déportés dans _includes/filter-tested.html
+    - Dépendance : .recipe-item[data-tested] produit par _includes/recipes-index.html
   {%- endcomment -%}
   {%- if filtered.size > tested_count -%}
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="tested-filter">
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-primary"
-        id="btn-only-tested"
-        aria-pressed="false"
-      >
-        Seulement les recettes testées
-      </button>
-    </div>
+    {% include filter-tested.html %}
   {%- endif -%}
 
   {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
@@ -201,56 +194,9 @@ layout: page
   {%- endfor -%}
 
   {%- comment -%}
-    ✅ Rendu via l’include existant (évite toute dépendance à un include inexistant)
+    ✅ Rendu via l’include existant
   {%- endcomment -%}
   {%- include recipes-index.html grouped=grouped hidden_tags=hidden_tags -%}
-
-  {%- comment -%}
-    JS : Toggle “Seulement recettes testées”
-    - Nécessite que recipes-index.html rende des wrappers :
-        <div class="recipe-item" data-tested="true|false"> ... </div>
-    - On ne charge le script que si le bouton existe (donc si c’est utile).
-  {%- endcomment -%}
-  {%- if filtered.size > tested_count -%}
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("btn-only-tested");
-
-        // On cible uniquement des éléments explicitement marqués (sécurisé).
-        const items = document.querySelectorAll(".recipe-item[data-tested]");
-
-        // Si recipes-index.html n’a pas encore été modifié pour produire ces wrappers,
-        // on évite de laisser un bouton “cassé” : on masque le bouton.
-        if (!btn || items.length === 0) {
-          if (btn) btn.style.display = "none";
-          return;
-        }
-
-        function applyFilter(onlyTested) {
-          items.forEach((el) => {
-            const isTested = el.getAttribute("data-tested") === "true";
-            el.style.display = (onlyTested && !isTested) ? "none" : "";
-          });
-
-          btn.setAttribute("aria-pressed", String(onlyTested));
-          btn.classList.toggle("btn-primary", onlyTested);
-          btn.classList.toggle("btn-outline-primary", !onlyTested);
-
-          btn.textContent = onlyTested
-            ? "Voir toutes les recettes"
-            : "Voir seulement les recettes testées";
-        }
-
-        let onlyTested = false;
-        applyFilter(onlyTested);
-
-        btn.addEventListener("click", function () {
-          onlyTested = !onlyTested;
-          applyFilter(onlyTested);
-        });
-      });
-    </script>
-  {%- endif -%}
 
 </section>
 
