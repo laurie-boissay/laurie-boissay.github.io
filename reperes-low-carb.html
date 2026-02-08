@@ -7,6 +7,15 @@ body_id: "reperes-low-carb"
 page_h1: "Repères low carb"
 page_h3: "Objectifs, principes et gestion du poids"
 ---
+<!-- =========================================================
+     Repères low carb — refonte de rendu (sans changer le fond)
+     Objectif :
+     - rendre la page scannable (lecture en diagonale)
+     - mettre en avant les messages clés
+     - isoler les détails techniques dans des blocs repliables
+     Contrainte :
+     - conserver toutes les informations existantes
+     ========================================================= -->
 
 <!-- INTRO -->
 <section class="marge" id="intro">
@@ -18,15 +27,58 @@ page_h3: "Objectifs, principes et gestion du poids"
       <strong>moins de glucides</strong> et <strong>beaucoup de protéines</strong>,
       et comment cela aide à gérer le poids durablement.
     </p>
+
+    <!-- Lecture rapide : points à retenir immédiatement -->
+    <div class="alert alert-info mb-0">
+      <div class="fw-bold mb-2">À retenir (lecture rapide)</div>
+      <ul class="mb-0">
+        <li><strong>Low carb</strong> : moins de pics glycémiques → moins de pics d’insuline → accès aux graisses facilité.</li>
+        <li><strong>Protéines</strong> : levier central (satiété, masse musculaire, digestion).</li>
+        <li><strong>Marche digestive</strong> : raccourcit la phase post-repas (glycémie/insuline) même en low carb.</li>
+        <li><strong>Fructose</strong> : peut freiner la perte de gras sans pic glycémique visible (effet foie).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- NAV / SOMMAIRE -->
+<section class="marge" id="sommaire">
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <div class="fw-bold mb-2">Accès direct</div>
+        <div class="row g-2">
+          <div class="col-12 col-md-6">
+            <ul class="mb-0">
+              <li><a href="#schema">Schéma (version simple)</a></li>
+              <li><a href="#insuline">Insuline</a></li>
+              <li><a href="#lipolyse">Lipolyse</a></li>
+              <li><a href="#fructose-glucose">Fructose vs glucose</a></li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-6">
+            <ul class="mb-0">
+              <li><a href="#lowcarb-proteines">Low carb + protéines</a></li>
+              <li><a href="#cholesterol">Cholestérol</a></li>
+              <li><a href="#gestion-poids">Poids, activité, marche digestive</a></li>
+              <li><a href="#ingredients">Ingrédients (psyllium / konjac / whey)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- SCHÉMA SIMPLE -->
 <section class="marge" id="schema">
-  <h2>Schéma simple : glycémie → insuline → lipolyse</h2>
+  <h2>Le mécanisme central (version simple) : glycémie → insuline → lipolyse</h2>
   <div class="container">
 
-    <p>Version volontairement simplifiée pour visualiser le mécanisme principal.</p>
+    <p class="mb-2">
+      Version volontairement simplifiée pour visualiser le mécanisme principal.
+      Si tu comprends ce bloc, tu comprends la logique générale du site.
+    </p>
 
     <div class="card">
       <div class="card-body">
@@ -61,34 +113,35 @@ page_h3: "Objectifs, principes et gestion du poids"
   </div>
 </section>
 
-<!-- INSULINE -->
-<section class="marge" id="insuline">
-  <h2>Insuline : ce qu’elle fait réellement</h2>
+<!-- INSULINE + LIPOLYSE (mise en parallèle) -->
+<section class="marge" id="insuline-lipolyse">
   <div class="container">
-    <ul>
-      <li>Permet au glucose d’entrer dans les cellules.</li>
-      <li>Organise le stockage de l’énergie récente.</li>
-      <li>Freine temporairement l’accès aux graisses stockées.</li>
-    </ul>
-    <p class="mb-0">
-      Plus les pics d’insuline sont fréquents et élevés,
-      moins l’organisme utilise ses réserves.
-    </p>
-  </div>
-</section>
+    <div class="row g-3">
+      <div class="col-12 col-lg-6" id="insuline">
+        <h2>Insuline : ce qu’elle fait réellement</h2>
+        <ul>
+          <li>Permet au glucose d’entrer dans les cellules.</li>
+          <li>Organise le stockage de l’énergie récente.</li>
+          <li>Freine temporairement l’accès aux graisses stockées.</li>
+        </ul>
+        <p class="mb-0">
+          Plus les pics d’insuline sont fréquents et élevés,
+          moins l’organisme utilise ses réserves.
+        </p>
+      </div>
 
-<!-- LIPOLYSE -->
-<section class="marge" id="lipolyse">
-  <h2>Lipolyse : utiliser ses graisses corporelles</h2>
-  <div class="container">
-    <p>
-      La lipolyse correspond à l’utilisation des graisses stockées pour produire de l’énergie.
-    </p>
-    <p class="mb-0">
-      Pour qu’elle fonctionne efficacement, l’insuline doit rester basse
-      suffisamment longtemps dans la journée.
-      C’est le cadre que cherche à créer le low carb modéré.
-    </p>
+      <div class="col-12 col-lg-6" id="lipolyse">
+        <h2>Lipolyse : utiliser ses graisses corporelles</h2>
+        <p>
+          La lipolyse correspond à l’utilisation des graisses stockées pour produire de l’énergie.
+        </p>
+        <p class="mb-0">
+          Pour qu’elle fonctionne efficacement, l’insuline doit rester basse
+          suffisamment longtemps dans la journée.
+          C’est le cadre que cherche à créer le low carb modéré.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -96,21 +149,39 @@ page_h3: "Objectifs, principes et gestion du poids"
 <section class="marge" id="fructose-glucose">
   <h2>Fructose et glucose : une différence métabolique clé</h2>
   <div class="container">
-    <p>
-      Le glucose et le fructose sont deux sucres simples, mais leur devenir dans l’organisme
-      est très différent. Le <strong>glucose</strong> est utilisé par de nombreux tissus
-      (muscles, cerveau) et stimule l’insuline, ce qui permet une régulation relativement
-      directe de son utilisation ou de son stockage.
-    </p>
-    <p class="mb-0">
-      Le <strong>fructose</strong>, lui, est métabolisé presque exclusivement par le
-      <strong>foie</strong> : il stimule peu l’insuline, n’est pas utilisé directement
-      comme énergie par les muscles et, en excès, favorise la transformation en graisses
-      (lipogenèse hépatique). Cette particularité explique pourquoi un apport élevé en
-      fructose peut freiner la perte de masse grasse <strong>sans provoquer de pic glycémique
-      visible</strong>. En low carb, il est donc pertinent de distinguer le fructose des
-      autres glucides afin d’éviter les faux amis perçus comme sains.
-    </p>
+
+    <!-- Résumé avant le détail (scannable) -->
+    <div class="alert alert-secondary">
+      <div class="fw-bold mb-1">Résumé</div>
+      <ul class="mb-0">
+        <li><strong>Glucose</strong> : utilisé par de nombreux tissus, stimule l’insuline.</li>
+        <li><strong>Fructose</strong> : métabolisé surtout par le <strong>foie</strong>, stimule peu l’insuline.</li>
+        <li>En excès : peut favoriser la transformation en graisses (lipogenèse hépatique).</li>
+      </ul>
+    </div>
+
+    <!-- Détail technique repliable : le contenu est conservé, mais visuellement allégé -->
+    <details>
+      <summary class="fw-bold">Voir l’explication détaillée</summary>
+      <div class="mt-3">
+        <p>
+          Le glucose et le fructose sont deux sucres simples, mais leur devenir dans l’organisme
+          est très différent. Le <strong>glucose</strong> est utilisé par de nombreux tissus
+          (muscles, cerveau) et stimule l’insuline, ce qui permet une régulation relativement
+          directe de son utilisation ou de son stockage.
+        </p>
+        <p class="mb-0">
+          Le <strong>fructose</strong>, lui, est métabolisé presque exclusivement par le
+          <strong>foie</strong> : il stimule peu l’insuline, n’est pas utilisé directement
+          comme énergie par les muscles et, en excès, favorise la transformation en graisses
+          (lipogenèse hépatique). Cette particularité explique pourquoi un apport élevé en
+          fructose peut freiner la perte de masse grasse <strong>sans provoquer de pic glycémique
+          visible</strong>. En low carb, il est donc pertinent de distinguer le fructose des
+          autres glucides afin d’éviter les faux amis perçus comme sains.
+        </p>
+      </div>
+    </details>
+
   </div>
 </section>
 
@@ -119,11 +190,14 @@ page_h3: "Objectifs, principes et gestion du poids"
   <h2>Low carb modéré et apport protéique élevé : le duo central</h2>
   <div class="container">
 
-    <p>
-      L’approche du site ne consiste pas à « manger très gras ».
-      Elle repose sur deux leviers simples et puissants :
-      <strong>réduire les glucides</strong> et <strong>augmenter fortement les protéines</strong>.
-    </p>
+    <div class="alert alert-info">
+      <div class="fw-bold mb-1">Position du site</div>
+      <p class="mb-0">
+        L’approche du site ne consiste pas à « manger très gras ».
+        Elle repose sur deux leviers simples et puissants :
+        <strong>réduire les glucides</strong> et <strong>augmenter fortement les protéines</strong>.
+      </p>
+    </div>
 
     <ul>
       <li>Moins de glucides → moins de pics d’insuline → lipolyse facilitée.</li>
@@ -147,15 +221,21 @@ page_h3: "Objectifs, principes et gestion du poids"
     <p>
       Le cholestérol est une molécule vitale fabriquée par le foie.
     </p>
-    <p>
-      Les profils défavorables sont souvent liés au mélange
-      <strong>glucides rapides + graisses</strong>.
-    </p>
-    <ul class="mb-0">
-      <li>Triglycérides souvent en baisse.</li>
-      <li>HDL souvent en hausse.</li>
-      <li>LDL à interpréter dans son contexte global.</li>
-    </ul>
+
+    <details>
+      <summary class="fw-bold">Voir les repères (profil lipidique)</summary>
+      <div class="mt-3">
+        <p>
+          Les profils défavorables sont souvent liés au mélange
+          <strong>glucides rapides + graisses</strong>.
+        </p>
+        <ul class="mb-0">
+          <li>Triglycérides souvent en baisse.</li>
+          <li>HDL souvent en hausse.</li>
+          <li>LDL à interpréter dans son contexte global.</li>
+        </ul>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -176,121 +256,146 @@ page_h3: "Objectifs, principes et gestion du poids"
   <h2>Gestion du poids, activité physique et calories</h2>
   <div class="container">
 
-    <h3>Calories : un repère, pas une obsession</h3>
-    <p>
-      Le low carb agit d’abord sur la satiété et la stabilité glycémique.
-      Les calories restent un <strong>outil de compréhension</strong>,
-      utile pour ajuster et interpréter une évolution du poids.
-    </p>
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="mb-2">Calories : un repère, pas une obsession</h3>
+            <p class="mb-0">
+              Le low carb agit d’abord sur la satiété et la stabilité glycémique.
+              Les calories restent un <strong>outil de compréhension</strong>,
+              utile pour ajuster et interpréter une évolution du poids.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="mb-2">Activité physique : un levier complémentaire</h3>
+
+            <p>
+              L’activité physique améliore fortement le <strong>contexte métabolique</strong>
+              dans lequel le low carb agit.
+            </p>
+
+            <ul class="mb-0">
+              <li>réduire plus rapidement la glycémie post-prandiale,</li>
+              <li>faire redescendre l’insuline plus vite après les repas,</li>
+              <li>faciliter l’accès aux graisses stockées.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-2">Marche digestive : simple, accessible, efficace</h4>
+
+            <p>
+              La marche digestive consiste à marcher tranquillement
+              <strong>10 à 20 minutes après un repas</strong>.
+              Ce n’est pas un sport, mais un outil métabolique.
+            </p>
+
+            <ul>
+              <li>Glycémie plus stable après les repas</li>
+              <li>Insuline plus basse plus rapidement</li>
+              <li>Lipolyse relancée plus tôt dans la journée</li>
+            </ul>
+
+            <p class="mb-0">
+              C’est une stratégie particulièrement adaptée au low carb,
+              car elle prolonge les périodes d’insuline basse
+              sans générer de fatigue.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <hr class="my-4"/>
 
-    <h3>Activité physique : un levier complémentaire</h3>
+    <details>
+      <summary class="fw-bold">Voir les repères chiffrés (besoins, déficit, OMS)</summary>
+      <div class="mt-3">
 
-    <p>
-      L’activité physique améliore fortement le <strong>contexte métabolique</strong>
-      dans lequel le low carb agit.
-    </p>
+        <h3>Besoins caloriques journaliers (ordres de grandeur)</h3>
 
-    <ul>
-      <li>réduire plus rapidement la glycémie post-prandiale,</li>
-      <li>faire redescendre l’insuline plus vite après les repas,</li>
-      <li>faciliter l’accès aux graisses stockées.</li>
-    </ul>
+        <h4>Femme adulte</h4>
+        <ul>
+          <li>Sédentaire : ~22–24 kcal / kg</li>
+          <li>Active : ~25–28 kcal / kg</li>
+          <li>Sportive : ~30–35 kcal / kg</li>
+        </ul>
 
-    <h4>Marche digestive : simple, accessible, efficace</h4>
+        <h4>Homme adulte</h4>
+        <ul>
+          <li>Sédentaire : ~24–26 kcal / kg</li>
+          <li>Actif : ~28–32 kcal / kg</li>
+          <li>Sportif : ~35–40 kcal / kg</li>
+        </ul>
 
-    <p>
-      La marche digestive consiste à marcher tranquillement
-      <strong>10 à 20 minutes après un repas</strong>.
-      Ce n’est pas un sport, mais un outil métabolique.
-    </p>
+        <p>
+          Ces valeurs donnent une estimation des besoins pour <strong>maintenir le poids</strong>.
+        </p>
 
-    <ul>
-      <li>Glycémie plus stable après les repas</li>
-      <li>Insuline plus basse plus rapidement</li>
-      <li>Lipolyse relancée plus tôt dans la journée</li>
-    </ul>
+        <h3>Quel déficit calorique viser pour rester en bonne santé ?</h3>
 
-    <p>
-      C’est une stratégie particulièrement adaptée au low carb,
-      car elle prolonge les périodes d’insuline basse
-      sans générer de fatigue.
-    </p>
+        <ul>
+          <li><strong>−200 à −300 kcal / jour</strong> : perte lente, très durable</li>
+          <li><strong>−10 à −20 % des besoins de maintien</strong></li>
+        </ul>
 
-    <hr class="my-4"/>
+        <hr class="my-4"/>
 
-    <h3>Besoins caloriques journaliers (ordres de grandeur)</h3>
+        <h3>Marche digestive : intérêt même en low carb</h3>
 
-    <h4>Femme adulte</h4>
-    <ul>
-      <li>Sédentaire : ~22–24 kcal / kg</li>
-      <li>Active : ~25–28 kcal / kg</li>
-      <li>Sportive : ~30–35 kcal / kg</li>
-    </ul>
+        <p>
+          Même en mangeant peu de glucides, un repas provoque une réponse insulinique.
+          Marcher permet de raccourcir cette phase.
+        </p>
 
-    <h4>Homme adulte</h4>
-    <ul>
-      <li>Sédentaire : ~24–26 kcal / kg</li>
-      <li>Actif : ~28–32 kcal / kg</li>
-      <li>Sportif : ~35–40 kcal / kg</li>
-    </ul>
+        <h4>Pourquoi ça fonctionne</h4>
+        <ul>
+          <li>La glycémie redescend plus vite.</li>
+          <li>L’insuline redescend plus vite.</li>
+          <li>La lipolyse peut reprendre plus tôt.</li>
+        </ul>
 
-    <p>
-      Ces valeurs donnent une estimation des besoins pour <strong>maintenir le poids</strong>.
-    </p>
+        <h4>Comment l’utiliser concrètement</h4>
+        <ul>
+          <li>10 à 20 minutes de marche après le repas.</li>
+          <li>Pas besoin d’intensité.</li>
+          <li>Rester debout ou bouger aide déjà.</li>
+        </ul>
 
-    <h3>Quel déficit calorique viser pour rester en bonne santé ?</h3>
+        <hr class="my-4"/>
 
-    <ul>
-      <li><strong>−200 à −300 kcal / jour</strong> : perte lente, très durable</li>
-      <li><strong>−10 à −20 % des besoins de maintien</strong></li>
-    </ul>
+        <h3>Activité physique : repères OMS</h3>
 
-    <hr class="my-4"/>
+        <ul>
+          <li>
+            <strong>150 à 300 minutes par semaine</strong> d’activité d’intensité modérée.
+          </li>
+          <li>
+            ou <strong>75 à 150 minutes par semaine</strong> d’activité plus intense.
+          </li>
+          <li>
+            <strong>Renforcement musculaire</strong> au moins 2 fois par semaine.
+          </li>
+        </ul>
 
-    <h3>Marche digestive : intérêt même en low carb</h3>
+        <p class="mb-0">
+          Une activité régulière, même modérée, améliore la sensibilité à l’insuline,
+          facilite l’utilisation des graisses et soutient la gestion du poids,
+          sans logique de performance.
+        </p>
 
-    <p>
-      Même en mangeant peu de glucides, un repas provoque une réponse insulinique.
-      Marcher permet de raccourcir cette phase.
-    </p>
-
-    <h4>Pourquoi ça fonctionne</h4>
-    <ul>
-      <li>La glycémie redescend plus vite.</li>
-      <li>L’insuline redescend plus vite.</li>
-      <li>La lipolyse peut reprendre plus tôt.</li>
-    </ul>
-
-    <h4>Comment l’utiliser concrètement</h4>
-    <ul>
-      <li>10 à 20 minutes de marche après le repas.</li>
-      <li>Pas besoin d’intensité.</li>
-      <li>Rester debout ou bouger aide déjà.</li>
-    </ul>
-
-    <hr class="my-4"/>
-
-    <h3>Activité physique : repères OMS</h3>
-
-    <ul>
-      <li>
-        <strong>150 à 300 minutes par semaine</strong> d’activité d’intensité modérée.
-      </li>
-      <li>
-        ou <strong>75 à 150 minutes par semaine</strong> d’activité plus intense.
-      </li>
-      <li>
-        <strong>Renforcement musculaire</strong> au moins 2 fois par semaine.
-      </li>
-    </ul>
-
-    <p class="mb-0">
-      Une activité régulière, même modérée, améliore la sensibilité à l’insuline,
-      facilite l’utilisation des graisses et soutient la gestion du poids,
-      sans logique de performance.
-    </p>
+      </div>
+    </details>
 
   </div>
 </section>
@@ -300,11 +405,13 @@ page_h3: "Objectifs, principes et gestion du poids"
   <h2>Ingrédients spécifiques : à quoi ils servent réellement</h2>
   <div class="container">
 
-    <p>
-      Les principes du low carb peuvent s’appliquer avec des aliments simples :
-      viande, poisson, œufs, légumes, produits laitiers.
-      <strong>Aucun ingrédient spécifique n’est indispensable</strong>.
-    </p>
+    <div class="alert alert-secondary">
+      <p class="mb-0">
+        Les principes du low carb peuvent s’appliquer avec des aliments simples :
+        viande, poisson, œufs, légumes, produits laitiers.
+        <strong>Aucun ingrédient spécifique n’est indispensable</strong>.
+      </p>
+    </div>
 
     <p>
       Certains ingrédients reviennent toutefois régulièrement dans les recettes du site.
@@ -320,93 +427,103 @@ page_h3: "Objectifs, principes et gestion du poids"
       un réel avantage par rapport aux alternatives classiques.
     </p>
 
-    <h3>Konjac (poudre) : un outil de structure, pas une base alimentaire</h3>
+    <!-- Détails repliables : on conserve le texte, mais on évite un mur d’un seul tenant -->
+    <details>
+      <summary class="fw-bold">Konjac (poudre) : un outil de structure, pas une base alimentaire</summary>
+      <div class="mt-3">
+        <p>
+          Le konjac est souvent réduit à son rôle d’épaississant,
+          mais il s’agit avant tout d’une <strong>fibre soluble</strong>
+          composée presque exclusivement de <strong>glucomannane</strong>.
+          Cette fibre n’est pas digérée par l’intestin grêle,
+          apporte très peu de calories et a un impact glycémique quasi nul.
+        </p>
 
-    <p>
-      Le konjac est souvent réduit à son rôle d’épaississant,
-      mais il s’agit avant tout d’une <strong>fibre soluble</strong>
-      composée presque exclusivement de <strong>glucomannane</strong>.
-      Cette fibre n’est pas digérée par l’intestin grêle,
-      apporte très peu de calories et a un impact glycémique quasi nul.
-    </p>
+        <p>
+          Le glucomannane se distingue par son
+          <strong>pouvoir de gonflement exceptionnel</strong> :
+          il peut absorber plusieurs dizaines de fois son poids en eau.
+          C’est cette propriété qui explique à la fois son
+          effet épaississant très marqué et son influence sur la satiété,
+          liée au volume occupé dans l’estomac.
+        </p>
 
-    <p>
-      Le glucomannane se distingue par son
-      <strong>pouvoir de gonflement exceptionnel</strong> :
-      il peut absorber plusieurs dizaines de fois son poids en eau.
-      C’est cette propriété qui explique à la fois son
-      effet épaississant très marqué et son influence sur la satiété,
-      liée au volume occupé dans l’estomac.
-    </p>
+        <p>
+          Contrairement au psyllium, dont l’effet est à la fois
+          mécanique et digestif, le konjac agit surtout sur la
+          <strong>structure et la stabilité</strong> des préparations.
+          Utilisé à très faible dose, il permet de stabiliser
+          sauces, crèmes ou pâtes low carb sans recours aux farines.
+        </p>
 
-    <p>
-      Contrairement au psyllium, dont l’effet est à la fois
-      mécanique et digestif, le konjac agit surtout sur la
-      <strong>structure et la stabilité</strong> des préparations.
-      Utilisé à très faible dose, il permet de stabiliser
-      sauces, crèmes ou pâtes low carb sans recours aux farines.
-    </p>
+        <p class="mb-0">
+          En revanche, un surdosage entraîne rapidement une texture
+          gélatineuse ou artificielle.
+          Sur ce site, le konjac est donc utilisé
+          <strong>avec parcimonie</strong>, comme un outil technique ponctuel,
+          et non comme une source principale de fibres.
+          On le trouve facilement en magasin bio ou en ligne,
+          sous forme de <strong>poudre pure</strong>.
+        </p>
+      </div>
+    </details>
 
-    <p class="mb-0">
-      En revanche, un surdosage entraîne rapidement une texture
-      gélatineuse ou artificielle.
-      Sur ce site, le konjac est donc utilisé
-      <strong>avec parcimonie</strong>, comme un outil technique ponctuel,
-      et non comme une source principale de fibres.
-      On le trouve facilement en magasin bio ou en ligne,
-      sous forme de <strong>poudre pure</strong>.
-    </p>
+    <details class="mt-3">
+      <summary class="fw-bold">Psyllium blond : tenue et satiété</summary>
+      <div class="mt-3">
+        <p>
+          Le psyllium blond est une <strong>fibre soluble</strong>
+          issue de l’enveloppe des graines de Plantago ovata.
+          Au contact de l’eau, il forme un gel qui améliore
+          la tenue des pâtes et des préparations.
+        </p>
 
-    <h3>Psyllium blond : tenue et satiété</h3>
+        <p>
+          Contrairement au konjac, le psyllium agit aussi
+          au niveau digestif :
+          il ralentit la vidange gastrique,
+          contribue à une <strong>satiété durable</strong>
+          et peut améliorer le confort intestinal chez certaines personnes.
+        </p>
 
-    <p>
-      Le psyllium blond est une <strong>fibre soluble</strong>
-      issue de l’enveloppe des graines de Plantago ovata.
-      Au contact de l’eau, il forme un gel qui améliore
-      la tenue des pâtes et des préparations.
-    </p>
+        <p class="mb-0">
+          Son principal défaut est le surdosage,
+          qui conduit à des textures compactes ou lourdes.
+          Il est donc utilisé à la dose minimale fonctionnelle.
+          Le psyllium blond se trouve facilement
+          en pharmacie, en magasin bio ou en ligne.
+        </p>
+      </div>
+    </details>
 
-    <p>
-      Contrairement au konjac, le psyllium agit aussi
-      au niveau digestif :
-      il ralentit la vidange gastrique,
-      contribue à une <strong>satiété durable</strong>
-      et peut améliorer le confort intestinal chez certaines personnes.
-    </p>
+    <details class="mt-3">
+      <summary class="fw-bold">Whey : une aide pratique pour l’objectif protéique</summary>
+      <div class="mt-3">
+        <p>
+          La whey est une <strong>protéine issue du lait</strong>,
+          rapidement assimilée et naturellement pauvre en glucides.
+          Elle n’est pas indispensable,
+          mais facilite l’atteinte d’un apport protéique élevé,
+          surtout lorsque l’appétit est limité.
+        </p>
 
-    <p class="mb-0">
-      Son principal défaut est le surdosage,
-      qui conduit à des textures compactes ou lourdes.
-      Il est donc utilisé à la dose minimale fonctionnelle.
-      Le psyllium blond se trouve facilement
-      en pharmacie, en magasin bio ou en ligne.
-    </p>
+        <p>
+          Elle est utilisée sur le site comme un
+          <strong>outil pratique</strong>,
+          jamais comme une base exclusive de l’alimentation.
+          Les recettes privilégient les aliments solides,
+          la whey venant en complément ponctuel.
+        </p>
 
-    <h3>Whey : une aide pratique pour l’objectif protéique</h3>
-
-    <p>
-      La whey est une <strong>protéine issue du lait</strong>,
-      rapidement assimilée et naturellement pauvre en glucides.
-      Elle n’est pas indispensable,
-      mais facilite l’atteinte d’un apport protéique élevé,
-      surtout lorsque l’appétit est limité.
-    </p>
-
-    <p>
-      Elle est utilisée sur le site comme un
-      <strong>outil pratique</strong>,
-      jamais comme une base exclusive de l’alimentation.
-      Les recettes privilégient les aliments solides,
-      la whey venant en complément ponctuel.
-    </p>
-
-    <p class="mb-0">
-      Le point de vigilance concerne la qualité :
-      certaines whey sont très sucrées ou fortement aromatisées.
-      Les recettes du site utilisent des whey
-      <strong>nature ou très peu aromatisées</strong>,
-      disponibles en magasins spécialisés ou en ligne.
-    </p>
+        <p class="mb-0">
+          Le point de vigilance concerne la qualité :
+          certaines whey sont très sucrées ou fortement aromatisées.
+          Les recettes du site utilisent des whey
+          <strong>nature ou très peu aromatisées</strong>,
+          disponibles en magasins spécialisés ou en ligne.
+        </p>
+      </div>
+    </details>
 
     <div class="table-responsive mt-4">
       <table class="table table-striped align-middle">
@@ -471,4 +588,3 @@ page_h3: "Objectifs, principes et gestion du poids"
 
   </div>
 </section>
-
