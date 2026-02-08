@@ -1,9 +1,43 @@
-{% if page.layout == "recipe" %}
-<header class="marge">
-  <h1><strong>{{ page.recipe_title }}</strong></h1>
+{%- comment -%}
+==============================================================================
+Bloc header recette — AFFICHAGE CONDITIONNEL
+==============================================================================
 
-  {% if page.recipe_subtitle %}
-    <h3><span class="bleu">{{ page.recipe_subtitle }}</span></h3>
-  {% endif %}
-</header>
+Rôle
+- Afficher l’en-tête spécifique d’une recette :
+  • titre principal (recipe_title)
+  • sous-titre optionnel (recipe_subtitle)
+
+Condition d’affichage
+- Le bloc n’est rendu QUE si la page utilise layout: recipe.
+  Cela évite toute pollution visuelle sur les autres layouts.
+
+Entrées (front-matter)
+- page.layout          : doit être égal à "recipe".
+- page.recipe_title    : titre principal affiché (obligatoire pour une recette).
+- page.recipe_subtitle : sous-titre optionnel (affichage conditionnel).
+
+Contraintes / conventions
+- Ce bloc rend un <h1>.
+  Il ne doit PAS coexister avec un autre composant générant un <h1>
+  (ex : header global ou include recipe-header.html),
+  afin de respecter :
+  • l’accessibilité
+  • la hiérarchie sémantique
+  • le SEO (un seul <h1> par page).
+
+- La mise en forme (marges, couleurs, typographie) est entièrement gérée
+  par le CSS global (.marge, .bleu, etc.).
+==============================================================================
+{%- endcomment -%}
+
+{% if page.layout == "recipe" %}
+  <header class="marge">
+    <h1><strong>{{ page.recipe_title }}</strong></h1>
+
+    {% if page.recipe_subtitle %}
+      <h3><span class="bleu">{{ page.recipe_subtitle }}</span></h3>
+    {% endif %}
+  </header>
 {% endif %}
+

@@ -1,9 +1,57 @@
+# ==============================================================================
+# Gemfile — Dépendances Ruby pour le site Jekyll
+# ==============================================================================
+#
+# Rôle
+# - Définir l’ensemble des gems nécessaires au build et au fonctionnement
+#   du site Jekyll (local + GitHub Pages).
+#
+# Contexte d’exécution
+# - Utilisé par Bundler (bundle install / bundle exec jekyll serve).
+# - Compatible avec l’environnement GitHub Pages (versions raisonnables,
+#   pas de dépendances exotiques).
+#
+# Contraintes
+# - Éviter les gems inutiles ou redondantes pour limiter les risques
+#   d’incompatibilité lors du build distant.
+# - Les versions sont volontairement peu strictes sauf nécessité.
+# ==============================================================================
+
 source 'https://rubygems.org'
 
+# ------------------------------------------------------------------------------
+# Moteur principal
+# ------------------------------------------------------------------------------
+# Jekyll :
+# - Générateur de site statique.
+# - Version ~> 4.0 : compatible GitHub Pages tout en restant moderne.
 gem 'jekyll', '~> 4.0'
+
+# ------------------------------------------------------------------------------
+# Plugins Jekyll
+# ------------------------------------------------------------------------------
+# jekyll-seo-tag :
+# - Génération automatique des balises SEO (meta, OpenGraph, Twitter Card).
+# - Utilisé via {% seo %} dans les layouts.
 gem 'jekyll-seo-tag'
+
+# jekyll-paginate :
+# - Pagination des listes de pages (index, archives, etc.).
+# - Pagination simple basée sur page X / Y (non compatible avec collections avancées).
 gem 'jekyll-paginate'
+
+# jekyll-relative-links :
+# - Conversion automatique des liens relatifs dans les pages Markdown/HTML.
+# - Utile pour la navigation locale et les dépôts GitHub.
 gem 'jekyll-relative-links'
+
+# jekyll-coffeescript :
+# - Support du CoffeeScript si présent dans le projet.
+# - Inclus par sécurité / compatibilité, même si peu utilisé.
 gem 'jekyll-coffeescript'
+
+# jekyll-commonmark-ghpages :
+# - Parser Markdown CommonMark identique à celui de GitHub Pages.
+# - Garantit un rendu cohérent entre build local et build distant.
 gem 'jekyll-commonmark-ghpages'
 

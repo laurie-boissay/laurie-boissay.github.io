@@ -1,66 +1,89 @@
 {%- comment -%}
-  _includes/recipes-index.html
-  ===========================
+==============================================================================
+_includes/recipes-index.html — Rendu centralisé des cartes recette
+==============================================================================
 
-  Objectif :
-  - Centraliser le rendu des cartes recette (évite la duplication entre index.html et tag-index.html).
+Rôle
+- Produire le markup unique des cartes recette pour toutes les pages d’index
+  (ex : index.html, tag-index.html), afin d’éviter toute divergence d’affichage.
 
-  Paramètres attendus :
-  - include.grouped     : résultat de `group_by: "recipe_group"` (tableau de groupes)
-  - include.hidden_tags : liste (array) des tags à masquer sur les cartes
+Entrées (paramètres d’include)
+- include.grouped (requis)
+  • Tableau issu de `group_by: "recipe_group"`.
+  • Chaque entrée contient : name (nom du groupe) + items (pages recettes).
+- include.hidden_tags (optionnel)
+  • Array de tags “techniques” à masquer dans l’affichage des badges.
 
-  Contraintes techniques :
-  - Le filtre “Seulement les recettes testées” (include filter-tested.html)
-    dépend de `.recipe-item[data-tested="true|false"]`.
-  - Le random pick / scripts peuvent lire les attributs data-* sur `.recipe-card-link`,
-    notamment `data-title` et `data-subtitle`.
+Sortie (markup / data-* exposés)
+- .recipe-item[data-tested="true|false"]
+  • Contrat requis par filter-tested.html (filtre “Seulement les recettes testées”).
+- a.recipe-card-link[data-title][data-subtitle][data-tested]
+  • Contrat exploité par random-pick et/ou scripts de navigation.
+- article.recipe-card[data-tags][data-micros]
+  • Métadonnées disponibles pour des filtres / recherches côté client.
+
+Contraintes
+- Stabilité :
+  • Tri des groupes par g.name (affichage déterministe).
+  • Tri des recettes par recipe_sort (ordre stable intra-groupe).
+- Tolérance aux données manquantes :
+  • group name vide => groupe ignoré (évite ancres / sections invalides).
+  • recipe_subtitle / badges_nutritionnels optionnels.
+- Accessibilité :
+  • Hiérarchie : H3 = titre de groupe, H4 = titre de carte.
+  • aria-label sur les listes de badges.
+
+Remarques
+- Le mapping tag/micronutriment → emoji + title est centralisé ici pour garantir
+  une cohérence UI entre toutes les pages.
+==============================================================================
 {%- endcomment -%}
 
 {%- comment -%}
-  Sécurise hidden_tags (évite les erreurs si l’appelant oublie de le passer).
+  hidden_tags est optionnel : on sécurise pour éviter une erreur Liquid si l’appelant
+  n’en fournit pas.
 {%- endcomment -%}
 {%- assign hidden_tags = include.hidden_tags | default: "" -%}
 
 {%- comment -%}
   Tri des groupes par nom :
-  - Rend l’affichage stable (même si l’appelant n’a pas trié).
+  - Garantit un rendu stable quel que soit l’ordre de construction en amont.
 {%- endcomment -%}
 {%- assign grouped_sorted = include.grouped | sort: "name" -%}
 
 <div id="recipes-index">
   {%- comment -%}
-    Boucle sur chaque groupe (recipe_group).
-    On ignore les groupes sans nom pour éviter des ancres vides.
+    Parcours des groupes (recipe_group).
+    Les groupes sans nom sont ignorés pour éviter :
+    - des titres vides
+    - des ancres (#) inutiles / non déterministes.
   {%- endcomment -%}
   {%- for g in grouped_sorted -%}
     {%- if g.name and g.name != "" -%}
 
       <h3 id="{{ g.name | slugify }}" class="recipe-category-title">
-        <!-- Titre du groupe cliquable (ancre locale) -->
         <a href="#{{ g.name | slugify }}">{{ g.name }}</a>
       </h3>
 
       <div class="recipe-group-block mb-4" data-recipe-group="{{ g.name | escape }}">
         {%- comment -%}
-          Tri des recettes dans le groupe :
-          - Utilise `recipe_sort` (clé fonctionnelle courte) pour un ordre stable.
+          Tri intra-groupe :
+          - recipe_sort est la clé fonctionnelle courte définie par convention éditoriale.
+          - Ce tri évite l’instabilité liée au titre (accents / variations).
         {%- endcomment -%}
         {%- assign group_recipes = g.items | sort: "recipe_sort" -%}
 
         <div class="recipes-grid">
           {%- comment -%}
-            Boucle sur chaque recette du groupe.
+            Rendu d’une carte par recette.
+            Le wrapper .recipe-item est le point d’ancrage du filtre "recettes testées".
           {%- endcomment -%}
           {%- for r in group_recipes -%}
 
-            <!-- =========================================================
-                 Wrapper requis pour filter-tested.html
-                 ========================================================= -->
             <div
               class="recipe-item"
               data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
             >
-
               <article
                 class="recipe-card mb-2"
                 data-tags="{{ r.tags | join: ',' | escape }}"
@@ -81,11 +104,21 @@
                     <p class="recipe-card-subtitle mb-1">{{ r.recipe_subtitle }}</p>
                   {%- endif -%}
 
+                  {%- comment -%}
+                    Indicateur “non testée” :
+                    - volontairement redondant avec le bandeau du layout recette,
+                      car il s’agit ici d’un repère de navigation sur les index.
+                  {%- endcomment -%}
                   {%- if r.recipe_tested == false -%}
                     <span class="badge bg-warning text-dark mb-2">Recette non testée</span>
                   {%- endif -%}
 
                   <div class="recipe-badges-wrap">
+                    {%- comment -%}
+                      Ligne 1 — badges tags :
+                      - Exclut les tags techniques listés dans hidden_tags.
+                      - N’affiche que les tags reconnus (mapping contrôlé).
+                    {%- endcomment -%}
                     {%- if r.tags -%}
                       <ul class="recipe-badges-line badges-tags" aria-label="Badges">
                         {%- for tag in r.tags -%}
@@ -105,6 +138,11 @@
                       </ul>
                     {%- endif -%}
 
+                    {%- comment -%}
+                      Ligne 2 — badges micronutriments :
+                      - Source : r.badges_nutritionnels (liste d’IDs).
+                      - Affichée uniquement si la liste est non vide.
+                    {%- endcomment -%}
                     {%- assign micros = r.badges_nutritionnels | default: "" -%}
                     {%- if micros and micros.size > 0 -%}
                       <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
@@ -124,7 +162,7 @@
                             {%- when "potassium" -%}<li title="Potassium">🍌</li>
                             {%- when "zinc" -%}<li title="Zinc">🔩</li>
                             {%- when "selenium" -%}<li title="Sélénium">🧪</li>
-                            {%- when "iode" -%}<li title="Iode">🌊</li>
+                            {%- when "iode" %}<li title="Iode">🌊</li>
                           {%- endcase -%}
                         {%- endfor -%}
                       </ul>

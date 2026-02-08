@@ -1,11 +1,32 @@
-{% comment %}
-  Bandeau "recette non testée" basé sur le champ recipe_tested (bool).
-  Remplace l’ancienne logique basée sur le tag non-teste (tag non autorisé).
-{% endcomment %}
+{%- comment -%}
+==============================================================================
+_includes/bandeau-non-teste.html — Avertissement “recette non testée”
+==============================================================================
 
-{% if page.recipe_tested == false %}
+Rôle
+- Afficher un bandeau d’avertissement lorsque la recette n’a pas encore été testée.
+
+Entrées
+- page.recipe_tested : booléen (true | false)
+  • false  => la recette est explicitement marquée “non testée” (bandeau affiché)
+  • true   => recette testée (bandeau masqué)
+  • absent => par défaut, aucun bandeau (évite d’alerter sans intention éditoriale)
+
+Contrat / conventions
+- Le statut “non testée” est piloté uniquement par recipe_tested dans le front-matter.
+- Aucun tag dédié (ex : non-teste) ne doit être utilisé : les tags restent réservés
+  aux tags officiels du site.
+- L’alerte utilise la classe Bootstrap alert-warning pour rester cohérente avec le design.
+
+Accessibilité
+- role="alert" informe les technologies d’assistance d’un message important.
+==============================================================================
+{%- endcomment -%}
+
+{%- if page.recipe_tested == false -%}
   <div class="alert alert-warning" role="alert">
     <strong>⚠ Recette non testée</strong><br>
     Cette recette n’a pas encore été cuisinée. Les proportions, textures ou temps peuvent nécessiter des ajustements.
   </div>
-{% endif %}
+{%- endif -%}
+

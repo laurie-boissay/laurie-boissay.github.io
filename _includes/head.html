@@ -1,22 +1,79 @@
 <meta charset="utf-8" />
 
-<!-- Viewport -->
+<!--
+==============================================================================
+_head.html — Métadonnées et ressources globales
+==============================================================================
+
+Rôle
+- Centraliser l’ensemble des balises <head> communes à toutes les pages du site.
+- Garantir une base SEO cohérente, un rendu responsive et un chargement
+  déterministe des ressources critiques (CSS / JS globaux).
+
+Contraintes générales
+- Aucune logique métier : uniquement configuration, métadonnées et dépendances.
+- Toute personnalisation spécifique à une page passe par le front-matter
+  (page.*) ou par page.extra_head.
+==============================================================================
+-->
+
+<!--
+Viewport
+- Active le rendu responsive.
+- width=device-width + initial-scale=1 : comportement standard attendu sur mobile.
+-->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<!-- SEO -->
+<!--
+SEO — Robots
+- Contrôlable page par page via page.robots.
+- Valeur par défaut : index, follow (site public).
+-->
 <meta name="robots" content="{{ page.robots | default: 'index, follow' }}">
 
 {%- comment -%}
-  Meta description :
-  - Priorité à page.meta_description si tu veux une description "SEO" dédiée
-  - Sinon page.description (tes recipes l’ont déjà)
-  - Sinon fallback global (évite description vide => snippets moisis)
-{%- endcomment -%}
-<meta name="description" content="{% if page.meta_description %}{{ page.meta_description | strip_html | strip_newlines | escape }}{% elsif page.description %}{{ page.description | strip_html | strip_newlines | escape }}{% else %}Site personnel de Laurie Boissay : recettes low carb, projets et parcours. Contenu structuré et mis à jour.{% endif %}">
+==============================================================================
+Meta description (SEO)
+==============================================================================
 
+Règle de priorité :
+1. page.meta_description
+   - Description SEO dédiée (contrôle fin du snippet).
+2. page.description
+   - Utilisée par défaut sur les pages recette.
+3. Fallback global
+   - Évite une meta description vide ou incohérente.
+
+Traitements appliqués :
+- strip_html       : supprime tout balisage résiduel.
+- strip_newlines   : garantit une description sur une seule ligne.
+- escape           : sécurise l’attribut HTML.
+==============================================================================
+{%- endcomment -%}
+<meta
+  name="description"
+  content="{% if page.meta_description %}
+    {{ page.meta_description | strip_html | strip_newlines | escape }}
+  {% elsif page.description %}
+    {{ page.description | strip_html | strip_newlines | escape }}
+  {% else %}
+    Site personnel de Laurie Boissay : recettes low carb, projets et parcours. Contenu structuré et mis à jour.
+  {% endif %}"
+>
+
+<!--
+Title
+- Piloté par page.title (obligatoire).
+- Les variantes (H1 visibles, SEO avancé) sont gérées ailleurs si nécessaire.
+-->
 <title>{{ page.title }}</title>
 
-<!-- Bootstrap CSS -->
+<!--
+Bootstrap CSS
+- Framework UI principal du site.
+- Chargé via CDN pour simplicité et fiabilité.
+- integrity + crossorigin : sécurité (SRI).
+-->
 <link
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
   rel="stylesheet"
@@ -24,13 +81,20 @@
   crossorigin="anonymous"
 >
 
-<!-- CSS principal du site (CHEMIN CORRECT PARTOUT) -->
+<!--
+CSS principal du site
+- style.css centralise TOUT le style custom.
+- relative_url garantit la compatibilité avec baseurl (GitHub Pages).
+-->
 <link
   rel="stylesheet"
   href="{{ '/style.css' | relative_url }}"
 >
 
-<!-- Favicon -->
+<!--
+Favicon
+- Icône du site affichée dans l’onglet navigateur.
+-->
 <link
   rel="icon"
   type="image/png"
@@ -38,18 +102,32 @@
 >
 
 {%- comment -%}
-  =========================================================
-  Badges map (JS global)
-  ---------------------------------------------------------
-  - Centralise les mappings :
-      * tags fonctionnels
-      * micronutriments
-  - Utilisé par random-pick.html (et potentiellement d’autres scripts)
-  - DOIT être chargé AVANT tout script inline qui l’exploite
-  =========================================================
+==============================================================================
+Badges map — Script global
+==============================================================================
+
+Rôle
+- Centraliser les mappings JS :
+  • tags fonctionnels
+  • micronutriments
+- Source de vérité partagée entre :
+  • random-pick.html
+  • autres scripts exploitant badges / métadonnées
+
+Contraintes
+- DOIT être chargé AVANT tout script inline qui consomme ces mappings.
+- Aucun effet visuel direct : données uniquement.
+==============================================================================
 {%- endcomment -%}
 <script src="{{ '/assets/js/badges-map.js' | relative_url }}"></script>
 
-<!-- Head spécifique à certaines pages (JSON-LD recettes, etc.) -->
+<!--
+Head spécifique aux pages
+- Injection contrôlée via page.extra_head.
+- Usages typiques :
+  • JSON-LD (recettes)
+  • meta spécifiques
+  • scripts strictement nécessaires à une page
+-->
 {{ page.extra_head }}
 

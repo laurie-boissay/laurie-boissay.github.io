@@ -3,82 +3,69 @@ layout: page
 ---
 
 {%- comment -%}
-  tag-index.html
-  =============
+==============================================================================
+tag-index.html — Page d’index filtrée (tags fonctionnels / micronutriments)
+==============================================================================
 
-  Page “index filtré” (tags fonctionnels / micronutriments)
+Rôle
+- Afficher une liste de recettes filtrée par :
+  • tag fonctionnel (page.filter_type = "tag")
+  • micronutriment (page.filter_type = "micro")
 
-  Objectif (UX) :
-  - Sur ces pages, le bloc "Random pick" doit apparaître AU-DESSUS des 2 lignes de badges cliquables.
+Entrées (front-matter)
+- filter_type : "tag" | "micro"
+- filter_id   : identifiant du tag (ex: "rapide") ou du micronutriment (ex: "omega-3")
 
-  Paramètres attendus dans la page :
-  - page.filter_type : "tag" ou "micro"
-  - page.filter_id   : ID technique (ex: "selenium", "tres-proteine")
+Contrats / dépendances
+- random-pick.html :
+  • doit être rendu AVANT la navigation par badges (contrainte UX).
+  • lit document.body.dataset.filterType / filterId : ces attributs doivent être posés
+    immédiatement (pas de dépendance à DOMContentLoaded).
+- recipes-index.html :
+  • fournit le marquage <div class="recipe-item" data-tested="true|false"> utilisé
+    par le filtre “recettes testées”.
+- Données :
+  • _data/tags_fonctionnels.yml : descriptions des tags fonctionnels.
+  • _data/micronutriments.yml   : fiches micronutriments (rôles, apports, sources, etc.).
 
-  Notes techniques :
-  - Le JS du random pick lit document.body.dataset.filterType / filterId.
-  - On renseigne ces attributs le plus tôt possible (sans attendre DOMContentLoaded),
-    pour éviter tout effet d’ordre d’exécution si d’autres scripts changent.
-
-  Ajout : filtre “Seulement les recettes testées”
-  ----------------------------------------------
-  Comportement :
-  - Par défaut : afficher toutes les recettes filtrées (tag ou micronutriment)
-  - Au clic : masquer les recettes non testées (recipe_tested != true)
-
-  IMPORTANT :
-  - Le JS filtre des éléments HTML qui doivent exister dans le DOM.
-  - Il faut donc que _includes/recipes-index.html enveloppe chaque carte recette avec :
-      <div class="recipe-item" data-tested="true|false"> ... </div>
+Contraintes d’affichage
+- Le filtre “recettes testées” n’est affiché que s’il existe au moins une recette
+  non testée dans la sélection (évite un contrôle inutile).
+==============================================================================
 {%- endcomment -%}
 
 <section class="site-container" id="tag-index">
 
   {%- comment -%}
-    Initialise immédiatement le filtre sur <body> pour que le random pick puisse le lire.
-    (Le <body> existe déjà à ce stade du parsing.)
+    Paramètres de filtre exposés au JS (random pick).
+    Le script consomme dataset.* dès le chargement : pas de temporisation.
   {%- endcomment -%}
   <script>
-    // Filtre du tirage aléatoire : utilisé par _includes/random-pick.html
     document.body.dataset.filterType = "{{ page.filter_type | escape }}";
-    document.body.dataset.filterId = "{{ page.filter_id | escape }}";
+    document.body.dataset.filterId   = "{{ page.filter_id   | escape }}";
   </script>
 
   {%- comment -%}
-    ✅ Random pick sur page badges — POSITIONNÉ AVANT la nav des badges
-    - hide_links=true : on masque les liens fixes internes du random pick
-      (doublon avec la barre nav-badges juste en dessous).
-    - Le filtre est appliqué via document.body.dataset.*
+    Random pick :
+    - placé avant la navigation (contrainte UX).
+    - hide_links évite la redondance avec la navigation par badges de cette page.
   {%- endcomment -%}
   {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
-    Barre de navigation par badges (2 lignes cliquables)
-    - Factorisée dans un include pour éviter la duplication.
+    Navigation transversale (badges tags + micronutriments).
   {%- endcomment -%}
   {% include nav-badges.html %}
 
-  {%- comment -%}
-    ✅ UX demandé :
-    - Compteur + bouton JUSTE SOUS les 2 lignes de tags
-    - On calcule filtered + tested_count ici,
-      puis on affiche compteur + include du filtre.
-  {%- endcomment -%}
-
-  {%- comment -%}
-    Tags techniques masqués dans l’affichage des badges sur les cartes.
-    (Ces tags restent utilisables ailleurs, mais ne doivent pas polluer l’UI des cartes.)
-  {%- endcomment -%}
   {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
+  {%- assign filtered = "" | split: "" -%}
 
   {%- comment -%}
-    Construction de la liste filtrée :
-    - Si page.filter_type == "tag"  : r.tags contient page.filter_id
-    - Si page.filter_type == "micro": r.badges_nutritionnels contient page.filter_id
+    Filtrage :
+    - mode "tag"  : r.tags contient page.filter_id
+    - mode "micro": r.badges_nutritionnels contient page.filter_id
   {%- endcomment -%}
-  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
-
-  {%- assign filtered = "" | split: "" -%}
   {%- for r in recipes -%}
     {%- if page.filter_type == "tag" and page.filter_id and r.tags contains page.filter_id -%}
       {%- assign filtered = filtered | push: r -%}
@@ -87,9 +74,6 @@ layout: page
     {%- endif -%}
   {%- endfor -%}
 
-  {%- comment -%}
-    Compte recettes testées (recipe_tested: true) dans la liste filtrée.
-  {%- endcomment -%}
   {%- assign tested_count = 0 -%}
   {%- for r in filtered -%}
     {%- if r.recipe_tested == true -%}
@@ -103,16 +87,19 @@ layout: page
   </p>
 
   {%- comment -%}
-    Filtre “Seulement les recettes testées”
-    - On ne l’affiche que si au moins 1 recette est non testée.
-    - Dépend de `.recipe-item[data-tested]` rendu par _includes/recipes-index.html
+    Filtre “recettes testées” :
+    - affiché uniquement si la sélection contient au moins une recette non testée.
+    - le comportement JS s’appuie sur data-tested rendu par recipes-index.html.
   {%- endcomment -%}
   {%- if filtered.size > tested_count -%}
     {% include filter-tested.html %}
   {%- endif -%}
 
   {%- comment -%}
-    ===== Bloc descriptif TAG FONCTIONNEL =====
+    Bloc descriptif :
+    - tag : contenu issu de _data/tags_fonctionnels
+    - micro : contenu issu de _data/micronutriments
+    Le bloc n’est rendu que si l’entrée correspondante existe (fail-safe).
   {%- endcomment -%}
   {%- if page.filter_type == "tag" and page.filter_id -%}
     {%- assign taginfo = site.data.tags_fonctionnels[page.filter_id] -%}
@@ -131,9 +118,6 @@ layout: page
     {%- endif -%}
   {%- endif -%}
 
-  {%- comment -%}
-    ===== Bloc descriptif MICRONUTRIMENT =====
-  {%- endcomment -%}
   {%- if page.filter_type == "micro" and page.filter_id -%}
     {%- assign micro = site.data.micronutriments[page.filter_id] -%}
     {%- if micro -%}
@@ -144,40 +128,34 @@ layout: page
         <h3>À quoi ça sert ?</h3>
         <ul>{% for r in micro.roles %}<li>{{ r }}</li>{% endfor %}</ul>
 
-        <h3>Quelle dose ?</h3>
+        <h3>Apports recommandés</h3>
         <p><strong>Adulte :</strong> {{ micro.apports.adulte.cible }}</p>
 
-        <h3>Où en trouver ?</h3>
+        <h3>Sources alimentaires</h3>
         <ul>{% for f in micro.ou_en_trouver %}<li>{{ f }}</li>{% endfor %}</ul>
 
-        <h3>Comment savoir si j’en manque ?</h3>
+        <h3>Signes de carence</h3>
         <p>{{ micro.carence.signes }}</p>
       </section>
     {%- endif -%}
   {%- endif -%}
 
   {%- comment -%}
-    ===== Rendu des recettes filtrées =====
-    - On regroupe par recipe_group, on nettoie les groupes sans nom,
-      puis on rend via l’include factorisé _includes/recipes-index.html
+    Regroupement :
+    - group_by sur recipe_group
+    - exclusion des groupes vides (évite des sections sans titre).
+    Le rendu final est délégué à recipes-index.html (source de vérité du markup).
   {%- endcomment -%}
-
   {%- assign grouped_raw = filtered | group_by: "recipe_group" -%}
-
-  {%- comment -%}
-    Nettoyage : on exclut les groupes sans nom (nil / vide) sans where_exp.
-  {%- endcomment -%}
   {%- assign grouped = "" | split: "" -%}
+
   {%- for g in grouped_raw -%}
     {%- if g.name and g.name != "" -%}
       {%- assign grouped = grouped | push: g -%}
     {%- endif -%}
   {%- endfor -%}
 
-  {%- comment -%}
-    ✅ Rendu via l’include commun (évite la duplication du HTML des cartes)
-  {%- endcomment -%}
-  {%- include recipes-index.html grouped=grouped hidden_tags=hidden_tags -%}
+  {% include recipes-index.html grouped=grouped hidden_tags=hidden_tags %}
 
 </section>
 

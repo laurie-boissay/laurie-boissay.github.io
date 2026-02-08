@@ -1,7 +1,45 @@
+{%- comment -%}
+==============================================================================
+Include — Liste simple de recettes par groupe
+==============================================================================
+
+Rôle
+- Générer une liste HTML (<ul>) de liens vers des recettes appartenant
+  à un recipe_group donné.
+- Utilisé pour des affichages simples (navigation secondaire, sommaires,
+  listes textuelles), sans cartes ni badges.
+
+Entrées (include.*)
+- include.recipes (requis)
+  • Collection de pages recette (ex : site.pages filtré en amont).
+- include.group (requis)
+  • Nom exact du recipe_group à afficher.
+
+Traitement
+- Filtrage sur recipe_group == include.group.
+- Tri par recipe_sort :
+  • clé fonctionnelle courte définie par la convention éditoriale,
+  • garantit un ordre stable et prévisible.
+
+Sortie
+- <ul> contenant des <li> avec liens vers les pages recette.
+- Le lien utilise relative_url pour compatibilité baseurl (GitHub Pages).
+
+Contraintes
+- Aucun fallback silencieux :
+  • si include.recipes est vide ou include.group inexistant, la liste sera vide.
+- Aucune logique d’affichage avancée (badges, statut testée, etc.) :
+  • ce composant est volontairement minimal.
+==============================================================================
+{%- endcomment -%}
+
 {% assign items = include.recipes | where: "recipe_group", include.group | sort: "recipe_sort" %}
 
 <ul>
   {% for r in items %}
-    <li><a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a></li>
+    <li>
+      <a href="{{ r.url | relative_url }}">{{ r.recipe_title }}</a>
+    </li>
   {% endfor %}
 </ul>
+

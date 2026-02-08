@@ -1,12 +1,53 @@
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous">
-</script>
+<!--
+==============================================================================
+_includes/scripts.html — Scripts globaux (Bootstrap + comportements de navigation)
+==============================================================================
+
+Rôle
+- Charger Bootstrap JS (bundle) via CDN.
+- Centraliser les comportements JS liés à la navigation :
+  • fermeture du menu mobile après sélection
+  • correction d’offset lors des ancres (navbar fixe)
+  • verrouillage du scroll de page derrière un dropdown (mobile)
+
+Dépendances / contrats
+- Bootstrap JS doit être chargé avant l’utilisation de window.bootstrap.*.
+- La navbar doit avoir l’ID "navigation" (mesure de hauteur pour l’offset).
+- Le conteneur de menu mobile Bootstrap doit avoir l’ID "navbarSupportedContent".
+- Les liens/éléments qui doivent déclencher “fermer + scroll” portent la classe
+  ".recipes-group-chip" (contrat côté markup).
+
+Compatibilité / robustesse
+- Toute action vérifie la présence des éléments attendus (fail-safe).
+- Les sélecteurs d’ancre sont protégés (try/catch) pour éviter les erreurs
+  si le hash n’est pas un sélecteur CSS valide.
+==============================================================================
+-->
+
+<!--
+Bootstrap JS (bundle)
+- Inclut Popper (nécessaire aux dropdowns).
+- integrity + crossorigin : sécurité (SRI).
+-->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+  crossorigin="anonymous"
+></script>
 
 <script>
+  /**
+   * Base URL du site (GitHub Pages).
+   * - Injecté par Jekyll.
+   * - Utilisé pour déterminer si l’on est sur la page d’accueil.
+   */
   const SITE_BASEURL = "{{ site.baseurl }}";
 
+  /**
+   * Ferme un composant Collapse Bootstrap par ID.
+   * Contrat :
+   * - Nécessite Bootstrap JS (window.bootstrap).
+   */
   function closeCollapseById(id) {
     const el = document.getElementById(id);
     if (!el || !window.bootstrap) return;
@@ -18,6 +59,14 @@
     inst.hide();
   }
 
+  /**
+   * Corrige l’offset d’une ancre pour tenir compte de la navbar fixe.
+   * - Calcule la position cible - hauteur de navbar - marge de confort.
+   * - Neutralise temporairement le smooth scroll pour éviter les “rebonds”.
+   *
+   * Paramètres :
+   * - hash : optionnel ; fallback sur location.hash.
+   */
   function fixAnchorOffset(hash) {
     const h = hash || location.hash;
     if (!h) return;
@@ -32,7 +81,7 @@
 
     const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
 
-    // Neutraliser temporairement le smooth scroll
+    // Neutralisation temporaire du smooth scroll (évite les décalages).
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
     html.style.scrollBehavior = "auto";
@@ -42,6 +91,11 @@
     html.style.scrollBehavior = prev || "";
   }
 
+  /**
+   * Détecte si l’URL courante correspond à la page d’accueil.
+   * - Normalise le trailing slash.
+   * - Gère / et /index.html sous baseurl.
+   */
   function isHomePage() {
     const path = location.pathname.replace(/\/+$/, "");
     const base = (SITE_BASEURL || "").replace(/\/+$/, "");
@@ -52,7 +106,14 @@
     return path === home1 || path === home2 || path === base;
   }
 
-  // Fermer menu mobile après clic sur une catégorie + scroll propre (index)
+  /**
+   * Clic sur une “chip” de groupe :
+   * - Ferme le menu burger (mobile).
+   * - Si on est déjà sur l’accueil, gère le scroll vers l’ancre avec offset.
+   *
+   * Contrat :
+   * - L’élément déclencheur porte la classe .recipes-group-chip et un href contenant "#".
+   */
   document.addEventListener("click", function (e) {
     const chip = e.target.closest(".recipes-group-chip");
     if (!chip) return;
@@ -63,36 +124,54 @@
 
     const hash = href.slice(hashIndex);
 
-    // Fermer le menu burger (mobile)
+    // Ferme le menu burger (mobile).
     closeCollapseById("navbarSupportedContent");
 
+    // Sur la home : on maîtrise le scroll (offset navbar).
     if (isHomePage()) {
       e.preventDefault();
       history.pushState(null, "", hash);
 
+      // Répétition volontaire : stabilise l’offset après reflow/layout Bootstrap.
       setTimeout(() => fixAnchorOffset(hash), 0);
       setTimeout(() => fixAnchorOffset(hash), 120);
       setTimeout(() => fixAnchorOffset(hash), 260);
     }
   });
 
-  // Corriger l'offset quand on arrive sur /#groupe depuis une autre page
+  /**
+   * Arrivée sur une ancre depuis une autre page (ex : /#plats-a-base-de-viande).
+   * - Recalage après load pour compenser chargements tardifs et reflow.
+   */
   window.addEventListener("load", () => {
     setTimeout(() => fixAnchorOffset(location.hash), 0);
     setTimeout(() => fixAnchorOffset(location.hash), 180);
     setTimeout(() => fixAnchorOffset(location.hash), 420);
   });
 
+  /**
+   * Recalage lors des changements d’ancre (navigation interne).
+   */
   window.addEventListener("hashchange", () => {
     setTimeout(() => fixAnchorOffset(location.hash), 120);
     setTimeout(() => fixAnchorOffset(location.hash), 260);
   });
 
-  // ===== IMPORTANT : empêcher le scroll de la page derrière quand le dropdown est ouvert (mobile)
+  // ---------------------------------------------------------------------------
+  // Mobile : empêcher le scroll de la page derrière un dropdown ouvert
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Détecte le breakpoint mobile de la navbar Bootstrap.
+   */
   function isMobileNav() {
     return window.matchMedia("(max-width: 991.98px)").matches;
   }
 
+  /**
+   * Active / désactive le verrouillage du scroll sur <body>.
+   * - Limité au contexte mobile pour ne pas altérer le desktop.
+   */
   function lockBodyScroll(lock) {
     if (!isMobileNav()) return;
     document.body.style.overflow = lock ? "hidden" : "";
@@ -107,3 +186,4 @@
     if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(false);
   });
 </script>
+

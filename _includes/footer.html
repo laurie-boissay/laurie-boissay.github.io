@@ -1,21 +1,33 @@
-<!-- =========================================================
-     _includes/footer.html
-     Footer global du site
+<!--
+==============================================================================
+_includes/footer.html — Pied de page global
+==============================================================================
 
-     Contenu :
-     - Lien vers les mentions légales
-     - Copyright (année automatique)
-     - Date de dernière mise à jour du site (build GitHub Pages)
-     ========================================================= -->
+Rôle
+- Fournir un footer commun à l’ensemble du site.
+
+Contenu
+- Lien vers la page des mentions légales.
+- Copyright avec année calculée automatiquement.
+- Date de dernière mise à jour du site (horodatage du build GitHub Pages).
+
+Données utilisées
+- site.baseurl : garantit des liens valides quel que soit l’environnement.
+- site.time    : horodatage du build (source de vérité pour l’année et la date).
+
+Contraintes
+- Aucune logique métier : affichage purement déclaratif.
+- Mise en forme centralisée via les classes Bootstrap et les styles globaux.
+==============================================================================
+-->
 
 <footer class="mt-4 py-3 border-top">
   <div class="container site-container text-center small">
 
     {%- comment -%}
-      Footer en ligne :
-      - Mentions légales
-      - Copyright avec année automatique
-      - Date de dernière mise à jour
+      Ligne de footer unique :
+      - séparation visuelle via un simple séparateur typographique (•)
+      - structure volontairement linéaire pour rester lisible sur mobile.
     {%- endcomment -%}
 
     <span>
@@ -39,3 +51,4 @@
 
   </div>
 </footer>
+

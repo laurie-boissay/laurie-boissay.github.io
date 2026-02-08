@@ -1,21 +1,31 @@
-<!-- =========================================================
-     INCLUDE : FILTER TESTED
-     Fichier : _includes/filter-tested.html
+<!--
+==============================================================================
+_include/filter-tested.html — Filtre “recettes testées”
+==============================================================================
 
-     Rôle :
-     - Bouton toggle "Seulement les recettes testées"
-     - Masque/affiche les .recipe-item[data-tested]
-     - Expose l'état global via document.body.dataset.onlyTested
-     - Notifie les autres scripts via l'évènement "testedFilterChanged"
+Rôle
+- Fournir un bouton toggle “Voir seulement les recettes testées”.
+- Masquer / afficher les cartes enveloppées dans .recipe-item selon data-tested.
+- Exposer l’état du filtre via document.body.dataset.onlyTested.
+- Notifier les autres scripts via l’évènement global "testedFilterChanged".
 
-     Dépendances :
-     - Chaque carte recette doit être enveloppée par :
-         <div class="recipe-item" data-tested="true|false"> ... </div>
+Contrats / dépendances
+- Chaque carte recette DOIT être enveloppée par :
+    <div class="recipe-item" data-tested="true|false"> ... </div>
+  (contrat fourni par _includes/recipes-index.html).
+- L’include peut être rendu avant la liste des recettes :
+  => on attend DOMContentLoaded avant de requêter .recipe-item.
 
-     IMPORTANT :
-     - L'include peut être placé AVANT la liste des recettes.
-       => On attend DOMContentLoaded pour que les .recipe-item existent.
-     ========================================================= -->
+Sorties (interfaces JS)
+- document.body.dataset.onlyTested : "true" | "false"
+- Évènement document "testedFilterChanged" :
+    detail: { onlyTested: boolean }
+
+Contrainte UI
+- Si aucun wrapper conforme n’est trouvé, le bouton est masqué pour éviter
+  une action sans effet.
+==============================================================================
+-->
 
 <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="tested-filter">
   <button
@@ -29,36 +39,51 @@
 </div>
 
 <script>
-/* =========================================================
-   Filtre "Seulement recettes testées"
-   - Toggle simple
-   - Basé sur data-tested="true|false"
-   - Expose l'état dans document.body.dataset.onlyTested
-   - Déclenche l'évènement "testedFilterChanged" à chaque changement
-   ========================================================= */
+/**
+ * Filtre “recettes testées”.
+ *
+ * Contrat :
+ * - S’appuie sur .recipe-item[data-tested="true|false"] rendu par recipes-index.html.
+ *
+ * Interfaces exposées :
+ * - document.body.dataset.onlyTested ("true" | "false") pour lecture par d’autres scripts.
+ * - Évènement "testedFilterChanged" (CustomEvent) émis à chaque bascule.
+ *
+ * Timing :
+ * - DOMContentLoaded est requis car l’include peut être placé avant les cartes.
+ */
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("btn-only-tested");
   if (!btn) return;
 
-  // Les items existent maintenant (liste des recettes déjà parsée).
   const items = document.querySelectorAll(".recipe-item[data-tested]");
 
-  // Sécurité : si pas de wrapper, on masque le bouton.
+  // Garde-fou : si le markup contractuel n’existe pas, on neutralise l’UI.
   if (items.length === 0) {
     btn.style.display = "none";
     return;
   }
 
+  /**
+   * Publie l’état courant du filtre :
+   * - dataset pour consommation passive
+   * - évènement pour recalculs actifs (ex : random-pick)
+   */
   function notifyChange(onlyTested) {
-    // État global lisible par d'autres scripts (ex: random-pick).
     document.body.dataset.onlyTested = onlyTested ? "true" : "false";
 
-    // Notification (le random-pick peut se recalcule).
-    document.dispatchEvent(new CustomEvent("testedFilterChanged", {
-      detail: { onlyTested: onlyTested }
-    }));
+    document.dispatchEvent(
+      new CustomEvent("testedFilterChanged", {
+        detail: { onlyTested: onlyTested }
+      })
+    );
   }
 
+  /**
+   * Applique le filtrage à toutes les cartes :
+   * - cache uniquement les recettes non testées si onlyTested=true
+   * - met à jour l’état ARIA et les classes Bootstrap du bouton
+   */
   function applyFilter(onlyTested) {
     items.forEach((el) => {
       const isTested = el.getAttribute("data-tested") === "true";
@@ -75,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notifyChange(onlyTested);
   }
 
-  // État initial : tout afficher.
+  // État initial : aucune restriction (toutes les recettes visibles).
   let onlyTested = false;
   applyFilter(onlyTested);
 

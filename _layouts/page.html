@@ -7,15 +7,29 @@
 <body class="container-fluid{% if page.body_id %} {{ page.body_id }}{% endif %}">
   {% include navbar.html %}
 
-  <!--
-    HEADER GLOBAL
-    -------------
-    Ce header affiche déjà le titre principal de la page via :
-    - page.page_h1 (si défini)
-    - sinon page.title
-    => On ne doit PAS ré-afficher un second <h1> dans le contenu,
-       sinon on obtient des doublons / titres parasites.
-  -->
+  {%- comment -%}
+    =========================================================
+    LAYOUT — PAGE (STRUCTURANT)
+    =========================================================
+    Rôle :
+    - Fournir la structure commune (head, navbar, footer) et l’enveloppe de contenu.
+
+    Entrées (front-matter) :
+    - page.body_id          : (optionnel) identifiant CSS ajouté à <body>.
+    - page.page_h1          : (optionnel) titre principal affiché dans le header.
+    - page.title            : fallback si page.page_h1 est absent.
+    - page.page_h3          : (optionnel) sous-titre (ligne bleue).
+    - page.page_h2_orange   : (optionnel) accroche (ligne orange).
+
+    Contrats / contraintes :
+    - Un seul <h1> par page : le header global rend déjà le titre principal.
+      Le contenu injecté via {{ content }} ne doit pas réintroduire un <h1>,
+      pour éviter les doublons (SEO / accessibilité / hiérarchie).
+    - Les composants visuels (marges, largeur) sont gérés par .site-container
+      et .content-surface (voir style.css).
+    =========================================================
+  {%- endcomment -%}
+
   <header class="marge" id="top">
     <div class="site-container">
       <h1><strong>{{ page.page_h1 | default: page.title }}</strong></h1>
@@ -33,7 +47,6 @@
   <main class="site-main">
     <div class="site-container">
       <div class="content-surface">
-
         {{ content }}
       </div>
     </div>

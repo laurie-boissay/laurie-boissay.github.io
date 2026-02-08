@@ -3,30 +3,55 @@
 <head>
   {% include head.html %}
 
+  {%- comment -%}
+    =========================================================
+    LAYOUT — RECETTE (STRUCTURANT)
+    =========================================================
+    Rôle :
+    - Encadrer l’affichage d’une recette (titre, photo optionnelle, badges,
+      bandeau "non testée", contenu, footer) en s’appuyant sur les includes existants.
+
+    Entrées (front-matter) :
+    - page.title                 : fallback standard.
+    - page.recipe_title          : titre affiché sur la page (prioritaire sur page.title).
+    - page.tags                  : tags fonctionnels + tags techniques (certains cachés).
+    - page.badges_nutritionnels  : liste de micronutriments (IDs), affichée en seconde ligne.
+    - page.image                 : (optionnel) chemin de l’image de recette.
+    - page.image_alt             : (optionnel) texte alternatif (fallback sur recipe_title/title).
+    - page.body_id               : (optionnel) identifiant CSS ajouté à <body>.
+    - page.extra_head            : (optionnel) injection contrôlée de balises dans <head> (ex: JSON-LD).
+
+    Dépendances / includes :
+    - head.html                  : head commun (meta, CSS global, etc.).
+    - navbar.html                : navigation.
+    - bandeau-non-teste.html     : bandeau conditionnel (piloté par recipe_tested dans le front-matter).
+    - footer.html + scripts.html : footer et scripts communs.
+
+    Contrats / contraintes :
+    - CSS :
+      * aucun style local dans ce layout ; tout passe par style.css pour éviter les divergences.
+      * .recipe-badges-line gère le wrap + centrage (pas de scroll horizontal).
+      * .recipe-photo et .badges-legend sont stylés globalement.
+    - Titres :
+      * ce layout rend le <h1> (.recipe-title) ; ne pas inclure d’autre header générant un <h1>.
+    - Tags :
+      * certains tags sont "techniques" et doivent rester invisibles côté badges.
+        Ils restent présents pour le filtrage et l’organisation du site.
+    =========================================================
+  {%- endcomment -%}
+
   {%- if page.extra_head -%}
     {{ page.extra_head }}
   {%- endif -%}
-
-  {%- comment -%}
-    IMPORTANT :
-    - On ne met plus de CSS local ici.
-    - Tout est centralisé dans style.css pour éviter les contradictions :
-      * badges : wrap + centré (PAS de scroll horizontal)
-      * photo : .recipe-photo
-      * légende : .badges-legend
-  {%- endcomment -%}
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
-  {% comment %}
-    On évite le doublon de titres :
-    - recipe-header.html affiche déjà un h1
-    - recipe.html affiche aussi un h1 (.recipe-title)
-    => on retire l'include recipe-header.html ici.
-
-    Si tu veux absolument garder recipe-header.html, il faudra supprimer
-    le h1 ci-dessous (ou passer recipe-header.html en h2/h3).
-  {% endcomment %}
+  {%- comment -%}
+    Prévention doublon de titres :
+    - recipe-header.html rend déjà un <h1> dans son implémentation actuelle.
+    - Ce layout rend également un <h1> via .recipe-title.
+    => On n’inclut pas recipe-header.html ici (sinon hiérarchie cassée / doublon SEO).
+  {%- endcomment -%}
 
   {% include navbar.html %}
 
@@ -36,23 +61,26 @@
       {% include bandeau-non-teste.html %}
 
       {%- comment -%}
-        Tags "techniques" / cachés :
-        - pas affichés dans les badges sur la page
-        - mais ils restent utiles en metadata (filtre, organisation, etc.)
+        Tags techniques / cachés :
+        - Non affichés dans les badges (UI).
+        - Conservés dans page.tags pour les filtres, index, et l’organisation.
+        Remarque :
+        - La liste est maintenue ici pour rester cohérente avec les conventions du site.
       {%- endcomment -%}
       {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
 
       <header class="recipe-head">
         <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
-        {% comment %}
-          Photo optionnelle (centralisée dans le layout) :
-          - À activer par recette avec :
-              image: "/images/recettes/mon-fichier.webp"
-              image_alt: "Texte alternatif"
-          - Si image_alt est absent, on retombe sur recipe_title/title.
-          - relative_url garantit que ça marche même si baseurl change.
-        {% endcomment %}
+        {%- comment -%}
+          Photo optionnelle :
+          - Activée uniquement si page.image est défini.
+          - relative_url garantit la compatibilité avec baseurl (GitHub Pages / environnements).
+          - alt :
+            * priorité à page.image_alt
+            * fallback sur recipe_title puis title
+            * escape pour éviter les surprises en attribut HTML.
+        {%- endcomment -%}
         {% if page.image %}
           <figure class="recipe-photo">
             <img
@@ -65,13 +93,20 @@
 
         {%- comment -%}
           Badges :
-          - Ligne 1 : tags fonctionnels (on ignore les tags cachés)
-          - Ligne 2 : micronutriments (si présents)
-          NB : Le style (wrap + centré) est géré dans style.css via .recipe-badges-line
+          - Ligne 1 : badges issus des tags fonctionnels (exclure les tags techniques listés).
+          - Ligne 2 : micronutriments (si page.badges_nutritionnels est non vide).
+          - Le rendu est volontairement "data-driven" : on mappe un ID -> emoji + title.
+          - Le style (wrap + centrage) est géré côté CSS ; ce layout ne doit pas réintroduire
+            de règles de présentation.
         {%- endcomment -%}
         <div class="recipe-badges-wrap">
 
-          <!-- Ligne 1 : badges (tags) -->
+          {%- comment -%}
+            Ligne 1 — tags fonctionnels :
+            - On parcourt page.tags et on ignore hidden_tags.
+            - Chaque tag reconnu produit un <li> avec emoji et title.
+            - Les tags inconnus sont volontairement silencieux (pas d’affichage parasite).
+          {%- endcomment -%}
           {% if page.tags %}
             <ul class="recipe-badges-line badges-tags" aria-label="Badges">
               {% for tag in page.tags %}
@@ -91,7 +126,13 @@
             </ul>
           {% endif %}
 
-          <!-- Ligne 2 : micronutriments -->
+          {%- comment -%}
+            Ligne 2 — micronutriments :
+            - Source : page.badges_nutritionnels (liste d’IDs).
+            - Condition :
+              * on sécurise via default: "" puis test de "size" pour éviter les erreurs.
+            - Les IDs non reconnus restent silencieux (pas d’affichage inattendu).
+          {%- endcomment -%}
           {% assign micros = page.badges_nutritionnels | default: "" %}
           {% if micros and micros.size > 0 %}
             <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
@@ -121,8 +162,9 @@
 
           {%- comment -%}
             Légende des badges :
-            - Le style est géré dans style.css via .badges-legend
-            - Important : on laisse la liste en <ul> pour être lisible/accessibilité.
+            - Fournit une aide explicite sans surcharger l’UI (via <details>).
+            - La liste est maintenue côté HTML pour rester accessible et indexable.
+            - La mise en forme est centralisée via .badges-legend dans style.css.
           {%- endcomment -%}
           <details class="badges-legend">
             <summary>Légende des badges</summary>
@@ -168,3 +210,4 @@
   {% include scripts.html %}
 </body>
 </html>
+

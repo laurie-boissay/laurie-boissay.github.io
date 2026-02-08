@@ -1,35 +1,40 @@
 {%- comment -%}
-  =========================================================
-  INCLUDE : RANDOM PICK (On mange quoi ?)
-  Fichier : _includes/random-pick.html
+==============================================================================
+_includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
+==============================================================================
 
-  Rôle :
-  - Affiche une suggestion aléatoire de recette (hors "gout-sucre")
-  - Exclut certains recipe_group du tirage
-  - Affiche les badges (tags + micronutriments) de la recette tirée
+Rôle
+- Afficher une suggestion aléatoire de recette (carte “pick-card”) injectée en JS.
+- Exclure systématiquement les recettes taguées "gout-sucre".
+- Exclure certains recipe_group du tirage (groupes utilitaires / non “plats”).
+- Afficher les badges (tags fonctionnels + micronutriments) de la recette tirée.
 
-  Options (include.*) :
-  - include.hide_links : si true, masque les 2 lignes de liens fixes (tags + micros)
+Options (include.*)
+- include.hide_links (optionnel)
+  • true  => masque les deux lignes de navigation badges (tags + micros)
+  • false => affiche la navigation badges sous la carte (comportement par défaut)
 
-  Mode "page filtrée" (auto) :
-  - Si document.body.dataset.filterType = "tag"|"micro"
-    ET document.body.dataset.filterId = "<id>"
-    alors le random pick ne tire que dans les cartes qui matchent ce filtre.
+Mode “page filtrée” (automatique)
+- Si document.body.dataset.filterType = "tag"|"micro" ET document.body.dataset.filterId = "<id>",
+  le tirage est restreint aux cartes correspondant au filtre.
+  (Initialisation fournie par tag-index.html.)
 
-  Ajout :
-  - Si document.body.dataset.onlyTested == "true"
-    alors le random pick ne tire QUE dans les recettes testées.
-    (Synchronisé par _includes/filter-tested.html)
+Filtre global “testées seulement” (interactions cross-scripts)
+- Si document.body.dataset.onlyTested == "true", le tirage est restreint aux recettes testées.
+- L’état est piloté par _includes/filter-tested.html qui émet l’évènement "testedFilterChanged".
 
-  IMPORTANT (factorisation) :
-  - Les 2 lignes de liens fixes (navigation badges) ne sont PLUS écrites en dur ici.
-  - Elles sont rendues via _includes/nav-badges.html (source unique),
-    ce qui évite les doublons avec index.html / tag-index.html.
+Factorisation
+- Les liens fixes (tags/micros) ne sont pas dupliqués : rendu via _includes/nav-badges.html.
+- Les mappings JS (TAG_BADGES / MICRO_BADGES) ne sont pas définis ici :
+  ils proviennent de assets/js/badges-map.js chargé dans le <head> (head.html).
 
-  IMPORTANT (factorisation JS) :
-  - Les mappings TAG_BADGES / MICRO_BADGES ne sont PLUS définis ici.
-  - Ils viennent de assets/js/badges-map.js chargé dans le <head>.
-  =========================================================
+Contrats / dépendances
+- La liste source est dérivée de #recipes-index (rendu par _includes/recipes-index.html).
+- Les attributs data-* attendus :
+  • .recipe-card[data-tags][data-micros]
+  • a.recipe-card-link[data-title][data-subtitle][data-tested]
+- Les groupes sont lus via [data-recipe-group] (encapsuleur de section de groupe).
+==============================================================================
 {%- endcomment -%}
 
 <!-- =========================================================
@@ -37,15 +42,14 @@
      ========================================================= -->
 <div class="mb-4">
 
-  <!-- Zone où la “pick-card” est injectée par JS -->
+  <!-- Hôte d’injection de la pick-card (contenu fourni par JS) -->
   <div id="random-pick"></div>
 
   {%- comment -%}
-    ✅ Bloc “navigation badges” (HORS tirage)
-    - Navigation rapide tags + micronutriments
-    - Masquable via include.hide_links pour éviter les doublons
-    - Rendu via nav-badges.html (source unique)
-    - On garde badge-link-outside ici pour ton style “hors cartes”
+    Navigation badges (hors tirage) :
+    - réutilise nav-badges.html (source unique)
+    - masquable via include.hide_links pour éviter les doublons sur pages filtrées
+    - link_class dédié pour le style “hors cartes”
   {%- endcomment -%}
   {%- unless include.hide_links -%}
     {%- include nav-badges.html link_class="badge-link-outside" wrapper_class="random-pick-links mt-2" -%}
@@ -53,56 +57,52 @@
 </div>
 
 <script>
-  /*
-    =========================================================
-    RANDOM PICK
-    - Exclut toutes les recettes taguées "gout-sucre"
-    - Exclut certains recipe_group du tirage
-    - Affiche aussi les badges (tags + micronutriments) de la recette tirée
-    - Mode page filtrée :
-        body[data-filter-type="tag|micro"][data-filter-id="..."]
-    - Ajout : filtre global "testées seulement"
-        body[data-only-tested="true"]
-      =========================================================
-  */
-
-  // On attend que TOUT le DOM soit chargé (car #recipes-index peut être plus bas).
+  /**
+   * Random pick (“On mange quoi ?”).
+   *
+   * Fonction :
+   * - Tire une recette aléatoire à partir des cartes présentes dans #recipes-index.
+   *
+   * Exclusions :
+   * - Tag "gout-sucre" (exclusion systématique du tirage).
+   * - Groups listés dans EXCLUDED_GROUPS (comparaison en minuscules).
+   *
+   * Filtres dynamiques :
+   * - Mode page filtrée :
+   *     body[data-filter-type="tag|micro"][data-filter-id="..."]
+   * - Filtre global “testées seulement” :
+   *     body[data-only-tested="true"]
+   *   (piloté par filter-tested.html, évènement "testedFilterChanged")
+   *
+   * Dépendances :
+   * - #recipes-index (rendu par recipes-index.html) doit exister.
+   * - badges-map.js expose window.RECETTES_BADGES_MAP (TAG_BADGES / MICRO_BADGES).
+   */
   document.addEventListener("DOMContentLoaded", () => {
-
-    // Racine : index des recettes (cartes)
     const indexRoot = document.getElementById("recipes-index");
-
-    // Cible : où on injecte la “pick-card”
     const pickHost = document.getElementById("random-pick");
-
-    // Si l’un des éléments est absent, on ne fait rien (évite erreurs console)
     if (!indexRoot || !pickHost) return;
 
-    // ----------------------------
-    // MODE "PAGE FILTRÉE" (tags/micros)
-    // ----------------------------
+    // -------------------------------------------------------------------------
+    // Mode “page filtrée” (paramètres posés tôt par tag-index.html)
+    // -------------------------------------------------------------------------
     const FILTER_TYPE = (document.body?.dataset?.filterType || "").toLowerCase().trim(); // "tag"|"micro"|"" 
     const FILTER_ID = (document.body?.dataset?.filterId || "").toLowerCase().trim();     // ex: "selenium"
 
-    // ----------------------------
-    // FILTRE GLOBAL "TESTÉES SEULEMENT"
-    // (piloté par _includes/filter-tested.html)
-    // ----------------------------
+    // -------------------------------------------------------------------------
+    // Filtre global “testées seulement” (état publié par filter-tested.html)
+    // -------------------------------------------------------------------------
     function isOnlyTestedActive() {
       return (document.body?.dataset?.onlyTested || "").toLowerCase().trim() === "true";
     }
 
-    // Tag exclu du tirage
+    // Exclusion systématique : pas de tirage dans "gout-sucre"
     const EXCLUDED_TAG = "gout-sucre";
 
-    // Tags cachés (utiles côté data, mais pas affichés comme badges “fonctionnels”)
+    // Tags invisibles dans l’affichage des badges fonctionnels
     const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
 
-    /*
-      Exclusions du tirage aléatoire par recipe_group (comparaison en minuscules).
-      IMPORTANT : data-recipe-group contient le nom humain (ex: "Plats à base de viande")
-      => on compare en minuscules ici.
-    */
+    // Exclusions par recipe_group (comparaison en minuscules sur data-recipe-group)
     const EXCLUDED_GROUPS = [
       "amuse-bouche",
       "boissons",
@@ -114,47 +114,37 @@
       "barres nutritionnelles"
     ];
 
-    // =========================================================
-    // MAPPINGS BADGES (centralisés)
-    // - Définis dans assets/js/badges-map.js (chargé dans le <head>)
-    // - Fallback safe si le fichier n'est pas chargé / erreur 404
-    // =========================================================
+    // -------------------------------------------------------------------------
+    // Mappings badges (centralisés dans badges-map.js)
+    // -------------------------------------------------------------------------
     const BADGES_MAP = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
     const TAG_BADGES = BADGES_MAP.TAG_BADGES || {};
     const MICRO_BADGES = BADGES_MAP.MICRO_BADGES || {};
 
-    // Pour éviter de retomber sur la même recette trop souvent
+    // Anti-répétition simple : évite de proposer la même recette trop souvent
     let lastHref = null;
 
-    // Convertit "a,b,c" -> ["a","b","c"] en minuscules
     function parseList(str) {
       return (str || "")
         .split(",")
-        .map(s => s.trim().toLowerCase())
+        .map((s) => s.trim().toLowerCase())
         .filter(Boolean);
     }
 
-    // Vérifie si le lien correspond à une recette exploitable
     function isValidRecipeLink(a) {
       const href = (a.getAttribute("href") || "").trim();
       if (!href) return false;
-
-      // On ignore les ancres
       if (href.startsWith("#")) return false;
 
       const title = (a.dataset.title || a.textContent || "").trim();
-      if (!title) return false;
-
-      return true;
+      return Boolean(title);
     }
 
-    // Exclut les cartes taguées "gout-sucre"
     function hasExcludedTag(card) {
       const tags = parseList(card?.dataset?.tags);
       return tags.includes(EXCLUDED_TAG);
     }
 
-    // Exclut certains recipe_group
     function isInExcludedGroup(a) {
       const groupEl = a.closest("[data-recipe-group]");
       if (!groupEl) return false;
@@ -163,9 +153,7 @@
       return EXCLUDED_GROUPS.includes(group);
     }
 
-    // Vérifie que la carte correspond au filtre courant (si présent)
     function matchesPageFilter(card) {
-      // Pas de filtre => tout passe
       if (!FILTER_TYPE || !FILTER_ID) return true;
 
       if (FILTER_TYPE === "tag") {
@@ -178,43 +166,36 @@
         return micros.includes(FILTER_ID);
       }
 
-      // Type inconnu => on ne filtre pas (sécurité)
+      // Type inconnu => pas de filtrage (fail-safe)
       return true;
     }
 
-    // Filtre global : si "testées seulement" est actif, on ne garde que data-tested="true"
     function matchesOnlyTested(a) {
       if (!isOnlyTestedActive()) return true;
       return (a.dataset.tested || "").toLowerCase().trim() === "true";
     }
 
-    // Liste des candidats au tirage
     function getCandidates() {
       return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
         .filter(isValidRecipeLink)
-        .filter(a => {
+        .filter((a) => {
           const card = a.closest(".recipe-card");
           if (!card) return false;
 
-          // Exclusions globales
           if (hasExcludedTag(card)) return false;
           if (isInExcludedGroup(a)) return false;
-
-          // Filtre de page (tags/micros)
           if (!matchesPageFilter(card)) return false;
-
-          // Filtre global (testées seulement)
           if (!matchesOnlyTested(a)) return false;
 
           return true;
         });
     }
 
-    // Tirage aléatoire (évite de répéter la même recette)
     function pickRandom(links) {
       if (!links.length) return null;
 
-      let a, tries = 0;
+      let a;
+      let tries = 0;
       do {
         a = links[Math.floor(Math.random() * links.length)];
         tries++;
@@ -224,10 +205,9 @@
       return a;
     }
 
-    // Construit une ligne de badges (UL) à partir d’une liste d’IDs et d’un mapping
     function buildBadgeLine(items, map, ariaLabel) {
       const lis = items
-        .map(id => {
+        .map((id) => {
           const info = map[id];
           if (!info) return "";
           const title = (info.title || "").replace(/"/g, "&quot;");
@@ -240,15 +220,12 @@
       return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
     }
 
-    // Badges à afficher dans le random pick pour UNE recette
     function buildPickBadges(card) {
       const tagsAll = parseList(card?.dataset?.tags);
-
-      // Tags fonctionnels : on enlève les tags cachés + on garde seulement ceux connus
-      const tagsFunctional = tagsAll.filter(t => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
+      const tagsFunctional = tagsAll.filter((t) => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
 
       const microsAll = parseList(card?.dataset?.micros);
-      const micros = microsAll.filter(m => MICRO_BADGES[m]);
+      const micros = microsAll.filter((m) => MICRO_BADGES[m]);
 
       const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Badges");
       const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments");
@@ -262,7 +239,6 @@
       `;
     }
 
-    // Affiche la carte “On mange quoi ?”
     function renderPick(a) {
       const title = (a.dataset.title || a.textContent || "").trim();
       const subtitle = (a.dataset.subtitle || "").trim();
@@ -300,14 +276,9 @@
         </div>
       `;
 
-      // Bouton “Autre idée” : relance un tirage
       document.getElementById("btn-reroll").onclick = pickAndRender;
     }
 
-    /*
-      - Si aucun candidat n’existe, on n’affiche RIEN.
-      - On vide juste la zone #random-pick et on sort.
-    */
     function pickAndRender() {
       const links = getCandidates();
 
@@ -317,7 +288,6 @@
       }
 
       const a = pickRandom(links);
-
       if (!a) {
         pickHost.innerHTML = "";
         return;
@@ -329,7 +299,7 @@
     // Lancement initial
     pickAndRender();
 
-    // Réagit au changement du filtre "testées seulement"
+    // Recalcule au changement du filtre global “testées seulement”
     document.addEventListener("testedFilterChanged", function () {
       pickAndRender();
     });

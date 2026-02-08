@@ -1,21 +1,28 @@
-/* =========================================================
-   THEME CLAIR TURQUOISE / VERT — style.css (NETTOYÉ + COHÉRENT)
-   Cible : site Jekyll + Bootstrap (navbar, pages, index, recettes, tag-index)
+/* ==============================================================================
+style.css — Thème clair turquoise/vert (Jekyll + Bootstrap)
+==============================================================================
 
-   Objectifs conservés :
-   - ZÉRO soulignement (underline / border-bottom) sur les liens (navbar + dropdown inclus)
-   - Le hover global des <a> ne doit PAS “salir” les cartes recettes
-   - Dropdown "Recettes" scrollable sur mobile/iOS
-   - Tags (chips) lisibles et espacés
-   - Badges (emoji) : WRAP + lignes centrées (pas de scroll horizontal)
-   - Pas de doublons : une seule définition par composant
+Rôle
+- Feuille de style unique du site (surcouche Bootstrap + styles maison).
+- Garantir une UI cohérente entre :
+  • pages de contenu
+  • index + cartes recettes
+  • pages recette (layout recipe)
+  • pages filtrées (tag-index / micronutriments)
+  • navigation (navbar + dropdown)
 
-   Corrections appliquées :
-   - Listes : reset SCOPÉ (uniquement section + content-surface), pas global
-   - Badges : suppression de redondances (#tag-index a.badge-link + overflow scrolling inutile)
-   - Liens : garde-fou global réduit (évite d’écraser des composants Bootstrap)
-   - ✅ Suppression des “puces vertes” : suppression des puces custom en ::before
-   ========================================================= */
+Objectifs (contrats UI)
+- Liens : zéro soulignement (navbar + dropdown inclus).
+- Hover global des <a> : ne doit pas “salir” les cartes recette (neutralisation ciblée).
+- Dropdown “Recettes” : scrollable et utilisable sur mobile/iOS.
+- Badges (emoji) : wrap + centrage, pas de scroll horizontal.
+- Listes : reset SCOPÉ (contenu uniquement), ne pas casser navbar / composants Bootstrap.
+- Styles : pas de doublons (une seule définition par composant).
+
+Contraintes techniques
+- Compatible GitHub Pages (CSS standard, pas de build requis).
+- Bootstrap 5.3+ : utilisation des variables --bs-link-decoration pour limiter les overrides.
+============================================================================== */
 
 
 /* ================= VARIABLES ================= */
@@ -42,7 +49,7 @@
   --shadow-nav: 0 6px 18px rgba(0,0,0,.06);
   --ring: 0 0 0 4px rgba(20,184,166,.22);
 
-  /* Bootstrap 5.3+ : supprime les décorations par variables */
+  /* Bootstrap 5.3+ : suppression des décorations par variables (si supportées) */
   --bs-link-decoration: none;
   --bs-link-hover-decoration: none;
 }
@@ -121,11 +128,12 @@ hr{
 }
 
 
-/* =========================================================
-   LIENS
-   - Zéro soulignement
-   - Hover léger (fond doux)
-   ========================================================= */
+/* ==============================================================================
+LIENS
+- Suppression systématique des décorations (underline / border-bottom).
+- Hover léger global (fond doux), neutralisé explicitement dans les zones sensibles
+  (navbar, cartes).
+============================================================================== */
 
 a{
   color: var(--link);
@@ -141,16 +149,16 @@ a:hover{
 }
 
 /*
-  Garde-fou global minimal :
-  - On supprime uniquement les décorations (underline / border-bottom).
-  - On évite d’écraser des styles Bootstrap via background-image sur TOUS les enfants.
+Garde-fou minimal :
+- Supprime les décorations héritées (underline / border-bottom) y compris sur enfants.
+- Limite volontairement le scope : on ne touche pas aux backgrounds/images globalement.
 */
 a, a *{
   text-decoration: none !important;
   border-bottom: 0 !important;
 }
 
-/* Helpers historiques (utilisés dans le header global) */
+/* Helpers historiques (utilisés dans certains headers / textes) */
 .bleu{ color: var(--link); }
 .orange{ color: var(--accent-2); }
 
@@ -163,9 +171,9 @@ a, a *{
 }
 
 
-/* =========================================================
-   NAVBAR
-   ========================================================= */
+/* ==============================================================================
+NAVBAR
+============================================================================== */
 
 #navigation{
   position: sticky;
@@ -210,7 +218,7 @@ a, a *{
   border-radius: 12px;
 }
 
-/* Fix strict : aucun soulignement / ombre parasite dans la navbar + dropdown */
+/* Fix strict : aucun soulignement / “artefact” sur liens navbar + dropdown */
 #navigation a,
 #navigation a:hover,
 #navigation a:focus,
@@ -223,11 +231,12 @@ a, a *{
 }
 
 
-/* =========================================================
-   LISTES (SCOPÉES)
-   - On évite de casser des <ul> hors contenu (header, nav, etc.)
-   - ✅ Suppression des “puces vertes” partout : suppression de la puce custom ::before
-   ========================================================= */
+/* ==============================================================================
+LISTES (SCOPÉES)
+- Reset uniquement dans le contenu (section / .content-surface).
+- Ne pas impacter navbar, dropdown, composants Bootstrap, etc.
+- Suppression explicite de tout système de puces custom ::before.
+============================================================================== */
 
 .content-surface ul,
 section ul{
@@ -238,21 +247,20 @@ section ul{
 
 section ul li,
 .content-surface ul li{
-  position: static;     /* plus besoin de positionnement pour une puce */
-  padding-left: 0;      /* supprime le retrait prévu pour la puce */
+  position: static;
+  padding-left: 0;
   margin: 7px 0;
 }
 
-/* Supprime explicitement la puce custom (rond vert/turquoise) */
 section ul li::before,
 .content-surface ul li::before{
   content: none;
 }
 
 
-/* =========================================================
-   TABLES
-   ========================================================= */
+/* ==============================================================================
+TABLES
+============================================================================== */
 
 .table-responsive{
   background: var(--card);
@@ -284,9 +292,11 @@ table tr:hover td{
 }
 
 
-/* =========================================================
-   BOUTONS
-   ========================================================= */
+/* ==============================================================================
+BOUTONS
+- Attention : cette surcouche affecte .btn ET <button>.
+- Conservée telle quelle car c’est un choix graphique global.
+============================================================================== */
 
 .btn, button{
   border: 1px solid rgba(20,184,166,.35) !important;
@@ -314,9 +324,9 @@ table tr:hover td{
 }
 
 
-/* =========================================================
-   IMAGES
-   ========================================================= */
+/* ==============================================================================
+IMAGES
+============================================================================== */
 
 img{
   max-width: 100%;
@@ -324,9 +334,9 @@ img{
 }
 
 
-/* =========================================================
-   ACCUEIL / INDEX — CARTES RECETTES
-   ========================================================= */
+/* ==============================================================================
+ACCUEIL / INDEX — CARTES RECETTES
+============================================================================== */
 
 .recipes-grid{
   display: grid;
@@ -402,9 +412,9 @@ img{
 }
 
 
-/* =========================================================
-   (Optionnel) TAGS (chips)
-   ========================================================= */
+/* ==============================================================================
+(Optionnel) TAGS (chips)
+============================================================================== */
 
 .recipe-tags{
   display: flex;
@@ -431,9 +441,9 @@ img{
 }
 
 
-/* =========================================================
-   PICK CARD ("On mange quoi ?") — bloc injecté en JS
-   ========================================================= */
+/* ==============================================================================
+PICK CARD (“On mange quoi ?”) — bloc injecté en JS
+============================================================================== */
 
 .pick-card{
   background: var(--card);
@@ -452,9 +462,9 @@ img{
 }
 
 
-/* =========================================================
-   RECETTES
-   ========================================================= */
+/* ==============================================================================
+RECETTES (layout recipe)
+============================================================================== */
 
 .recipe-lead{
   background: rgba(20,184,166,.08);
@@ -512,9 +522,9 @@ img{
 }
 
 
-/* =========================================================
-   NAVBAR — DROPDOWN "RECETTES"
-   ========================================================= */
+/* ==============================================================================
+NAVBAR — DROPDOWN “RECETTES”
+============================================================================== */
 
 .recipes-dropdown-menu{
   max-height: 70vh;
@@ -585,9 +595,9 @@ img{
 }
 
 
-/* =========================================================
-   BADGES (emoji) — WRAP + CENTRÉ (définition unique)
-   ========================================================= */
+/* ==============================================================================
+BADGES (emoji) — WRAP + CENTRÉ (définition unique)
+============================================================================== */
 
 .recipe-badges-line{
   display:flex;
@@ -620,9 +630,9 @@ img{
 }
 
 /*
-  Liens autour des emojis :
-  - .badge-link (tag-index)
-  - .badge-link-outside (random pick)
+Liens autour des emojis :
+- .badge-link (nav-badges)
+- .badge-link-outside (random pick)
 */
 .recipe-badges-line a,
 .recipe-badges-line a.badge-link-outside{
@@ -649,9 +659,9 @@ img{
 }
 
 
-/* =========================================================
-   TITRES DE CATÉGORIES (index)
-   ========================================================= */
+/* ==============================================================================
+TITRES DE CATÉGORIES (index)
+============================================================================== */
 
 .recipe-category-title{
   margin-top: 1.25rem;
@@ -671,9 +681,11 @@ img{
 }
 
 
-/* =========================================================
-   BADGE "Recette non testée" (Bootstrap .badge.bg-warning)
-   ========================================================= */
+/* ==============================================================================
+BADGE “Recette non testée”
+- Sur index : style “capsule” discret (badge Bootstrap warning).
+- Sur random-pick : style plus neutre pour ne pas dominer la carte.
+============================================================================== */
 
 .recipe-card .badge.bg-warning{
   font-size: .7rem;
@@ -701,9 +713,9 @@ img{
 }
 
 
-/* =========================================================
-   TAG-INDEX (layout #tag-index)
-   ========================================================= */
+/* ==============================================================================
+TAG-INDEX (layout #tag-index)
+============================================================================== */
 
 #tag-index .page-head{ margin-bottom: 1rem; }
 #tag-index .nav-badges{ margin: .75rem 0 1rem 0; }
@@ -729,11 +741,12 @@ img{
 }
 
 
-/* =========================================================
-   ACCESSIBILITÉ : respecte le réglage utilisateur
-   ========================================================= */
+/* ==============================================================================
+ACCESSIBILITÉ — Respect des préférences utilisateur
+============================================================================== */
 
 @media (prefers-reduced-motion: reduce){
   *{ transition: none !important; }
   .recipe-card-link:hover{ transform: none !important; }
 }
+

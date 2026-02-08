@@ -1,24 +1,51 @@
-<!-- =========================================================
-     _includes/navbar.html
-     Navigation principale (Bootstrap)
-     Modifs demandées :
-     - Suppression du lien "Mentions légales" (déplacé dans le footer)
-     ========================================================= -->
+<!--
+==============================================================================
+_includes/navbar.html — Navigation principale (Bootstrap)
+==============================================================================
+
+Rôle
+- Fournir la navigation principale du site (desktop + mobile).
+- Donner accès :
+  • à l’index recettes (avec accès rapide “On mange quoi ?”)
+  • aux sections recettes par recipe_group (ancres sur la page d’accueil)
+  • aux pages fixes (repères, sucres, édulcorants, à propos)
+
+Entrées / dépendances
+- page.url     : détection de la page courante (classe .active).
+- site.baseurl : construction de liens compatibles GitHub Pages.
+- site.pages   : construction du menu “Recettes” via les pages layout: recipe.
+
+Contrats / contraintes
+- Compat GitHub Pages :
+  • évite where_exp (selon config/plugins, peut être plus strict).
+  • construit la liste de recettes avec une boucle + push.
+- UX :
+  • “On mange quoi ?” pointe vers #random-pick (index).
+  • les groupes pointent vers #{{ recipe_group | slugify }} (index).
+- Structure :
+  • “Mentions légales” n’est pas dans la navbar (déplacé dans le footer).
+
+Accessibilité
+- aria-label sur <nav>.
+- aria-controls / aria-expanded / aria-label sur le bouton mobile.
+- aria-labelledby sur le dropdown.
+==============================================================================
+-->
 
 <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
   <div class="container-fluid site-container">
 
     {%- comment -%}
-      Marque / retour accueil
-      - On évite les styles inline : le CSS global supprime déjà les soulignements.
+      Marque / retour accueil.
+      L’aspect visuel (soulignement, etc.) est géré par le CSS global.
     {%- endcomment -%}
     <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/">
       Recettes low carb
     </a>
 
     {%- comment -%}
-      Bouton mobile (Bootstrap)
-      - navbar-toggler-icon est géré par Bootstrap.
+      Toggler mobile (Bootstrap).
+      Le rendu de l’icône est fourni par .navbar-toggler-icon (Bootstrap).
     {%- endcomment -%}
     <button
       class="navbar-toggler"
@@ -36,16 +63,17 @@
       <ul class="navbar-nav ms-lg-auto me-lg-auto mb-2 mb-lg-0 gap-lg-1">
 
         {%- comment -%}
-          Détermination de la page courante
-          - On normalise l'URL pour que "/" et "/index.html" soient traités pareil.
+          Détermination de la page courante.
+          Normalisation : "/index.html" est ramené à "/" pour un test cohérent.
         {%- endcomment -%}
         {% assign current = page.url | replace: "index.html", "" %}
 
         {%- comment -%}
-          RECETTES (dropdown catégories)
-          IMPORTANT compat GitHub Pages :
-          - On évite where_exp ici (plus strict selon config).
-          - On reconstruit manuellement la liste des recettes ayant un recipe_group.
+          Menu “Recettes” (dropdown).
+          Construction :
+          1) pages layout: recipe
+          2) filtrage sur recipe_group présent
+          3) group_by recipe_group + tri par nom (stable)
         {%- endcomment -%}
         <li class="nav-item dropdown">
           <a
@@ -59,11 +87,6 @@
             Recettes
           </a>
 
-          {%- comment -%}
-            1) Récupère toutes les pages "recipe"
-            2) Filtre celles qui ont recipe_group
-            3) Groupe par recipe_group puis tri par nom de groupe
-          {%- endcomment -%}
           {% assign all_recipes_raw = site.pages | where: "layout", "recipe" %}
           {% assign all_recipes = "" | split: "" %}
           {% for p in all_recipes_raw %}
@@ -76,8 +99,8 @@
           <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
 
             {%- comment -%}
-              Accès direct : On mange quoi ?
-              - Ancre sur la page d’accueil (index).
+              Accès direct — “On mange quoi ?”
+              Pointe vers l’ancre du composant random pick sur l’index.
             {%- endcomment -%}
             <li>
               <a class="dropdown-item" href="{{ site.baseurl }}/#random-pick">
@@ -88,7 +111,8 @@
             <li><hr class="dropdown-divider"></li>
 
             {%- comment -%}
-              Liens vers les sections de l’index (ancres par groupes)
+              Accès aux sections de l’index par recipe_group.
+              slugify doit rester cohérent avec l’ID rendu par recipes-index.html.
             {%- endcomment -%}
             {% for g in grouped %}
               <li>
@@ -101,8 +125,8 @@
         </li>
 
         {%- comment -%}
-          Pages fixes
-          - On garde un test simple sur l'URL courante.
+          Pages fixes.
+          Le critère d’activation reste volontairement simple (test sur current).
         {%- endcomment -%}
         <li class="nav-item">
           <a
@@ -133,8 +157,9 @@
         </li>
 
         {%- comment -%}
-          "Mentions légales" supprimé ici :
-          - Le lien est désormais dans le footer.
+          Mentions légales :
+          - Lien volontairement absent de la navbar.
+          - Le point d’entrée unique est désormais le footer (footer.html).
         {%- endcomment -%}
 
       </ul>
@@ -142,3 +167,4 @@
 
   </div>
 </nav>
+
