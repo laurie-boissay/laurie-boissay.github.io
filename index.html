@@ -32,8 +32,11 @@ body_id: "home"
 
   {%- comment -%}
     Tags techniques masqués dans l’UI des cartes
+    - low-carb-modere / low-carb-strict : tags de classification (non affichés en badges)
+    - gout-sucre : DOIT être affiché sur les cartes (emoji 🍬), donc NON masqué ici.
+      Son exclusion du random pick se gère dans la logique du random pick (JS).
   {%- endcomment -%}
-  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
 
   {%- comment -%}
     Comptage des recettes testées

@@ -24,6 +24,8 @@ Contrats / dépendances
 - recipes-index.html :
   • fournit le marquage <div class="recipe-item" data-tested="true|false"> utilisé
     par le filtre “recettes testées”.
+  • interprète le paramètre hidden_tags pour masquer UNIQUEMENT certains tags techniques
+    dans l’UI des cartes (affichage des emojis).
 - Données :
   • _data/tags_fonctionnels.yml : descriptions des tags fonctionnels.
   • _data/micronutriments.yml   : fiches micronutriments (rôles, apports, sources, etc.).
@@ -31,6 +33,11 @@ Contrats / dépendances
 Contraintes d’affichage
 - Le filtre “recettes testées” n’est affiché que s’il existe au moins une recette
   non testée dans la sélection (évite un contrôle inutile).
+
+Note importante (gout-sucre)
+- Le tag "gout-sucre" DOIT être affiché sur les cartes (emoji 🍬).
+- Son exclusion du tirage aléatoire se gère dans la logique du random pick (JS),
+  pas via hidden_tags (qui ne fait que masquer l’affichage).
 ==============================================================================
 {%- endcomment -%}
 
@@ -57,7 +64,12 @@ Contraintes d’affichage
   {%- endcomment -%}
   {% include nav-badges.html %}
 
-  {%- assign hidden_tags = "low-carb-modere,low-carb-strict,gout-sucre" | split: "," -%}
+  {%- comment -%}
+    Tags techniques masqués dans l’UI des cartes :
+    - low-carb-modere / low-carb-strict : tags de classification, non affichés en badges.
+  {%- endcomment -%}
+  {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
+
   {%- assign recipes = site.pages | where: "layout", "recipe" -%}
   {%- assign filtered = "" | split: "" -%}
 

@@ -36,6 +36,9 @@ Contraintes
 Remarques
 - Le mapping tag/micronutriment → emoji + title est centralisé ici pour garantir
   une cohérence UI entre toutes les pages.
+- Le tag "gout-sucre" est un tag technique (classification), mais il est affiché
+  volontairement sur les cartes via l’emoji 🍬 (si l’appelant ne le masque pas
+  dans hidden_tags).
 ==============================================================================
 {%- endcomment -%}
 
@@ -132,6 +135,13 @@ Remarques
                               {%- when "peu-calorique" -%}<li title="Peu calorique">🪶</li>
                               {%- when "calorique" -%}<li title="Calorique">🔥</li>
                               {%- when "longue" -%}<li title="Préparation longue">🐌</li>
+
+                              {%- comment -%}
+                                Tag "gout-sucre" :
+                                - Doit être visible sur les cartes (emoji 🍬) si non masqué
+                                  par l’appelant via hidden_tags.
+                              {%- endcomment -%}
+                              {%- when "gout-sucre" -%}<li title="Goût sucré">🍬</li>
                             {%- endcase -%}
                           {%- endunless -%}
                         {%- endfor -%}
@@ -162,7 +172,7 @@ Remarques
                             {%- when "potassium" -%}<li title="Potassium">🍌</li>
                             {%- when "zinc" -%}<li title="Zinc">🔩</li>
                             {%- when "selenium" -%}<li title="Sélénium">🧪</li>
-                            {%- when "iode" %}<li title="Iode">🌊</li>
+                            {%- when "iode" -%}<li title="Iode">🌊</li>
                           {%- endcase -%}
                         {%- endfor -%}
                       </ul>
