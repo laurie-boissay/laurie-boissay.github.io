@@ -3,306 +3,252 @@
 _includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
 ==============================================================================
 
-Rôle
-- Afficher une suggestion aléatoire de recette (carte “pick-card”) injectée en JS.
-- Exclure systématiquement les recettes taguées "gout-sucre".
-- Exclure certains recipe_group du tirage (groupes utilitaires / non “plats”).
-- Afficher les badges (tags fonctionnels + micronutriments) de la recette tirée.
-
-Options (include.*)
-- include.hide_links (optionnel)
-  • true  => masque les deux lignes de navigation badges (tags + micros)
-  • false => affiche la navigation badges sous la carte (comportement par défaut)
-
-Mode “page filtrée” (automatique)
-- Si document.body.dataset.filterType = "tag"|"micro" ET document.body.dataset.filterId = "<id>",
-  le tirage est restreint aux cartes correspondant au filtre.
-  (Initialisation fournie par tag-index.html.)
-
-Filtre global “testées seulement” (interactions cross-scripts)
-- Si document.body.dataset.onlyTested == "true", le tirage est restreint aux recettes testées.
-- L’état est piloté par _includes/filter-tested.html qui émet l’évènement "testedFilterChanged".
-
-Factorisation
-- Les liens fixes (tags/micros) ne sont pas dupliqués : rendu via _includes/nav-badges.html.
-- Les mappings JS (TAG_BADGES / MICRO_BADGES) ne sont pas définis ici :
-  ils proviennent de assets/js/badges-map.js chargé dans le <head> (head.html).
-
-Contrats / dépendances
-- La liste source est dérivée de #recipes-index (rendu par _includes/recipes-index.html).
-- Les attributs data-* attendus :
-  • .recipe-card[data-tags][data-micros]
-  • a.recipe-card-link[data-title][data-subtitle][data-tested]
-- Les groupes sont lus via [data-recipe-group] (encapsuleur de section de groupe).
+Évolutions UX :
+- Le titre de la recette dans la pick-card est désormais cliquable.
+- Les badges (tags fonctionnels + micronutriments) sont cliquables.
+- Cohérent avec la structure “carte non cliquable + lien sur le titre”.
 ==============================================================================
 {%- endcomment -%}
 
-<!-- =========================================================
-     SUGGESTION ALÉATOIRE
-     ========================================================= -->
 <div class="mb-4">
-
-  <!-- Hôte d’injection de la pick-card (contenu fourni par JS) -->
   <div id="random-pick"></div>
 
-  {%- comment -%}
-    Navigation badges (hors tirage) :
-    - réutilise nav-badges.html (source unique)
-    - masquable via include.hide_links pour éviter les doublons sur pages filtrées
-    - link_class dédié pour le style “hors cartes”
-  {%- endcomment -%}
   {%- unless include.hide_links -%}
     {%- include nav-badges.html link_class="badge-link-outside" wrapper_class="random-pick-links mt-2" -%}
   {%- endunless -%}
 </div>
 
 <script>
-  /**
-   * Random pick (“On mange quoi ?”).
-   *
-   * Fonction :
-   * - Tire une recette aléatoire à partir des cartes présentes dans #recipes-index.
-   *
-   * Exclusions :
-   * - Tag "gout-sucre" (exclusion systématique du tirage).
-   * - Groups listés dans EXCLUDED_GROUPS (comparaison en minuscules).
-   *
-   * Filtres dynamiques :
-   * - Mode page filtrée :
-   *     body[data-filter-type="tag|micro"][data-filter-id="..."]
-   * - Filtre global “testées seulement” :
-   *     body[data-only-tested="true"]
-   *   (piloté par filter-tested.html, évènement "testedFilterChanged")
-   *
-   * Dépendances :
-   * - #recipes-index (rendu par recipes-index.html) doit exister.
-   * - badges-map.js expose window.RECETTES_BADGES_MAP (TAG_BADGES / MICRO_BADGES).
-   */
-  document.addEventListener("DOMContentLoaded", () => {
-    const indexRoot = document.getElementById("recipes-index");
-    const pickHost = document.getElementById("random-pick");
-    if (!indexRoot || !pickHost) return;
+document.addEventListener("DOMContentLoaded", () => {
 
-    // -------------------------------------------------------------------------
-    // Mode “page filtrée” (paramètres posés tôt par tag-index.html)
-    // -------------------------------------------------------------------------
-    const FILTER_TYPE = (document.body?.dataset?.filterType || "").toLowerCase().trim(); // "tag"|"micro"|"" 
-    const FILTER_ID = (document.body?.dataset?.filterId || "").toLowerCase().trim();     // ex: "selenium"
+  const indexRoot = document.getElementById("recipes-index");
+  const pickHost  = document.getElementById("random-pick");
+  if (!indexRoot || !pickHost) return;
 
-    // -------------------------------------------------------------------------
-    // Filtre global “testées seulement” (état publié par filter-tested.html)
-    // -------------------------------------------------------------------------
-    function isOnlyTestedActive() {
-      return (document.body?.dataset?.onlyTested || "").toLowerCase().trim() === "true";
+  const FILTER_TYPE = (document.body?.dataset?.filterType || "").toLowerCase().trim();
+  const FILTER_ID   = (document.body?.dataset?.filterId   || "").toLowerCase().trim();
+
+  function isOnlyTestedActive() {
+    return (document.body?.dataset?.onlyTested || "").toLowerCase().trim() === "true";
+  }
+
+  const EXCLUDED_TAG = "gout-sucre";
+
+  const HIDDEN_TAGS = new Set([
+    "low-carb-modere",
+    "low-carb-strict",
+    "gout-sucre"
+  ]);
+
+  const EXCLUDED_GROUPS = [
+    "amuse-bouche",
+    "boissons",
+    "pains & substituts",
+    "pâtes & fonds",
+    "sauces & assaisonnements",
+    "légumes & accompagnements",
+    "préparations & conservations",
+    "barres nutritionnelles"
+  ];
+
+  const BADGES_MAP   = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
+  const TAG_BADGES   = BADGES_MAP.TAG_BADGES   || {};
+  const MICRO_BADGES = BADGES_MAP.MICRO_BADGES || {};
+
+  let lastHref = null;
+
+  function parseList(str) {
+    return (str || "")
+      .split(",")
+      .map(s => s.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
+  function getTitleLink(card){
+    return card?.querySelector("a.recipe-title-link[href]") || null;
+  }
+
+  function getRecipeHref(card){
+    return getTitleLink(card)?.getAttribute("href")?.trim() || "";
+  }
+
+  function getRecipeTitle(card){
+    return getTitleLink(card)?.textContent?.trim() || "";
+  }
+
+  function getRecipeSubtitle(card){
+    return card?.querySelector(".recipe-card-subtitle")?.textContent?.trim() || "";
+  }
+
+  function isRecipeTested(card){
+    const item = card?.closest(".recipe-item");
+    return (item?.dataset?.tested || "").toLowerCase() === "true";
+  }
+
+  function hasExcludedTag(card){
+    return parseList(card?.dataset?.tags).includes(EXCLUDED_TAG);
+  }
+
+  function isInExcludedGroup(card){
+    const group = card?.closest("[data-recipe-group]")?.dataset?.recipeGroup?.toLowerCase().trim();
+    return EXCLUDED_GROUPS.includes(group);
+  }
+
+  function matchesPageFilter(card){
+    if (!FILTER_TYPE || !FILTER_ID) return true;
+
+    if (FILTER_TYPE === "tag"){
+      return parseList(card?.dataset?.tags).includes(FILTER_ID);
     }
 
-    // Exclusion systématique : pas de tirage dans "gout-sucre"
-    const EXCLUDED_TAG = "gout-sucre";
-
-    // Tags invisibles dans l’affichage des badges fonctionnels
-    const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict", "gout-sucre"]);
-
-    // Exclusions par recipe_group (comparaison en minuscules sur data-recipe-group)
-    const EXCLUDED_GROUPS = [
-      "amuse-bouche",
-      "boissons",
-      "pains & substituts",
-      "pâtes & fonds",
-      "sauces & assaisonnements",
-      "légumes & accompagnements",
-      "préparations & conservations",
-      "barres nutritionnelles"
-    ];
-
-    // -------------------------------------------------------------------------
-    // Mappings badges (centralisés dans badges-map.js)
-    // -------------------------------------------------------------------------
-    const BADGES_MAP = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
-    const TAG_BADGES = BADGES_MAP.TAG_BADGES || {};
-    const MICRO_BADGES = BADGES_MAP.MICRO_BADGES || {};
-
-    // Anti-répétition simple : évite de proposer la même recette trop souvent
-    let lastHref = null;
-
-    function parseList(str) {
-      return (str || "")
-        .split(",")
-        .map((s) => s.trim().toLowerCase())
-        .filter(Boolean);
+    if (FILTER_TYPE === "micro"){
+      return parseList(card?.dataset?.micros).includes(FILTER_ID);
     }
 
-    function isValidRecipeLink(a) {
-      const href = (a.getAttribute("href") || "").trim();
-      if (!href) return false;
-      if (href.startsWith("#")) return false;
+    return true;
+  }
 
-      const title = (a.dataset.title || a.textContent || "").trim();
-      return Boolean(title);
-    }
+  function matchesOnlyTested(card){
+    if (!isOnlyTestedActive()) return true;
+    return isRecipeTested(card);
+  }
 
-    function hasExcludedTag(card) {
-      const tags = parseList(card?.dataset?.tags);
-      return tags.includes(EXCLUDED_TAG);
-    }
+  function isValidCard(card){
+    return getRecipeHref(card) && getRecipeTitle(card);
+  }
 
-    function isInExcludedGroup(a) {
-      const groupEl = a.closest("[data-recipe-group]");
-      if (!groupEl) return false;
+  function getCandidates(){
+    return Array.from(indexRoot.querySelectorAll(".recipe-card"))
+      .filter(isValidCard)
+      .filter(card =>
+        !hasExcludedTag(card) &&
+        !isInExcludedGroup(card) &&
+        matchesPageFilter(card) &&
+        matchesOnlyTested(card)
+      );
+  }
 
-      const group = (groupEl.dataset.recipeGroup || "").toLowerCase().trim();
-      return EXCLUDED_GROUPS.includes(group);
-    }
+  function pickRandom(cards){
+    if (!cards.length) return null;
 
-    function matchesPageFilter(card) {
-      if (!FILTER_TYPE || !FILTER_ID) return true;
+    let card;
+    let tries = 0;
+    do{
+      card = cards[Math.floor(Math.random() * cards.length)];
+      tries++;
+    }while(getRecipeHref(card) === lastHref && tries < 20);
 
-      if (FILTER_TYPE === "tag") {
-        const tags = parseList(card?.dataset?.tags);
-        return tags.includes(FILTER_ID);
-      }
+    lastHref = getRecipeHref(card);
+    return card;
+  }
 
-      if (FILTER_TYPE === "micro") {
-        const micros = parseList(card?.dataset?.micros);
-        return micros.includes(FILTER_ID);
-      }
+  /* ===============================
+     BADGES CLIQUABLES
+     =============================== */
 
-      // Type inconnu => pas de filtrage (fail-safe)
-      return true;
-    }
+  function buildBadgeLine(items, map, ariaLabel, type){
+    const lis = items.map(id => {
+      const info = map[id];
+      if (!info) return "";
 
-    function matchesOnlyTested(a) {
-      if (!isOnlyTestedActive()) return true;
-      return (a.dataset.tested || "").toLowerCase().trim() === "true";
-    }
+      const url = type === "tag"
+        ? `/tags/${id}/`
+        : `/micronutriments/${id}/`;
 
-    function getCandidates() {
-      return Array.from(indexRoot.querySelectorAll(".recipe-card a[href]"))
-        .filter(isValidRecipeLink)
-        .filter((a) => {
-          const card = a.closest(".recipe-card");
-          if (!card) return false;
-
-          if (hasExcludedTag(card)) return false;
-          if (isInExcludedGroup(a)) return false;
-          if (!matchesPageFilter(card)) return false;
-          if (!matchesOnlyTested(a)) return false;
-
-          return true;
-        });
-    }
-
-    function pickRandom(links) {
-      if (!links.length) return null;
-
-      let a;
-      let tries = 0;
-      do {
-        a = links[Math.floor(Math.random() * links.length)];
-        tries++;
-      } while (a.getAttribute("href") === lastHref && tries < 20);
-
-      lastHref = a.getAttribute("href");
-      return a;
-    }
-
-    function buildBadgeLine(items, map, ariaLabel) {
-      const lis = items
-        .map((id) => {
-          const info = map[id];
-          if (!info) return "";
-          const title = (info.title || "").replace(/"/g, "&quot;");
-          return `<li title="${title}">${info.emoji}</li>`;
-        })
-        .filter(Boolean)
-        .join("");
-
-      if (!lis) return "";
-      return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
-    }
-
-    function buildPickBadges(card) {
-      const tagsAll = parseList(card?.dataset?.tags);
-      const tagsFunctional = tagsAll.filter((t) => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
-
-      const microsAll = parseList(card?.dataset?.micros);
-      const micros = microsAll.filter((m) => MICRO_BADGES[m]);
-
-      const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Badges");
-      const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments");
-
-      if (!line1 && !line2) return "";
       return `
-        <div class="recipe-badges-wrap">
-          ${line1}
-          ${line2}
-        </div>
+        <li>
+          <a class="badge-link-outside" href="${url}" title="${info.title}">
+            ${info.emoji}
+          </a>
+        </li>
       `;
-    }
+    }).join("");
 
-    function renderPick(a) {
-      const title = (a.dataset.title || a.textContent || "").trim();
-      const subtitle = (a.dataset.subtitle || "").trim();
-      const tested = a.dataset.tested === "true";
-      const href = a.getAttribute("href");
+    if (!lis) return "";
+    return `<ul class="recipe-badges-line" aria-label="${ariaLabel}">${lis}</ul>`;
+  }
 
-      const card = a.closest(".recipe-card");
-      const badgesHtml = buildPickBadges(card);
+  function buildPickBadges(card){
+    const tagsAll = parseList(card?.dataset?.tags);
+    const tagsFunctional = tagsAll.filter(t => !HIDDEN_TAGS.has(t) && TAG_BADGES[t]);
 
-      pickHost.innerHTML = `
-        <div class="pick-card">
-          <div class="pick-card-body text-center">
-            <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
+    const microsAll = parseList(card?.dataset?.micros);
+    const micros = microsAll.filter(m => MICRO_BADGES[m]);
 
-            <h3 class="h5 mb-1">
+    const line1 = buildBadgeLine(tagsFunctional, TAG_BADGES, "Tags fonctionnels", "tag");
+    const line2 = buildBadgeLine(micros, MICRO_BADGES, "Micronutriments", "micro");
+
+    if (!line1 && !line2) return "";
+
+    return `
+      <div class="recipe-badges-wrap">
+        ${line1}
+        ${line2}
+      </div>
+    `;
+  }
+
+  function renderPick(card){
+
+    const title    = getRecipeTitle(card);
+    const subtitle = getRecipeSubtitle(card);
+    const tested   = isRecipeTested(card);
+    const href     = getRecipeHref(card);
+
+    const badgesHtml = buildPickBadges(card);
+
+    pickHost.innerHTML = `
+      <div class="pick-card">
+        <div class="pick-card-body text-center">
+          <div class="mb-2 fw-bold fs-4">On mange quoi&nbsp;?</div>
+
+          <h3 class="h5 mb-1">
+            <a class="recipe-title-link" href="${href}">
               ${title}
-              ${tested ? "" : `
-                <span class="badge bg-warning text-dark ms-2">
-                  Recette non testée
-                </span>
-              `}
-            </h3>
+            </a>
+            ${tested ? "" : `
+              <span class="badge bg-warning text-dark ms-2">
+                Recette non testée
+              </span>
+            `}
+          </h3>
 
-            ${subtitle ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>` : ""}
+          ${subtitle ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>` : ""}
 
-            ${badgesHtml}
+          ${badgesHtml}
 
-            <div class="d-flex justify-content-center gap-2 mt-3">
-              <a class="btn btn-primary" href="${href}">Ça me plaît</a>
-              <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
-                Autre idée
-              </button>
-            </div>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <a class="btn btn-primary" href="${href}">Ça me plaît</a>
+            <button id="btn-reroll" type="button" class="btn btn-outline-secondary">
+              Autre idée
+            </button>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      document.getElementById("btn-reroll").onclick = pickAndRender;
+    document.getElementById("btn-reroll").onclick = pickAndRender;
+  }
+
+  function pickAndRender(){
+    const cards = getCandidates();
+    if (!cards.length){
+      pickHost.innerHTML = "";
+      return;
     }
 
-    function pickAndRender() {
-      const links = getCandidates();
-
-      if (!links.length) {
-        pickHost.innerHTML = "";
-        return;
-      }
-
-      const a = pickRandom(links);
-      if (!a) {
-        pickHost.innerHTML = "";
-        return;
-      }
-
-      renderPick(a);
+    const card = pickRandom(cards);
+    if (!card){
+      pickHost.innerHTML = "";
+      return;
     }
 
-    // Lancement initial
-    pickAndRender();
+    renderPick(card);
+  }
 
-    // Recalcule au changement du filtre global “testées seulement”
-    document.addEventListener("testedFilterChanged", function () {
-      pickAndRender();
-    });
-  });
+  pickAndRender();
+
+  document.addEventListener("testedFilterChanged", pickAndRender);
+});
 </script>
 

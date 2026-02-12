@@ -336,6 +336,10 @@ img{
 
 /* ==============================================================================
 ACCUEIL / INDEX — CARTES RECETTES
+- Modification UX :
+  • la carte n’est plus un lien global
+  • le titre + un bouton “Voir la recette” sont les CTA
+  • les badges deviennent de vrais liens (tags / micronutriments)
 ============================================================================== */
 
 .recipes-grid{
@@ -348,8 +352,12 @@ ACCUEIL / INDEX — CARTES RECETTES
   .recipes-grid{ grid-template-columns: 1fr; }
 }
 
-.recipe-card-link{
-  display: block;
+/*
+Carte (conteneur non cliquable)
+- Contrat : même look que l’ancien .recipe-card-link
+- Le hover s’applique au conteneur, pas à un <a>
+*/
+.recipe-card{
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
@@ -360,14 +368,10 @@ ACCUEIL / INDEX — CARTES RECETTES
   box-shadow: var(--shadow);
   padding: 14px;
 
-  text-decoration: none !important;
-  border-bottom: none !important;
-  background-image: none !important;
-
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.recipe-card-link::before{
+.recipe-card::before{
   content:"";
   position:absolute;
   inset:-2px;
@@ -378,31 +382,36 @@ ACCUEIL / INDEX — CARTES RECETTES
   pointer-events:none;
 }
 
-.recipe-card-link > *{ position: relative; z-index: 1; }
+.recipe-card > *{ position: relative; z-index: 1; }
 
-.recipe-card-link:hover{
+.recipe-card:hover{
   transform: translateY(-3px);
   box-shadow: var(--shadow-strong);
-  background: var(--card) !important;
 }
 
-/* Neutralise le hover global des <a> à l’intérieur des cartes */
-.recipe-card-link,
-.recipe-card-link *{
-  text-decoration: none !important;
-  border-bottom: none !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
+/*
+Neutralisation du hover global des <a> dans les cartes :
+- on évite le “fond turquoise” sur le titre / CTA
+- exception : les liens badges ont leur propre hover (défini plus bas)
+*/
+.recipe-card a:hover{
+  background: transparent;
 }
 
+/* Titre */
 .recipe-card-title{
   margin: 0;
   color: var(--text);
   font-weight: 850;
 }
 
-.recipe-card-link:hover .recipe-card-title{
+.recipe-title-link{
+  color: var(--text);
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.recipe-card:hover .recipe-title-link{
   color: var(--primary-2);
 }
 
@@ -411,6 +420,18 @@ ACCUEIL / INDEX — CARTES RECETTES
   color: rgba(15,23,42,.78);
 }
 
+/*
+Zone actions :
+- CTA “Voir la recette” visible et cliquable (mobile-friendly)
+- On laisse Bootstrap gérer le look du .btn (surcouche globale conservée)
+*/
+.recipe-card-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
 
 /* ==============================================================================
 (Optionnel) TAGS (chips)
@@ -633,9 +654,11 @@ BADGES (emoji) — WRAP + CENTRÉ (définition unique)
 Liens autour des emojis :
 - .badge-link (nav-badges)
 - .badge-link-outside (random pick)
+- .badge-link-card (cartes index / tag-index)
 */
 .recipe-badges-line a,
-.recipe-badges-line a.badge-link-outside{
+.recipe-badges-line a.badge-link-outside,
+.recipe-badges-line a.badge-link-card{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -649,8 +672,10 @@ Liens autour des emojis :
   border-radius: 10px;
 }
 
+/* Hover badges : on le force, même si .recipe-card neutralise a:hover */
 .recipe-badges-line a:hover,
-.recipe-badges-line a.badge-link-outside:hover{
+.recipe-badges-line a.badge-link-outside:hover,
+.recipe-badges-line a.badge-link-card:hover{
   background: rgba(20,184,166,.10) !important;
 }
 
@@ -747,6 +772,6 @@ ACCESSIBILITÉ — Respect des préférences utilisateur
 
 @media (prefers-reduced-motion: reduce){
   *{ transition: none !important; }
-  .recipe-card-link:hover{ transform: none !important; }
+  .recipe-card:hover{ transform: none !important; }
 }
 
