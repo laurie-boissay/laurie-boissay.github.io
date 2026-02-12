@@ -765,6 +765,34 @@ TAG-INDEX (layout #tag-index)
   font-weight: 800;
 }
 
+/* ==============================================================================
+RACCOURCIS (index + tag-index)
+- Encapsule la navigation par badges (tags + micronutriments) pour la rendre explicite.
+============================================================================== */
+
+.nav-shortcuts{
+  margin: .75rem 0 1rem 0;
+  padding: .85rem 1rem;
+
+  border: 1px solid rgba(15,23,42,.09);
+  border-radius: var(--radius);
+  background: rgba(20,184,166,.06);
+}
+
+.nav-shortcuts-title{
+  margin: 0 0 .25rem 0;
+  font-weight: 850;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.nav-shortcuts-hint{
+  margin: 0 0 .65rem 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+
 
 /* ==============================================================================
 ACCESSIBILITÉ — Respect des préférences utilisateur

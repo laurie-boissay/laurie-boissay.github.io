@@ -18,10 +18,15 @@ body_id: "home"
   {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
-    Navigation par badges (tags fonctionnels + micronutriments)
-    - Source unique des 2 lignes cliquables
+    Raccourcis de navigation (tags + micronutriments) :
+    - présenté comme un bloc “filtres rapides” (UX explicite).
+    - source unique : nav-badges.html.
   {%- endcomment -%}
-  {% include nav-badges.html %}
+  <div class="nav-shortcuts" aria-label="Raccourcis de filtres">
+    <div class="nav-shortcuts-title">Raccourcis</div>
+    <p class="nav-shortcuts-hint">Filtrer rapidement les recettes (tags fonctionnels et micronutriments).</p>
+    {% include nav-badges.html %}
+  </div>
 
   {%- comment -%}
     Récupération de toutes les recettes :
@@ -65,13 +70,6 @@ body_id: "home"
     Regroupement par catégorie (recipe_group)
   {%- endcomment -%}
   {%- assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" -%}
-
-  {%- comment -%}
-    Rendu des cartes (source locale)
-    - Modification UX : la carte n’est plus un lien global
-    - Le titre + un bouton “Voir la recette” sont les CTA
-    - Les badges deviennent des liens (tags + micros)
-  {%- endcomment -%}
 
   <div id="recipes-index">
     {% for g in grouped %}
@@ -193,5 +191,6 @@ body_id: "home"
       </div>
     {% endfor %}
   </div>
+
 </section>
 

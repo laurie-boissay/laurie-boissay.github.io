@@ -55,9 +55,15 @@ Note importante (gout-sucre)
   {% include random-pick.html hide_links=true %}
 
   {%- comment -%}
-    Navigation transversale (badges tags + micronutriments).
+    Raccourcis de navigation (tags + micronutriments) :
+    - présenté comme un bloc “filtres rapides” (UX explicite).
+    - source unique : nav-badges.html.
   {%- endcomment -%}
-  {% include nav-badges.html %}
+  <div class="nav-shortcuts" aria-label="Raccourcis de filtres">
+    <div class="nav-shortcuts-title">Raccourcis</div>
+    <p class="nav-shortcuts-hint">Changer rapidement de filtre (tags fonctionnels et micronutriments).</p>
+    {% include nav-badges.html %}
+  </div>
 
   {%- comment -%}
     Tags techniques masqués dans l’UI des cartes :
