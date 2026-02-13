@@ -4,6 +4,15 @@ layout: recipe
 # =========================================================
 # Recette (format site) — Plats à base de viande
 # =========================================================
+# Rôle :
+# - Plat “familial” type tourte : portionnement différent d’un plat standard.
+# - Recette conçue pour être stable (découpe) + batch cooking.
+#
+# Contrats site :
+# - recipe_sort : chaîne courte, sans accents/ponctuation, TOUJOURS entre guillemets.
+# - tags : uniquement tags fonctionnels officiels.
+# - micronutriments : via badges_nutritionnels (jamais dans tags).
+# =========================================================
 
 title: "Tourte familiale bœuf émincé & champignons"
 description: "Tourte familiale low carb modéré au bœuf émincé et champignons, avec pâte salée aux amandes et psyllium."
@@ -17,7 +26,7 @@ recipe_tested: true
 image: "/images/recettes/tourte-familiale-boeuf-champignons.webp"
 image_alt: "Tourte low carb au bœuf émincé et champignons, pâte aux amandes et psyllium"
 
-# Tags techniques
+# Tags techniques (badges fonctionnels)
 tags:
   - low-carb-modere
   - tres-proteine
@@ -27,7 +36,7 @@ tags:
   - longue
   # ⚠️ 610 kcal/portion → zone neutre plat (551–749), PAS de tag calorique
 
-# Micronutriments
+# Micronutriments (badges dédiés, pas des tags)
 badges_nutritionnels:
   - fer
   - vitamine-b12
@@ -35,6 +44,7 @@ badges_nutritionnels:
 
 # =========================================================
 # JSON-LD Recipe (SEO)
+# - kept simple (aligné avec tes autres fiches)
 # =========================================================
 extra_head: |
   <script type="application/ld+json">
@@ -69,7 +79,7 @@ extra_head: |
     <strong>Tourte familiale</strong> low carb modéré, conçue pour être
     <strong>rassasiante</strong>, <strong>stable à la découpe</strong>
     et compatible <strong>batch cooking</strong>.
-    La clé de la réussite est une garniture bien sèche avant montage.
+    La clé de la réussite est une garniture <strong>bien sèche</strong> avant montage.
   </p>
   <ul>
     <li><strong>Portions :</strong> 6 parts</li>
@@ -84,12 +94,17 @@ extra_head: |
 <h3>Pâte salée low carb</h3>
 <p>
   Utiliser la recette suivante :<br>
-  <a href="/recettes/pate-salee.html"><strong>Pâte salée aux amandes & psyllium</strong></a>
+  <a href="{{ '/recettes/pate-salee.html' | relative_url }}"><strong>Pâte salée aux amandes & psyllium</strong></a>
 </p>
 <ul>
   <li><strong>Quantité :</strong> <strong>2 doses</strong> (fond + couvercle) pour un moule 26–28 cm</li>
-  <li><strong>Texture :</strong> version <strong>psyllium renforcé</strong> pour une bonne tenue</li>
+  <li><strong>Objectif :</strong> pâte qui tient la découpe malgré une garniture humide</li>
 </ul>
+
+<p class="small text-muted">
+  <strong>Note psyllium :</strong> on reste sur le <strong>minimum fonctionnel</strong>.
+  Si ta pâte “standard” tient déjà bien, ne renforce pas : la stabilité vient surtout d’une garniture <strong>bien desséchée</strong>.
+</p>
 
 <h3>Garniture</h3>
 <ul>
@@ -109,4 +124,84 @@ extra_head: |
   en fin de cuisson, sinon la pâte ramollira.
 </p>
 
-<!-- (le reste du fichier est inchangé) -->
+<h2>Préparation</h2>
+<ol>
+  <li>Préchauffer le four à <strong>180°C</strong>.</li>
+
+  <li>
+    Préparer la <strong>garniture</strong> :
+    émincer les échalotes (et l’ail), puis faire fondre le beurre dans une grande poêle.
+  </li>
+
+  <li>Ajouter échalotes + ail, cuire 2 minutes sans coloration marquée.</li>
+
+  <li>
+    Ajouter les champignons émincés et cuire à feu moyen/fort en remuant,
+    jusqu’à évaporation maximale de l’eau (viser une poêle <strong>quasi sèche</strong>).
+  </li>
+
+  <li>Ajouter le bœuf émincé, cuire juste le temps de le saisir. Poivrer, thym.</li>
+
+  <li>
+    Hors feu, incorporer la crème, puis laisser tiédir 5 minutes.
+    Ajouter l’œuf battu et mélanger (évite l’œuf “brouillé”).
+  </li>
+
+  <li>
+    Foncer le moule avec <strong>1 dose</strong> de pâte.
+    Répartir la garniture en couche homogène (sans jus libre).
+  </li>
+
+  <li>
+    Poser le couvercle (2e dose), souder les bords.
+    Faire 2–3 petites cheminées au centre (évacuation vapeur).
+  </li>
+
+  <li>
+    Cuire <strong>40 à 50 minutes</strong> à 180°C, jusqu’à belle coloration.
+    Laisser reposer 10 minutes avant découpe (stabilise la part).
+  </li>
+</ol>
+
+<h2>Informations nutritionnelles</h2>
+<p>Valeurs estimées par portion (1 part sur 6).</p>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Énergie</th>
+        <th>Protéines</th>
+        <th>Lipides</th>
+        <th>Glucides</th>
+        <th>dont fructose</th>
+        <th>Fibres</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>≈ 610 kcal</td>
+        <td>≈ 40 g</td>
+        <td>≈ 45 g</td>
+        <td>≈ 9 g</td>
+        <td>≈ 1 g</td>
+        <td>≈ 7 g</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="small text-muted">
+  Valeurs indicatives. Les écarts viennent surtout de la pâte (amandes/psyllium) et du choix de morceaux de bœuf.
+</p>
+
+<h2>Notes low carb</h2>
+<ul>
+  <li><strong>Low carb modéré</strong> : compatible (la majeure partie des glucides vient de la pâte aux amandes et des champignons).</li>
+  <li><strong>Très protéiné</strong> : portion conçue pour un vrai repas (≈ 40 g/part).</li>
+  <li><strong>Riche en fibres</strong> : psyllium + amandes.</li>
+  <li><strong>Congélation</strong> : congeler en parts, puis décongeler au réfrigérateur.</li>
+  <li><strong>Micro-ondable</strong> : réchauffer à puissance moyenne pour limiter le dessèchement.</li>
+  <li><strong>Point texture</strong> : si la tourte rend de l’eau, c’est presque toujours un manque de dessiccation des champignons.</li>
+</ul>
+
