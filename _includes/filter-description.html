@@ -1,0 +1,73 @@
+{%- comment -%}
+==============================================================================
+filter-description.html — Bloc descriptif pour pages filtrées
+==============================================================================
+
+Rôle
+- Afficher le bloc explicatif correspondant au filtre actif :
+  • tag fonctionnel
+  • micronutriment
+
+Entrées (include params)
+- filter_type : "tag" | "micro"
+- filter_id   : identifiant du tag ou micronutriment
+
+Dépendances
+- _data/tags_fonctionnels.yml
+- _data/micronutriments.yml
+
+Contrat
+- Fail-safe : n’affiche rien si l’entrée n’existe pas.
+==============================================================================
+{%- endcomment -%}
+
+{%- if include.filter_type == "tag" and include.filter_id -%}
+  {%- assign taginfo = site.data.tags_fonctionnels[include.filter_id] -%}
+  {%- if taginfo -%}
+    <section class="micro-desc">
+      <h2>{{ taginfo.titre }}</h2>
+      <p>{{ taginfo.signification }}</p>
+
+      {%- if taginfo.criteres -%}
+        <h3>Critères d’attribution</h3>
+        <ul>
+          {%- for c in taginfo.criteres -%}
+            <li>{{ c }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+
+{%- if include.filter_type == "micro" and include.filter_id -%}
+  {%- assign micro = site.data.micronutriments[include.filter_id] -%}
+  {%- if micro -%}
+    <section class="micro-desc">
+      <h2>{{ micro.titre }}</h2>
+      <p>{{ micro.resume }}</p>
+
+      <h3>À quoi ça sert ?</h3>
+      <ul>
+        {% for r in micro.roles %}
+          <li>{{ r }}</li>
+        {% endfor %}
+      </ul>
+
+      <h3>Apports recommandés</h3>
+      <p><strong>Adulte :</strong> {{ micro.apports.adulte.cible }}</p>
+
+      <h3>Sources alimentaires</h3>
+      <ul>
+        {% for f in micro.ou_en_trouver %}
+          <li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+
+      <h3>Signes de carence</h3>
+      <p>{{ micro.carence.signes }}</p>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+

@@ -1,0 +1,247 @@
+{%- comment -%}
+==============================================================================
+recipes-search.html — Recherche par mots-clés (index + tag-index)
+==============================================================================
+
+Rôle
+- Fournir une recherche côté client pour filtrer les cartes visibles.
+
+Principe
+- Chaque carte expose `.recipe-item[data-search]` (fourni par recipes-grouped-grid.html).
+- Le script masque/affiche en ajoutant la classe `.is-search-hidden`.
+- Le champ est dans un <form> :
+  • Entrée déclenche un submit
+  • Le submit est intercepté (pas de navigation), et applique le filtre
+
+Contrats / dépendances
+- Dépend de `.recipe-item[data-search]` et de la classe `.recipe-item`.
+- Doit fonctionner même si l’include est placé AVANT la grille : initialisation sur DOMContentLoaded.
+
+Comportement de recherche
+- Recherche par mots entiers (évite "oeuf" => "boeuf").
+- Tous les mots saisis doivent être présents dans le titre (AND).
+- Tolérance minimale sur le pluriel en "s" (ex: "oeuf" => "oeufs", et inversement).
+- Normalisation tolérante : accents + ligatures (œ/æ).
+
+Accessibilité / UX
+- Champ + bouton Rechercher + bouton Effacer.
+- Compteur “X / total”.
+==============================================================================
+{%- endcomment -%}
+
+{%- assign title = include.title | default: "Recherche" -%}
+{%- assign placeholder = include.placeholder | default: "Chercher une fiche (ex. steak, asperges, saumon, boeuf, rapide…)" -%}
+{%- assign button_label = include.button_label | default: "Rechercher" -%}
+
+<div class="recipes-search my-3" aria-label="Recherche dans les fiches">
+  <div class="d-flex align-items-baseline justify-content-between gap-2 flex-wrap">
+    <div class="fw-semibold">{{ title }}</div>
+    <div id="recipes-search-count" class="small text-muted" aria-live="polite"></div>
+  </div>
+
+  <form id="recipes-search-form" class="mt-2" role="search" aria-label="Recherche par mots-clés">
+    <div class="input-group">
+      <input
+        id="recipes-search-input"
+        type="search"
+        class="form-control"
+        placeholder="{{ placeholder }}"
+        autocomplete="off"
+        aria-label="Rechercher dans les fiches"
+      >
+
+      <button
+        id="recipes-search-submit"
+        class="btn btn-outline-primary"
+        type="submit"
+        aria-label="{{ button_label }}"
+        title="{{ button_label }}"
+      >
+        {{ button_label }}
+      </button>
+
+      <button
+        id="recipes-search-clear"
+        class="btn btn-outline-secondary"
+        type="button"
+        aria-label="Effacer la recherche"
+        title="Effacer"
+      >
+        ✕
+      </button>
+    </div>
+  </form>
+</div>
+
+{%- comment -%}
+  CSS minimal :
+  - Masquage via classe pour cohabiter avec d’autres filtres (ex. “testées”).
+{%- endcomment -%}
+<style>
+  .recipe-item.is-search-hidden { display: none !important; }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    /**
+     * Normalise une chaîne pour rendre la recherche tolérante :
+     * - minuscules
+     * - ligatures (œ/æ) converties en (oe/ae)
+     * - accents supprimés
+     * - espaces normalisés
+     */
+    function normalizeText(s) {
+      if (!s) return "";
+      s = String(s).toLowerCase();
+
+      // Ligatures fréquentes en français : "bœuf" doit matcher "boeuf"
+      s = s.replace(/œ/g, "oe").replace(/æ/g, "ae");
+
+      // Suppression des accents (ex: "é" => "e")
+      if (s.normalize) {
+        s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+
+      // Nettoyage des espaces
+      return s.replace(/\s+/g, " ").trim();
+    }
+
+    /**
+     * Découpe en mots "recherche" :
+     * - supprime la ponctuation simple
+     * - conserve uniquement des tokens utiles
+     */
+    function tokenize(s) {
+      s = normalizeText(s);
+      if (!s) return [];
+
+      // Remplace la ponctuation par des espaces pour une tokenisation stable
+      // (ex: "boeuf-aux-oignons" => ["boeuf", "aux", "oignons"])
+      s = s.replace(/[^a-z0-9]+/g, " ").trim();
+
+      return s.split(" ").filter(Boolean);
+    }
+
+    function initRecipesSearch() {
+      var form = document.getElementById("recipes-search-form");
+      var input = document.getElementById("recipes-search-input");
+      var clearBtn = document.getElementById("recipes-search-clear");
+      var countEl = document.getElementById("recipes-search-count");
+
+      if (!form || !input || !clearBtn || !countEl) return;
+
+      // Scan après rendu DOM : l’include peut être au-dessus de la grille.
+      var items = Array.prototype.slice.call(
+        document.querySelectorAll(".recipe-item[data-search]")
+      );
+      var total = items.length;
+
+      function updateCount(visible) {
+        if (total === 0) {
+          countEl.textContent = "";
+          return;
+        }
+        countEl.textContent = visible + " / " + total;
+      }
+
+      function scrollToFirstVisible() {
+        var first = document.querySelector(".recipe-item:not(.is-search-hidden)");
+        if (!first) return;
+
+        first.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+
+      /**
+       * Match par mot entier avec tolérance pluriel simple en "s" :
+       * - "oeuf" match "oeufs"
+       * - "oeufs" match "oeuf"
+       */
+      function wordMatches(hayWords, qw) {
+        if (hayWords.includes(qw)) return true;
+
+        // Tolérance : singulier -> pluriel
+        if (hayWords.includes(qw + "s")) return true;
+
+        // Tolérance : pluriel -> singulier
+        if (qw.endsWith("s")) {
+          var singular = qw.slice(0, -1);
+          if (singular && hayWords.includes(singular)) return true;
+        }
+
+        return false;
+      }
+
+      function applyFilter(scroll) {
+        if (total === 0) return;
+
+        var queryWords = tokenize(input.value);
+        var visible = 0;
+
+        for (var i = 0; i < items.length; i++) {
+          var el = items[i];
+          var hayWords = tokenize(el.getAttribute("data-search"));
+
+          var match = false;
+
+          // Si aucun mot saisi => tout visible
+          if (queryWords.length === 0) {
+            match = true;
+          } else {
+            // AND : tous les mots recherchés doivent matcher comme mots entiers
+            // (avec tolérance minimale sur le pluriel "s")
+            match = queryWords.every(function (qw) {
+              return wordMatches(hayWords, qw);
+            });
+          }
+
+          if (match) {
+            el.classList.remove("is-search-hidden");
+            visible++;
+          } else {
+            el.classList.add("is-search-hidden");
+          }
+        }
+
+        updateCount(visible);
+
+        if (scroll && visible > 0) {
+          scrollToFirstVisible();
+        }
+      }
+
+      // Bouton "Rechercher" ou appui sur Entrée
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        applyFilter(true);
+      });
+
+      // Recherche live (sans scroll automatique)
+      input.addEventListener("input", function () {
+        applyFilter(false);
+      });
+
+      // Effacer : reset + focus + filtre
+      clearBtn.addEventListener("click", function () {
+        input.value = "";
+        input.focus();
+        applyFilter(false);
+      });
+
+      // État initial : tout visible
+      updateCount(total);
+    }
+
+    // Initialisation après chargement du DOM (robuste même si la grille est plus bas).
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initRecipesSearch);
+    } else {
+      initRecipesSearch();
+    }
+  })();
+</script>
+

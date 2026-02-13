@@ -1,0 +1,28 @@
+{%- comment -%}
+==============================================================================
+nav-shortcuts.html — Bloc “Raccourcis” (navigation tags + micronutriments)
+==============================================================================
+
+Rôle
+- Afficher un bloc UX “Raccourcis” au-dessus des listes, servant de filtres rapides.
+- Source unique de la navigation : nav-badges.html.
+
+Entrées (include params)
+- title : titre du bloc (optionnel, défaut "Raccourcis")
+- hint  : texte d’aide (optionnel, défaut générique)
+
+Contrats / dépendances
+- Dépend de l’include nav-badges.html (source unique).
+- Doit rester sémantiquement stable (classes CSS utilisées par le thème).
+==============================================================================
+{%- endcomment -%}
+
+{%- assign title = include.title | default: "Raccourcis" -%}
+{%- assign hint  = include.hint  | default: "Filtrer rapidement (tags fonctionnels et micronutriments)." -%}
+
+<div class="nav-shortcuts" aria-label="Raccourcis de filtres">
+  <div class="nav-shortcuts-title">{{ title }}</div>
+  <p class="nav-shortcuts-hint">{{ hint }}</p>
+  {% include nav-badges.html %}
+</div>
+
