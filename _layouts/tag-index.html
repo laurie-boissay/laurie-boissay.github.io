@@ -2,26 +2,54 @@
 layout: page
 ---
 
+{%- comment -%}
+==============================================================================
+tag-index.html — Page d’index filtrée (tags fonctionnels / micronutriments)
+==============================================================================
+
+Objectif UX
+- Recherche au-dessus des raccourcis.
+- Compteur + filtre “recettes testées” AU-DESSUS de la description.
+- La grille est rendue sans compteur/filtre (gérés ici).
+==============================================================================
+{%- endcomment -%}
+
 <section class="site-container" id="tag-index">
 
+  {%- comment -%}
+    Paramètres de filtre exposés au JS (random pick).
+  {%- endcomment -%}
   <script>
     document.body.dataset.filterType = "{{ page.filter_type | escape }}";
     document.body.dataset.filterId   = "{{ page.filter_id   | escape }}";
   </script>
 
+  {%- comment -%}
+    Random pick : avant la navigation (contrainte UX).
+  {%- endcomment -%}
   {% include random-pick.html hide_links=true %}
-  
-    {%- comment -%}
-    Recherche par mots-clés (sur la sélection filtrée)
+
+  {%- comment -%}
+    Recherche (UX) :
+    - Placée au-dessus des raccourcis.
+    - Filtre côté client sur .recipe-item[data-search] (fourni par la grille).
   {%- endcomment -%}
   {% include recipes-search.html %}
 
+  {%- comment -%}
+    Raccourcis (tags + micronutriments).
+    IMPORTANT : ton include s'appelle nav-shortcuts.html.
+  {%- endcomment -%}
   {% include nav-shortcuts.html
-    title="Filtres"
-    hint="Changer rapidement de filtre."
+    title="Raccourcis"
+    hint="Changer rapidement de filtre (tags fonctionnels et micronutriments)."
   %}
 
-  {%- assign recipes = site.pages | where: "layout", "recipe" -%}
+  {%- comment -%}
+    Collection filtrée :
+    - Pages recipe avec recipe_group (contrat site).
+  {%- endcomment -%}
+  {%- assign recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" -%}
   {%- assign filtered = "" | split: "" -%}
 
   {%- for r in recipes -%}
@@ -32,11 +60,72 @@ layout: page
     {%- endif -%}
   {%- endfor -%}
 
-  {% include filter-description.html
-    filter_type=page.filter_type
-    filter_id=page.filter_id
-  %}
+  {%- comment -%}
+    Compteur + filtre “testées” :
+    - Doit être AVANT la description sur cette page.
+  {%- endcomment -%}
+  {%- assign tested_count = 0 -%}
+  {%- for r in filtered -%}
+    {%- if r.recipe_tested == true -%}
+      {%- assign tested_count = tested_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
 
-  {% include recipes-grouped-grid.html recipes=filtered cta_label="Voir la fiche" %}
+  <p class="small text-muted mb-2">
+    <strong>{{ filtered.size }}</strong> fiche(s).
+    <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
+  </p>
+
+  {%- if filtered.size > tested_count -%}
+    {% include filter-tested.html %}
+  {%- endif -%}
+
+  {%- comment -%}
+    Description (tag / micro) : après compteur + filtre.
+  {%- endcomment -%}
+  {%- if page.filter_type == "tag" and page.filter_id -%}
+    {%- assign taginfo = site.data.tags_fonctionnels[page.filter_id] -%}
+    {%- if taginfo -%}
+      <section class="micro-desc">
+        <h2>{{ taginfo.titre }}</h2>
+        <p>{{ taginfo.signification }}</p>
+
+        {%- if taginfo.criteres -%}
+          <h3>Critères d’attribution</h3>
+          <ul>
+            {%- for c in taginfo.criteres -%}<li>{{ c }}</li>{%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </section>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if page.filter_type == "micro" and page.filter_id -%}
+    {%- assign micro = site.data.micronutriments[page.filter_id] -%}
+    {%- if micro -%}
+      <section class="micro-desc">
+        <h2>{{ micro.titre }}</h2>
+        <p>{{ micro.resume }}</p>
+
+        <h3>À quoi ça sert ?</h3>
+        <ul>{% for r in micro.roles %}<li>{{ r }}</li>{% endfor %}</ul>
+
+        <h3>Apports recommandés</h3>
+        <p><strong>Adulte :</strong> {{ micro.apports.adulte.cible }}</p>
+
+        <h3>Sources alimentaires</h3>
+        <ul>{% for f in micro.ou_en_trouver %}<li>{{ f }}</li>{% endfor %}</ul>
+
+        <h3>Signes de carence</h3>
+        <p>{{ micro.carence.signes }}</p>
+      </section>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%}
+    Grille : sans contrôles (déjà rendus plus haut).
+  {%- endcomment -%}
+  {% include recipes-grouped-grid.html recipes=filtered cta_label="Voir la recette" show_controls=false %}
+
 </section>
 

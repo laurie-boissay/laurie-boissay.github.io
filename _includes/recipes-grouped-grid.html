@@ -5,21 +5,24 @@ recipes-grouped-grid.html — Rendu mutualisé des listes de fiches/recettes
 
 Rôle
 - Afficher une collection de pages "recipe" sous forme :
-  • compteur total + compteur testées
-  • filtre “recettes testées” si pertinent
+  • (optionnel) compteur total + compteur testées
+  • (optionnel) filtre “recettes testées” si pertinent
   • regroupement par recipe_group
   • grille de cartes (titre, sous-titre, statut testée, CTA, badges)
 
 Entrées (include params)
-- recipes   : Array<Page> (obligatoire)
-- cta_label : Libellé du bouton (optionnel, défaut "Voir la fiche")
+- recipes         : Array<Page> (obligatoire)
+- cta_label       : Libellé du bouton (optionnel, défaut "Voir la fiche")
+- show_controls   : bool (optionnel, défaut true)
+  • true  => affiche compteur + filtre "testées" (comportement historique)
+  • false => n’affiche QUE la grille (permet à la page appelante de placer
+             compteur/filtre ailleurs, ex: tag-index au-dessus de la description)
 
 Contrats / dépendances
 - filter-tested.html :
-  • n’est affiché que si au moins une fiche de la sélection est non testée.
   • JS s’appuie sur `.recipe-item[data-tested]`.
 - recipes-search.html :
-  • filtre via `.recipe-item[data-search]`.
+  • filtre via `.recipe-item[data-search]` (provenant de data-search sur .recipe-item).
 
 Contraintes
 - Robustesse : certains contenus peuvent ne pas avoir de tags ou de micronutriments.
@@ -28,6 +31,15 @@ Contraintes
 {%- endcomment -%}
 
 {%- assign cta = include.cta_label | default: "Voir la fiche" -%}
+
+{%- comment -%}
+  show_controls :
+  - Liquid ne cast pas “proprement” les strings, donc on traite explicitement "false".
+{%- endcomment -%}
+{%- assign show_controls = true -%}
+{%- if include.show_controls == false or include.show_controls == "false" -%}
+  {%- assign show_controls = false -%}
+{%- endif -%}
 
 {%- comment -%}
   Tags techniques masqués dans l’UI des cartes (classification interne).
@@ -44,17 +56,19 @@ Contraintes
   {%- endif -%}
 {%- endfor -%}
 
-<p class="small text-muted mb-2">
-  <strong>{{ include.recipes.size }}</strong> fiche(s).
-  <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
-</p>
+{%- if show_controls -%}
+  <p class="small text-muted mb-2">
+    <strong>{{ include.recipes.size }}</strong> fiche(s).
+    <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
+  </p>
 
-{%- comment -%}
-  Filtre “recettes testées” :
-  - affiché uniquement si la sélection contient au moins une fiche non testée.
-{%- endcomment -%}
-{%- if include.recipes.size > tested_count -%}
-  {% include filter-tested.html %}
+  {%- comment -%}
+    Filtre “recettes testées” :
+    - affiché uniquement si la sélection contient au moins une fiche non testée.
+  {%- endcomment -%}
+  {%- if include.recipes.size > tested_count -%}
+    {% include filter-tested.html %}
+  {%- endif -%}
 {%- endif -%}
 
 {%- comment -%}
@@ -88,9 +102,8 @@ Contraintes
 
           {%- comment -%}
             Champ de recherche :
-            - utilisé par recipes-search.html
             - CONTRAINTE : recherche limitée STRICTEMENT au titre (recipe_title).
-            - normalisation (accents/ligatures) faite côté JS.
+            - Normalisation (accents/ligatures/pluriel simple) faite côté JS.
           {%- endcomment -%}
           {%- assign search_blob = r.recipe_title -%}
 
