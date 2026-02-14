@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "Cuisine low carb"
-description: "Idées repas low carb (faibles en glucides). Index par catégories."
-page_h1: "Mes repas low carb"
-page_h3: "ou repas faibles en glucides"
+title: "Low carb modéré — gestion du poids"
+description: "Gestion du poids en low carb modéré : recettes très protéinées, repères (glycémie/insuline/lipolyse), filtres et générateur d’idées repas."
+page_h1: "Low carb modéré & gestion du poids"
+page_h3: "Recettes fonctionnelles, protéines élevées, organisation"
 body_id: "home"
 ---
 
@@ -16,7 +16,7 @@ body_id: "home"
       car la barre nav-badges est affichée juste en dessous.
   {%- endcomment -%}
   {% include random-pick.html hide_links=true %}
-  
+
   {%- comment -%}
     Recherche par mots-clés :
     - filtre côté client (JS) sur les cartes rendues plus bas.
@@ -29,15 +29,21 @@ body_id: "home"
   {%- endcomment -%}
   {% include nav-shortcuts.html
     title="Filtres"
-    hint="Changer rapidement de filtre."
+    hint="Changer rapidement de filtre (protéines, fibres, rapidité, densité calorique, micronutriments)."
   %}
-  
+
   {%- comment -%}
     Récupération de toutes les fiches :
     - Pages avec layout: recipe
     - recipe_group obligatoire
   {%- endcomment -%}
-  {%- assign all_recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" -%}
+  {%- assign all_recipes_raw = site.pages | where: "layout", "recipe" -%}
+  {%- assign all_recipes = "" | split: "" -%}
+  {%- for p in all_recipes_raw -%}
+    {%- if p.recipe_group and p.recipe_group != "" -%}
+      {%- assign all_recipes = all_recipes | push: p -%}
+    {%- endif -%}
+  {%- endfor -%}
 
   {% include recipes-grouped-grid.html recipes=all_recipes cta_label="Voir la fiche" %}
 </section>

@@ -2,19 +2,23 @@
 layout: page
 title: "Repères low carb"
 filter_title: "Repères low carb"
-description: "Repères low carb : principes (glycémie, insuline, lipolyse), protéines, gestion du poids et marche digestive."
+description: "Repères low carb : principes (glycémie, insuline, lipolyse), fructose, protéines et ingrédients (psyllium/konjac/whey)."
 body_id: "reperes-low-carb"
 page_h1: "Repères low carb"
-page_h3: "Objectifs, principes et gestion du poids"
+page_h3: "Principes et outils"
 ---
 <!-- =========================================================
-     Repères low carb — refonte de rendu (sans changer le fond)
-     Objectif :
-     - rendre la page scannable (lecture en diagonale)
-     - mettre en avant les messages clés
-     - isoler les détails techniques dans des blocs repliables
-     Contrainte :
-     - conserver toutes les informations existantes
+     Repères low carb — page “principes” (partie 1/2)
+     Rôle :
+     - expliquer les principes low carb utilisés sur le site
+     - donner des repères sur glycémie/insuline/lipolyse + fructose
+     - cadrer le duo low carb + protéines (sans “keto” ni discours bien-être)
+     - documenter les ingrédients/outils (psyllium/konjac/whey)
+
+     Contrat :
+     - ne pas dupliquer la page “Gestion du poids” :
+       les détails calories / déficit / activité / marche digestive sont
+       centralisés dans gestion-poids.html.
      ========================================================= -->
 
 <!-- INTRO -->
@@ -34,7 +38,10 @@ page_h3: "Objectifs, principes et gestion du poids"
       <ul class="mb-0">
         <li><strong>Low carb</strong> : moins de pics glycémiques → moins de pics d’insuline → accès aux graisses facilité.</li>
         <li><strong>Protéines</strong> : levier central (satiété, masse musculaire, digestion).</li>
-        <li><strong>Marche digestive</strong> : raccourcit la phase post-repas (glycémie/insuline) même en low carb.</li>
+        <li>
+          <strong>Marche digestive</strong> : raccourcit la phase post-repas (glycémie/insuline) même en low carb.
+          <span class="text-muted">Détails dans la page <a href="{{ site.baseurl }}/gestion-poids.html">Gestion du poids</a>.</span>
+        </li>
         <li><strong>Fructose</strong> : peut freiner la perte de gras sans pic glycémique visible (effet foie).</li>
       </ul>
     </div>
@@ -60,11 +67,17 @@ page_h3: "Objectifs, principes et gestion du poids"
             <ul class="mb-0">
               <li><a href="#lowcarb-proteines">Low carb + protéines</a></li>
               <li><a href="#cholesterol">Cholestérol</a></li>
-              <li><a href="#gestion-poids">Poids, activité, marche digestive</a></li>
               <li><a href="#ingredients">Ingrédients (psyllium / konjac / whey)</a></li>
+              <li><a href="{{ site.baseurl }}/gestion-poids.html">Gestion du poids (page dédiée)</a></li>
             </ul>
           </div>
         </div>
+
+        {%- comment -%}
+          Note UX :
+          - lien explicite vers la page “Gestion du poids”
+          - évite un sommaire trop long ici (les détails sont ailleurs).
+        {%- endcomment -%}
       </div>
     </div>
   </div>
@@ -160,7 +173,7 @@ page_h3: "Objectifs, principes et gestion du poids"
       </ul>
     </div>
 
-    <!-- Détail technique repliable : le contenu est conservé, mais visuellement allégé -->
+    <!-- Détail technique repliable -->
     <details>
       <summary class="fw-bold">Voir l’explication détaillée</summary>
       <div class="mt-3">
@@ -239,167 +252,6 @@ page_h3: "Objectifs, principes et gestion du poids"
   </div>
 </section>
 
-<!-- PROTÉINES -->
-<section class="marge" id="proteines">
-  <h2>Pourquoi viser environ 2 g de protéines par kilo de poids de corps</h2>
-  <div class="container">
-    <ul class="mb-0">
-      <li>Satiété accrue.</li>
-      <li>Préservation musculaire.</li>
-      <li>Perte de poids plus stable.</li>
-    </ul>
-  </div>
-</section>
-
-<!-- GESTION DU POIDS -->
-<section class="marge" id="gestion-poids">
-  <h2>Gestion du poids, activité physique et calories</h2>
-  <div class="container">
-
-    <div class="row g-3">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="mb-2">Calories : un repère, pas une obsession</h3>
-            <p class="mb-0">
-              Le low carb agit d’abord sur la satiété et la stabilité glycémique.
-              Les calories restent un <strong>outil de compréhension</strong>,
-              utile pour ajuster et interpréter une évolution du poids.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="mb-2">Activité physique : un levier complémentaire</h3>
-
-            <p>
-              L’activité physique améliore fortement le <strong>contexte métabolique</strong>
-              dans lequel le low carb agit.
-            </p>
-
-            <ul class="mb-0">
-              <li>réduire plus rapidement la glycémie post-prandiale,</li>
-              <li>faire redescendre l’insuline plus vite après les repas,</li>
-              <li>faciliter l’accès aux graisses stockées.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="mb-2">Marche digestive : simple, accessible, efficace</h4>
-
-            <p>
-              La marche digestive consiste à marcher tranquillement
-              <strong>10 à 20 minutes après un repas</strong>.
-              Ce n’est pas un sport, mais un outil métabolique.
-            </p>
-
-            <ul>
-              <li>Glycémie plus stable après les repas</li>
-              <li>Insuline plus basse plus rapidement</li>
-              <li>Lipolyse relancée plus tôt dans la journée</li>
-            </ul>
-
-            <p class="mb-0">
-              C’est une stratégie particulièrement adaptée au low carb,
-              car elle prolonge les périodes d’insuline basse
-              sans générer de fatigue.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr class="my-4"/>
-
-    <details>
-      <summary class="fw-bold">Voir les repères chiffrés (besoins, déficit, OMS)</summary>
-      <div class="mt-3">
-
-        <h3>Besoins caloriques journaliers (ordres de grandeur)</h3>
-
-        <h4>Femme adulte</h4>
-        <ul>
-          <li>Sédentaire : ~22–24 kcal / kg</li>
-          <li>Active : ~25–28 kcal / kg</li>
-          <li>Sportive : ~30–35 kcal / kg</li>
-        </ul>
-
-        <h4>Homme adulte</h4>
-        <ul>
-          <li>Sédentaire : ~24–26 kcal / kg</li>
-          <li>Actif : ~28–32 kcal / kg</li>
-          <li>Sportif : ~35–40 kcal / kg</li>
-        </ul>
-
-        <p>
-          Ces valeurs donnent une estimation des besoins pour <strong>maintenir le poids</strong>.
-        </p>
-
-        <h3>Quel déficit calorique viser pour rester en bonne santé ?</h3>
-
-        <ul>
-          <li><strong>−200 à −300 kcal / jour</strong> : perte lente, très durable</li>
-          <li><strong>−10 à −20 % des besoins de maintien</strong></li>
-        </ul>
-
-        <hr class="my-4"/>
-
-        <h3>Marche digestive : intérêt même en low carb</h3>
-
-        <p>
-          Même en mangeant peu de glucides, un repas provoque une réponse insulinique.
-          Marcher permet de raccourcir cette phase.
-        </p>
-
-        <h4>Pourquoi ça fonctionne</h4>
-        <ul>
-          <li>La glycémie redescend plus vite.</li>
-          <li>L’insuline redescend plus vite.</li>
-          <li>La lipolyse peut reprendre plus tôt.</li>
-        </ul>
-
-        <h4>Comment l’utiliser concrètement</h4>
-        <ul>
-          <li>10 à 20 minutes de marche après le repas.</li>
-          <li>Pas besoin d’intensité.</li>
-          <li>Rester debout ou bouger aide déjà.</li>
-        </ul>
-
-        <hr class="my-4"/>
-
-        <h3>Activité physique : repères OMS</h3>
-
-        <ul>
-          <li>
-            <strong>150 à 300 minutes par semaine</strong> d’activité d’intensité modérée.
-          </li>
-          <li>
-            ou <strong>75 à 150 minutes par semaine</strong> d’activité plus intense.
-          </li>
-          <li>
-            <strong>Renforcement musculaire</strong> au moins 2 fois par semaine.
-          </li>
-        </ul>
-
-        <p class="mb-0">
-          Une activité régulière, même modérée, améliore la sensibilité à l’insuline,
-          facilite l’utilisation des graisses et soutient la gestion du poids,
-          sans logique de performance.
-        </p>
-
-      </div>
-    </details>
-
-  </div>
-</section>
-
 <!-- INGRÉDIENTS -->
 <section class="marge" id="ingredients">
   <h2>Ingrédients spécifiques : à quoi ils servent réellement</h2>
@@ -427,7 +279,6 @@ page_h3: "Objectifs, principes et gestion du poids"
       un réel avantage par rapport aux alternatives classiques.
     </p>
 
-    <!-- Détails repliables : on conserve le texte, mais on évite un mur d’un seul tenant -->
     <details>
       <summary class="fw-bold">Konjac (poudre) : un outil de structure, pas une base alimentaire</summary>
       <div class="mt-3">
@@ -588,3 +439,4 @@ page_h3: "Objectifs, principes et gestion du poids"
 
   </div>
 </section>
+

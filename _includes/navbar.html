@@ -6,9 +6,9 @@ _includes/navbar.html — Navigation principale (Bootstrap)
 Rôle
 - Fournir la navigation principale du site (desktop + mobile).
 - Donner accès :
-  • à l’index recettes (avec accès rapide “On mange quoi ?”)
+  • à l’index (avec accès rapide “On mange quoi ?”)
   • aux sections recettes par recipe_group (ancres sur la page d’accueil)
-  • aux pages fixes (repères, sucres, édulcorants, à propos)
+  • aux pages fixes (repères, gestion du poids, sucres, édulcorants, à propos)
 
 Entrées / dépendances
 - page.url     : détection de la page courante (classe .active).
@@ -37,10 +37,10 @@ Accessibilité
 
     {%- comment -%}
       Marque / retour accueil.
-      L’aspect visuel (soulignement, etc.) est géré par le CSS global.
+      Le libellé reflète le positionnement du site (régime, pas “juste” recettes).
     {%- endcomment -%}
     <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/">
-      Recettes low carb
+      Régime low carb
     </a>
 
     {%- comment -%}
@@ -137,6 +137,13 @@ Accessibilité
 
         <li class="nav-item">
           <a
+            class="nav-link {% if current contains 'gestion-poids' %}active{% endif %}"
+            href="{{ site.baseurl }}/gestion-poids.html"
+          >Gestion du poids</a>
+        </li>
+
+        <li class="nav-item">
+          <a
             class="nav-link {% if current contains 'sucres-caches' %}active{% endif %}"
             href="{{ site.baseurl }}/sucres-caches.html"
           >Sucres cachés</a>
@@ -155,12 +162,6 @@ Accessibilité
             href="{{ site.baseurl }}/apropos.html"
           >À propos</a>
         </li>
-
-        {%- comment -%}
-          Mentions légales :
-          - Lien volontairement absent de la navbar.
-          - Le point d’entrée unique est désormais le footer (footer.html).
-        {%- endcomment -%}
 
       </ul>
     </div>
