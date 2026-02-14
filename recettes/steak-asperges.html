@@ -8,6 +8,10 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "steak-asperges"
 recipe_tested: true
 
+# Image associée (format .jpg)
+image: "/images/recettes/steak-asperges.jpg"
+image_alt: "Steak grillé accompagné d’asperges vertes poêlées"
+
 tags:
   - low-carb-modere
   - tres-proteine
@@ -66,11 +70,11 @@ extra_head: |
   <li>Laver les asperges et couper la base fibreuse.</li>
   <li>Couper les plus grosses en deux dans la longueur si nécessaire.</li>
   <li>Chauffer 1 c. à soupe d’huile dans une grande poêle.</li>
-  <li>Ajouter les asperges et cuire à feu moyen 8 à 10 minutes, en remuant régulièrement, jusqu’à ce qu’elles soient tendres mais encore légèrement fermes.</li>
+  <li>Ajouter les asperges et cuire à feu moyen 8 à 10 minutes, en remuant régulièrement.</li>
   <li>Saler et poivrer en fin de cuisson.</li>
   <li>Dans une autre poêle bien chaude, ajouter 1 c. à soupe d’huile.</li>
-  <li>Saisir les steaks 2 à 4 minutes par face selon l’épaisseur et la cuisson souhaitée.</li>
-  <li>Ajouter éventuellement une petite noix de beurre en fin de cuisson pour arroser la viande.</li>
+  <li>Saisir les steaks 2 à 4 minutes par face selon l’épaisseur.</li>
+  <li>Ajouter éventuellement une petite noix de beurre en fin de cuisson.</li>
   <li>Laisser reposer la viande 3 à 5 minutes avant de servir.</li>
 </ol>
 
@@ -106,31 +110,11 @@ extra_head: |
   Valeurs indicatives. Variables selon la teneur en matière grasse du steak.
 </p>
 
-{%- comment -%}
-  Lien recette “sauce” :
-  - On évite tout hardcode d’URL (dépend du nom de fichier / permalink).
-  - On résout via recipe_sort (contrat site : identifiant fonctionnel stable).
-  - Si la page n’existe pas encore, on n’affiche rien (fallback silencieux).
-{%- endcomment -%}
-{%- assign all_recipes_raw = site.pages | where: "layout", "recipe" -%}
-{%- assign sauce = "" -%}
-{%- for p in all_recipes_raw -%}
-  {%- if p.recipe_sort == "sauce-cantal-comte" -%}
-    {%- assign sauce = p -%}
-  {%- endif -%}
-{%- endfor -%}
-
 <h2>Notes low carb</h2>
 <ul>
   <li>Plat <strong>complet</strong> : protéines élevées + légumes fibreux.</li>
-  <li><strong>Low carb modéré</strong> (asperges ≈ 3–4 g de glucides nets par portion).</li>
+  <li><strong>Low carb modéré</strong>.</li>
   <li><strong>Très protéiné</strong> : adapté à un objectif ≈ 2 g/kg/jour.</li>
   <li>Aucun ingrédient non compatible low carb.</li>
-
-  {%- if sauce and sauce.url -%}
-    <li>
-      Pour une version plus gourmande : <a href="{{ sauce.url | relative_url }}">sauce crémeuse au cantal ou comté</a>.
-    </li>
-  {%- endif -%}
 </ul>
 
