@@ -1,10 +1,10 @@
 ---
 layout: recipe
 title: "Thé aromatisé maison"
-description: "Thé noir ou vert aromatisé naturellement (agrumes, épices, menthe), sans sucre. Low carb strict, à servir chaud ou glacé."
+description: "Thé noir ou vert aromatisé (zestes, épices, menthe), sans sucre. Low carb strict, à servir chaud ou glacé."
 recipe_title: "Thé aromatisé maison"
 recipe_subtitle: "Thé simple, chaud ou glacé, sans sucre"
-recipe_group: "Boissons"
+recipe_group: "Préparations & conservations"
 recipe_sort: "the-aromatise"
 recipe_tested: true
 
@@ -12,28 +12,30 @@ tags:
   - low-carb-strict
   - rapide
 
-badges_nutritionnels:
-  - vitamine-c
-
 extra_head: |
+  <!-- =========================================================
+       JSON-LD structuré
+       - Boisson simple (sans sucre)
+       - Rendement : 1 litre
+       ========================================================= -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Recipe",
     "name": "Thé aromatisé maison",
-    "description": "Thé noir ou vert aromatisé naturellement avec agrumes et épices, sans sucre, servi chaud ou glacé.",
+    "description": "Thé noir ou vert aromatisé naturellement avec zestes, épices ou menthe, sans sucre, servi chaud ou glacé.",
     "recipeYield": "1 litre",
     "prepTime": "PT2M",
     "cookTime": "PT5M",
     "totalTime": "PT7M",
-    "recipeCategory": "Boisson",
+    "recipeCategory": "Préparations & conservations",
     "recipeIngredient": [
       "1 litre d’eau",
       "2 sachets de thé noir ou vert (ou 2 c. à café de thé en vrac)",
       "Arômes au choix (zestes, épices, menthe, gingembre)"
     ],
     "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Chauffer l’eau. Ajuster la température selon le type de thé." },
+      { "@type": "HowToStep", "text": "Chauffer l’eau et ajuster la température selon le type de thé." },
       { "@type": "HowToStep", "text": "Infuser 2 à 4 minutes." },
       { "@type": "HowToStep", "text": "Ajouter les éléments aromatiques pendant l’infusion." },
       { "@type": "HowToStep", "text": "Retirer le thé. Servir chaud ou refroidir pour une version glacée." }
@@ -42,24 +44,28 @@ extra_head: |
   </script>
 ---
 
-<p class="lead">
-  <strong>Pour :</strong> 1 litre —
-  <strong>Préparation :</strong> 2 minutes —
-  <strong>Infusion :</strong> 2–4 minutes —
-  <strong>Type :</strong> boisson chaude ou glacée
-</p>
+{%- comment -%}
+==============================================================================
+Thé aromatisé maison — Fiche boisson (sans sucre)
+==============================================================================
+- recipe_group :
+  "Boissons" n'est pas un groupe officiel du site -> classement en "Préparations & conservations".
+- Nutrition :
+  tableau 2 colonnes obligatoire + ajout "Glucides nets" (glucides - fibres - polyols si présents).
+- Badges micronutriments :
+  suppression vitamine-c : les quantités (zestes/épices) ne garantissent pas un apport significatif.
+==============================================================================
+{%- endcomment -%}
 
-<hr>
-
-<p>
-  Thé <strong>sans sucre</strong> aromatisé avec des ingrédients simples (zestes, épices, menthe, gingembre).
-  Compatible <strong>low carb strict</strong> tant qu’aucun sucre, miel, sirop ou jus n’est ajouté.
-</p>
-
-<hr>
+<div class="recipe-lead">
+  <p>
+    Thé <strong>sans sucre</strong> aromatisé avec des ingrédients simples (zestes, épices, menthe, gingembre).
+    Compatible <strong>low carb strict</strong> tant qu’aucun sucre, miel, sirop ou jus n’est ajouté.
+    À servir chaud ou glacé.
+  </p>
+</div>
 
 <h2>Ingrédients</h2>
-
 <ul>
   <li>1 litre d’eau</li>
   <li>2 sachets de thé noir ou vert (ou 2 c. à café de thé en vrac)</li>
@@ -67,7 +73,6 @@ extra_head: |
 </ul>
 
 <h2>Préparation</h2>
-
 <ol>
   <li>Chauffer l’eau. Pour un thé vert, éviter l’eau bouillante (laisser redescendre quelques minutes).</li>
   <li>Ajouter le thé et infuser 2 à 4 minutes selon la variété (plus longtemps = plus d’amertume).</li>
@@ -77,7 +82,6 @@ extra_head: |
 </ol>
 
 <h2>Idées d’aromatisation (sans sucre)</h2>
-
 <ul>
   <li>Zeste de citron ou d’orange (sans la partie blanche)</li>
   <li>Gingembre frais en fines tranches</li>
@@ -92,32 +96,31 @@ extra_head: |
 </p>
 
 <h2>Informations nutritionnelles</h2>
-
-<p>Valeurs estimées <strong>par grand verre</strong> (250 ml) :</p>
+<p>Valeurs estimées <strong>par grand verre</strong> (250 ml).</p>
 
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
-      <tr><th>Calories</th><td>≈ 0–2 kcal</td></tr>
+      <tr><th>Énergie</th><td>≈ 0–2 kcal</td></tr>
       <tr><th>Protéines</th><td>0 g</td></tr>
       <tr><th>Lipides</th><td>0 g</td></tr>
       <tr><th>Glucides</th><td>0 g</td></tr>
-      <tr><th>Fructose</th><td>0 g</td></tr>
+      <tr><th><strong>Glucides nets</strong></th><td><strong>0 g</strong></td></tr>
+      <tr><th>dont fructose</th><td>0 g</td></tr>
       <tr><th>Fibres</th><td>0 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
-  Ces valeurs restent proches de zéro tant qu’aucun sucre, miel ou jus n’est ajouté.
+  Glucides nets = glucides − fibres − polyols (aucun polyol).
+  Valeurs proches de zéro tant qu’aucun sucre, miel, sirop ou jus n’est ajouté.
   Les zestes et épices n’apportent pas de glucides significatifs aux quantités utilisées.
 </p>
 
 <h2>Notes low carb</h2>
-
 <ul>
-  <li><strong>Low carb strict :</strong> boisson sans sucre.</li>
-  <li><strong>Version glacée :</strong> utile pour remplacer sodas et thés industriels.</li>
-  <li><strong>Citron :</strong> le zeste parfume beaucoup avec un impact glucidique négligeable. Le jus apporte un peu plus de glucides (souvent faible, mais non nul).</li>
+  <li><strong>Low carb strict</strong> : boisson sans sucre.</li>
+  <li><strong>Version glacée</strong> : alternative simple aux boissons industrielles sucrées.</li>
 </ul>
 

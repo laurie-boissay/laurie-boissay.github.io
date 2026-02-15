@@ -1,35 +1,26 @@
 ---
 layout: recipe
 
-# =========================================================
-# Recette (format site) — Plats à base de poissons
-# =========================================================
-
 title: "Roulés de crêpes au saumon fumé"
 description: "Roulés de crêpes low carb garnis de skyr et de saumon fumé. Préparation froide, simple, pour un vrai repas (2 crêpes par personne)."
 recipe_title: "Roulés de crêpes au saumon fumé"
 recipe_subtitle: "Garniture fraîche au skyr, poivre blanc et ciboulette"
 recipe_group: "Plats à base de poissons"
 
-# Identifiant fonctionnel
+# Règle site : recipe_sort toujours entre guillemets
 recipe_sort: "roules-crepes-saumon"
 
-# Recette testée
 recipe_tested: true
 
-# Photo (affichée automatiquement par recipe.html)
 image: "/images/recettes/roules-crepes-saumon.webp"
 image_alt: "Roulés de crêpes low carb au saumon fumé et skyr"
 
-# Tags techniques
 tags:
   - low-carb-modere
   - rapide
   - tres-proteine
   - riche-en-fibres
-  # ✅ PAS de tag calorique : ≈ 720 kcal/portion -> zone neutre 551–749
 
-# Micronutriments
 badges_nutritionnels:
   - omega-3
   - vitamine-b12
@@ -48,22 +39,7 @@ extra_head: |
     "totalTime": "PT15M",
     "recipeCategory": "Plats à base de poissons",
     "keywords": "low carb, roulés, saumon fumé, skyr",
-    "author": { "@type": "Person", "name": "Laurie" },
-    "recipeIngredient": [
-      "8 crêpes salées low carb (/recettes/crepes-salee.html)",
-      "480 g de skyr nature",
-      "400 g de saumon fumé (ou truite fumée)",
-      "4 c. à soupe de ciboulette ciselée",
-      "Poivre blanc",
-      "2 c. à café de jus de citron (optionnel)"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Mélanger le skyr avec la ciboulette, le poivre blanc et le citron si utilisé." },
-      { "@type": "HowToStep", "text": "Étaler une couche régulière de skyr assaisonné sur chaque crêpe." },
-      { "@type": "HowToStep", "text": "Répartir le saumon fumé (ou la truite) sur toute la surface." },
-      { "@type": "HowToStep", "text": "Rouler serré, filmer et placer 10 minutes au frais pour faciliter la découpe." },
-      { "@type": "HowToStep", "text": "Couper en tronçons et servir (ou servir en 2 roulés par personne)." }
-    ]
+    "author": { "@type": "Person", "name": "Laurie" }
   }
   </script>
 ---
@@ -74,13 +50,13 @@ extra_head: |
     fraîche au <strong>skyr</strong>, poivre blanc et <strong>ciboulette</strong>, puis roulées avec du
     <strong>saumon fumé</strong> (ou truite).
     Base indispensable :
-    <a href="/recettes/crepes-salee.html"><strong>Crêpes salées low carb</strong></a>.
+    <a href="{{ '/recettes/crepes-salee.html' | relative_url }}"><strong>Crêpes salées low carb</strong></a>.
   </p>
 </div>
 
 <h2>Ingrédients (4 personnes)</h2>
 <ul>
-  <li>8 <a href="/recettes/crepes-salee.html">crêpes salées low carb</a> (2 par personne)</li>
+  <li>8 <a href="{{ '/recettes/crepes-salee.html' | relative_url }}">crêpes salées low carb</a> (2 par personne)</li>
   <li>480 g de skyr nature</li>
   <li>400 g de saumon fumé (ou truite fumée)</li>
   <li>4 c. à soupe de ciboulette ciselée</li>
@@ -93,20 +69,14 @@ extra_head: |
   <li>Mélanger le skyr avec la ciboulette et le poivre blanc (ajouter le citron si utilisé).</li>
   <li>Étaler une couche régulière de skyr sur chaque crêpe.</li>
   <li>Ajouter le saumon fumé (ou la truite) en couvrant bien la surface.</li>
-
-  <!--
-    Passage au frais :
-    - améliore la tenue
-    - facilite la découpe (moins d’écrasement)
-  -->
   <li>Rouler serré. Filmer et placer <strong>10 minutes</strong> au frais (recommandé pour une découpe nette).</li>
-
   <li>Couper en tronçons et servir, ou servir en <strong>2 roulés par personne</strong>.</li>
 </ol>
 
 <h2>Informations nutritionnelles</h2>
 <p>Valeurs estimées par <strong>portion (1 sur 4)</strong> = 2 crêpes garnies.</p>
 
+<!-- Ne pas modifier la présentation des tableaux nutritionnels. -->
 <div class="table-responsive">
   <table class="table table-striped">
     <tbody>
@@ -114,13 +84,15 @@ extra_head: |
       <tr><th>Protéines</th><td>≈ 64 g</td></tr>
       <tr><th>Lipides</th><td>≈ 36 g</td></tr>
       <tr><th>Glucides</th><td>≈ 12 g</td></tr>
-      <tr><th>dont fructose</th><td>≈ 0 g</td></tr>
       <tr><th>Fibres</th><td>≈ 10 g</td></tr>
+      <tr><th>Glucides nets</th><td>≈ 2 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 0 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
+  Glucides nets = glucides totaux − fibres − polyols (aucun polyol dans cette recette).
   Estimation basée sur 8 crêpes low carb + skyr + saumon fumé.
   Les valeurs dépendent de la taille des crêpes et du produit fumé.
 </p>
@@ -133,3 +105,4 @@ extra_head: |
   <li>À consommer froid (ne pas réchauffer une fois garni).</li>
   <li>Variante : remplacer une partie du skyr par du fromage frais, ou ajouter aneth/citron.</li>
 </ul>
+

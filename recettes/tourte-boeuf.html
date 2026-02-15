@@ -22,11 +22,9 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "tourte-familiale-boeuf-champignons"
 recipe_tested: true
 
-# Photo (affichage centralisé dans recipe.html)
 image: "/images/recettes/tourte-familiale-boeuf-champignons.webp"
 image_alt: "Tourte low carb au bœuf émincé et champignons, pâte aux amandes et psyllium"
 
-# Tags techniques (badges fonctionnels)
 tags:
   - low-carb-modere
   - tres-proteine
@@ -36,16 +34,11 @@ tags:
   - longue
   # ⚠️ 610 kcal/portion → zone neutre plat (551–749), PAS de tag calorique
 
-# Micronutriments (badges dédiés, pas des tags)
 badges_nutritionnels:
   - fer
   - vitamine-b12
   - zinc
 
-# =========================================================
-# JSON-LD Recipe (SEO)
-# - kept simple (aligné avec tes autres fiches)
-# =========================================================
 extra_head: |
   <script type="application/ld+json">
   {
@@ -168,30 +161,20 @@ extra_head: |
 
 <div class="table-responsive">
   <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Énergie</th>
-        <th>Protéines</th>
-        <th>Lipides</th>
-        <th>Glucides</th>
-        <th>dont fructose</th>
-        <th>Fibres</th>
-      </tr>
-    </thead>
     <tbody>
-      <tr>
-        <td>≈ 610 kcal</td>
-        <td>≈ 40 g</td>
-        <td>≈ 45 g</td>
-        <td>≈ 9 g</td>
-        <td>≈ 1 g</td>
-        <td>≈ 7 g</td>
-      </tr>
+      <tr><th scope="row">Énergie</th><td>≈ 610 kcal</td></tr>
+      <tr><th scope="row">Protéines</th><td>≈ 40 g</td></tr>
+      <tr><th scope="row">Lipides</th><td>≈ 45 g</td></tr>
+      <tr><th scope="row">Glucides totaux</th><td>≈ 9 g</td></tr>
+      <tr><th scope="row">dont fructose</th><td>≈ 1 g</td></tr>
+      <tr><th scope="row">Fibres</th><td>≈ 7 g</td></tr>
+      <tr><th scope="row">Glucides nets</th><td>≈ 2 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
+  Glucides nets = glucides totaux − fibres (pas de polyols).
   Valeurs indicatives. Les écarts viennent surtout de la pâte (amandes/psyllium) et du choix de morceaux de bœuf.
 </p>
 
@@ -204,4 +187,3 @@ extra_head: |
   <li><strong>Micro-ondable</strong> : réchauffer à puissance moyenne pour limiter le dessèchement.</li>
   <li><strong>Point texture</strong> : si la tourte rend de l’eau, c’est presque toujours un manque de dessiccation des champignons.</li>
 </ul>
-

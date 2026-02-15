@@ -35,7 +35,7 @@ extra_head: |
     "prepTime": "PT10M",
     "cookTime": "PT0M",
     "totalTime": "PT10M",
-    "recipeCategory": "Pains & substituts",
+    "recipeCategory": "Dessert",
     "keywords": "low carb, crepe, dakatine, arachide, confiture",
     "author": { "@type": "Person", "name": "Laurie" }
   }
@@ -44,10 +44,11 @@ extra_head: |
 
 {%- comment -%}
 ==============================================================================
-Crêpe Dakatine & confiture — Corrections liens
+Crêpe Dakatine & confiture
 ==============================================================================
-- Les pages recettes (base + confiture) sont sous /recettes/.
-- On utilise relative_url pour rester compatible GitHub Pages (baseurl).
+- Liens internes avec relative_url (compatibilité GitHub Pages)
+- Tableau nutritionnel : 2 colonnes strictes
+- Glucides nets ajoutés (Glucides - Fibres)
 ==============================================================================
 {%- endcomment -%}
 
@@ -56,7 +57,7 @@ Crêpe Dakatine & confiture — Corrections liens
     Crêpe salée low carb (voir la recette des
     <a href="{{ '/recettes/crepes-salee.html' | relative_url }}">crêpes salées low carb</a>)
     garnie de <strong>Dakatine (100 % arachide)</strong>
-    et de <strong><a href="{{ '/recettes/confiture-de-fruits-rouges.html' | relative_url }}">confiture de fruits rouges sans sucre ajouté</a></strong>.
+    et de <strong><a href="{{ '/recettes/confiture-fruits-rouges.html' | relative_url }}">confiture de fruits rouges sans sucre ajouté</a></strong>.
     La crêpe est <strong>pliée en quatre</strong> pour une dégustation simple,
     dense et rassasiante.
   </p>
@@ -66,7 +67,7 @@ Crêpe Dakatine & confiture — Corrections liens
 <ul>
   <li>4 <a href="{{ '/recettes/crepes-salee.html' | relative_url }}">crêpes salées low carb</a></li>
   <li>80 g de Dakatine (pâte d’arachide 100 %)</li>
-  <li>120 g de <a href="{{ '/recettes/confiture-de-fruits-rouges.html' | relative_url }}">confiture de fruits rouges low carb</a></li>
+  <li>120 g de <a href="{{ '/recettes/confiture-fruits-rouges.html' | relative_url }}">confiture de fruits rouges low carb</a></li>
 </ul>
 
 <h2>Préparation</h2>
@@ -98,14 +99,16 @@ Crêpe Dakatine & confiture — Corrections liens
       <tr><th>Protéines</th><td>≈ 9 g</td></tr>
       <tr><th>Lipides</th><td>≈ 25 g</td></tr>
       <tr><th>Glucides</th><td>≈ 6 g</td></tr>
-      <tr><th>dont fructose</th><td>≈ 1 g</td></tr>
       <tr><th>Fibres</th><td>≈ 4 g</td></tr>
+      <tr><th>Glucides nets</th><td>≈ 2 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 1 g</td></tr>
     </tbody>
   </table>
 </div>
 
 <p class="small text-muted">
   Estimation basée sur 1 crêpe low carb + 20 g de Dakatine + 30 g de confiture.
+  Les glucides nets correspondent aux glucides totaux moins les fibres.
 </p>
 
 <h2>Notes low carb</h2>
