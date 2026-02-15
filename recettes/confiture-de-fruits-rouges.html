@@ -46,9 +46,9 @@ extra_head: |
       { "@type": "HowToStep", "text": "Mettre les fruits rouges dans une casserole à feu moyen." },
       { "@type": "HowToStep", "text": "Laisser compoter 8 à 10 minutes en remuant régulièrement." },
       { "@type": "HowToStep", "text": "Écraser à la fourchette ou mixer selon la texture désirée." },
-      { "@type": "HowToStep", "text": "Hors du feu, ajouter le jus de citron puis la stévia progressivement, en goûtant pour éviter le surdosage." },
-      { "@type": "HowToStep", "text": "Saupoudrer le konjac en pluie en fouettant énergiquement pour éviter les grumeaux." },
-      { "@type": "HowToStep", "text": "Laisser reposer 3 à 5 minutes : la texture épaissit rapidement." }
+      { "@type": "HowToStep", "text": "Hors du feu, ajouter le jus de citron puis la stévia progressivement." },
+      { "@type": "HowToStep", "text": "Saupoudrer le konjac en pluie en fouettant énergiquement." },
+      { "@type": "HowToStep", "text": "Laisser reposer 3 à 5 minutes pour épaississement." }
     ],
     "nutrition": {
       "@type": "NutritionInformation",
@@ -62,6 +62,17 @@ extra_head: |
   }
   </script>
 ---
+
+{%- comment -%}
+==============================================================================
+Confiture fruits rouges — Tableau nutritionnel conforme
+==============================================================================
+Règle site :
+- Tableau STRICTEMENT en 2 colonnes : Nutriment | Valeur
+- Pas de <thead> multicolonnes
+- Structure identique au modèle "Bol nordique"
+==============================================================================
+{%- endcomment -%}
 
 <div class="recipe-lead">
   <p>
@@ -80,7 +91,7 @@ extra_head: |
   </li>
   <li>
     (Facultatif) 1 à 2 c. à café de stévia
-    <span class="text-muted">(ajouter progressivement, arrêter dès que le goût est suffisant — surdosage = arrière-goût)</span>
+    <span class="text-muted">(ajouter progressivement, arrêter dès que le goût est suffisant)</span>
   </li>
   <li>1 c. à café rase de konjac en poudre (≈ 2 g)</li>
   <li>1 c. à café de jus de citron</li>
@@ -92,9 +103,9 @@ extra_head: |
   <li>Laisser compoter 8 à 10 minutes en remuant régulièrement.</li>
   <li>Écraser à la fourchette ou mixer selon la texture désirée.</li>
   <li>Hors du feu, ajouter le jus de citron.</li>
-  <li>Ajouter la stévia progressivement en goûtant pour éviter tout arrière-goût.</li>
+  <li>Ajouter la stévia progressivement en goûtant.</li>
   <li>Saupoudrer le konjac en pluie en fouettant énergiquement.</li>
-  <li>Laisser reposer 3 à 5 minutes : la préparation épaissit rapidement.</li>
+  <li>Laisser reposer 3 à 5 minutes : épaississement rapide.</li>
   <li>Transvaser dans un pot propre et laisser refroidir.</li>
 </ol>
 
@@ -103,25 +114,13 @@ extra_head: |
 
 <div class="table-responsive">
   <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Énergie</th>
-        <th>Protéines</th>
-        <th>Lipides</th>
-        <th>Glucides</th>
-        <th>dont fructose</th>
-        <th>Fibres</th>
-      </tr>
-    </thead>
     <tbody>
-      <tr>
-        <td>≈ 10 kcal</td>
-        <td>≈ 0 g</td>
-        <td>≈ 0 g</td>
-        <td>≈ 2,5 g</td>
-        <td>≈ 1 g</td>
-        <td>≈ 1 g</td>
-      </tr>
+      <tr><th>Énergie</th><td>≈ 10 kcal</td></tr>
+      <tr><th>Protéines</th><td>≈ 0 g</td></tr>
+      <tr><th>Lipides</th><td>≈ 0 g</td></tr>
+      <tr><th>Glucides</th><td>≈ 2,5 g</td></tr>
+      <tr><th>dont fructose</th><td>≈ 1 g</td></tr>
+      <tr><th>Fibres</th><td>≈ 1 g</td></tr>
     </tbody>
   </table>
 </div>
@@ -135,16 +134,13 @@ extra_head: |
 <ul>
   <li><strong>Compatible low carb modéré</strong> en portion maîtrisée.</li>
   <li>
-    Cette version est <strong>nettement moins sucrée que les confitures du commerce</strong>.
-    Le goût est naturellement <strong>acide</strong> (fruits rouges + absence de sucre).
-    Il ne faut pas s’attendre à une confiture “très sucrée” classique.
+    Nettement moins sucrée que les confitures du commerce.
+    Goût naturellement acide (fruits rouges + absence de sucre).
   </li>
   <li>
-    Si l’acidité est trop marquée pour toi, ajuste légèrement la stévia
-    (progressivement) ou privilégie un mélange contenant davantage de fraises.
+    Ajuster légèrement la stévia si nécessaire, progressivement.
   </li>
-  <li>Le konjac épaissit rapidement : ne pas surdoser (texture gélatineuse possible).</li>
-  <li>Pas besoin d’ajouter d’eau : les fruits rendent naturellement du jus.</li>
+  <li>Ne pas surdoser le konjac (texture gélatineuse possible).</li>
   <li><strong>Congelable</strong> en petites portions.</li>
   <li>Conservation : jusqu’à 5 jours au réfrigérateur, pot fermé.</li>
 </ul>
