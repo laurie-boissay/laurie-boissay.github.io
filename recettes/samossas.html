@@ -1,84 +1,77 @@
-<section id="random-recipe">
-  <h2>Qu'est-ce qu'on mange ?</h2>
+---
+layout: recipe
 
-  <div id="recipe-container"></div>
+title: "Samossas low carb à la viande"
+description: "Samossas low carb à la viande hachée, enveloppe à base d’omelette fine. Plat complet, riche en protéines."
+recipe_title: "Samossas low carb à la viande"
+recipe_subtitle: "Version protéinée sans farine, enveloppe omelette"
+recipe_group: "Plats à base de viande"
+recipe_sort: "samossas-viande"
+recipe_tested: false
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Liste des recettes avec leurs titres, descriptions, tags et le statut de test
-      const recipes = [
-        { 
-          "title": "Avocat farci œuf & saumon",
-          "description": "Avocat farci aux œufs et saumon fumé. Plat froid low carb modéré, simple et rassasiant.",
-          "recipe_tested": false,
-          "url": "/recettes/avocat-farci-oeuf-et-saumon.html",
-          "tags": ["low-carb-moderé", "tres-proteine", "rapide", "calorique"],
-          "badges": ["omega-3", "vitamine-b12"]
-        },
-        { 
-          "title": "Samossas low carb à la viande",
-          "description": "Alternative low carb aux samossas classiques : enveloppe à base d’omelette fine ou de nori, garniture viande épicée.",
-          "recipe_tested": false,
-          "url": "/recettes/samossas.html",
-          "tags": ["low-carb-moderé", "tres-proteine"],
-          "badges": ["vitamine-b12"]
-        },
-        // Assure-toi que toutes tes autres recettes sont également incluses ici
-      ];
+meal_type: "plat"
 
-      console.log("Nombre de recettes disponibles : ", recipes.length); // Vérifie si toutes les recettes sont présentes
-      console.log("Recettes récupérées : ", recipes); // Affiche toutes les recettes dans la console
+tags:
+  - low-carb-modere
+  - tres-proteine
 
-      // Fonction pour choisir une recette au hasard
-      function getRandomRecipe() {
-        const randomIndex = Math.floor(Math.random() * recipes.length);
-        return recipes[randomIndex];
-      }
+badges_nutritionnels:
+  - vitamine-b12
+  - fer
 
-      // Sélectionner une recette au hasard
-      const randomRecipe = getRandomRecipe();
+# =============================
+# Données nutritionnelles
+# Portion = 1/4 recette
+# =============================
 
-      // Vérifier la recette choisie dans la console
-      console.log("Recette sélectionnée : ", randomRecipe);
+calories: 520
+proteines: 45
+glucides_nets: 4
 
-      // Fonction pour générer les badges
-      function generateBadges(badges) {
-        return badges.map(function(badge) {
-          switch (badge) {
-            case 'tres-proteine': return '💪';
-            case 'riche-en-fibres': return '💩';
-            case 'rapide': return '⏱️';
-            case 'congelable': return '❄️';
-            case 'micro-ondable': return '♨️';
-            case 'peu-calorique': return '🪶';
-            case 'calorique': return '🔥';
-            case 'longue': return '🐌';
-            case 'omega-3': return '🐟';
-            case 'vitamine-b12': return '🥩';
-            default: return '';
-          }
-        }).join(' ');
-      }
+nutrition:
+  lipides: 34
+  glucides: 4
+  fibres: 0
+  fructose: 1
 
-      // Créer le HTML pour afficher la recette
-      const recipeContainer = document.getElementById('recipe-container');
-      
-      if (randomRecipe) {
-        recipeContainer.innerHTML = `
-          <div class="recipe-card">
-            <h3 class="recipe-title">
-              <a href="${randomRecipe.url}">${randomRecipe.title}</a>
-              ${randomRecipe.recipe_tested === false ? 
-                '<span class="badge bg-warning text-dark ms-2">Recette non testée</span>' : ''}
-            </h3>
-            <p>${randomRecipe.description}</p>
-            <div class="recipe-badges">${generateBadges(randomRecipe.badges)}</div>
-          </div>
-        `;
-      } else {
-        recipeContainer.innerHTML = `<p>Aucune recette disponible.</p>`;
-      }
-    });
-  </script>
-</section>
+# =============================
+# Ingrédients (4 portions)
+# =============================
+
+ingredients:
+  - 600 g de bœuf haché 5–10 %
+  - 4 œufs
+  - 1 oignon
+  - 1 c. à soupe d’huile de colza
+  - 1 c. à café de cumin
+  - 1 c. à café de coriandre moulue
+  - 1/2 c. à café de curcuma
+  - Sel
+  - Poivre
+
+# =============================
+# Étapes
+# =============================
+
+steps:
+  - Émincer finement l’oignon.
+  - Faire revenir l’oignon dans l’huile 2 à 3 minutes.
+  - Ajouter le bœuf haché, émietter et cuire jusqu’à cuisson complète.
+  - Ajouter cumin, coriandre, curcuma, sel et poivre. Mélanger puis laisser tiédir.
+  - Battre les œufs et réaliser 4 omelettes fines dans une poêle antiadhésive.
+  - Déposer une portion de farce au centre de chaque omelette.
+  - Replier en triangle façon samossa.
+  - Remettre 1 à 2 minutes à la poêle pour légèrement dorer l’extérieur.
+  - Servir chaud.
+
+# =============================
+# Notes low carb
+# =============================
+
+notes_low_carb:
+  - Enveloppe sans farine : uniquement à base d’œufs.
+  - Très protéiné : environ 45 g de protéines par portion.
+  - Compatible low carb modéré.
+  - Aucun ingrédient non compatible low carb.
+---
 

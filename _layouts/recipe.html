@@ -8,35 +8,23 @@
     LAYOUT — RECETTE (STRUCTURANT)
     =========================================================
     Rôle :
-    - Encadrer l’affichage d’une recette (titre, photo optionnelle, badges,
-      bandeau "non testée", contenu, footer) en s’appuyant sur les includes existants.
+    - Afficher une fiche recette à partir du front-matter (Option 2 “data-only”).
+    - Conserver le support des anciennes recettes avec contenu HTML (fallback).
 
-    Entrées (front-matter) :
-    - page.title                 : fallback standard.
-    - page.recipe_title          : titre affiché sur la page (prioritaire sur page.title).
-    - page.tags                  : tags fonctionnels + tags techniques (certains cachés).
-    - page.badges_nutritionnels  : liste de micronutriments (IDs), affichée en seconde ligne.
-    - page.image                 : (optionnel) chemin de l’image de recette.
-    - page.image_alt             : (optionnel) texte alternatif (fallback sur recipe_title/title).
-    - page.body_id               : (optionnel) identifiant CSS ajouté à <body>.
-    - page.extra_head            : (optionnel) injection contrôlée de balises dans <head> (ex: JSON-LD).
+    Entrées (front-matter) — data-only :
+    - recipe_title, recipe_subtitle, recipe_group, recipe_tested
+    - tags, badges_nutritionnels
+    - image, image_alt
+    - calories, proteines, glucides_nets (obligatoires selon tes règles)
+    - nutrition.* (lipides, glucides, fibres, fructose) optionnel mais recommandé
+    - ingredients (liste ; supporte string OU objet {label, link})
+    - steps (liste)
+    - notes_low_carb (liste)
 
-    Dépendances / includes :
-    - head.html                  : head commun (meta, CSS global, etc.).
-    - navbar.html                : navigation.
-    - bandeau-non-teste.html     : bandeau conditionnel (piloté par recipe_tested dans le front-matter).
-    - footer.html + scripts.html : footer et scripts communs.
-
-    Contrats / contraintes :
-    - CSS :
-      * aucun style local dans ce layout ; tout passe par style.css pour éviter les divergences.
-      * .recipe-badges-line gère le wrap + centrage (pas de scroll horizontal).
-      * .badge-link-card est utilisé pour rendre les badges cliquables sans soulignement.
-    - Titres :
-      * ce layout rend le <h1> (.recipe-title) ; ne pas inclure d’autre header générant un <h1>.
-    - Tags :
-      * certains tags sont "techniques" et doivent rester invisibles côté badges.
-      * les tags fonctionnels (dont gout-sucre) sont affichés et cliquables.
+    Contrats :
+    - Tableau nutritionnel à 2 colonnes (Nutriment | Valeur).
+    - Ligne “Glucides nets” toujours affichée.
+    - Liens internes recettes : /recettes/...html avec relative_url.
     =========================================================
   {%- endcomment -%}
 
@@ -46,13 +34,6 @@
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
-  {%- comment -%}
-    Prévention doublon de titres :
-    - recipe-header.html rend déjà un <h1> dans son implémentation actuelle.
-    - Ce layout rend également un <h1> via .recipe-title.
-    => On n’inclut pas recipe-header.html ici.
-  {%- endcomment -%}
-
   {% include navbar.html %}
 
   <main class="site-main">
@@ -62,19 +43,21 @@
 
       {%- comment -%}
         Tags techniques / cachés :
-        - Non affichés dans les badges (UI) mais conservés dans page.tags pour le filtrage.
-        Note :
-        - gout-sucre N’EST PAS un tag technique : il doit être affiché (🍬) et cliquable.
+        - low-carb-modere et low-carb-strict sont invisibles en badges.
+        - gout-sucre est affiché (🍬).
       {%- endcomment -%}
       {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
 
       <header class="recipe-head">
         <h1 class="recipe-title">{{ page.recipe_title | default: page.title }}</h1>
 
+        {%- if page.recipe_subtitle and page.recipe_subtitle != "" -%}
+          <p class="text-muted mb-2">{{ page.recipe_subtitle }}</p>
+        {%- endif -%}
+
         {%- comment -%}
           Photo optionnelle :
-          - Activée uniquement si page.image est défini.
-          - relative_url garantit la compatibilité avec baseurl.
+          - relative_url pour compat GitHub Pages.
         {%- endcomment -%}
         {% if page.image %}
           <figure class="recipe-photo">
@@ -88,8 +71,8 @@
 
         {%- comment -%}
           Badges :
-          - Ligne 1 : tags fonctionnels (cliquables vers /tags/<id>/)
-          - Ligne 2 : micronutriments (cliquables vers /micronutriments/<id>/)
+          - Ligne 1 : tags fonctionnels (cliquables).
+          - Ligne 2 : micronutriments (cliquables).
         {%- endcomment -%}
         <div class="recipe-badges-wrap">
 
@@ -197,8 +180,99 @@
         </div>
       </header>
 
+      {%- comment -%}
+        Mode data-only :
+        - Si ingredients/steps existent, on génère l’affichage ici.
+        - Sinon, fallback : on rend le contenu HTML (anciennes recettes).
+      {%- endcomment -%}
       <div class="content-surface recipe-surface">
-        {{ content }}
+
+        {% if page.ingredients or page.steps or page.calories or page.proteines or page.glucides_nets %}
+
+          {%- comment -%}
+            Ingrédients :
+            - Supporte deux formes :
+              1) string : "200 g de skyr"
+              2) objet : {label: "...", link: "/recettes/...html"}
+          {%- endcomment -%}
+          {% if page.ingredients %}
+            <h2>Ingrédients</h2>
+            <ul>
+              {% for i in page.ingredients %}
+                <li>
+                  {% if i.label and i.link %}
+                    <a href="{{ i.link | relative_url }}">{{ i.label }}</a>
+                  {% else %}
+                    {{ i }}
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if page.steps %}
+            <h2>Préparation</h2>
+            <ol>
+              {% for s in page.steps %}
+                <li>{{ s }}</li>
+              {% endfor %}
+            </ol>
+          {% endif %}
+
+          {%- comment -%}
+            Nutrition :
+            - Tableau 2 colonnes.
+            - “Glucides nets” toujours affiché (champ requis côté recette).
+          {%- endcomment -%}
+          <h2>Informations nutritionnelles</h2>
+          <p>Valeurs estimées par portion.</p>
+
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tbody>
+                {% if page.calories %}
+                  <tr><th scope="row">Énergie</th><td>{{ page.calories }} kcal</td></tr>
+                {% endif %}
+                {% if page.proteines %}
+                  <tr><th scope="row">Protéines</th><td>{{ page.proteines }} g</td></tr>
+                {% endif %}
+                {% if page.nutrition and page.nutrition.lipides %}
+                  <tr><th scope="row">Lipides</th><td>{{ page.nutrition.lipides }} g</td></tr>
+                {% endif %}
+                {% if page.nutrition and page.nutrition.glucides %}
+                  <tr><th scope="row">Glucides totaux</th><td>{{ page.nutrition.glucides }} g</td></tr>
+                {% endif %}
+                {% if page.nutrition and page.nutrition.fructose != nil %}
+                  <tr><th scope="row">dont fructose</th><td>{{ page.nutrition.fructose }} g</td></tr>
+                {% endif %}
+                {% if page.nutrition and page.nutrition.fibres %}
+                  <tr><th scope="row">Fibres</th><td>{{ page.nutrition.fibres }} g</td></tr>
+                {% endif %}
+
+                {%- comment -%}
+                  Ligne obligatoire :
+                  - Le layout l’affiche dès que la recette fournit page.glucides_nets (contrat site).
+                {%- endcomment -%}
+                {% if page.glucides_nets %}
+                  <tr><th scope="row">Glucides nets</th><td>{{ page.glucides_nets }} g</td></tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+
+          {% if page.notes_low_carb %}
+            <h2>Notes low carb</h2>
+            <ul>
+              {% for n in page.notes_low_carb %}
+                <li>{{ n }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+        {% else %}
+          {{ content }}
+        {% endif %}
+
       </div>
 
       {% include footer.html %}

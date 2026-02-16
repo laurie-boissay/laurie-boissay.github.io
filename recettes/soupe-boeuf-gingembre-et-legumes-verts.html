@@ -8,6 +8,8 @@ recipe_group: "Soupe"
 recipe_sort: "soupe-boeuf-gingembre-legumes-verts"
 recipe_tested: false
 
+meal_type: "plat"
+
 tags:
   - low-carb-modere
   - tres-proteine
@@ -18,126 +20,54 @@ badges_nutritionnels:
   - vitamine-b12
   - fer
 
-extra_head: |
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Recipe",
-    "name": "Soupe bœuf gingembre & légumes verts",
-    "description": "Soupe de bœuf au gingembre avec légumes verts. Soupe chaude complète low carb modéré.",
-    "recipeYield": "4 portions",
-    "prepTime": "PT10M",
-    "cookTime": "PT25M",
-    "totalTime": "PT35M",
-    "recipeCategory": "Soupe",
-    "keywords": "low carb, soupe, boeuf, gingembre, legumes verts",
-    "author": { "@type": "Person", "name": "Laurie" },
-    "recipeIngredient": [
-      "600 g de bœuf (bavette ou rumsteck)",
-      "1 L de bouillon",
-      "200 g de brocoli",
-      "200 g de haricots verts",
-      "1 oignon",
-      "1 c. à café de gingembre (frais ou en poudre)",
-      "1 c. à soupe d’huile de colza",
-      "Sel",
-      "Poivre"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Émincer l’oignon et le faire revenir brièvement dans l’huile." },
-      { "@type": "HowToStep", "text": "Ajouter le bouillon et porter à frémissement." },
-      { "@type": "HowToStep", "text": "Ajouter le bœuf coupé en lamelles et cuire environ 10 minutes." },
-      { "@type": "HowToStep", "text": "Ajouter les légumes verts et le gingembre, puis cuire encore 5 à 10 minutes." },
-      { "@type": "HowToStep", "text": "Assaisonner et servir chaud." }
-    ]
-  }
-  </script>
+# =============================
+# Données nutritionnelles
+# Portion = 1 bol (1/4 recette)
+# =============================
+
+calories: 400
+proteines: 43
+glucides_nets: 1
+
+nutrition:
+  lipides: 22
+  glucides: 5
+  fibres: 4
+  fructose: 1
+
+# =============================
+# Ingrédients (4 portions)
+# =============================
+
+ingredients:
+  - 800 g de bœuf (bavette ou rumsteck)
+  - 1 L de bouillon (sans sucre ajouté)
+  - 200 g de brocoli
+  - 200 g de haricots verts
+  - 100 g de champignons de Paris
+  - 1 oignon
+  - 1 c. à café de gingembre (frais ou en poudre)
+  - 1 c. à soupe d’huile de colza
+  - Sel
+  - Poivre
+
+# =============================
+# Étapes
+# =============================
+
+steps:
+  - Émincer l’oignon et le faire revenir brièvement dans l’huile.
+  - Ajouter le bouillon et porter à frémissement.
+  - Couper le bœuf en fines lamelles et l’ajouter à la soupe. Cuire environ 10 minutes à feu doux.
+  - Ajouter le brocoli, les haricots verts et les champignons émincés.
+  - Ajouter le gingembre et poursuivre la cuisson 5 à 10 minutes selon la texture souhaitée.
+  - Saler, poivrer et servir chaud.
+
+notes_low_carb:
+  - Low carb modéré : légumes sélectionnés pour leur faible charge glucidique.
+  - Très protéiné : environ 43 g de protéines par portion.
+  - Riche en fibres : légumes verts + champignons.
+  - Compatible objectif ≈ 2 g/kg/jour.
+  - Aucun ingrédient non compatible low carb.
 ---
-
-<div class="recipe-lead">
-  <p>
-    Soupe <strong>simple et rapide</strong>, sans féculents, conçue comme un
-    <strong>repas complet</strong>.  
-    Le gingembre apporte une note aromatique marquée sans impact glucidique
-    significatif.
-  </p>
-  <ul>
-    <li><strong>Portions :</strong> 4</li>
-    <li><strong>Préparation :</strong> 10 min</li>
-    <li><strong>Cuisson :</strong> 25 min</li>
-    <li><strong>Niveau :</strong> facile</li>
-  </ul>
-</div>
-
-<h2>Ingrédients</h2>
-<ul>
-  <li>600 g de bœuf (bavette ou rumsteck)</li>
-  <li>1 L de bouillon</li>
-  <li>200 g de brocoli</li>
-  <li>200 g de haricots verts</li>
-  <li>1 oignon</li>
-  <li>1 c. à café de gingembre (frais ou en poudre)</li>
-  <li>1 c. à soupe d’huile de colza</li>
-  <li>Sel</li>
-  <li>Poivre</li>
-</ul>
-
-<h2>Préparation</h2>
-<ol>
-  <li>Émincer l’oignon et le faire revenir brièvement dans l’huile.</li>
-  <li>Ajouter le bouillon et porter à frémissement.</li>
-  <li>Couper le bœuf en fines lamelles et l’ajouter à la soupe.</li>
-  <li>Laisser cuire environ 10 minutes à feu doux.</li>
-  <li>Ajouter le brocoli, les haricots verts et le gingembre.</li>
-  <li>Poursuivre la cuisson 5 à 10 minutes selon la texture souhaitée.</li>
-  <li>Saler, poivrer et servir chaud.</li>
-</ol>
-
-<h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par portion (pour 4 portions).</p>
-
-<div class="table-responsive">
-  <table class="table table-striped">
-    <tbody>
-      <tr>
-        <th scope="row">Énergie</th>
-        <td>≈ 340 kcal</td>
-      </tr>
-      <tr>
-        <th scope="row">Protéines</th>
-        <td>≈ 32 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Lipides</th>
-        <td>≈ 20 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Glucides</th>
-        <td>≈ 4 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fibres</th>
-        <td>≈ 3 g</td>
-      </tr>
-      <tr>
-        <th scope="row">Fructose</th>
-        <td>≈ 1 g</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<p class="small text-muted">
-  Estimation pour 1 bol. Glucides issus exclusivement des légumes verts et de l’oignon.
-  Aucun féculent.
-</p>
-
-<h2>Notes low carb</h2>
-<ul>
-  <li><strong>Low carb modéré</strong> : légumes sélectionnés pour leur faible charge glucidique.</li>
-  <li><strong>Très protéiné</strong> : base viande adaptée à un objectif protéique élevé.</li>
-  <li><strong>Fibres</strong> : brocoli et haricots verts contribuent à la satiété.</li>
-  <li><strong>Micronutriments</strong> : source notable de vitamine B12 et de fer (bœuf).</li>
-  <li><strong>Rapide</strong> : préparation compatible avec un repas de semaine.</li>
-</ul>
 

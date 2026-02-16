@@ -1,19 +1,6 @@
 ---
 layout: recipe
 
-# =========================================================
-# Recette (format site) — Plats à base de viande
-# =========================================================
-# Rôle :
-# - Plat “familial” type tourte : portionnement différent d’un plat standard.
-# - Recette conçue pour être stable (découpe) + batch cooking.
-#
-# Contrats site :
-# - recipe_sort : chaîne courte, sans accents/ponctuation, TOUJOURS entre guillemets.
-# - tags : uniquement tags fonctionnels officiels.
-# - micronutriments : via badges_nutritionnels (jamais dans tags).
-# =========================================================
-
 title: "Tourte familiale bœuf émincé & champignons"
 description: "Tourte familiale low carb modéré au bœuf émincé et champignons, avec pâte salée aux amandes et psyllium."
 recipe_title: "Tourte familiale bœuf émincé & champignons"
@@ -21,6 +8,8 @@ recipe_subtitle: "Tourte salée low carb modéré, riche et rassasiante"
 recipe_group: "Plats à base de viande"
 recipe_sort: "tourte-familiale-boeuf-champignons"
 recipe_tested: true
+
+meal_type: "plat"
 
 image: "/images/recettes/tourte-familiale-boeuf-champignons.webp"
 image_alt: "Tourte low carb au bœuf émincé et champignons, pâte aux amandes et psyllium"
@@ -32,158 +21,71 @@ tags:
   - congelable
   - micro-ondable
   - longue
-  # ⚠️ 610 kcal/portion → zone neutre plat (551–749), PAS de tag calorique
+  # 610 kcal → zone neutre plat (551–749) → pas de tag calorique
 
 badges_nutritionnels:
   - fer
   - vitamine-b12
   - zinc
 
-extra_head: |
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Recipe",
-    "name": "Tourte familiale bœuf émincé & champignons",
-    "description": "Tourte salée low carb modéré au bœuf émincé et champignons, avec pâte aux amandes et psyllium.",
-    "recipeCategory": "Plats à base de viande",
-    "recipeYield": "6 parts",
-    "prepTime": "PT30M",
-    "cookTime": "PT45M",
-    "totalTime": "PT75M",
-    "recipeIngredient": [
-      "Pâte salée low carb (2 doses)",
-      "700 à 800 g de bœuf émincé fin",
-      "500 g de champignons de Paris",
-      "2 échalotes (ou 1 oignon moyen)",
-      "30 g de beurre",
-      "30 g de crème entière",
-      "1 œuf",
-      "1 petite gousse d’ail",
-      "Poivre noir",
-      "Thym"
-    ]
-  }
-  </script>
+# =============================
+# Données nutritionnelles
+# Portion = 1 part (1/6 recette)
+# =============================
+
+calories: 610
+proteines: 40
+glucides_nets: 2
+
+nutrition:
+  lipides: 45
+  glucides: 9
+  fibres: 7
+  fructose: 1
+
+# =============================
+# Ingrédients (6 parts)
+# =============================
+
+ingredients:
+  - label: Pâte salée aux amandes & psyllium (2 doses)
+    link: "/recettes/pate-salee.html"
+  - 700 à 800 g de bœuf émincé fin
+  - 500 g de champignons de Paris
+  - 2 échalotes (ou 1 oignon moyen)
+  - 30 g de beurre
+  - 30 g de crème entière
+  - 1 œuf
+  - 1 petite gousse d’ail
+  - Poivre noir
+  - Thym
+
+# =============================
+# Étapes
+# =============================
+
+steps:
+  - Préchauffer le four à 180°C.
+  - Émincer échalotes et ail.
+  - Faire fondre le beurre dans une grande poêle.
+  - Ajouter échalotes et ail, cuire 2 minutes sans coloration marquée.
+  - Ajouter les champignons émincés et cuire à feu moyen/fort jusqu’à évaporation maximale de l’eau (poêle quasi sèche).
+  - Ajouter le bœuf émincé, saisir rapidement. Poivrer, ajouter le thym.
+  - Hors feu, incorporer la crème. Laisser tiédir 5 minutes.
+  - Ajouter l’œuf battu et mélanger.
+  - Foncer le moule avec 1 dose de pâte.
+  - Répartir la garniture sans jus libre.
+  - Poser le couvercle (2e dose), souder les bords.
+  - Faire 2 à 3 petites cheminées.
+  - Cuire 40 à 50 minutes à 180°C.
+  - Laisser reposer 10 minutes avant découpe.
+
+notes_low_carb:
+  - Low carb modéré compatible.
+  - Très protéiné (~40 g par part).
+  - Riche en fibres (psyllium + amandes).
+  - Congélation possible en parts.
+  - Réchauffage micro-ondes à puissance moyenne.
+  - Texture optimale si les champignons sont parfaitement desséchés.
 ---
 
-<div class="recipe-lead">
-  <p>
-    <strong>Tourte familiale</strong> low carb modéré, conçue pour être
-    <strong>rassasiante</strong>, <strong>stable à la découpe</strong>
-    et compatible <strong>batch cooking</strong>.
-    La clé de la réussite est une garniture <strong>bien sèche</strong> avant montage.
-  </p>
-  <ul>
-    <li><strong>Portions :</strong> 6 parts</li>
-    <li><strong>Préparation :</strong> 30 min</li>
-    <li><strong>Cuisson :</strong> 40–50 min</li>
-    <li><strong>Difficulté :</strong> moyenne</li>
-  </ul>
-</div>
-
-<h2>Ingrédients</h2>
-
-<h3>Pâte salée low carb</h3>
-<p>
-  Utiliser la recette suivante :<br>
-  <a href="{{ '/recettes/pate-salee.html' | relative_url }}"><strong>Pâte salée aux amandes & psyllium</strong></a>
-</p>
-<ul>
-  <li><strong>Quantité :</strong> <strong>2 doses</strong> (fond + couvercle) pour un moule 26–28 cm</li>
-  <li><strong>Objectif :</strong> pâte qui tient la découpe malgré une garniture humide</li>
-</ul>
-
-<p class="small text-muted">
-  <strong>Note psyllium :</strong> on reste sur le <strong>minimum fonctionnel</strong>.
-  Si ta pâte “standard” tient déjà bien, ne renforce pas : la stabilité vient surtout d’une garniture <strong>bien desséchée</strong>.
-</p>
-
-<h3>Garniture</h3>
-<ul>
-  <li><strong>700 à 800 g</strong> de bœuf <strong>émincé fin</strong> (rumsteck, poire, bavette)</li>
-  <li><strong>500 g</strong> de champignons de Paris</li>
-  <li><strong>2</strong> échalotes (ou 1 oignon moyen)</li>
-  <li><strong>30 g</strong> de beurre (ou matière grasse neutre)</li>
-  <li><strong>30 g</strong> de crème entière (≈ 2 c. à soupe)</li>
-  <li><strong>1</strong> œuf</li>
-  <li><strong>1</strong> petite gousse d’ail</li>
-  <li>Poivre noir</li>
-  <li>Thym</li>
-</ul>
-
-<p class="small text-muted">
-  <strong>Point clé :</strong> les champignons doivent être <strong>très bien desséchés</strong>
-  en fin de cuisson, sinon la pâte ramollira.
-</p>
-
-<h2>Préparation</h2>
-<ol>
-  <li>Préchauffer le four à <strong>180°C</strong>.</li>
-
-  <li>
-    Préparer la <strong>garniture</strong> :
-    émincer les échalotes (et l’ail), puis faire fondre le beurre dans une grande poêle.
-  </li>
-
-  <li>Ajouter échalotes + ail, cuire 2 minutes sans coloration marquée.</li>
-
-  <li>
-    Ajouter les champignons émincés et cuire à feu moyen/fort en remuant,
-    jusqu’à évaporation maximale de l’eau (viser une poêle <strong>quasi sèche</strong>).
-  </li>
-
-  <li>Ajouter le bœuf émincé, cuire juste le temps de le saisir. Poivrer, thym.</li>
-
-  <li>
-    Hors feu, incorporer la crème, puis laisser tiédir 5 minutes.
-    Ajouter l’œuf battu et mélanger (évite l’œuf “brouillé”).
-  </li>
-
-  <li>
-    Foncer le moule avec <strong>1 dose</strong> de pâte.
-    Répartir la garniture en couche homogène (sans jus libre).
-  </li>
-
-  <li>
-    Poser le couvercle (2e dose), souder les bords.
-    Faire 2–3 petites cheminées au centre (évacuation vapeur).
-  </li>
-
-  <li>
-    Cuire <strong>40 à 50 minutes</strong> à 180°C, jusqu’à belle coloration.
-    Laisser reposer 10 minutes avant découpe (stabilise la part).
-  </li>
-</ol>
-
-<h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par portion (1 part sur 6).</p>
-
-<div class="table-responsive">
-  <table class="table table-striped">
-    <tbody>
-      <tr><th scope="row">Énergie</th><td>≈ 610 kcal</td></tr>
-      <tr><th scope="row">Protéines</th><td>≈ 40 g</td></tr>
-      <tr><th scope="row">Lipides</th><td>≈ 45 g</td></tr>
-      <tr><th scope="row">Glucides totaux</th><td>≈ 9 g</td></tr>
-      <tr><th scope="row">dont fructose</th><td>≈ 1 g</td></tr>
-      <tr><th scope="row">Fibres</th><td>≈ 7 g</td></tr>
-      <tr><th scope="row">Glucides nets</th><td>≈ 2 g</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<p class="small text-muted">
-  Glucides nets = glucides totaux − fibres (pas de polyols).
-  Valeurs indicatives. Les écarts viennent surtout de la pâte (amandes/psyllium) et du choix de morceaux de bœuf.
-</p>
-
-<h2>Notes low carb</h2>
-<ul>
-  <li><strong>Low carb modéré</strong> : compatible (la majeure partie des glucides vient de la pâte aux amandes et des champignons).</li>
-  <li><strong>Très protéiné</strong> : portion conçue pour un vrai repas (≈ 40 g/part).</li>
-  <li><strong>Riche en fibres</strong> : psyllium + amandes.</li>
-  <li><strong>Congélation</strong> : congeler en parts, puis décongeler au réfrigérateur.</li>
-  <li><strong>Micro-ondable</strong> : réchauffer à puissance moyenne pour limiter le dessèchement.</li>
-  <li><strong>Point texture</strong> : si la tourte rend de l’eau, c’est presque toujours un manque de dessiccation des champignons.</li>
-</ul>
