@@ -1,5 +1,14 @@
 ---
 layout: recipe
+
+# =========================================================
+# Recette (data-only) — Plats à base de poissons
+# =========================================================
+# Contrat :
+# - Le layout génère l’affichage (ingrédients, étapes, nutrition, notes).
+# - Pas de HTML ni de JSON-LD saisi dans le corps de la recette.
+# =========================================================
+
 title: "Bol nordique"
 description: "Bol nordique low carb modéré, très protéiné et riche en fibres, à base de skyr, poisson fumé et graines de chia. Plat complet, froid et rassasiant."
 recipe_title: "Bol nordique"
@@ -7,6 +16,8 @@ recipe_subtitle: "Plat froid express au skyr, poisson fumé & chia"
 recipe_group: "Plats à base de poissons"
 recipe_sort: "bol-nordique"
 recipe_tested: true
+
+meal_type: "plat"
 
 tags:
   - low-carb-modere
@@ -20,89 +31,38 @@ badges_nutritionnels:
   - vitamine-b12
   - vitamine-d
 
-extra_head: |
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Recipe",
-    "name": "Bol nordique",
-    "description": "Bol nordique low carb modéré, très protéiné, à base de skyr, poisson fumé et graines de chia.",
-    "recipeYield": "4 portions",
-    "prepTime": "PT10M",
-    "cookTime": "PT0M",
-    "totalTime": "PT40M",
-    "recipeCategory": "Plats à base de poissons",
-    "recipeCuisine": "Nordique",
-    "author": { "@type": "Person", "name": "Laurie" },
-    "nutrition": {
-      "@type": "NutritionInformation",
-      "calories": "400 kcal",
-      "proteinContent": "35 g",
-      "fatContent": "20 g",
-      "carbohydrateContent": "9 g",
-      "fiberContent": "7 g",
-      "sugarContent": "1 g"
-    }
-  }
-  </script>
+# Estimations par portion (1 bol sur 4)
+calories: 400
+proteines: 35
+glucides_nets: 2
+
+nutrition:
+  lipides: 20
+  glucides: 9
+  fibres: 7
+  fructose: 1
+
+ingredients:
+  - "800 g de skyr nature"
+  - "400 g de truite fumée ou saumon fumé"
+  - "2 concombres moyens"
+  - "60 g de graines de chia"
+  - "4 c. à soupe de vinaigre de cidre"
+  - "Sel, poivre"
+
+steps:
+  - "Laver et couper les concombres en petits dés."
+  - "Détailler la truite ou le saumon fumé en lamelles."
+  - "Verser le skyr dans un grand saladier."
+  - "Ajouter les concombres, le poisson et les graines de chia."
+  - "Assaisonner avec le vinaigre de cidre, le sel et le poivre."
+  - "Laisser reposer au réfrigérateur 30 minutes minimum."
+  - "Mélanger juste avant de servir."
+
+notes_low_carb:
+  - "Plat complet : protéines, fibres et lipides intégrés."
+  - "Compatible low carb modéré."
+  - "Fibres majoritairement apportées par les graines de chia."
+  - "Aucun ingrédient non low carb."
 ---
-
-<div class="recipe-lead">
-  <p>
-    Bol froid <strong>complet et rassasiant</strong>, inspiré des cuisines nordiques.
-    Très protéiné, riche en fibres et <strong>rapide à préparer</strong>, sans cuisson.
-  </p>
-</div>
-
-<h2>Ingrédients (4 personnes)</h2>
-<ul>
-  <li>800 g de skyr nature</li>
-  <li>400 g de truite fumée ou saumon fumé</li>
-  <li>2 concombres moyens</li>
-  <li>60 g de graines de chia</li>
-  <li>4 c. à soupe de vinaigre de cidre</li>
-  <li>Sel, poivre</li>
-</ul>
-
-<h2>Préparation</h2>
-<ol>
-  <li>Laver et couper les concombres en petits dés.</li>
-  <li>Détailler la truite ou le saumon fumé en lamelles.</li>
-  <li>Verser le skyr dans un grand saladier.</li>
-  <li>Ajouter les concombres, le poisson et les graines de chia.</li>
-  <li>Assaisonner avec le vinaigre de cidre, le sel et le poivre.</li>
-  <li>Laisser reposer au réfrigérateur 30 minutes minimum.</li>
-  <li>Mélanger juste avant de servir.</li>
-</ol>
-
-<h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par portion (1 bol sur 4).</p>
-
-<!-- Ne pas modifier la présentation des tableaux nutritionnels. -->
-<div class="table-responsive">
-  <table class="table table-striped">
-    <tbody>
-      <tr><th>Énergie</th><td>≈ 400 kcal</td></tr>
-      <tr><th>Protéines</th><td>≈ 35 g</td></tr>
-      <tr><th>Lipides</th><td>≈ 20 g</td></tr>
-      <tr><th>Glucides</th><td>≈ 9 g</td></tr>
-      <tr><th>Fibres</th><td>≈ 7 g</td></tr>
-      <tr><th><strong>Glucides nets</strong></th><td><strong>≈ 2 g</strong></td></tr>
-      <tr><th>dont fructose</th><td>≈ 1 g</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<p class="small text-muted">
-  Glucides nets = glucides totaux − fibres − polyols (aucun polyol dans cette recette).
-  Valeurs indicatives : les quantités peuvent varier selon les marques et le poisson utilisé.
-</p>
-
-<h2>Notes low carb</h2>
-<ul>
-  <li>Plat <strong>complet</strong> : protéines, fibres et lipides intégrés.</li>
-  <li>Compatible <strong>low carb modéré</strong>.</li>
-  <li>Fibres majoritairement apportées par les graines de chia.</li>
-  <li>Aucun ingrédient non low carb.</li>
-</ul>
 

@@ -2,7 +2,11 @@
 layout: recipe
 
 # =========================================================
-# Recette (format site) — Pains & substituts
+# Recette (data-only) — Pains & substituts
+# =========================================================
+# Contrat :
+# - Le layout génère l’affichage (ingrédients, étapes, nutrition, notes).
+# - Pas de HTML ni de JSON-LD saisi dans le corps de la recette.
 # =========================================================
 
 title: "Crêpes salées low carb"
@@ -10,10 +14,11 @@ description: "Crêpes salées low carb, sans farine de blé. Base souple et neut
 recipe_title: "Crêpes salées"
 recipe_subtitle: "Base souple et neutre pour wraps et crêpes garnies low carb"
 recipe_group: "Pains & substituts"
-
 recipe_sort: "crepes-salees"
-
 recipe_tested: true
+
+# Base / substitut : non tirable comme “plat” ou “dessert”
+meal_type: "other"
 
 image: "/images/recettes/crepes-salees.webp"
 image_alt: "Crêpes salées low carb (base pour wraps)"
@@ -29,131 +34,48 @@ tags:
 badges_nutritionnels:
   - magnesium
 
-extra_head: |
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Recipe",
-    "name": "Crêpes salées low carb",
-    "description": "Crêpes salées low carb, sans farine de blé, base souple et neutre pour wraps et crêpes garnies.",
-    "recipeYield": "12 crêpes",
-    "prepTime": "PT15M",
-    "cookTime": "PT30M",
-    "totalTime": "PT1H30M",
-    "recipeCategory": "Pains & substituts",
-    "keywords": "low carb, crepes, wraps, base salee",
-    "author": { "@type": "Person", "name": "Laurie" },
-    "recipeIngredient": [
-      "5 œufs",
-      "500 ml de lait d’amande non sucré",
-      "60 g de poudre d’amandes",
-      "18 g de psyllium blond",
-      "1 c. à soupe d’huile (colza ou tournesol)",
-      "1 pincée de sel"
-    ],
-    "recipeInstructions": [
-      { "@type": "HowToStep", "text": "Mixer tous les ingrédients jusqu’à obtenir une pâte lisse." },
-      { "@type": "HowToStep", "text": "Laisser reposer 45 minutes pour permettre l’hydratation complète du psyllium." },
-      { "@type": "HowToStep", "text": "Après repos, ajuster la texture avec un peu de lait d’amande si nécessaire." },
-      { "@type": "HowToStep", "text": "Cuire les crêpes plus longtemps qu’une crêpe classique et les laisser bien colorer." }
-    ]
-  }
-  </script>
+# Estimations par portion fonctionnelle : 1 crêpe (1 sur 12)
+calories: 110
+proteines: 5
+
+# Glucides nets = glucides totaux − fibres − polyols (aucun polyol indiqué).
+# Ici 2 − 3 = −1 : on borne à 0 pour éviter une valeur négative non exploitable.
+glucides_nets: 0
+
+nutrition:
+  lipides: 8
+  glucides: 2
+  fibres: 3
+  fructose: 0
+
+ingredients:
+  - "5 œufs"
+  - "500 ml de lait d’amande non sucré"
+  - "60 g de poudre d’amandes"
+  - "18 g de psyllium blond"
+  - "1 c. à soupe d’huile (colza ou tournesol)"
+  - "1 pincée de sel"
+
+steps:
+  - "Mettre tous les ingrédients dans un blender."
+  - "Mixer jusqu’à obtenir une pâte parfaitement lisse."
+  - "Laisser reposer 45 minutes à température ambiante pour permettre l’hydratation complète des fibres."
+  - "Après repos, mélanger rapidement : la pâte sera plus épaisse qu’une pâte à crêpes classique (normal)."
+  - "Si nécessaire, ajouter un peu de lait d’amande par petites quantités pour obtenir une pâte nappante mais fluide."
+  - "Chauffer une poêle antiadhésive légèrement huilée."
+  - "Verser une petite louche de pâte et étaler finement (la texture restera plus dense qu’une crêpe au blé)."
+  - "Cuire plus longtemps qu’une crêpe traditionnelle et laisser bien colorer pour améliorer la tenue et la souplesse."
+  - "Répéter jusqu’à épuisement de la pâte."
+
+notes_low_carb:
+  - "Compatible low carb modéré : sans farine de blé."
+  - "Riche en fibres grâce au psyllium."
+  - "⚠️ Le psyllium absorbe beaucoup d’eau : boire suffisamment d’eau avec ces crêpes."
+  - "Cuisson volontairement plus longue qu’une crêpe classique : une bonne coloration améliore nettement la texture."
+  - "Texture différente d’une crêpe au blé : objectif = stabilité et tenue, pas finesse ultra-souple."
+  - "Idéal pour wraps garnis (viande, poisson, fromage)."
+  - "Micro-ondable : réchauffage doux possible."
+  - "Congélation : congeler séparées par papier cuisson, puis réchauffer doucement."
+  - "Conservation : jusqu’à 48 h au réfrigérateur."
 ---
-
-<div class="recipe-lead">
-  <p>
-    Base <strong>souple, neutre et stable</strong> pour crêpes salées et wraps low carb.
-    Le <strong>psyllium</strong> assure la tenue sans farine de blé, et le <strong>temps de repos</strong>
-    permet d’obtenir une texture pliable sans goût d’œuf dominant.
-  </p>
-</div>
-
-<h2>Ingrédients (4 personnes)</h2>
-<ul>
-  <li>5 œufs</li>
-  <li>500 ml de lait d’amande non sucré</li>
-  <li>60 g de poudre d’amandes</li>
-  <li>18 g de psyllium blond</li>
-  <li>1 c. à soupe d’huile (colza ou tournesol)</li>
-  <li>1 pincée de sel</li>
-</ul>
-
-<h2>Préparation</h2>
-<ol>
-  <li>Mettre tous les ingrédients dans un blender.</li>
-  <li>Mixer jusqu’à obtenir une pâte parfaitement lisse.</li>
-
-  <li>
-    Laisser reposer <strong>45 minutes</strong> à température ambiante
-    pour permettre l’hydratation complète des fibres.
-  </li>
-
-  <li>
-    Après repos, mélanger rapidement.  
-    La pâte sera <strong>plus épaisse qu’une pâte à crêpes classique</strong>.
-    C’est normal.  
-    Si nécessaire, ajouter un peu de lait d’amande par petites quantités
-    pour obtenir une pâte nappante mais fluide.
-  </li>
-
-  <li>Chauffer une poêle antiadhésive légèrement huilée.</li>
-
-  <li>
-    Verser une petite louche de pâte et étaler finement.
-    La texture restera plus dense qu’une crêpe à la farine de blé :
-    ne pas chercher à obtenir la même fluidité.
-  </li>
-
-  <li>
-    Cuire <strong>plus longtemps qu’une crêpe traditionnelle</strong>.
-    Ne pas hésiter à laisser bien colorer :
-    une coloration franche améliore la tenue et la souplesse.
-  </li>
-
-  <li>Répéter jusqu’à épuisement de la pâte.</li>
-</ol>
-
-<h2>Informations nutritionnelles</h2>
-<p>Valeurs estimées par <strong>crêpe (1 sur 12)</strong>.</p>
-
-<div class="table-responsive">
-  <table class="table table-striped">
-    <tbody>
-      <tr><th>Énergie</th><td>≈ 110 kcal</td></tr>
-      <tr><th>Protéines</th><td>≈ 5 g</td></tr>
-      <tr><th>Lipides</th><td>≈ 8 g</td></tr>
-      <tr><th>Glucides</th><td>≈ 2 g</td></tr>
-      <tr><th>dont fructose</th><td>≈ 0 g</td></tr>
-      <tr><th>Fibres</th><td>≈ 3 g</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<p class="small text-muted">
-  Estimation pour 1 crêpe. Les fibres proviennent principalement du psyllium.
-</p>
-
-<h2>Notes low carb</h2>
-<ul>
-  <li><strong>Compatible low carb modéré</strong> : sans farine de blé.</li>
-  <li><strong>Riche en fibres</strong> grâce au psyllium.</li>
-  <li>
-    ⚠️ Le psyllium absorbe beaucoup d’eau :
-    il est recommandé de <strong>boire suffisamment d’eau</strong>
-    avec ces crêpes.
-  </li>
-  <li>
-    La cuisson est volontairement plus longue qu’une crêpe classique.
-    Une bonne coloration améliore nettement la texture.
-  </li>
-  <li>
-    La texture sera différente d’une crêpe au blé.
-    L’objectif est la stabilité et la tenue, pas la finesse ultra-souple.
-  </li>
-  <li>Idéal pour wraps garnis (viande, poisson, fromage).</li>
-  <li><strong>Micro-ondable</strong> : réchauffage doux possible.</li>
-  <li><strong>Congélation</strong> : congeler séparées par papier cuisson, puis réchauffer doucement.</li>
-  <li>Conservation : jusqu’à 48 h au réfrigérateur.</li>
-</ul>
 
