@@ -19,22 +19,25 @@
     - nutrition.* (lipides, glucides, fibres, fructose) optionnel mais recommandé
     - ingredients (liste ; supporte string OU objet {label, link})
     - steps (liste)
-    - notes_low_carb (liste)
+    - notes_low_carb (liste ; supporte :
+        1) string
+        2) map YAML (si ":" non quoté)
+        3) string “sérialisée” type {"clé"=>"valeur"})
 
     Contrats :
     - Tableau nutritionnel à 2 colonnes (Nutriment | Valeur).
-    - Ligne “Glucides nets” toujours affichée.
+    - Ligne “Glucides nets” toujours affichée si fournie.
     - Liens internes recettes : /recettes/...html avec relative_url.
+
+    Important :
+    - head.html gère déjà page.extra_head (ne pas le dupliquer ici).
     =========================================================
   {%- endcomment -%}
-
-  {%- if page.extra_head -%}
-    {{ page.extra_head }}
-  {%- endif -%}
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
-  {% include navbar.html %}
+ 
+   {% include navbar.html %}
 
   <main class="site-main">
     <div class="site-container">
@@ -182,7 +185,7 @@
 
       {%- comment -%}
         Mode data-only :
-        - Si ingredients/steps existent, on génère l’affichage ici.
+        - Si ingredients/steps/nutrition existent, on génère l’affichage ici.
         - Sinon, fallback : on rend le contenu HTML (anciennes recettes).
       {%- endcomment -%}
       <div class="content-surface recipe-surface">
@@ -222,7 +225,7 @@
           {%- comment -%}
             Nutrition :
             - Tableau 2 colonnes.
-            - “Glucides nets” toujours affiché (champ requis côté recette).
+            - “Glucides nets” affiché si la recette fournit page.glucides_nets.
           {%- endcomment -%}
           <h2>Informations nutritionnelles</h2>
           <p>Valeurs estimées par portion.</p>
@@ -248,11 +251,6 @@
                 {% if page.nutrition and page.nutrition.fibres %}
                   <tr><th scope="row">Fibres</th><td>{{ page.nutrition.fibres }} g</td></tr>
                 {% endif %}
-
-                {%- comment -%}
-                  Ligne obligatoire :
-                  - Le layout l’affiche dès que la recette fournit page.glucides_nets (contrat site).
-                {%- endcomment -%}
                 {% if page.glucides_nets %}
                   <tr><th scope="row">Glucides nets</th><td>{{ page.glucides_nets }} g</td></tr>
                 {% endif %}
@@ -260,11 +258,56 @@
             </table>
           </div>
 
+          {%- comment -%}
+            Notes low carb — rendu robuste.
+
+            Objectif :
+            - Corriger l’affichage "{"clé"=>"valeur"}" sans refaire les recettes.
+
+            Cas supportés :
+            1) String propre :
+               - "Très protéiné : ~40 g par portion."
+            2) Map YAML (si ":" non quoté) :
+               - Très protéiné : ~40 g par portion.
+            3) String déjà “sérialisée” (copiée depuis un rendu) :
+               - {"Très protéiné"=>"~40 g par portion."}
+          {%- endcomment -%}
           {% if page.notes_low_carb %}
             <h2>Notes low carb</h2>
             <ul>
               {% for n in page.notes_low_carb %}
-                <li>{{ n }}</li>
+
+                {% if n.keys %}
+                  {%- comment -%} Cas 2 : hash YAML { "Titre" => "texte" } {%- endcomment -%}
+                  {% for kv in n %}
+                    <li><strong>{{ kv[0] }}</strong> : {{ kv[1] }}</li>
+                  {% endfor %}
+
+                {% else %}
+                  {%- assign raw = n | strip -%}
+
+                  {% if raw contains '"=>"' %}
+                    {%- comment -%}
+                      Cas 3 : string du type {"Titre"=>"texte"}.
+                      Nettoyage simple :
+                      - suppression des accolades
+                      - remplacement du séparateur Ruby "=>" en " : "
+                      - suppression des guillemets résiduels
+                    {%- endcomment -%}
+                    {%- assign pretty = raw
+                      | replace: '{', ''
+                      | replace: '}', ''
+                      | replace: '"=>"', ' : '
+                      | replace: '"', ''
+                    -%}
+                    <li>{{ pretty }}</li>
+                  {% else %}
+                    {%- comment -%} Cas 1 : string classique {%- endcomment -%}
+                    <li>{{ n }}</li>
+                  {% endif %}
+
+                {% endif %}
+
               {% endfor %}
             </ul>
           {% endif %}
