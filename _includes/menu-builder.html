@@ -1,0 +1,93 @@
+{%- comment -%}
+==============================================================================
+_includes/menu-builder.html — Générateur de menu (UI)
+==============================================================================
+
+Rôle
+- UI du générateur de menu.
+- Le JS lit les champs et rend le menu dans #menuGrid.
+- Le JS récupère aussi la cible kcal/jour depuis les calculateurs plus haut.
+
+Dépendances DOM
+- #menu-builder-root[data-baseurl]
+- #menuMessage, #generateMenu, #weekStart, #mealsPerDay
+- #proteinPerKg, #carbMax, #fatMax, #calorieTargetDay
+- #menuGrid
+==============================================================================
+{%- endcomment -%}
+
+<section class="marge" id="menu-hebdo">
+  <h2>Générateur de menu</h2>
+
+  <div class="content-surface">
+
+    <div id="menu-builder-root" data-baseurl="{{ site.baseurl }}"></div>
+
+    <div id="menuMessage" class="alert alert-secondary d-none" role="status"></div>
+
+    <div class="row g-3 mb-4">
+
+      <div class="col-md-4">
+        <label class="form-label" for="weekStart">Début de semaine</label>
+        <select id="weekStart" class="form-select">
+          <option value="1">Lundi</option>
+          <option value="2">Mardi</option>
+          <option value="3">Mercredi</option>
+          <option value="4">Jeudi</option>
+          <option value="5">Vendredi</option>
+          <option value="6">Samedi</option>
+          <option value="0">Dimanche</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="mealsPerDay">Repas par jour</label>
+        <select id="mealsPerDay" class="form-select">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 d-flex align-items-end">
+        <button id="generateMenu" class="btn btn-primary w-100" type="button">
+          Générer le menu
+        </button>
+      </div>
+
+    </div>
+
+    <div class="row g-3 mb-4">
+
+      <div class="col-md-3">
+        <label class="form-label" for="proteinPerKg">Protéines minimum (g/kg)</label>
+        <input type="number" id="proteinPerKg" class="form-control" value="2" step="0.1" min="0">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label" for="carbMax">Glucides nets max / jour (g)</label>
+        <input type="number" id="carbMax" class="form-control" value="50" step="1" min="0">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label" for="fatMax">Lipides max / jour (g)</label>
+        <input type="number" id="fatMax" class="form-control" value="80" step="1" min="0">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label" for="calorieTargetDay">Calories cible / jour (kcal)</label>
+        <input type="number" id="calorieTargetDay" class="form-control" value="0" step="50" min="0">
+        <div class="form-text">
+          Auto-rempli depuis le calculateur “calories cible” (modifiable si besoin).
+        </div>
+      </div>
+
+    </div>
+
+    <div id="menuGrid" class="mt-4"></div>
+
+  </div>
+</section>
+

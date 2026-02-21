@@ -1,0 +1,29 @@
+---
+layout: null
+permalink: /assets/data/recipes.json
+---
+
+[
+{%- assign recipes = site.pages | where: "layout", "recipe" -%}
+{%- for r in recipes -%}
+  {%- if r.recipe_group and r.recipe_group != "" -%}
+  {
+    "title": {{ r.title | jsonify }},
+    "url": {{ r.url | relative_url | jsonify }},
+    "meal_type": {{ r.meal_type | jsonify }},
+    "recipe_group": {{ r.recipe_group | jsonify }},
+    "calories": {{ r.calories | jsonify }},
+    "proteines": {{ r.proteines | jsonify }},
+    "glucides_nets": {{ r.glucides_nets | jsonify }},
+    "lipides": {{ r.nutrition.lipides | jsonify }},
+    "glucides": {{ r.nutrition.glucides | jsonify }},
+    "fibres": {{ r.nutrition.fibres | jsonify }},
+    "fructose": {{ r.nutrition.fructose | jsonify }},
+    "servings": {{ r.servings | jsonify }},
+    "serving_size": {{ r.serving_size | jsonify }},
+    "ingredients": {{ r.ingredients | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+  {%- endif -%}
+{%- endfor -%}
+]
+

@@ -5,33 +5,16 @@
   - Calculer une cible calorique quotidienne selon l’objectif :
     maintien / perte / prise de poids.
 
-  Entrées
-  - BMR (kcal/jour) :
-      • récupéré si disponible (localStorage bmr_value)
-      • sinon saisi manuellement
-  - Facteur d’activité :
-      • récupéré si disponible (localStorage activity_factor)
-      • sinon saisi manuellement
-  - Objectif : maintien / perdre / gagner
-  - Intensité (perte/prise) : doux / modéré / agressif
-    (paramétré en % du maintien)
+  Sorties (interop)
+  - Publie la cible via :
+    • window.calorieTargetKcal (nombre)
+    • localStorage.calorieTargetKcal (string)
+    • event "calorieTargetUpdated" (detail: { kcal })
+    • DOM : #ct-target-kcal[data-calorie-target]
 
-  Sorties
-  - Maintien estimé (TDEE) = BMR × facteur d’activité
-  - Cible calorique selon objectif
-  - Estimation très grossière de variation de poids / semaine
-    (approximation 7 700 kcal ≈ 1 kg de masse grasse)
-
-  Notes (fiabilité)
-  - Le TDEE est une estimation.
-  - Les balances et formules peuvent diverger.
-  - L’estimation de variation hebdo est indicative (eau/glycogène, adaptation, etc.).
-
-  Dépendances (optionnelles)
-  - Si tes autres includes enregistrent :
-      • localStorage.bmr_value
-      • localStorage.activity_factor
-    alors ce module peut auto-remplir.
+  Notes
+  - Permet à d’autres modules (ex : générateur de menu) de récupérer une valeur fiable
+    sans dépendre d’IDs internes ou de parsing de texte.
 ========================================================= -->
 
 <section class="calorie-target-calculator card p-3 mb-4">
@@ -41,6 +24,11 @@
     Ce module calcule ton <strong>maintien calorique estimé</strong> (TDEE), puis applique un
     <strong>déficit</strong> (perte) ou un <strong>surplus</strong> (prise). Les chiffres sont des
     points de départ : la validation se fait sur 3–4 semaines (tendance, énergie, faim, perf).
+  </div>
+
+  <!-- Sortie “machine-readable” (interop menu, etc.) -->
+  <div class="small text-muted mb-3">
+    Cible publiée : <span id="ct-target-kcal" data-calorie-target="">—</span>
   </div>
 
   <!-- Sources (auto-remplissage) -->
@@ -108,13 +96,10 @@
   <div id="ct-intensity-wrap" class="mb-3" style="display:none;">
     <label class="form-label"><strong>Intensité</strong></label>
     <select id="ct-intensity" class="form-select">
-      <!-- Valeurs en % du maintien (TDEE) -->
       <option value="0.00">Standard</option>
-      <!-- Perte -->
       <option value="-0.10" data-mode="lose">Perte douce (−10 %)</option>
       <option value="-0.15" data-mode="lose">Perte modérée (−15 %)</option>
       <option value="-0.20" data-mode="lose">Perte agressive (−20 %)</option>
-      <!-- Prise -->
       <option value="0.05" data-mode="gain">Prise douce (+5 %)</option>
       <option value="0.10" data-mode="gain">Prise modérée (+10 %)</option>
       <option value="0.15" data-mode="gain">Prise agressive (+15 %)</option>
@@ -149,6 +134,9 @@
   const elResult = document.getElementById("ct-result");
   const elDetail = document.getElementById("ct-detail");
 
+  // Sortie interop : DOM stable pour d'autres modules
+  const elTargetKcal = document.getElementById("ct-target-kcal");
+
   function getGoal() {
     const checked = document.querySelector('input[name="ct-goal"]:checked');
     return checked ? checked.value : "maintain";
@@ -167,6 +155,41 @@
     return Math.round(n);
   }
 
+  /**
+   * Publie la cible kcal/jour sous 4 formes :
+   * - window.calorieTargetKcal
+   * - localStorage.calorieTargetKcal
+   * - event CustomEvent("calorieTargetUpdated")
+   * - DOM #ct-target-kcal[data-calorie-target]
+   */
+  function publishTargetKcal(kcal) {
+    const n = parseInt(kcal, 10);
+    if (!Number.isFinite(n) || n <= 0) return;
+
+    // 1) variable globale
+    window.calorieTargetKcal = n;
+
+    // 2) localStorage
+    try {
+      localStorage.setItem("calorieTargetKcal", String(n));
+    } catch (e) {
+      // Pas bloquant (mode privé / quotas)
+    }
+
+    // 3) event
+    try {
+      window.dispatchEvent(new CustomEvent("calorieTargetUpdated", { detail: { kcal: n } }));
+    } catch (e) {
+      // Pas bloquant
+    }
+
+    // 4) DOM stable
+    if (elTargetKcal) {
+      elTargetKcal.textContent = n + " kcal/jour";
+      elTargetKcal.setAttribute("data-calorie-target", String(n));
+    }
+  }
+
   function setIntensityVisibility() {
     const goal = getGoal();
     if (goal === "maintain") {
@@ -176,19 +199,16 @@
     }
     elIntensityWrap.style.display = "block";
 
-    // Filtrer les options pour ne garder que celles du mode
     const mode = goal; // "lose" ou "gain"
     Array.from(elIntensity.options).forEach(function (opt) {
       const optMode = opt.getAttribute("data-mode");
       if (!optMode) {
-        // "Standard"
         opt.hidden = false;
       } else {
         opt.hidden = (optMode !== mode);
       }
     });
 
-    // Valeur par défaut raisonnable
     elIntensity.value = (mode === "lose") ? "-0.15" : "0.10";
   }
 
@@ -196,15 +216,12 @@
     let bmr = null;
     let factor = null;
 
-    // Option A : localStorage (si tes autres modules l’enregistrent)
     const lsBmr = localStorage.getItem("bmr_value");
     const lsFactor = localStorage.getItem("activity_factor");
 
     if (lsBmr && !Number.isNaN(parseFloat(lsBmr))) bmr = parseFloat(lsBmr);
     if (lsFactor && !Number.isNaN(parseFloat(lsFactor))) factor = parseFloat(lsFactor);
 
-    // Option B : fallback (si tu ajoutes plus tard des variables globales)
-    // ex : window.bmrValue, window.activityFactor
     if (bmr === null && typeof window.bmrValue === "number") bmr = window.bmrValue;
     if (factor === null && typeof window.activityFactor === "number") factor = window.activityFactor;
 
@@ -237,23 +254,23 @@
       adjPct = Number.isFinite(raw) ? raw : 0.0;
     }
 
-    // Sécurité : si mauvais combo (ex: option perte sélectionnée en mode prise), neutraliser
     if (goal === "lose" && adjPct > 0) adjPct = -0.10;
     if (goal === "gain" && adjPct < 0) adjPct = 0.05;
 
     const target = tdee * (1 + adjPct);
 
-    // Estimation variation hebdo : (écart/jour × 7) / 7700
     const dailyDelta = target - tdee;
-    const weeklyKg = (dailyDelta * 7) / 7700; // signe inclus
+    const weeklyKg = (dailyDelta * 7) / 7700;
 
     const goalLabel =
       (goal === "maintain") ? "Maintien" :
       (goal === "lose") ? "Perte" :
       "Prise";
 
+    const targetRounded = round(target);
+
     elResult.innerHTML =
-      goalLabel + " : <span class=\"fw-bold\">" + round(target) + " kcal/jour</span>";
+      goalLabel + " : <span class=\"fw-bold\">" + targetRounded + " kcal/jour</span>";
 
     const lines = [];
     lines.push("Maintien estimé (TDEE) ≈ " + round(tdee) + " kcal/jour (BMR × facteur).");
@@ -264,19 +281,17 @@
       const sign = dailyDelta < 0 ? "−" : "+";
       lines.push("Ajustement : " + pctStr + " % (" + sign + absDelta + " kcal/jour vs maintien).");
 
-      // Variation hebdo indicative
       const wk = Math.abs(weeklyKg);
       const wkStr = wk.toFixed(2).replace(".", ",");
-      if (dailyDelta < 0) {
-        lines.push("Variation théorique : ~" + wkStr + " kg/semaine (approximation).");
-      } else {
-        lines.push("Variation théorique : ~" + wkStr + " kg/semaine (approximation).");
-      }
+      lines.push("Variation théorique : ~" + wkStr + " kg/semaine (approximation).");
     } else {
       lines.push("Si ton poids dérive, ajuste doucement (±100 à 150 kcal/j) et observe 3–4 semaines.");
     }
 
     elDetail.innerHTML = lines.join("<br>");
+
+    // Publication inter-modules (menu, etc.)
+    publishTargetKcal(targetRounded);
   }
 
   // Events
@@ -286,15 +301,22 @@
     });
   });
 
-  elIntensity.addEventListener("change", function () {
-    // optionnel : recalcul automatique
-  });
-
   elAutofillBtn.addEventListener("click", autofillFromStorage);
   elCalcBtn.addEventListener("click", compute);
 
   // Init UI
   setIntensityVisibility();
+
+  // Option : au chargement, si une valeur existe déjà, on la publie.
+  // (évite un champ menu vide si tu as déjà calculé dans une session précédente)
+  try {
+    const saved = localStorage.getItem("calorieTargetKcal");
+    if (saved && !Number.isNaN(parseFloat(saved))) {
+      publishTargetKcal(saved);
+    }
+  } catch (e) {
+    // Pas bloquant
+  }
 })();
 </script>
 

@@ -1,0 +1,92 @@
+---
+layout: page
+title: "Menu hebdomadaire"
+description: "Générateur de menu hebdomadaire low carb"
+page_h1: "Menu hebdomadaire"
+page_h3: "Générateur + calculs"
+body_id: "menu"
+---
+
+<section class="site-container">
+
+  <!-- ================= CALCULS (cachés par défaut) ================= -->
+  <section class="marge" id="outils-calculs">
+    <h2>Outils de calcul : BMR, activité et calories cible</h2>
+
+    <div class="content-surface">
+
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#calculatorsCollapse"
+          aria-expanded="false"
+          aria-controls="calculatorsCollapse"
+          id="toggleCalculatorsBtn"
+        >
+          Afficher les calculateurs
+        </button>
+
+        <div class="small text-muted">
+          (Optionnel) Recommandé si tu veux synchroniser automatiquement “kcal/jour” avec la cible calculée.
+        </div>
+      </div>
+
+      <div class="collapse" id="calculatorsCollapse">
+        <div class="card">
+          <div class="card-body">
+
+            {% include bmr-calculator.html %}
+
+            <hr class="my-4">
+
+            {% include activity-level.html %}
+
+            <hr class="my-4">
+
+            {% include calorie-target.html %}
+
+          </div>
+        </div>
+
+        <p class="small text-muted mt-3 mb-0">
+          Remarque : ce sont des estimations. La validation se fait sur la tendance (3–4 semaines),
+          pas sur une journée isolée.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= MENU BUILDER ================= -->
+  {% include menu-builder.html %}
+
+  <!-- Bouton pour générer le PDF -->
+  <button id="generatePdfMenu" class="btn btn-primary mt-3">Générer le PDF du menu</button>
+
+</section>
+
+<!-- Menu builder (version découpée en modules) -->
+<script src="{{ '/assets/js/menu-builder.js' | relative_url }}"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  // Améliore le libellé du bouton “Afficher/Masquer”
+  const btn = document.getElementById("toggleCalculatorsBtn");
+  const box = document.getElementById("calculatorsCollapse");
+  if (!btn || !box) return;
+
+  box.addEventListener("shown.bs.collapse", function () {
+    btn.textContent = "Masquer les calculateurs";
+    btn.setAttribute("aria-expanded", "true");
+  });
+
+  box.addEventListener("hidden.bs.collapse", function () {
+    btn.textContent = "Afficher les calculateurs";
+    btn.setAttribute("aria-expanded", "false");
+  });
+})();
+</script>

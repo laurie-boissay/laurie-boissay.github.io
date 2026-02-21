@@ -53,7 +53,10 @@
   </main>
 
   {% include footer.html %}
+
+  <!-- Ajout du script menu-pdf.js avant la fin de la balise body -->
+  <script src="{{ '/assets/js/menu-pdf.js' | relative_url }}"></script>
+
   {% include scripts.html %}
 </body>
 </html>
-

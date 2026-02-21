@@ -1,52 +1,10 @@
-<!--
-==============================================================================
-_includes/navbar.html — Navigation principale (Bootstrap)
-==============================================================================
-
-Rôle
-- Fournir la navigation principale du site (desktop + mobile).
-- Donner accès :
-  • à l’index (avec accès rapide “On mange quoi ?”)
-  • aux sections recettes par recipe_group (ancres sur la page d’accueil)
-  • aux pages fixes (repères, gestion du poids, sucres, édulcorants, à propos)
-
-Entrées / dépendances
-- page.url     : détection de la page courante (classe .active).
-- site.baseurl : construction de liens compatibles GitHub Pages.
-- site.pages   : construction du menu “Recettes” via les pages layout: recipe.
-
-Contrats / contraintes
-- Compat GitHub Pages :
-  • évite where_exp (selon config/plugins, peut être plus strict).
-  • construit la liste de recettes avec une boucle + push.
-- UX :
-  • “On mange quoi ?” pointe vers #random-pick (index).
-  • les groupes pointent vers #{{ recipe_group | slugify }} (index).
-- Structure :
-  • “Mentions légales” n’est pas dans la navbar (déplacé dans le footer).
-
-Accessibilité
-- aria-label sur <nav>.
-- aria-controls / aria-expanded / aria-label sur le bouton mobile.
-- aria-labelledby sur le dropdown.
-==============================================================================
--->
-
 <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
   <div class="container-fluid site-container">
 
-    {%- comment -%}
-      Marque / retour accueil.
-      Le libellé reflète le positionnement du site (régime, pas “juste” recettes).
-    {%- endcomment -%}
     <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/">
       Régime low carb
     </a>
 
-    {%- comment -%}
-      Toggler mobile (Bootstrap).
-      Le rendu de l’icône est fourni par .navbar-toggler-icon (Bootstrap).
-    {%- endcomment -%}
     <button
       class="navbar-toggler"
       type="button"
@@ -62,19 +20,9 @@ Accessibilité
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-lg-auto me-lg-auto mb-2 mb-lg-0 gap-lg-1">
 
-        {%- comment -%}
-          Détermination de la page courante.
-          Normalisation : "/index.html" est ramené à "/" pour un test cohérent.
-        {%- endcomment -%}
         {% assign current = page.url | replace: "index.html", "" %}
 
-        {%- comment -%}
-          Menu “Recettes” (dropdown).
-          Construction :
-          1) pages layout: recipe
-          2) filtrage sur recipe_group présent
-          3) group_by recipe_group + tri par nom (stable)
-        {%- endcomment -%}
+        <!-- ===================== DROPDOWN RECETTES ===================== -->
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle {% if current == '/' or current == '' %}active{% endif %}"
@@ -98,10 +46,6 @@ Accessibilité
 
           <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
 
-            {%- comment -%}
-              Accès direct — “On mange quoi ?”
-              Pointe vers l’ancre du composant random pick sur l’index.
-            {%- endcomment -%}
             <li>
               <a class="dropdown-item" href="{{ site.baseurl }}/#random-pick">
                 On mange quoi ?
@@ -110,10 +54,6 @@ Accessibilité
 
             <li><hr class="dropdown-divider"></li>
 
-            {%- comment -%}
-              Accès aux sections de l’index par recipe_group.
-              slugify doit rester cohérent avec l’ID rendu par recipes-index.html.
-            {%- endcomment -%}
             {% for g in grouped %}
               <li>
                 <a class="dropdown-item" href="{{ site.baseurl }}/#{{ g.name | slugify }}">
@@ -124,10 +64,17 @@ Accessibilité
           </ul>
         </li>
 
-        {%- comment -%}
-          Pages fixes.
-          Le critère d’activation reste volontairement simple (test sur current).
-        {%- endcomment -%}
+        <!-- ===================== PAGES FIXES ===================== -->
+        <!-- Lien "Menu" COMMENTÉ TEMPORAIREMENT -->
+        <!--
+        <li class="nav-item">
+          <a
+            class="nav-link {% if current contains 'menu' %}active{% endif %}"
+            href="{{ site.baseurl }}/menu.html"
+          >Menu</a>
+        </li>
+        -->
+
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
@@ -168,4 +115,3 @@ Accessibilité
 
   </div>
 </nav>
-
