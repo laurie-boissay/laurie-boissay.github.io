@@ -8,6 +8,10 @@ _includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
 - Les badges (tags fonctionnels + micronutriments) sont cliquables.
 - Cohérent avec la structure “carte non cliquable + lien sur le titre”.
 - Exclusion du groupe "Aliments simples".
+
+Ajustements UI (stabilité) :
+- Placeholders pour sous-titre et badges : la hauteur de la carte ne varie plus.
+- Zone boutons poussée en bas via flex (CSS), même si contenu variable.
 ==============================================================================
 {%- endcomment -%}
 
@@ -197,7 +201,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const tested   = isRecipeTested(card);
     const href     = getRecipeHref(card);
 
-    const badgesHtml = buildPickBadges(card);
+    /* Placeholders :
+       - subtitle absent => on garde une ligne vide (hauteur stable)
+       - badges absents => on garde un bloc vide (hauteur stable) */
+    const subtitleHtml = subtitle
+      ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>`
+      : `<div class="recipe-card-subtitle mb-2 is-empty" aria-hidden="true"></div>`;
+
+    const badgesHtml = buildPickBadges(card) || `
+      <div class="recipe-badges-wrap is-empty" aria-hidden="true">
+        <ul class="recipe-badges-line is-empty" aria-hidden="true"></ul>
+      </div>
+    `;
 
     pickHost.innerHTML = `
       <div class="pick-card">
@@ -215,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `}
           </h3>
 
-          ${subtitle ? `<div class="recipe-card-subtitle mb-2">${subtitle}</div>` : ""}
+          ${subtitleHtml}
 
           ${badgesHtml}
 

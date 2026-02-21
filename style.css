@@ -482,6 +482,111 @@ PICK CARD (“On mange quoi ?”) — bloc injecté en JS
   box-shadow: none !important;
 }
 
+/* ==============================================================================
+PICK CARD (“On mange quoi ?”) — STABILITÉ + BADGES SCROLLABLES
+- Hauteur fixe de la carte
+- Titre et sous-titre clampés
+- Zone badges à hauteur constante avec scroll vertical interne
+- Boutons toujours exactement à la même hauteur
+============================================================================== */
+
+#random-pick .pick-card-body{
+  display: flex;
+  flex-direction: column;
+
+  /* Hauteur fixe => aucun saut */
+  height: 320px;
+
+  padding: 18px 16px;
+}
+
+/* ================= TITRE ================= */
+
+#random-pick .pick-card-body h3{
+  flex: 0 0 auto;
+  min-height: calc(1.2em * 2); /* réserve 2 lignes */
+  margin-bottom: .25rem;
+}
+
+#random-pick .pick-card-body h3 .recipe-title-link{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ================= SOUS-TITRE ================= */
+
+#random-pick .pick-card-body .recipe-card-subtitle{
+  flex: 0 0 auto;
+  min-height: calc(1.4em * 2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ================= BADGES ================= */
+
+/*
+On réserve 2 lignes complètes visibles sans scroll.
+Une 3e ligne déclenchera le scroll.
+*/
+
+#random-pick .pick-card-body .recipe-badges-wrap{
+  flex: 0 0 auto;
+
+  /* Hauteur équivalente à 2 lignes de badges */
+  min-height: 4.6rem;
+  max-height: 4.6rem;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  padding-right: 4px;
+}
+
+/* Chaque ligne badges garde un espacement cohérent */
+#random-pick .pick-card-body .recipe-badges-line{
+  margin: .35rem 0 0 0;
+  line-height: 1.6;
+}
+
+/* Scroll discret */
+#random-pick .pick-card-body .recipe-badges-wrap::-webkit-scrollbar{
+  width: 6px;
+}
+
+#random-pick .pick-card-body .recipe-badges-wrap::-webkit-scrollbar-thumb{
+  background: rgba(20,184,166,.35);
+  border-radius: 999px;
+}
+
+}
+
+/* Scroll discret */
+#random-pick .pick-card-body .recipe-badges-wrap::-webkit-scrollbar{
+  width: 6px;
+}
+
+#random-pick .pick-card-body .recipe-badges-wrap::-webkit-scrollbar-thumb{
+  background: rgba(20,184,166,.35);
+  border-radius: 999px;
+}
+
+/* ================= ACTIONS ================= */
+
+#random-pick .pick-card-body > .d-flex{
+  margin-top: auto !important; /* pousse en bas */
+  align-items: stretch;
+}
+
+#random-pick .pick-card .btn,
+#random-pick .pick-card button{
+  min-height: 44px;
+}
+
 
 /* ==============================================================================
 RECETTES (layout recipe)
