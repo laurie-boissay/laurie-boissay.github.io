@@ -7,19 +7,6 @@ body_id: "reperes-low-carb"
 page_h1: "Repères low carb"
 page_h3: "Principes et outils"
 ---
-<!-- =========================================================
-     Repères low carb — page “principes” (partie 1/2)
-     Rôle :
-     - expliquer les principes low carb utilisés sur le site
-     - donner des repères sur glycémie/insuline/lipolyse + fructose
-     - cadrer le duo low carb + protéines (sans “keto” ni discours bien-être)
-     - documenter les ingrédients/outils (psyllium/konjac/whey)
-
-     Contrat :
-     - ne pas dupliquer la page “Gestion du poids” :
-       les détails calories / déficit / activité / marche digestive sont
-       centralisés dans gestion-poids.html.
-     ========================================================= -->
 
 <!-- INTRO -->
 <section class="marge" id="intro">
@@ -32,13 +19,6 @@ page_h3: "Principes et outils"
       et comment cela aide à gérer le poids durablement.
     </p>
 
-    <!-- =========================================================
-         Cadre glucidique du site
-         - Objectif : donner un ordre de grandeur clair et éviter l’ambiguïté
-           du terme “low carb”.
-         - Contrat éditorial : low carb modéré (pas keto).
-         - Note : ordres de grandeur, pas prescription médicale.
-         ========================================================= -->
     <div class="alert alert-secondary">
       <div class="fw-bold mb-1">Cadre glucidique du site</div>
       <p class="mb-2">
@@ -49,84 +29,34 @@ page_h3: "Principes et outils"
         <li><strong>50 à 100 g de glucides par jour</strong> (ordre de grandeur).</li>
       </ul>
       <p class="mb-0">
-        Il ne s’agit <strong>pas</strong> d’une approche cétogène stricte
-        (souvent &lt; 20–30 g/jour),
+        Il ne s’agit <strong>pas</strong> d’une approche cétogène stricte,
         mais d’un cadre réaliste visant à réduire les pics glycémiques
-        tout en restant compatible avec une vie normale et un régime alimentaire durable.
+        tout en restant compatible avec une vie normale et durable.
       </p>
     </div>
 
-    <!-- Lecture rapide : points à retenir immédiatement -->
     <div class="alert alert-info mb-0">
       <div class="fw-bold mb-2">À retenir (lecture rapide)</div>
       <ul class="mb-0">
-        <li><strong>Low carb</strong> : moins de pics glycémiques → moins de pics d’insuline → accès aux graisses facilité.</li>
-        <li><strong>Protéines</strong> : levier central (satiété, masse musculaire, digestion).</li>
-        <li>
-          <strong>Marche digestive</strong> : raccourcit la phase post-repas (glycémie/insuline) même en low carb.
-          <span class="text-muted">Détails dans la page <a href="{{ site.baseurl }}/gestion-poids.html">Gestion du poids</a>.</span>
-        </li>
-        <li><strong>Fructose</strong> : peut freiner la perte de gras sans pic glycémique visible (effet foie).</li>
+        <li><strong>Low carb</strong> : moins de pics glycémiques → moins d’insuline → lipolyse facilitée.</li>
+        <li><strong>Protéines</strong> : levier central (satiété, masse musculaire).</li>
+        <li><strong>Fructose</strong> : peut freiner la perte de gras sans pic glycémique visible.</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- NAV / SOMMAIRE -->
-<section class="marge" id="sommaire">
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <div class="fw-bold mb-2">Accès direct</div>
-        <div class="row g-2">
-          <div class="col-12 col-md-6">
-            <ul class="mb-0">
-              <li><a href="#schema">Schéma (version simple)</a></li>
-              <li><a href="#insuline">Insuline</a></li>
-              <li><a href="#lipolyse">Lipolyse</a></li>
-              <li><a href="#fructose-glucose">Fructose vs glucose</a></li>
-            </ul>
-          </div>
-          <div class="col-12 col-md-6">
-            <ul class="mb-0">
-              <li><a href="#lowcarb-proteines">Low carb + protéines</a></li>
-              <li><a href="#cholesterol">Cholestérol</a></li>
-              <li><a href="#ingredients">Ingrédients (psyllium / konjac / whey)</a></li>
-              <li><a href="{{ site.baseurl }}/gestion-poids.html">Gestion du poids (page dédiée)</a></li>
-            </ul>
-          </div>
-        </div>
-
-        {%- comment -%}
-          Note UX :
-          - lien explicite vers la page “Gestion du poids”
-          - évite un sommaire trop long ici (les détails sont ailleurs).
-        {%- endcomment -%}
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SCHÉMA SIMPLE -->
+<!-- SCHÉMA -->
 <section class="marge" id="schema">
-  <h2>Le mécanisme central (version simple) : glycémie → insuline → lipolyse</h2>
+  <h2>Le mécanisme central : glycémie → insuline → lipolyse</h2>
   <div class="container">
-
-    <p class="mb-2">
-      Version volontairement simplifiée pour visualiser le mécanisme principal.
-      Si tu comprends ce bloc, tu comprends la logique générale du site.
-    </p>
-
     <div class="card">
       <div class="card-body">
-
         <div class="mb-4">
           <div class="fw-bold mb-2">Beaucoup de glucides rapidement disponibles</div>
           <div>
-            <span class="badge text-bg-primary">Glycémie ↑</span>
-            <span class="mx-2">→</span>
-            <span class="badge text-bg-secondary">Insuline ↑</span>
-            <span class="mx-2">→</span>
+            <span class="badge text-bg-primary">Glycémie ↑</span> →
+            <span class="badge text-bg-secondary">Insuline ↑</span> →
             <span class="badge text-bg-dark">Lipolyse ↓</span>
           </div>
         </div>
@@ -134,49 +64,13 @@ page_h3: "Principes et outils"
         <hr />
 
         <div>
-          <div class="fw-bold mb-2">Moins de glucides, plus de protéines et de fibres</div>
+          <div class="fw-bold mb-2">Moins de glucides, plus de protéines et fibres</div>
           <div>
-            <span class="badge text-bg-primary">Glycémie ↘</span>
-            <span class="mx-2">→</span>
-            <span class="badge text-bg-secondary">Insuline ↘</span>
-            <span class="mx-2">→</span>
+            <span class="badge text-bg-primary">Glycémie ↘</span> →
+            <span class="badge text-bg-secondary">Insuline ↘</span> →
             <span class="badge text-bg-dark">Lipolyse ↗</span>
           </div>
         </div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- INSULINE + LIPOLYSE (mise en parallèle) -->
-<section class="marge" id="insuline-lipolyse">
-  <div class="container">
-    <div class="row g-3">
-      <div class="col-12 col-lg-6" id="insuline">
-        <h2>Insuline : ce qu’elle fait réellement</h2>
-        <ul>
-          <li>Permet au glucose d’entrer dans les cellules.</li>
-          <li>Organise le stockage de l’énergie récente.</li>
-          <li>Freine temporairement l’accès aux graisses stockées.</li>
-        </ul>
-        <p class="mb-0">
-          Plus les pics d’insuline sont fréquents et élevés,
-          moins l’organisme utilise ses réserves.
-        </p>
-      </div>
-
-      <div class="col-12 col-lg-6" id="lipolyse">
-        <h2>Lipolyse : utiliser ses graisses corporelles</h2>
-        <p>
-          La lipolyse correspond à l’utilisation des graisses stockées pour produire de l’énergie.
-        </p>
-        <p class="mb-0">
-          Pour qu’elle fonctionne efficacement, l’insuline doit rester basse
-          suffisamment longtemps dans la journée.
-          C’est le cadre que cherche à créer le low carb modéré.
-        </p>
       </div>
     </div>
   </div>
@@ -187,34 +81,40 @@ page_h3: "Principes et outils"
   <h2>Fructose et glucose : une différence métabolique clé</h2>
   <div class="container">
 
-    <!-- Résumé avant le détail (scannable) -->
     <div class="alert alert-secondary">
       <div class="fw-bold mb-1">Résumé</div>
       <ul class="mb-0">
         <li><strong>Glucose</strong> : utilisé par de nombreux tissus, stimule l’insuline.</li>
-        <li><strong>Fructose</strong> : métabolisé surtout par le <strong>foie</strong>, stimule peu l’insuline.</li>
+        <li><strong>Fructose</strong> : métabolisé principalement par le <strong>foie</strong>, stimule peu l’insuline.</li>
         <li>En excès : peut favoriser la transformation en graisses (lipogenèse hépatique).</li>
       </ul>
     </div>
 
-    <!-- Détail technique repliable -->
     <details>
       <summary class="fw-bold">Voir l’explication détaillée</summary>
       <div class="mt-3">
         <p>
-          Le glucose et le fructose sont deux sucres simples, mais leur devenir dans l’organisme
-          est très différent. Le <strong>glucose</strong> est utilisé par de nombreux tissus
-          (muscles, cerveau) et stimule l’insuline, ce qui permet une régulation relativement
-          directe de son utilisation ou de son stockage.
+          Le glucose et le fructose sont deux sucres simples,
+          mais leur devenir dans l’organisme diffère.
+          Le <strong>glucose</strong> est utilisé par de nombreux tissus
+          (muscles, cerveau) et stimule l’insuline,
+          ce qui permet une régulation directe de son utilisation ou stockage.
         </p>
+
+        <p>
+          Le <strong>fructose</strong> est métabolisé presque exclusivement par le
+          <strong>foie</strong>. Il stimule peu l’insuline,
+          n’est pas utilisé directement par les muscles
+          et, en excès, favorise la lipogenèse hépatique
+          (transformation en graisses).
+        </p>
+
         <p class="mb-0">
-          Le <strong>fructose</strong>, lui, est métabolisé presque exclusivement par le
-          <strong>foie</strong> : il stimule peu l’insuline, n’est pas utilisé directement
-          comme énergie par les muscles et, en excès, favorise la transformation en graisses
-          (lipogenèse hépatique). Cette particularité explique pourquoi un apport élevé en
-          fructose peut freiner la perte de masse grasse <strong>sans provoquer de pic glycémique
-          visible</strong>. En low carb, il est donc pertinent de distinguer le fructose des
-          autres glucides afin d’éviter les faux amis perçus comme sains.
+          Cette particularité explique pourquoi un apport élevé en fructose
+          peut freiner la perte de masse grasse
+          <strong>sans provoquer de pic glycémique visible</strong>.
+          Distinguer fructose et glucose permet d’éviter certains
+          “faux amis” perçus comme sains.
         </p>
       </div>
     </details>
@@ -222,57 +122,63 @@ page_h3: "Principes et outils"
   </div>
 </section>
 
-<!-- LOW CARB + PROTÉINES -->
-<section class="marge" id="lowcarb-proteines">
-  <h2>Low carb modéré et apport protéique élevé : le duo central</h2>
-  <div class="container">
-
-    <div class="alert alert-info">
-      <div class="fw-bold mb-1">Position du site</div>
-      <p class="mb-0">
-        L’approche du site ne consiste pas à « manger très gras ».
-        Elle repose sur deux leviers simples et puissants :
-        <strong>réduire les glucides</strong> et <strong>augmenter fortement les protéines</strong>.
-      </p>
-    </div>
-
-    <ul>
-      <li>Moins de glucides → moins de pics d’insuline → lipolyse facilitée.</li>
-      <li>Plus de protéines → satiété durable → moins de grignotage.</li>
-      <li>Plus de protéines → protection de la masse musculaire.</li>
-      <li>Plus de protéines → dépense énergétique plus élevée lors de la digestion.</li>
-    </ul>
-
-    <div class="alert alert-secondary mb-0">
-      Les lipides sont présents naturellement dans les aliments,
-      mais ils ne sont pas l’objectif principal.
-    </div>
-
-  </div>
-</section>
-
-<!-- CHOLESTÉROL -->
+<!-- CHOLESTÉROL CORRIGÉ -->
 <section class="marge" id="cholesterol">
   <h2>Cholestérol : remettre le sujet à sa place</h2>
   <div class="container">
     <p>
-      Le cholestérol est une molécule vitale fabriquée par le foie.
+      Le cholestérol est une molécule vitale fabriquée en grande partie par le foie.
+      Il participe à la structure cellulaire,
+      à la synthèse hormonale et à la production de vitamine D.
     </p>
 
     <details>
       <summary class="fw-bold">Voir les repères (profil lipidique)</summary>
       <div class="mt-3">
+
         <p>
-          Les profils défavorables sont souvent liés au mélange
-          <strong>glucides rapides + graisses</strong>.
+          Le risque cardiovasculaire ne dépend pas d’un chiffre isolé de LDL,
+          mais du <strong>profil lipidique global</strong>
+          et du contexte métabolique.
         </p>
-        <ul class="mb-0">
-          <li>Triglycérides souvent en baisse.</li>
-          <li>HDL souvent en hausse.</li>
-          <li>LDL à interpréter dans son contexte global.</li>
-        </ul>
+
+        <h3>Triglycérides</h3>
+        <p>
+          Souvent élevés en cas d’excès glucidique.
+          Ils diminuent généralement lorsque l’équilibre métabolique s’améliore.
+        </p>
+
+        <h3>HDL</h3>
+        <p>
+          Généralement associé à un profil plus favorable.
+        </p>
+
+        <h3>LDL : à interpréter dans son contexte</h3>
+        <p>
+          Une élévation isolée du LDL ne suffit pas à évaluer le risque.
+          Il doit être analysé avec les triglycérides, le HDL
+          et le contexte global (glycémie, tension, poids, inflammation).
+        </p>
+
+        <p class="mb-0">
+          Toute variation significative du LDL nécessite un suivi médical.
+        </p>
+
       </div>
     </details>
+  </div>
+</section>
+
+<!-- LOW CARB + PROTÉINES -->
+<section class="marge" id="lowcarb-proteines">
+  <h2>Low carb modéré et apport protéique élevé</h2>
+  <div class="container">
+    <ul>
+      <li>Moins de glucides → moins d’insuline → lipolyse facilitée.</li>
+      <li>Plus de protéines → satiété durable.</li>
+      <li>Plus de protéines → protection musculaire.</li>
+      <li>Plus de protéines → dépense énergétique plus élevée lors de la digestion.</li>
+    </ul>
   </div>
 </section>
 
@@ -292,174 +198,79 @@ page_h3: "Principes et outils"
     <p>
       Certains ingrédients reviennent toutefois régulièrement dans les recettes du site.
       Ils ne sont ni “magiques”, ni obligatoires.
-      Leur intérêt est avant tout <strong>fonctionnel et pratique</strong> :
-      obtenir une bonne texture, améliorer la satiété ou atteindre plus facilement
-      un apport protéique élevé, sans complexifier les recettes.
+      Leur intérêt est avant tout <strong>fonctionnel</strong> :
+      améliorer la texture, la tenue, la satiété ou faciliter l’atteinte
+      d’un apport protéique élevé sans augmenter fortement les glucides.
+    </p>
+
+    <!-- ===================== KONJAC ===================== -->
+    <h3>Konjac (poudre)</h3>
+
+    <p>
+      Le konjac est une fibre soluble composée principalement de
+      <strong>glucomannane</strong>.
+      Elle n’est pas digérée par l’intestin grêle et a un impact glycémique quasi nul.
     </p>
 
     <p>
-      Ces ingrédients sont utilisés de façon <strong>raisonnée</strong>,
-      à faible dose, et uniquement lorsqu’ils apportent
-      un réel avantage par rapport aux alternatives classiques.
+      Son principal intérêt est son <strong>pouvoir épaississant très élevé</strong> :
+      il absorbe une grande quantité d’eau et forme une texture stable
+      à très faible dose.
+      Il permet donc de structurer sauces, crèmes ou pâtes
+      sans recourir aux farines classiques.
     </p>
 
-    <details>
-      <summary class="fw-bold">Konjac (poudre) : un outil de structure, pas une base alimentaire</summary>
-      <div class="mt-3">
-        <p>
-          Le konjac est souvent réduit à son rôle d’épaississant,
-          mais il s’agit avant tout d’une <strong>fibre soluble</strong>
-          composée presque exclusivement de <strong>glucomannane</strong>.
-          Cette fibre n’est pas digérée par l’intestin grêle,
-          apporte très peu de calories et a un impact glycémique quasi nul.
-        </p>
+    <p>
+      En revanche, le surdosage entraîne rapidement une texture
+      gélatineuse ou artificielle.
+      Il est utilisé ici uniquement comme <strong>outil technique ponctuel</strong>,
+      jamais comme base alimentaire.
+    </p>
 
-        <p>
-          Le glucomannane se distingue par son
-          <strong>pouvoir de gonflement exceptionnel</strong> :
-          il peut absorber plusieurs dizaines de fois son poids en eau.
-          C’est cette propriété qui explique à la fois son
-          effet épaississant très marqué et son influence sur la satiété,
-          liée au volume occupé dans l’estomac.
-        </p>
+    <!-- ===================== PSYLLIUM ===================== -->
+    <h3>Psyllium blond</h3>
 
-        <p>
-          Contrairement au psyllium, dont l’effet est à la fois
-          mécanique et digestif, le konjac agit surtout sur la
-          <strong>structure et la stabilité</strong> des préparations.
-          Utilisé à très faible dose, il permet de stabiliser
-          sauces, crèmes ou pâtes low carb sans recours aux farines.
-        </p>
+    <p>
+      Le psyllium blond est une fibre soluble issue de
+      l’enveloppe des graines de <em>Plantago ovata</em>.
+      Au contact de l’eau, il forme un gel qui améliore
+      la tenue des préparations low carb.
+    </p>
 
-        <p class="mb-0">
-          En revanche, un surdosage entraîne rapidement une texture
-          gélatineuse ou artificielle.
-          Sur ce site, le konjac est donc utilisé
-          <strong>avec parcimonie</strong>, comme un outil technique ponctuel,
-          et non comme une source principale de fibres.
-          On le trouve facilement en magasin bio ou en ligne,
-          sous forme de <strong>poudre pure</strong>.
-        </p>
-      </div>
-    </details>
+    <p>
+      Contrairement au konjac, il agit également au niveau digestif :
+      il ralentit la vidange gastrique et contribue
+      à une <strong>satiété plus durable</strong>.
+    </p>
 
-    <details class="mt-3">
-      <summary class="fw-bold">Psyllium blond : tenue et satiété</summary>
-      <div class="mt-3">
-        <p>
-          Le psyllium blond est une <strong>fibre soluble</strong>
-          issue de l’enveloppe des graines de Plantago ovata.
-          Au contact de l’eau, il forme un gel qui améliore
-          la tenue des pâtes et des préparations.
-        </p>
+    <p>
+      Son principal risque est le surdosage,
+      qui rend les textures compactes ou lourdes.
+      Il est donc utilisé à la <strong>dose minimale fonctionnelle</strong>.
+    </p>
 
-        <p>
-          Contrairement au konjac, le psyllium agit aussi
-          au niveau digestif :
-          il ralentit la vidange gastrique,
-          contribue à une <strong>satiété durable</strong>
-          et peut améliorer le confort intestinal chez certaines personnes.
-        </p>
+    <!-- ===================== WHEY ===================== -->
+    <h3>Whey</h3>
 
-        <p class="mb-0">
-          Son principal défaut est le surdosage,
-          qui conduit à des textures compactes ou lourdes.
-          Il est donc utilisé à la dose minimale fonctionnelle.
-          Le psyllium blond se trouve facilement
-          en pharmacie, en magasin bio ou en ligne.
-        </p>
-      </div>
-    </details>
+    <p>
+      La whey est une protéine issue du lait,
+      rapidement assimilée et naturellement pauvre en glucides.
+    </p>
 
-    <details class="mt-3">
-      <summary class="fw-bold">Whey : une aide pratique pour l’objectif protéique</summary>
-      <div class="mt-3">
-        <p>
-          La whey est une <strong>protéine issue du lait</strong>,
-          rapidement assimilée et naturellement pauvre en glucides.
-          Elle n’est pas indispensable,
-          mais facilite l’atteinte d’un apport protéique élevé,
-          surtout lorsque l’appétit est limité.
-        </p>
+    <p>
+      Elle n’est pas indispensable,
+      mais elle facilite l’atteinte d’un apport protéique élevé,
+      en particulier lorsque l’appétit est limité
+      ou que l’on souhaite augmenter la densité protéique d’une recette
+      sans en augmenter fortement le volume.
+    </p>
 
-        <p>
-          Elle est utilisée sur le site comme un
-          <strong>outil pratique</strong>,
-          jamais comme une base exclusive de l’alimentation.
-          Les recettes privilégient les aliments solides,
-          la whey venant en complément ponctuel.
-        </p>
-
-        <p class="mb-0">
-          Le point de vigilance concerne la qualité :
-          certaines whey sont très sucrées ou fortement aromatisées.
-          Les recettes du site utilisent des whey
-          <strong>nature ou très peu aromatisées</strong>,
-          disponibles en magasins spécialisés ou en ligne.
-        </p>
-      </div>
-    </details>
-
-    <div class="table-responsive mt-4">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Ingrédient</th>
-            <th>À quoi il sert concrètement</th>
-            <th>Pourquoi il est utilisé ici</th>
-            <th>Rôle</th>
-            <th>Intérêt réel</th>
-            <th>Erreur fréquente</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr>
-            <td><strong>Psyllium blond</strong></td>
-            <td>
-              Fibre soluble qui absorbe l’eau et forme un gel.
-              Améliore la tenue des pâtes et préparations.
-            </td>
-            <td>
-              Permet d’obtenir une texture stable sans farine
-              et augmente la satiété.
-            </td>
-            <td>Fibre soluble gélifiante</td>
-            <td>Tenue + satiété</td>
-            <td>Surdosage</td>
-          </tr>
-
-          <tr>
-            <td><strong>Konjac (poudre)</strong></td>
-            <td>
-              Épaississant très puissant à base de glucomannane.
-            </td>
-            <td>
-              Structuration ponctuelle de sauces et pâtes
-              à très faible dose.
-            </td>
-            <td>Épaississant technique</td>
-            <td>Structure et stabilité</td>
-            <td>Texture gélatineuse</td>
-          </tr>
-
-          <tr>
-            <td><strong>Whey</strong></td>
-            <td>
-              Protéine concentrée, rapidement assimilée.
-            </td>
-            <td>
-              Aide à atteindre l’objectif protéique
-              sans excès de glucides.
-            </td>
-            <td>Source protéique</td>
-            <td>Objectif protéines</td>
-            <td>Produits sucrés/aromatisés</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
+    <p class="mb-0">
+      Le point de vigilance concerne la qualité :
+      certaines whey sont fortement sucrées ou très aromatisées.
+      Les recettes du site privilégient des versions
+      <strong>nature ou peu aromatisées</strong>.
+    </p>
 
   </div>
 </section>
