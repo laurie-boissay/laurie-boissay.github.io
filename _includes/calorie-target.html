@@ -1,0 +1,300 @@
+<!-- =========================================================
+  INCLUDE : calorie-target.html
+
+  Rôle
+  - Calculer une cible calorique quotidienne selon l’objectif :
+    maintien / perte / prise de poids.
+
+  Entrées
+  - BMR (kcal/jour) :
+      • récupéré si disponible (localStorage bmr_value)
+      • sinon saisi manuellement
+  - Facteur d’activité :
+      • récupéré si disponible (localStorage activity_factor)
+      • sinon saisi manuellement
+  - Objectif : maintien / perdre / gagner
+  - Intensité (perte/prise) : doux / modéré / agressif
+    (paramétré en % du maintien)
+
+  Sorties
+  - Maintien estimé (TDEE) = BMR × facteur d’activité
+  - Cible calorique selon objectif
+  - Estimation très grossière de variation de poids / semaine
+    (approximation 7 700 kcal ≈ 1 kg de masse grasse)
+
+  Notes (fiabilité)
+  - Le TDEE est une estimation.
+  - Les balances et formules peuvent diverger.
+  - L’estimation de variation hebdo est indicative (eau/glycogène, adaptation, etc.).
+
+  Dépendances (optionnelles)
+  - Si tes autres includes enregistrent :
+      • localStorage.bmr_value
+      • localStorage.activity_factor
+    alors ce module peut auto-remplir.
+========================================================= -->
+
+<section class="calorie-target-calculator card p-3 mb-4">
+  <h3>Calories à consommer selon l’objectif</h3>
+
+  <div class="alert alert-secondary small mb-3">
+    Ce module calcule ton <strong>maintien calorique estimé</strong> (TDEE), puis applique un
+    <strong>déficit</strong> (perte) ou un <strong>surplus</strong> (prise). Les chiffres sont des
+    points de départ : la validation se fait sur 3–4 semaines (tendance, énergie, faim, perf).
+  </div>
+
+  <!-- Sources (auto-remplissage) -->
+  <div class="mb-3">
+    <button id="ct-autofill" class="btn btn-outline-secondary btn-sm" type="button">
+      Récupérer BMR + facteur d’activité (si dispo)
+    </button>
+    <div id="ct-autofill-status" class="small text-muted mt-1"></div>
+  </div>
+
+  <!-- BMR -->
+  <div class="mb-3">
+    <label class="form-label"><strong>BMR (kcal/jour)</strong></label>
+    <input
+      type="number"
+      id="ct-bmr"
+      class="form-control"
+      min="800"
+      max="3500"
+      step="1"
+      placeholder="Ex : 1450"
+    >
+    <div class="small text-muted mt-1">
+      BMR = métabolisme de base (repos). Si tu as une valeur via ta balance, mets-la ici.
+    </div>
+  </div>
+
+  <!-- Facteur d’activité -->
+  <div class="mb-3">
+    <label class="form-label"><strong>Facteur d’activité</strong></label>
+    <input
+      type="number"
+      id="ct-factor"
+      class="form-control"
+      min="1.0"
+      max="2.2"
+      step="0.1"
+      placeholder="Ex : 1.6"
+    >
+    <div class="small text-muted mt-1">
+      Repères : 1.2 sédentaire · 1.4 actif · 1.6 sportif · 1.8 très sportif
+    </div>
+  </div>
+
+  <!-- Objectif -->
+  <div class="mb-3">
+    <label class="form-label"><strong>Objectif</strong></label>
+    <div>
+      <label class="d-block">
+        <input type="radio" name="ct-goal" value="maintain" checked>
+        Maintenir le poids
+      </label>
+      <label class="d-block">
+        <input type="radio" name="ct-goal" value="lose">
+        Perdre du poids
+      </label>
+      <label class="d-block">
+        <input type="radio" name="ct-goal" value="gain">
+        Prendre du poids
+      </label>
+    </div>
+  </div>
+
+  <!-- Intensité (affichée uniquement en perte/prise) -->
+  <div id="ct-intensity-wrap" class="mb-3" style="display:none;">
+    <label class="form-label"><strong>Intensité</strong></label>
+    <select id="ct-intensity" class="form-select">
+      <!-- Valeurs en % du maintien (TDEE) -->
+      <option value="0.00">Standard</option>
+      <!-- Perte -->
+      <option value="-0.10" data-mode="lose">Perte douce (−10 %)</option>
+      <option value="-0.15" data-mode="lose">Perte modérée (−15 %)</option>
+      <option value="-0.20" data-mode="lose">Perte agressive (−20 %)</option>
+      <!-- Prise -->
+      <option value="0.05" data-mode="gain">Prise douce (+5 %)</option>
+      <option value="0.10" data-mode="gain">Prise modérée (+10 %)</option>
+      <option value="0.15" data-mode="gain">Prise agressive (+15 %)</option>
+    </select>
+
+    <div class="small text-muted mt-1">
+      Ces pourcentages sont des repères. Si tu as faim/fatigue en perte, baisse l’intensité.
+    </div>
+  </div>
+
+  <button id="ct-calc-btn" class="btn btn-primary" type="button">
+    Calculer la cible
+  </button>
+
+  <div id="ct-result" class="mt-3 fw-bold"></div>
+  <div id="ct-detail" class="mt-2 small text-muted"></div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  const elBmr = document.getElementById("ct-bmr");
+  const elFactor = document.getElementById("ct-factor");
+  const elAutofillBtn = document.getElementById("ct-autofill");
+  const elAutofillStatus = document.getElementById("ct-autofill-status");
+
+  const elIntensityWrap = document.getElementById("ct-intensity-wrap");
+  const elIntensity = document.getElementById("ct-intensity");
+
+  const elCalcBtn = document.getElementById("ct-calc-btn");
+  const elResult = document.getElementById("ct-result");
+  const elDetail = document.getElementById("ct-detail");
+
+  function getGoal() {
+    const checked = document.querySelector('input[name="ct-goal"]:checked');
+    return checked ? checked.value : "maintain";
+  }
+
+  function clamp(n, min, max) {
+    return Math.min(Math.max(n, min), max);
+  }
+
+  function readNumber(input) {
+    const x = parseFloat(input.value);
+    return Number.isFinite(x) ? x : null;
+  }
+
+  function round(n) {
+    return Math.round(n);
+  }
+
+  function setIntensityVisibility() {
+    const goal = getGoal();
+    if (goal === "maintain") {
+      elIntensityWrap.style.display = "none";
+      elIntensity.value = "0.00";
+      return;
+    }
+    elIntensityWrap.style.display = "block";
+
+    // Filtrer les options pour ne garder que celles du mode
+    const mode = goal; // "lose" ou "gain"
+    Array.from(elIntensity.options).forEach(function (opt) {
+      const optMode = opt.getAttribute("data-mode");
+      if (!optMode) {
+        // "Standard"
+        opt.hidden = false;
+      } else {
+        opt.hidden = (optMode !== mode);
+      }
+    });
+
+    // Valeur par défaut raisonnable
+    elIntensity.value = (mode === "lose") ? "-0.15" : "0.10";
+  }
+
+  function autofillFromStorage() {
+    let bmr = null;
+    let factor = null;
+
+    // Option A : localStorage (si tes autres modules l’enregistrent)
+    const lsBmr = localStorage.getItem("bmr_value");
+    const lsFactor = localStorage.getItem("activity_factor");
+
+    if (lsBmr && !Number.isNaN(parseFloat(lsBmr))) bmr = parseFloat(lsBmr);
+    if (lsFactor && !Number.isNaN(parseFloat(lsFactor))) factor = parseFloat(lsFactor);
+
+    // Option B : fallback (si tu ajoutes plus tard des variables globales)
+    // ex : window.bmrValue, window.activityFactor
+    if (bmr === null && typeof window.bmrValue === "number") bmr = window.bmrValue;
+    if (factor === null && typeof window.activityFactor === "number") factor = window.activityFactor;
+
+    if (bmr !== null) elBmr.value = String(round(bmr));
+    if (factor !== null) elFactor.value = String(factor.toFixed(1));
+
+    const parts = [];
+    parts.push(bmr !== null ? "BMR OK" : "BMR introuvable");
+    parts.push(factor !== null ? "facteur OK" : "facteur introuvable");
+    elAutofillStatus.textContent = parts.join(" · ");
+  }
+
+  function compute() {
+    const bmr = readNumber(elBmr);
+    const factor = readNumber(elFactor);
+    const goal = getGoal();
+
+    if (bmr === null || factor === null) {
+      elResult.textContent = "Renseigne un BMR et un facteur d’activité.";
+      elDetail.textContent = "";
+      return;
+    }
+
+    const factorClamped = clamp(factor, 1.0, 2.2);
+    const tdee = bmr * factorClamped;
+
+    let adjPct = 0.0;
+    if (goal !== "maintain") {
+      const raw = parseFloat(elIntensity.value);
+      adjPct = Number.isFinite(raw) ? raw : 0.0;
+    }
+
+    // Sécurité : si mauvais combo (ex: option perte sélectionnée en mode prise), neutraliser
+    if (goal === "lose" && adjPct > 0) adjPct = -0.10;
+    if (goal === "gain" && adjPct < 0) adjPct = 0.05;
+
+    const target = tdee * (1 + adjPct);
+
+    // Estimation variation hebdo : (écart/jour × 7) / 7700
+    const dailyDelta = target - tdee;
+    const weeklyKg = (dailyDelta * 7) / 7700; // signe inclus
+
+    const goalLabel =
+      (goal === "maintain") ? "Maintien" :
+      (goal === "lose") ? "Perte" :
+      "Prise";
+
+    elResult.innerHTML =
+      goalLabel + " : <span class=\"fw-bold\">" + round(target) + " kcal/jour</span>";
+
+    const lines = [];
+    lines.push("Maintien estimé (TDEE) ≈ " + round(tdee) + " kcal/jour (BMR × facteur).");
+
+    if (goal !== "maintain") {
+      const pctStr = (adjPct * 100).toFixed(0);
+      const absDelta = round(Math.abs(dailyDelta));
+      const sign = dailyDelta < 0 ? "−" : "+";
+      lines.push("Ajustement : " + pctStr + " % (" + sign + absDelta + " kcal/jour vs maintien).");
+
+      // Variation hebdo indicative
+      const wk = Math.abs(weeklyKg);
+      const wkStr = wk.toFixed(2).replace(".", ",");
+      if (dailyDelta < 0) {
+        lines.push("Variation théorique : ~" + wkStr + " kg/semaine (approximation).");
+      } else {
+        lines.push("Variation théorique : ~" + wkStr + " kg/semaine (approximation).");
+      }
+    } else {
+      lines.push("Si ton poids dérive, ajuste doucement (±100 à 150 kcal/j) et observe 3–4 semaines.");
+    }
+
+    elDetail.innerHTML = lines.join("<br>");
+  }
+
+  // Events
+  document.querySelectorAll('input[name="ct-goal"]').forEach(function (el) {
+    el.addEventListener("change", function () {
+      setIntensityVisibility();
+    });
+  });
+
+  elIntensity.addEventListener("change", function () {
+    // optionnel : recalcul automatique
+  });
+
+  elAutofillBtn.addEventListener("click", autofillFromStorage);
+  elCalcBtn.addEventListener("click", compute);
+
+  // Init UI
+  setIntensityVisibility();
+})();
+</script>
+

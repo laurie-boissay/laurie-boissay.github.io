@@ -1,0 +1,181 @@
+<!-- =========================================================
+  INCLUDE : activity-level.html
+
+  Rôle
+  - Estimer un niveau d’activité (Sédentaire / Actif / Sportif)
+  - Calculer un facteur d’activité numérique exploitable
+    pour estimer le maintien calorique (TDEE).
+
+  Logique
+  - Activité quotidienne (NEAT)
+  - Sport structuré : séances/semaine × durée moyenne
+  - Volume hebdomadaire = séances × minutes
+
+  Seuils
+  - >= 420 min/semaine → facteur 1.8
+  - >= 180 min/semaine → facteur 1.6
+  - >= 90  min/semaine → facteur 1.4
+  - sinon NEAT élevé → 1.4
+  - sinon → 1.2
+
+  Contraintes
+  - 100 % statique
+  - Pas de dépendances externes
+  - JS isolé (IIFE)
+========================================================= -->
+
+<section class="activity-level-calculator card p-3 mb-4">
+  <h3>Évaluer mon niveau d’activité</h3>
+
+  <!-- Q1 -->
+  <div class="mb-3">
+    <label class="form-label">
+      <strong>1. Ton activité quotidienne principale (hors sport)</strong>
+    </label>
+    <div>
+      <label class="d-block">
+        <input type="radio" name="q1" value="0">
+        Majoritairement assis
+      </label>
+      <label class="d-block">
+        <input type="radio" name="q1" value="1">
+        Mixte assis/debout
+      </label>
+      <label class="d-block">
+        <input type="radio" name="q1" value="2">
+        Très actif (physique, jardinage, manutention…)
+      </label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="mb-3">
+    <label class="form-label"><strong>2. Marche quotidienne (hors sport)</strong></label>
+    <div>
+      <label class="d-block"><input type="radio" name="q2" value="0"> &lt; 5 000 pas</label>
+      <label class="d-block"><input type="radio" name="q2" value="1"> 5 000–8 000</label>
+      <label class="d-block"><input type="radio" name="q2" value="2"> 8 000–12 000</label>
+      <label class="d-block"><input type="radio" name="q2" value="3"> &gt; 12 000</label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="mb-3">
+    <label class="form-label">
+      <strong>3. Nombre de séances de sport par semaine</strong>
+    </label>
+    <input type="number" id="q3" class="form-control" min="0" max="14" step="1" placeholder="Ex : 6">
+  </div>
+
+  <!-- Q4 -->
+  <div class="mb-3">
+    <label class="form-label">
+      <strong>4. Durée moyenne d’une séance (en minutes)</strong>
+    </label>
+    <input type="number" id="q4" class="form-control" min="5" max="240" step="5" placeholder="Ex : 40">
+  </div>
+
+  <button id="activity-calc-btn" class="btn btn-primary">
+    Calculer mon niveau
+  </button>
+
+  <div id="activity-result" class="mt-3 fw-bold"></div>
+  <div id="activity-detail" class="mt-2 small text-muted"></div>
+
+  <!-- Bloc explicatif -->
+  <div id="activity-explanation" class="mt-3 alert alert-secondary small" style="display:none;"></div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  const btn = document.getElementById("activity-calc-btn");
+  const resultDiv = document.getElementById("activity-result");
+  const detailDiv = document.getElementById("activity-detail");
+  const explanationDiv = document.getElementById("activity-explanation");
+
+  function getRadioValue(name) {
+    const selected = document.querySelector('input[name="' + name + '"]:checked');
+    return selected ? parseInt(selected.value, 10) : null;
+  }
+
+  function clampInt(n, min, max) {
+    const x = parseInt(n, 10);
+    if (Number.isNaN(x)) return null;
+    return Math.min(Math.max(x, min), max);
+  }
+
+  function factorToLevel(factor) {
+    if (factor <= 1.2) return "Sédentaire";
+    if (factor <= 1.4) return "Actif";
+    return "Sportif";
+  }
+
+  function calculateActivityLevel() {
+
+    const q1 = getRadioValue("q1");
+    const q2 = getRadioValue("q2");
+    const sessions = clampInt(document.getElementById("q3").value, 0, 14);
+    const minutes = clampInt(document.getElementById("q4").value, 5, 240);
+
+    if (q1 === null || q2 === null || sessions === null || minutes === null) {
+      resultDiv.textContent = "Merci de remplir tous les champs.";
+      detailDiv.textContent = "";
+      explanationDiv.style.display = "none";
+      return;
+    }
+
+    const weeklyMinutes = sessions * minutes;
+    const neatScore = q1 + q2;
+
+    let factor = 1.2;
+
+    if (weeklyMinutes >= 420) {
+      factor = 1.8;
+    } else if (weeklyMinutes >= 180) {
+      factor = 1.6;
+    } else if (weeklyMinutes >= 90) {
+      factor = 1.4;
+    } else if (neatScore >= 4) {
+      factor = 1.4;
+    } else {
+      factor = 1.2;
+    }
+
+    const level = factorToLevel(factor);
+
+    localStorage.setItem("activity_level", level);
+    localStorage.setItem("activity_factor", String(factor));
+    localStorage.setItem("activity_weekly_minutes", String(weeklyMinutes));
+
+    resultDiv.innerHTML =
+      "Niveau : " + level +
+      "<br>Facteur d’activité : " + factor.toFixed(1);
+
+    detailDiv.textContent =
+      "Volume sport estimé : " + weeklyMinutes +
+      " min/semaine. (NEAT : " + neatScore + "/5)";
+
+    explanationDiv.style.display = "block";
+    explanationDiv.innerHTML =
+      "<strong>Comment interpréter ce résultat :</strong><br><br>" +
+
+      "• Le volume hebdomadaire correspond à séances × durée.<br>" +
+      "• À partir d’environ 180 minutes/semaine, le sport a un impact significatif sur la dépense énergétique.<br><br>" +
+
+      "<strong>Facteur d’activité :</strong><br>" +
+      "Ce nombre sert à estimer ton maintien calorique (TDEE).<br>" +
+      "Formule simplifiée :<br>" +
+      "<em>Maintien ≈ Métabolisme de base × facteur d’activité</em><br><br>" +
+
+      "Exemple : si ton métabolisme de base est 1400 kcal et que ton facteur est 1.6,<br>" +
+      "ton maintien estimé ≈ 2240 kcal/jour.<br><br>" +
+
+      "Ce facteur est une estimation de départ. La validation réelle se fait sur 3 à 4 semaines d’observation (poids, énergie, récupération).";
+  }
+
+  btn.addEventListener("click", calculateActivityLevel);
+})();
+</script>
+

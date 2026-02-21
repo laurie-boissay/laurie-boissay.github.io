@@ -1,0 +1,192 @@
+<!-- =========================================================
+  INCLUDE : bmr-calculator.html
+
+  Rôle
+  - Calculer OU saisir le métabolisme de base (BMR).
+  - Mode calcul : bouton nécessaire.
+  - Mode manuel : affichage automatique (pas de bouton).
+
+  Contrat (interop avec d’autres includes)
+  - Expose la valeur courante via :
+      window.bmrValue = <number>
+    Cela permet à d’autres modules (ex: calorie-target.html) de récupérer
+    le BMR sans localStorage.
+
+  Formule utilisée : Mifflin-St Jeor
+========================================================= -->
+
+<section class="bmr-calculator card p-3 mb-4">
+  <h3>Mon métabolisme de base (BMR)</h3>
+
+  <!-- Choix du mode -->
+  <div class="mb-3">
+    <label class="form-label"><strong>Mode</strong></label>
+    <div>
+      <label class="d-block">
+        <input type="radio" name="bmr_mode" value="calc" checked>
+        Calcul via formule
+      </label>
+      <label class="d-block">
+        <input type="radio" name="bmr_mode" value="manual">
+        Je connais mon BMR
+      </label>
+    </div>
+  </div>
+
+  <!-- Mode calcul -->
+  <div id="bmr-mode-calc">
+
+    <div class="mb-3">
+      <label class="form-label"><strong>Sexe biologique</strong></label>
+      <div>
+        <label class="d-block">
+          <input type="radio" name="bmr_sex" value="female"> Femme
+        </label>
+        <label class="d-block">
+          <input type="radio" name="bmr_sex" value="male"> Homme
+        </label>
+      </div>
+      <div class="small text-muted mt-1">
+        Exemple : femme 43 ans, 70 kg, 162 cm.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><strong>Poids (kg)</strong></label>
+      <input type="number" id="bmr_weight" class="form-control" step="0.1"
+             placeholder="Ex : 70.0">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><strong>Taille (cm)</strong></label>
+      <input type="number" id="bmr_height" class="form-control"
+             placeholder="Ex : 162">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><strong>Âge</strong></label>
+      <input type="number" id="bmr_age" class="form-control"
+             placeholder="Ex : 43">
+    </div>
+
+    <button id="bmr-calc-btn" class="btn btn-primary">
+      Calculer
+    </button>
+
+  </div>
+
+  <!-- Mode manuel -->
+  <div id="bmr-mode-manual" style="display:none;">
+    <div class="mb-3">
+      <label class="form-label"><strong>BMR (kcal/jour)</strong></label>
+      <input type="number" id="bmr_manual" class="form-control"
+             placeholder="Ex : 1450">
+      <div class="small text-muted mt-1">
+        Exemple : valeur affichée par une balance connectée.
+      </div>
+    </div>
+  </div>
+
+  <div id="bmr-result" class="mt-3 fw-bold"></div>
+  <div id="bmr-explanation" class="mt-2 small text-muted"></div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  const resultDiv = document.getElementById("bmr-result");
+  const explanationDiv = document.getElementById("bmr-explanation");
+  const btn = document.getElementById("bmr-calc-btn");
+
+  const modeCalc = document.getElementById("bmr-mode-calc");
+  const modeManual = document.getElementById("bmr-mode-manual");
+  const manualInput = document.getElementById("bmr_manual");
+
+  function getRadioValue(name) {
+    const selected = document.querySelector('input[name="' + name + '"]:checked');
+    return selected ? selected.value : null;
+  }
+
+  function setModeUI(mode) {
+    resultDiv.textContent = "";
+    explanationDiv.textContent = "";
+
+    // Important : en changeant de mode, on invalide la valeur exposée,
+    // jusqu’à ce qu’un nouveau calcul / une nouvelle saisie soit effectuée.
+    window.bmrValue = null;
+
+    if (mode === "manual") {
+      modeCalc.style.display = "none";
+      modeManual.style.display = "block";
+    } else {
+      modeCalc.style.display = "block";
+      modeManual.style.display = "none";
+    }
+  }
+
+  function renderExplanation(bmr) {
+    // Contrat inter-modules : rendre la valeur disponible aux autres includes.
+    window.bmrValue = bmr;
+
+    resultDiv.textContent =
+      "Métabolisme de base estimé : " + bmr + " kcal/jour";
+
+    explanationDiv.textContent =
+      "Le métabolisme de base correspond à l’énergie minimale nécessaire au repos complet " +
+      "(respiration, organes, température). Il ne tient pas compte du sport ni de l’activité quotidienne. " +
+      "La formule ne prend pas en compte la composition corporelle : deux personnes du même poids " +
+      "peuvent avoir un BMR réel différent selon leur masse musculaire.";
+  }
+
+  function calculateFormulaBMR() {
+    const sex = getRadioValue("bmr_sex");
+    const weight = parseFloat(document.getElementById("bmr_weight").value);
+    const height = parseFloat(document.getElementById("bmr_height").value);
+    const age = parseInt(document.getElementById("bmr_age").value, 10);
+
+    if (!sex || Number.isNaN(weight) || Number.isNaN(height) || Number.isNaN(age)) {
+      resultDiv.textContent = "Merci de remplir tous les champs.";
+      explanationDiv.textContent = "";
+      window.bmrValue = null;
+      return;
+    }
+
+    let bmr;
+
+    if (sex === "female") {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    }
+
+    renderExplanation(Math.round(bmr));
+  }
+
+  function calculateManualBMR() {
+    const manual = parseInt(manualInput.value, 10);
+
+    // En saisie manuelle : tant que c’est vide / invalide, on n’expose rien.
+    if (Number.isNaN(manual)) {
+      resultDiv.textContent = "";
+      explanationDiv.textContent = "";
+      window.bmrValue = null;
+      return;
+    }
+
+    renderExplanation(manual);
+  }
+
+  document.querySelectorAll('input[name="bmr_mode"]').forEach(function (el) {
+    el.addEventListener("change", function () {
+      setModeUI(getRadioValue("bmr_mode"));
+    });
+  });
+
+  btn.addEventListener("click", calculateFormulaBMR);
+  manualInput.addEventListener("input", calculateManualBMR);
+
+  setModeUI(getRadioValue("bmr_mode") || "calc");
+})();
+</script>
+
