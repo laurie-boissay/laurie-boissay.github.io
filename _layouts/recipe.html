@@ -341,6 +341,22 @@
 
       </div>
 
+      {%- comment -%}
+        Lien global (toutes les recettes) vers l’outil de calcul :
+        - Doit apparaître "en bas" de la fiche, après le contenu recette.
+        - Utilise relative_url pour compat GitHub Pages.
+        - Ancre : #outils-calculs.
+      {%- endcomment -%}
+      <section class="content-surface recipe-tool-link">
+        <h2>Outils</h2>
+        <p>
+          Pour estimer ton besoin calorique, ton déficit et ajuster tes portions :
+          <a href="{{ '/gestion-poids.html#outils-calculs' | relative_url }}">
+            outils de calcul (gestion du poids)
+          </a>.
+        </p>
+      </section>
+
       {% include footer.html %}
 
     </div>
