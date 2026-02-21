@@ -16,6 +16,7 @@
     - tags, badges_nutritionnels
     - image, image_alt
     - calories, proteines, glucides_nets (obligatoires selon tes règles)
+    - servings, serving_size (optionnel, mais affiché si fourni)
     - nutrition.* (lipides, glucides, fibres, fructose) optionnel mais recommandé
     - ingredients (liste ; supporte string OU objet {label, link})
     - steps (liste)
@@ -36,8 +37,8 @@
 </head>
 
 <body class="container-fluid recipe{% if page.body_id %} {{ page.body_id }}{% endif %}">
- 
-   {% include navbar.html %}
+
+  {% include navbar.html %}
 
   <main class="site-main">
     <div class="site-container">
@@ -225,10 +226,32 @@
           {%- comment -%}
             Nutrition :
             - Tableau 2 colonnes.
-            - “Glucides nets” affiché si la recette fournit page.glucides_nets.
+            - “Glucides nets” affiché si fourni.
+            - Affiche aussi servings / serving_size si fournis pour clarifier la portion.
           {%- endcomment -%}
           <h2>Informations nutritionnelles</h2>
-          <p>Valeurs estimées par portion.</p>
+
+          {%- comment -%}
+            Rendu “Valeurs estimées …” :
+            - Si serving_size fourni : "par 1 beignet"
+            - Si servings fourni : "(8 portions au total)"
+            - Sinon : fallback "par portion"
+          {%- endcomment -%}
+          {% if page.servings or page.serving_size %}
+            <p>
+              Valeurs estimées par
+              {% if page.serving_size %}
+                <strong>{{ page.serving_size }}</strong>
+              {% else %}
+                portion
+              {% endif %}
+              {% if page.servings %}
+                ({{ page.servings }} portions au total)
+              {% endif %}.
+            </p>
+          {% else %}
+            <p>Valeurs estimées par portion.</p>
+          {% endif %}
 
           <div class="table-responsive">
             <table class="table table-striped">
