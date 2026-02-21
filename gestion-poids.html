@@ -73,6 +73,7 @@ page_h3: "Déficit calorique, activité et marche digestive"
               <li><a href="#activite">Activité physique : rôle réel</a></li>
               <li><a href="#marche">Marche digestive</a></li>
               <li><a href="#repere-oms">Repères OMS</a></li>
+              <li><a href="#outils-calculs">Outils : BMR, activité, calories cible</a></li>
             </ul>
           </div>
         </div>
@@ -149,31 +150,11 @@ page_h3: "Déficit calorique, activité et marche digestive"
           dans lequel le low carb agit.
         </p>
 
-        <ul class="mb-3">
+        <ul class="mb-0">
           <li>réduction plus rapide de la glycémie post-prandiale,</li>
           <li>descente plus rapide de l’insuline,</li>
           <li>meilleur accès aux graisses stockées.</li>
         </ul>
-
-        {%- comment -%}
-          Ordre logique :
-          1) Métabolisme de base (BMR)
-          2) Facteur / niveau d’activité
-          3) Cible calorique (maintien / perte / prise)
-        {%- endcomment -%}
-
-        <!-- Métabolisme de base -->
-        {% include bmr-calculator.html %}
-
-        <hr class="my-4">
-
-        <!-- Niveau d’activité -->
-        {% include activity-level.html %}
-
-        <hr class="my-4">
-
-        <!-- Cible calorique selon objectif -->
-        {% include calorie-target.html %}
 
       </div>
     </div>
@@ -282,6 +263,51 @@ page_h3: "Déficit calorique, activité et marche digestive"
         </p>
       </div>
     </details>
+
+  </div>
+</section>
+
+<!-- OUTILS / CALCULS -->
+<section class="marge" id="outils-calculs">
+  <h2>Outils de calcul : BMR, activité et calories cible</h2>
+  <div class="container">
+
+    <div class="alert alert-secondary">
+      <div class="fw-bold mb-1">Objectif</div>
+      <p class="mb-0">
+        Ces outils te donnent une estimation structurée :
+        <strong>BMR</strong> → <strong>facteur d’activité</strong> → <strong>maintien (TDEE)</strong> →
+        <strong>cible</strong> selon maintien / perte / prise.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+
+        {%- comment -%}
+          Ordre logique :
+          1) Métabolisme de base (BMR)
+          2) Facteur / niveau d’activité
+          3) Cible calorique (maintien / perte / prise)
+        {%- endcomment -%}
+
+        {% include bmr-calculator.html %}
+
+        <hr class="my-4">
+
+        {% include activity-level.html %}
+
+        <hr class="my-4">
+
+        {% include calorie-target.html %}
+
+      </div>
+    </div>
+
+    <p class="small text-muted mt-3 mb-0">
+      Remarque : ce sont des estimations. La validation se fait sur la tendance (3–4 semaines),
+      pas sur une journée isolée.
+    </p>
 
   </div>
 </section>
