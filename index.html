@@ -11,7 +11,7 @@ body_id: "home"
   <h2>Toutes les fiches</h2>
 
   {%- comment -%}
-    Tirage aléatoire (toutes recettes / idées)
+    Tirage aléatoire (idées repas)
     - hide_links=true : on masque les liens fixes internes du random pick
       car la barre nav-badges est affichée juste en dessous.
   {%- endcomment -%}
@@ -45,6 +45,12 @@ body_id: "home"
     {%- endif -%}
   {%- endfor -%}
 
-  {% include recipes-grouped-grid.html recipes=all_recipes cta_label="Voir la fiche" %}
+  {%- comment -%}
+    Contrat random-pick :
+    - le script cible #recipes-index pour récupérer les .recipe-card candidates.
+    - on force l'existence du conteneur ici (include indépendant).
+  {%- endcomment -%}
+  <div id="recipes-index">
+    {% include recipes-grouped-grid.html recipes=all_recipes cta_label="Voir la fiche" %}
+  </div>
 </section>
-

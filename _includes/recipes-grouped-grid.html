@@ -22,7 +22,9 @@ Contrats / dépendances
 - filter-tested.html :
   • JS s’appuie sur `.recipe-item[data-tested]`.
 - recipes-search.html :
-  • filtre via `.recipe-item[data-search]` (provenant de data-search sur .recipe-item).
+  • filtre via `.recipe-item[data-search]`.
+- random-pick.html :
+  • tirage filtré par meal_type : `.recipe-item[data-meal-type]` (canonique).
 
 Contraintes
 - Robustesse : certains contenus peuvent ne pas avoir de tags ou de micronutriments.
@@ -107,10 +109,18 @@ Contraintes
           {%- endcomment -%}
           {%- assign search_blob = r.recipe_title -%}
 
+          {%- comment -%}
+            Données dataset :
+            - data-tested : utilisé par filter-tested.html
+            - data-search : utilisé par recipes-search.html
+            - data-meal-type : utilisé par random-pick.html (filtrage "plat" uniquement)
+              NB : downcase + strip pour une comparaison JS robuste.
+          {%- endcomment -%}
           <div
             class="recipe-item"
             data-tested="{% if r.recipe_tested == true %}true{% else %}false{% endif %}"
             data-search="{{ search_blob | strip_html | strip | escape }}"
+            data-meal-type="{% if r.meal_type %}{{ r.meal_type | downcase | strip | escape }}{% endif %}"
           >
             <article
               class="recipe-card mb-2"
@@ -216,4 +226,3 @@ Contraintes
     </div>
   {% endfor %}
 </div>
-

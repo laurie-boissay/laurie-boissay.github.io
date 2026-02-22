@@ -7,11 +7,15 @@ _includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
 - Le titre de la recette dans la pick-card est désormais cliquable.
 - Les badges (tags fonctionnels + micronutriments) sont cliquables.
 - Cohérent avec la structure “carte non cliquable + lien sur le titre”.
-- Exclusion de certains recipe_group non tirables (bases, boissons, etc.).
+- Filtrage par meal_type="plat" (exclut automatiquement boissons, pains, bases, etc.).
 
 Ajustements UI (stabilité) :
 - Placeholders pour sous-titre et badges : la hauteur de la carte ne varie plus.
 - Zone boutons poussée en bas via flex (CSS), même si contenu variable.
+
+Contrat fonctionnel (tirage) :
+- Le tirage est limité aux recettes dont meal_type = "plat".
+  (Le meal_type est attendu sur .recipe-item via data-meal-type, avec fallback sur .recipe-card.)
 ==============================================================================
 {%- endcomment -%}
 
@@ -44,26 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "low-carb-strict",
     "gout-sucre"
   ]);
-
-  /*
-    Groupes exclus du tirage aléatoire.
-    Contrat :
-    - Ne pas tirer les bases (pains, sauces, préparations...), boissons, etc.
-    - Ne pas tirer "Fromages" (fiches unitaires, non destinées au menu).
-    Note : la comparaison est faite en minuscules (toLowerCase()).
-  */
-  const EXCLUDED_GROUPS = [
-    "amuse-bouche",
-    "aliments simples",
-    "boissons",
-    "fromages",
-    "pains & substituts",
-    "pâtes & fonds",
-    "sauces & assaisonnements",
-    "légumes & accompagnements",
-    "préparations & conservations",
-    "barres nutritionnelles"
-  ];
 
   const BADGES_MAP   = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
   const TAG_BADGES   = BADGES_MAP.TAG_BADGES   || {};
@@ -99,13 +83,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return (item?.dataset?.tested || "").toLowerCase() === "true";
   }
 
-  function hasExcludedTag(card){
-    return parseList(card?.dataset?.tags).includes(EXCLUDED_TAG);
+  /*
+    meal_type : filtrage global du tirage.
+    Contrat attendu côté HTML :
+    - data-meal-type idéalement porté par .recipe-item (source canonique),
+      ex: <div class="recipe-item" data-meal-type="plat">…</div>
+    - fallback toléré si data-meal-type est sur .recipe-card.
+  */
+  function getMealType(card){
+    const itemType = card?.closest(".recipe-item")?.dataset?.mealType || "";
+    if (itemType) return itemType.toLowerCase().trim();
+    return (card?.dataset?.mealType || "").toLowerCase().trim();
   }
 
-  function isInExcludedGroup(card){
-    const group = card?.closest("[data-recipe-group]")?.dataset?.recipeGroup?.toLowerCase().trim();
-    return EXCLUDED_GROUPS.includes(group);
+  function isMealTypePlat(card){
+    return getMealType(card) === "plat";
+  }
+
+  function hasExcludedTag(card){
+    return parseList(card?.dataset?.tags).includes(EXCLUDED_TAG);
   }
 
   function matchesPageFilter(card){
@@ -135,8 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return Array.from(indexRoot.querySelectorAll(".recipe-card"))
       .filter(isValidCard)
       .filter(card =>
+        isMealTypePlat(card) &&              // ✅ Tirage limité aux plats (meal_type="plat")
         !hasExcludedTag(card) &&
-        !isInExcludedGroup(card) &&
         matchesPageFilter(card) &&
         matchesOnlyTested(card)
       );
