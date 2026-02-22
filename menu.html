@@ -62,12 +62,12 @@ body_id: "menu"
   <!-- ================= MENU BUILDER ================= -->
   {% include menu-builder.html %}
 
-  <!-- Bouton pour générer le PDF -->
-  <button id="generatePdfMenu" class="btn btn-primary mt-3">Générer le PDF du menu</button>
+
 
 </section>
 
 <!-- Menu builder (version découpée en modules) -->
+<script src="{{ '/assets/js/menu-engine.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/menu-builder.js' | relative_url }}"></script>
 
 <script>
