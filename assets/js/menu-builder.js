@@ -2,6 +2,7 @@
    menu-builder.js — V1 (slots dynamiques + verrou + recherche)
    =========================================================
    Changements (cette étape)
+   - Le sélecteur de type de slot (dans la grille) doit afficher TOUS les meal_type.
    - "other" ne doit PAS apparaître dans le sélecteur d’ajout de slot.
    - Modal "Ajouter un slot" : filtre automatiquement les types proposés
      selon les kcal restantes pour le jour :
@@ -26,12 +27,23 @@ const MEAL_LABELS_BY_COUNT = {
   5: ["Petit déjeuner", "Collation", "Déjeuner", "Goûter", "Dîner"],
 };
 
+/**
+ * Liste CANONIQUE des meal_type affichés dans la grille (selecteur de slot).
+ * Contrat :
+ * - Doit contenir TOUS les meal_type autorisés par le site.
+ * - Les valeurs doivent matcher exactement recipes.json (champ meal_type).
+ */
 const SLOT_TYPES = [
   { value: "plat", label: "Plat" },
   { value: "dessert", label: "Dessert" },
   { value: "pain", label: "Pain" },
   { value: "boisson", label: "Boisson" },
   { value: "amuse-bouche", label: "Amuse-bouche" },
+  { value: "fromage", label: "Fromage" },
+  { value: "poisson", label: "Poisson" },
+  { value: "viande", label: "Viande" },
+  { value: "œuf", label: "Œuf" },
+  { value: "accompagnement", label: "Accompagnement" },
   { value: "other", label: "Other" },
 ];
 
@@ -212,14 +224,12 @@ async function loadRecipes() {
 }
 
 function buildPools() {
-  POOLS = {
-    plat: [],
-    dessert: [],
-    pain: [],
-    boisson: [],
-    "amuse-bouche": [],
-    other: [],
-  };
+  /**
+   * Pools strictement alignés sur SLOT_TYPES :
+   * - Permet d’activer les nouveaux meal_type sans modifier d’autres zones.
+   */
+  POOLS = {};
+  for (const t of SLOT_TYPES) POOLS[t.value] = [];
 
   for (const r of RECIPES) {
     const t = String(r?.meal_type || "").trim();
@@ -959,6 +969,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
         typeSelect.setAttribute("data-slot", String(slotIndex));
         if (slotObj.locked) typeSelect.disabled = true;
 
+        // Grille : on affiche tous les meal_type (y compris "other").
         for (const t of SLOT_TYPES) {
           const opt = document.createElement("option");
           opt.value = t.value;
@@ -1038,10 +1049,10 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
 
         totalCalories += kcal;
 
-recipeLine.innerHTML =
-  r
-    ? `<a href="${url}" target="_blank"><strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`
-    : `<span class="text-muted"><strong>${escapeHtml(title)}</strong></span>`;
+        recipeLine.innerHTML =
+          r
+            ? `<a href="${url}" target="_blank"><strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`
+            : `<span class="text-muted"><strong>${escapeHtml(title)}</strong></span>`;
 
         slotBox.appendChild(recipeLine);
         slotsWrap.appendChild(slotBox);
@@ -1127,4 +1138,3 @@ function closeModal(id) {
   const inst = window.bootstrap?.Modal?.getInstance(el) || new window.bootstrap.Modal(el);
   inst.hide();
 }
-

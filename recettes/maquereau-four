@@ -1,0 +1,61 @@
+---
+layout: recipe
+
+title: "Maquereau au four"
+description: "Maquereau au four, poisson gras riche en oméga-3. Cuisson simple, chair fondante et nutritive."
+recipe_title: "Maquereau au four"
+recipe_subtitle: "Poisson gras, riche en oméga-3"
+recipe_group: "Poissons"
+recipe_sort: "maquereau-four"
+recipe_tested: false
+
+meal_type: "poisson"
+
+tags:
+  - low-carb-modere
+  - tres-proteine
+  - rapide
+
+badges_nutritionnels:
+  - omega-3
+  - vitamine-d
+  - vitamine-b12
+  - selenium
+  - iode
+
+# Estimations par portion : 1 maquereau ~150 g de chair (sur 4 portions)
+servings: 4
+serving_size: "150 g de chair"
+
+calories: 305
+proteines: 28
+glucides_nets: 0
+
+nutrition:
+  lipides: 22
+  glucides: 0
+  fibres: 0
+  fructose: 0
+
+ingredients:
+  - "4 maquereaux vidés (~300 g chacun)"
+  - "1 c. à soupe d’huile de colza"
+  - "Sel"
+  - "Poivre"
+  - "Citron (facultatif)"
+
+steps:
+  - "Préchauffer le four à 190 °C."
+  - "Déposer les maquereaux dans un plat légèrement huilé."
+  - "Badigeonner très légèrement d’huile."
+  - "Saler et poivrer à l’intérieur et à l’extérieur."
+  - "Cuire 18 à 22 minutes selon la taille."
+  - "La chair doit se détacher facilement de l’arête centrale."
+  - "Laisser reposer 2 minutes avant de servir."
+
+notes_low_carb:
+  - "Aliment simple, 0 glucide."
+  - "Très riche en oméga-3 (EPA/DHA)."
+  - "Compatible low carb modéré et strict."
+  - "Poisson gras : densité calorique plus élevée que les poissons maigres."
+---

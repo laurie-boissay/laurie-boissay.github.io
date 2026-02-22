@@ -1,0 +1,45 @@
+---
+layout: recipe
+
+title: "Boudin noir poêlé"
+description: "Boudin noir cuit à la poêle. Vérifier composition."
+recipe_title: "Boudin noir"
+recipe_subtitle: "Cuisson à la poêle"
+recipe_group: "Viandes"
+recipe_sort: "boudin-noir-poele"
+recipe_tested: false
+
+meal_type: "viande"
+
+tags:
+  - low-carb-modere
+  - calorique
+  - tres-proteine
+
+badges_nutritionnels:
+  - fer
+
+servings: 1
+serving_size: "2 portions (200 g)"
+
+calories: 600
+proteines: 32
+glucides_nets: 5
+
+nutrition:
+  lipides: 50
+  glucides: 5
+  fibres: 0
+  fructose: 0
+
+ingredients:
+  - "200 g de boudin noir"
+
+steps:
+  - "Cuire à feu moyen 8 à 10 minutes."
+  - "Retourner délicatement."
+  - "Servir chaud."
+
+notes_low_carb:
+  - "Peut contenir des glucides selon la recette."
+---
