@@ -1,0 +1,56 @@
+---
+layout: recipe
+
+title: "Mont d’Or rôti, poulet grillé & brocoli"
+description: "Mont d’Or rôti servi avec filet de poulet grillé et brocoli. Plat complet très protéiné et mieux équilibré."
+recipe_title: "Mont d’Or rôti, poulet & brocoli"
+recipe_subtitle: "Version réaliste 500 g pour 6 personnes"
+recipe_group: "Plats à base de fromages"
+recipe_sort: "mont-d-or-poulet-brocoli"
+recipe_tested: true
+
+meal_type: "plat"
+
+servings: 6
+serving_size: "1 portion (≈ 83 g Mont d’Or + 150 g poulet + 250 g brocoli)"
+
+calories: 445
+proteines: 48
+glucides_nets: 8
+
+tags:
+  - low-carb-modere
+  - tres-proteine
+
+badges_nutritionnels:
+  - calcium
+  - vitamine-b12
+  - potassium
+
+nutrition:
+  lipides: 22
+  glucides: 11
+  fibres: 3
+  fructose: 3
+
+ingredients:
+  - "1 Mont d’Or (500 g)"
+  - "900 g de filet de poulet"
+  - "1,5 kg de brocoli"
+  - "1 cuillère à soupe d’huile de colza"
+  - "Poivre"
+
+steps:
+  - "Préchauffer le four à 180°C."
+  - "Retirer le film du Mont d’Or."
+  - "Enfourner 20 à 25 minutes jusqu’à texture fondante."
+  - "Couper le poulet en morceaux et le griller à la poêle sans ajout de matière grasse."
+  - "Cuire le brocoli à la vapeur puis le faire revenir 2 à 3 minutes avec l’huile."
+  - "Servir par personne : environ 83 g de Mont d’Or, 150 g de poulet et 250 g de brocoli."
+
+notes_low_carb:
+  - "≈ 48 g de protéines par portion."
+  - "Glucides nets ≈ 8 g issus des légumes."
+  - "Version plus équilibrée qu’un Mont d’Or seul."
+  - "Compatible low carb modéré."
+---
