@@ -11,8 +11,8 @@ Dépendances
 - Bootstrap 5 (modals + collapse).
 
 Contrats
-- Le format du menu est : menu[day][meal] = { slots: [ { type, recipe, locked } ] }.
-- Les meal_type proposés dans la grille doivent couvrir tous les types autorisés.
+- Format menu : menu[day][meal] = { slots: [ { type, recipe, locked } ] }.
+- La grille doit proposer tous les meal_type autorisés (SLOT_TYPES).
 - Le modal “Ajouter un slot” ne propose jamais le type "other".
 ============================================================================== */
 
@@ -756,7 +756,7 @@ function setupMenuInteractions() {
 }
 
 /* =========================
-   Rendu (cartes jour -> cartes repas -> slots)
+   Rendu (Option B — <template> HTML)
    ========================= */
 
 function getDayIndex(dayOffset, weekStart) {
@@ -764,26 +764,39 @@ function getDayIndex(dayOffset, weekStart) {
   return (startIndex + dayOffset) % 7;
 }
 
+/**
+ * Récupère un <template> par ID.
+ * Retourne null si absent (le message est géré par renderMenu()).
+ */
 function getTemplate(id) {
   const tpl = document.getElementById(id);
   if (!tpl || !(tpl instanceof HTMLTemplateElement)) return null;
   return tpl;
 }
 
+/**
+ * Clone le contenu d’un <template>.
+ * Contrat : on prend le premier élément du template (wrappers autorisés).
+ */
 function cloneTemplate(id) {
   const tpl = getTemplate(id);
   if (!tpl) return null;
-  return tpl.content.firstElementChild.cloneNode(true);
+
+  const frag = tpl.content.cloneNode(true);
+  const root = frag.firstElementChild || frag.querySelector("*");
+  if (!root) return null;
+
+  return root;
 }
 
 /**
  * Rendu UI (Option B — <template> HTML)
  * Contrat :
- * - Le rendu s’appuie sur des templates présents dans la page :
- *   • #tpl-menu-day
- *   • #tpl-menu-meal
- *   • #tpl-menu-slot
- * - Les events restent gérés par délégation (setupMenuInteractions).
+ * - Templates requis dans la page :
+ *   • #tpl-menu-day   (hooks .js-day-title/.js-meals-wrap/.js-day-total)
+ *   • #tpl-menu-meal  (hooks .js-meal-title/.js-slots-wrap + bouton data-action="add-slot")
+ *   • #tpl-menu-slot  (hooks .js-slot-box/.js-recipe-line + contrôles data-action)
+ * - Events gérés par délégation (setupMenuInteractions).
  * - Aucune logique métier ici (elle est dans menu-engine.js).
  */
 function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) {
@@ -815,6 +828,11 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
     const dayLabel = DAYS[dayIndex];
 
     const dayCard = cloneTemplate("tpl-menu-day");
+    if (!dayCard) {
+      showMessage("Template jour invalide (clone impossible).", "danger");
+      return;
+    }
+
     const dayTitleEl = dayCard.querySelector(".js-day-title");
     const mealsWrap = dayCard.querySelector(".js-meals-wrap");
     const dayTotalEl = dayCard.querySelector(".js-day-total");
@@ -832,6 +850,11 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
       const slots = Array.isArray(mealObj?.slots) ? mealObj.slots : [];
 
       const mealCard = cloneTemplate("tpl-menu-meal");
+      if (!mealCard) {
+        showMessage("Template repas invalide (clone impossible).", "danger");
+        return;
+      }
+
       const mealTitleEl = mealCard.querySelector(".js-meal-title");
       const slotsWrap = mealCard.querySelector(".js-slots-wrap");
       const addBtn = mealCard.querySelector("button[data-action='add-slot']");
@@ -849,6 +872,10 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
 
       slots.forEach((slotObj, slotIndex) => {
         const slotBox = cloneTemplate("tpl-menu-slot");
+        if (!slotBox) {
+          showMessage("Template slot invalide (clone impossible).", "danger");
+          return;
+        }
 
         const box = slotBox.querySelector(".js-slot-box");
         const typeSelect = slotBox.querySelector("select[data-action='change-type']");
@@ -887,11 +914,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
           typeSelect.appendChild(opt);
         }
 
-        if (slotObj.locked) {
-          typeSelect.disabled = true;
-        } else {
-          typeSelect.disabled = false;
-        }
+        typeSelect.disabled = !!slotObj.locked;
 
         // Boutons : état visuel + disabled
         lockBtn.textContent = slotObj.locked ? "🔒" : "🔓";
@@ -914,7 +937,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
         const r = slotObj.recipe;
         const title = r?.title ?? "— (non rempli)";
         const url = r?.url ?? "#";
-        const kcal = MenuEngine.getRecipeCalories(r);
+        const kcal = window.MenuEngine.getRecipeCalories(r);
 
         totalCalories += kcal;
 
@@ -948,6 +971,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
     grid.appendChild(dayCard);
   });
 }
+
 /* =========================
    Utils
    ========================= */
