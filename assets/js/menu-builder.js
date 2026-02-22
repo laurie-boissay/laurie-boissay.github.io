@@ -764,72 +764,121 @@ function getDayIndex(dayOffset, weekStart) {
   return (startIndex + dayOffset) % 7;
 }
 
+function getTemplate(id) {
+  const tpl = document.getElementById(id);
+  if (!tpl || !(tpl instanceof HTMLTemplateElement)) return null;
+  return tpl;
+}
+
+function cloneTemplate(id) {
+  const tpl = getTemplate(id);
+  if (!tpl) return null;
+  return tpl.content.firstElementChild.cloneNode(true);
+}
+
+/**
+ * Rendu UI (Option B — <template> HTML)
+ * Contrat :
+ * - Le rendu s’appuie sur des templates présents dans la page :
+ *   • #tpl-menu-day
+ *   • #tpl-menu-meal
+ *   • #tpl-menu-slot
+ * - Les events restent gérés par délégation (setupMenuInteractions).
+ * - Aucune logique métier ici (elle est dans menu-engine.js).
+ */
 function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) {
   const grid = document.getElementById("menuGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
+
   if (!Array.isArray(state.menu) || state.menu.length === 0) return;
 
+  const dayTpl = getTemplate("tpl-menu-day");
+  const mealTpl = getTemplate("tpl-menu-meal");
+  const slotTpl = getTemplate("tpl-menu-slot");
+
+  if (!dayTpl || !mealTpl || !slotTpl) {
+    showMessage(
+      "Templates manquants : #tpl-menu-day / #tpl-menu-meal / #tpl-menu-slot. " +
+        "Vérifie que la page menu inclut bien les <template> requis.",
+      "danger"
+    );
+    return;
+  }
+
   const mealLabels = MEAL_LABELS_BY_COUNT[mealsPerDay] || MEAL_LABELS_BY_COUNT[3];
+  const hasMax = Number.isFinite(calorieTarget) && calorieTarget > 0;
 
   state.menu.forEach((dayMeals, dayOffset) => {
-    const dayLabel = DAYS[getDayIndex(dayOffset, weekStart)];
+    const dayIndex = getDayIndex(dayOffset, weekStart);
+    const dayLabel = DAYS[dayIndex];
 
-    const dayCard = document.createElement("div");
-    dayCard.className = "card mb-4";
+    const dayCard = cloneTemplate("tpl-menu-day");
+    const dayTitleEl = dayCard.querySelector(".js-day-title");
+    const mealsWrap = dayCard.querySelector(".js-meals-wrap");
+    const dayTotalEl = dayCard.querySelector(".js-day-total");
 
-    const dayHeader = document.createElement("div");
-    dayHeader.className = "card-header fw-bold";
-    dayHeader.textContent = dayLabel;
+    if (!dayTitleEl || !mealsWrap || !dayTotalEl) {
+      showMessage("Template jour invalide (hooks .js-day-title/.js-meals-wrap/.js-day-total manquants).", "danger");
+      return;
+    }
 
-    const dayBody = document.createElement("div");
-    dayBody.className = "card-body";
+    dayTitleEl.textContent = dayLabel;
 
     let totalCalories = 0;
-
-    const mealsWrap = document.createElement("div");
-    mealsWrap.className = "d-flex flex-column gap-2";
 
     dayMeals.forEach((mealObj, mealIndex) => {
       const slots = Array.isArray(mealObj?.slots) ? mealObj.slots : [];
 
-      const mealCard = document.createElement("div");
-      mealCard.className = "card";
+      const mealCard = cloneTemplate("tpl-menu-meal");
+      const mealTitleEl = mealCard.querySelector(".js-meal-title");
+      const slotsWrap = mealCard.querySelector(".js-slots-wrap");
+      const addBtn = mealCard.querySelector("button[data-action='add-slot']");
 
-      const mealBody = document.createElement("div");
-      mealBody.className = "card-body py-2";
+      if (!mealTitleEl || !slotsWrap || !addBtn) {
+        showMessage("Template repas invalide (hooks .js-meal-title/.js-slots-wrap ou bouton add-slot manquants).", "danger");
+        return;
+      }
 
-      const mealTitle = document.createElement("div");
-      mealTitle.className = "fw-bold mb-2";
-      mealTitle.textContent = mealLabels[mealIndex] || `Repas ${mealIndex + 1}`;
-      mealBody.appendChild(mealTitle);
+      mealTitleEl.textContent = mealLabels[mealIndex] || `Repas ${mealIndex + 1}`;
 
-      const slotsWrap = document.createElement("div");
-      slotsWrap.className = "d-flex flex-column gap-2";
+      // Paramétrage du bouton “Ajouter un slot” (délégation events)
+      addBtn.setAttribute("data-day", String(dayOffset));
+      addBtn.setAttribute("data-meal", String(mealIndex));
 
       slots.forEach((slotObj, slotIndex) => {
-        const slotBox = document.createElement("div");
-        slotBox.className = "border rounded p-2";
+        const slotBox = cloneTemplate("tpl-menu-slot");
 
-        if (slotObj.locked) slotBox.classList.add("bg-warning-subtle", "border-warning", "border-2");
+        const box = slotBox.querySelector(".js-slot-box");
+        const typeSelect = slotBox.querySelector("select[data-action='change-type']");
+        const lockBtn = slotBox.querySelector("button[data-action='toggle-lock']");
+        const pickBtn = slotBox.querySelector("button[data-action='pick-recipe']");
+        const rerollBtn = slotBox.querySelector("button[data-action='reroll-slot']");
+        const removeBtn = slotBox.querySelector("button[data-action='remove-slot']");
+        const recipeLine = slotBox.querySelector(".js-recipe-line");
 
-        const top = document.createElement("div");
-        top.className = "d-flex flex-wrap gap-2 align-items-center justify-content-between";
+        if (!box || !typeSelect || !lockBtn || !pickBtn || !rerollBtn || !removeBtn || !recipeLine) {
+          showMessage("Template slot invalide (hooks .js-slot-box/.js-recipe-line ou contrôles manquants).", "danger");
+          return;
+        }
 
-        const left = document.createElement("div");
-        left.className = "d-flex flex-wrap gap-2 align-items-center";
+        // Style verrouillé
+        if (slotObj.locked) {
+          box.classList.add("bg-warning-subtle", "border-warning", "border-2");
+        } else {
+          box.classList.remove("bg-warning-subtle", "border-warning", "border-2");
+        }
 
-        const typeSelect = document.createElement("select");
-        typeSelect.className = "form-select form-select-sm";
-        typeSelect.style.maxWidth = "180px";
-        typeSelect.setAttribute("data-action", "change-type");
-        typeSelect.setAttribute("data-day", String(dayOffset));
-        typeSelect.setAttribute("data-meal", String(mealIndex));
-        typeSelect.setAttribute("data-slot", String(slotIndex));
-        if (slotObj.locked) typeSelect.disabled = true;
+        // Data attrs (délégation events)
+        for (const el of [typeSelect, lockBtn, pickBtn, rerollBtn, removeBtn]) {
+          el.setAttribute("data-day", String(dayOffset));
+          el.setAttribute("data-meal", String(mealIndex));
+          el.setAttribute("data-slot", String(slotIndex));
+        }
 
-        // Grille : on affiche tous les meal_type (y compris "other").
+        // Select type : tous les meal_type (y compris other) dans la grille
+        typeSelect.innerHTML = "";
         for (const t of SLOT_TYPES) {
           const opt = document.createElement("option");
           opt.value = t.value;
@@ -838,132 +887,67 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
           typeSelect.appendChild(opt);
         }
 
-        left.appendChild(typeSelect);
-        top.appendChild(left);
+        if (slotObj.locked) {
+          typeSelect.disabled = true;
+        } else {
+          typeSelect.disabled = false;
+        }
 
-        const actions = document.createElement("div");
-        actions.className = "d-flex gap-2";
-
-        const lockBtn = document.createElement("button");
-        lockBtn.type = "button";
-        lockBtn.className = "btn btn-outline-secondary btn-sm";
+        // Boutons : état visuel + disabled
         lockBtn.textContent = slotObj.locked ? "🔒" : "🔓";
         lockBtn.setAttribute("title", slotObj.locked ? "Déverrouiller ce slot" : "Verrouiller ce slot");
         lockBtn.setAttribute("aria-label", slotObj.locked ? "Déverrouiller ce slot" : "Verrouiller ce slot");
-        lockBtn.setAttribute("data-action", "toggle-lock");
-        lockBtn.setAttribute("data-day", String(dayOffset));
-        lockBtn.setAttribute("data-meal", String(mealIndex));
-        lockBtn.setAttribute("data-slot", String(slotIndex));
 
-        const pickBtn = document.createElement("button");
-        pickBtn.type = "button";
-        pickBtn.className = "btn btn-outline-primary btn-sm";
-        pickBtn.textContent = "🔎";
+        pickBtn.disabled = !!slotObj.locked;
         pickBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Rechercher une recette");
         pickBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Rechercher une recette");
-        pickBtn.setAttribute("data-action", "pick-recipe");
-        pickBtn.setAttribute("data-day", String(dayOffset));
-        pickBtn.setAttribute("data-meal", String(mealIndex));
-        pickBtn.setAttribute("data-slot", String(slotIndex));
-        if (slotObj.locked) pickBtn.disabled = true;
 
-        const rerollBtn = document.createElement("button");
-        rerollBtn.type = "button";
-        rerollBtn.className = "btn btn-outline-secondary btn-sm";
-        rerollBtn.textContent = "↻";
+        rerollBtn.disabled = !!slotObj.locked;
         rerollBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Relancer ce slot");
         rerollBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Relancer ce slot");
-        rerollBtn.setAttribute("data-action", "reroll-slot");
-        rerollBtn.setAttribute("data-day", String(dayOffset));
-        rerollBtn.setAttribute("data-meal", String(mealIndex));
-        rerollBtn.setAttribute("data-slot", String(slotIndex));
-        if (slotObj.locked) rerollBtn.disabled = true;
 
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.className = "btn btn-outline-danger btn-sm";
-        removeBtn.textContent = "−";
+        removeBtn.disabled = slots.length <= 1 || !!slotObj.locked;
         removeBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
         removeBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
-        removeBtn.setAttribute("data-action", "remove-slot");
-        removeBtn.setAttribute("data-day", String(dayOffset));
-        removeBtn.setAttribute("data-meal", String(mealIndex));
-        removeBtn.setAttribute("data-slot", String(slotIndex));
-        if (slots.length <= 1 || slotObj.locked) removeBtn.disabled = true;
 
-        actions.appendChild(lockBtn);
-        actions.appendChild(pickBtn);
-        actions.appendChild(rerollBtn);
-        actions.appendChild(removeBtn);
-
-        top.appendChild(actions);
-        slotBox.appendChild(top);
-
-        const recipeLine = document.createElement("div");
-        recipeLine.className = "mt-2";
-
+        // Ligne recette
         const r = slotObj.recipe;
         const title = r?.title ?? "— (non rempli)";
         const url = r?.url ?? "#";
-        const kcal = window.MenuEngine.getRecipeCalories(r);
+        const kcal = MenuEngine.getRecipeCalories(r);
 
         totalCalories += kcal;
 
-        recipeLine.innerHTML =
-          r
-            ? `<a href="${url}" target="_blank"><strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`
-            : `<span class="text-muted"><strong>${escapeHtml(title)}</strong></span>`;
+        if (r) {
+          recipeLine.innerHTML =
+            `<a href="${url}" target="_blank"><strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`;
+        } else {
+          recipeLine.innerHTML = `<span class="text-muted"><strong>${escapeHtml(title)}</strong></span>`;
+        }
 
-        slotBox.appendChild(recipeLine);
         slotsWrap.appendChild(slotBox);
       });
 
-      mealBody.appendChild(slotsWrap);
-
-      const addWrap = document.createElement("div");
-      addWrap.className = "mt-2 d-flex justify-content-end";
-
-      const addBtn = document.createElement("button");
-      addBtn.type = "button";
-      addBtn.className = "btn btn-outline-primary btn-sm";
-      addBtn.textContent = "+";
-      addBtn.setAttribute("title", "Ajouter un slot");
-      addBtn.setAttribute("aria-label", "Ajouter un slot");
-      addBtn.setAttribute("data-action", "add-slot");
-      addBtn.setAttribute("data-day", String(dayOffset));
-      addBtn.setAttribute("data-meal", String(mealIndex));
-
-      addWrap.appendChild(addBtn);
-      mealBody.appendChild(addWrap);
-
-      mealCard.appendChild(mealBody);
       mealsWrap.appendChild(mealCard);
     });
 
-    dayBody.appendChild(mealsWrap);
-
-    const total = document.createElement("div");
-    total.className = "mt-3";
-
-    const hasMax = Number.isFinite(calorieTarget) && calorieTarget > 0;
+    // Total jour
     if (hasMax) {
       const remaining = calorieTarget - totalCalories;
-      total.innerHTML =
+      dayTotalEl.innerHTML =
         `<strong>Total :</strong> ${totalCalories} kcal ` +
         `<span class="text-muted">(MAX : ${calorieTarget} kcal | Reste : ${remaining})</span>`;
-      if (remaining < 0) total.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
+
+      if (remaining < 0) {
+        dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
+      }
     } else {
-      total.innerHTML = `<strong>Total :</strong> ${totalCalories} kcal`;
+      dayTotalEl.innerHTML = `<strong>Total :</strong> ${totalCalories} kcal`;
     }
 
-    dayBody.appendChild(total);
-
-    dayCard.appendChild(dayHeader);
-    dayCard.appendChild(dayBody);
     grid.appendChild(dayCard);
   });
 }
-
 /* =========================
    Utils
    ========================= */

@@ -1,1 +1,10 @@
 baseurl: "" # Site déployé à la racine de github.io
+
+exclude:
+  - node_modules
+  - vendor
+  - .git
+  - .github
+  - README.md
+  - package-lock.json
+  - yarn.lock
