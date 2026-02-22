@@ -7,7 +7,7 @@ recipe_title: "Mont d’Or rôti, poulet & brocoli"
 recipe_subtitle: "Version réaliste 500 g pour 6 personnes"
 recipe_group: "Plats à base de fromages"
 recipe_sort: "mont-d-or-poulet-brocoli"
-recipe_tested: true
+recipe_tested: false
 
 meal_type: "plat"
 

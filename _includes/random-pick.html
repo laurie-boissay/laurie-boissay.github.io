@@ -7,7 +7,7 @@ _includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
 - Le titre de la recette dans la pick-card est désormais cliquable.
 - Les badges (tags fonctionnels + micronutriments) sont cliquables.
 - Cohérent avec la structure “carte non cliquable + lien sur le titre”.
-- Exclusion du groupe "Aliments simples".
+- Exclusion de certains recipe_group non tirables (bases, boissons, etc.).
 
 Ajustements UI (stabilité) :
 - Placeholders pour sous-titre et badges : la hauteur de la carte ne varie plus.
@@ -45,10 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
     "gout-sucre"
   ]);
 
+  /*
+    Groupes exclus du tirage aléatoire.
+    Contrat :
+    - Ne pas tirer les bases (pains, sauces, préparations...), boissons, etc.
+    - Ne pas tirer "Fromages" (fiches unitaires, non destinées au menu).
+    Note : la comparaison est faite en minuscules (toLowerCase()).
+  */
   const EXCLUDED_GROUPS = [
     "amuse-bouche",
     "aliments simples",
     "boissons",
+    "fromages",
     "pains & substituts",
     "pâtes & fonds",
     "sauces & assaisonnements",
@@ -268,4 +276,3 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("testedFilterChanged", pickAndRender);
 });
 </script>
-
