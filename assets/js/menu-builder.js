@@ -12,8 +12,8 @@ Dépendances
 
 Contrats
 - Format menu : menu[day][meal] = { slots: [ { type, recipe, locked } ] }.
-- La grille doit proposer tous les meal_type autorisés (SLOT_TYPES).
-- Le modal “Ajouter un slot” ne propose jamais le type "other".
+- La grille propose les recipe_group officiels (SLOT_TYPES).
+- Le modal “Ajouter un slot” propose les mêmes groupes (pas de catégorie "other").
 ============================================================================== */
 
 "use strict";
@@ -43,28 +43,47 @@ const MEAL_LABELS_BY_COUNT = {
 };
 
 /**
- * Liste CANONIQUE des meal_type affichés dans la grille (sélecteur de type de slot).
- * Contrat : doit matcher les valeurs de recipes.json (champ meal_type).
+ * Liste CANONIQUE des recipe_group affichés dans la grille (sélecteur de groupe de slot).
+ * Contrat : doit matcher les valeurs de recipes.json (champ recipe_group).
  */
 const SLOT_TYPES = [
-  { value: "plat", label: "Plat" },
-  { value: "dessert", label: "Dessert" },
-  { value: "pain", label: "Pain" },
-  { value: "boisson", label: "Boisson" },
-  { value: "amuse-bouche", label: "Amuse-bouche" },
-  { value: "fromage", label: "Fromage" },
-  { value: "poisson", label: "Poisson" },
-  { value: "viande", label: "Viande" },
-  { value: "œuf", label: "Œuf" },
-  { value: "accompagnement", label: "Accompagnement" },
-  { value: "other", label: "Other" },
+  { value: "Légumes & accompagnements", label: "Accompagnement" },
+  { value: "Amuse-bouche", label: "Amuse-bouche" },
+  { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
+  { value: "Boissons", label: "Boisson" },
+  { value: "Cake", label: "Cake" }, 
+  { value: "Chocolats", label: "Chocolat" },  
+  { value: "Desserts & crèmes", label: "Dessert" },
+  { value: "Fromages", label: "Fromage" },  
+  { value: "Fruits à coque", label: "Fruits à coque" },
+  { value: "Fruits frais", label: "Fruit(s) frai(s)" },
+  { value: "Gâteaux & biscuits", label: "Gâteau" },
+  { value: "Graines", label: "Graines" },
+  { value: "Œufs", label: "Œuf" },  
+  { value: "Pains & substituts", label: "Pain" },
+  { value: "Pâtés", label: "Pâté" },
+  { value: "Plat", label: "Plat (au hasard)" }, // dans tous les "Plats à base d..."
+  { value: "Plats à base de fromages", label: "Plat à base de fromages" }, 
+  { value: "Plats à base de fruits de mer", label: "Plat à base de fruits de mer" },
+  { value: "Plats à base de poissons", label: "Plat à base de poissons" },
+  { value: "Plats à base de viande", label: "Plat à base de viande" },
+  { value: "Plats à base d’œufs", label: "Plat à base d’œufs" },
+  { value: "Poissons", label: "Poisson" },
+  { value: "Sauces & assaisonnements", label: "Sauce" },
+  { value: "Snack", label: "Snack" }, // pain + yaourt + fruits à coque
+  { value: "Soupe", label: "Soupe" },
+  { value: "Viandes", label: "Viande" },
+  { value: "Yaourts", label: "Yaourt" },
 ];
 
 /**
- * Types autorisés UNIQUEMENT pour “Ajouter un slot”.
- * - "other" volontairement exclu (contrainte UX).
+ * Groupes autorisés pour “Ajouter un slot”.
+ * Contrat : identiques à SLOT_TYPES (filtrage possible plus tard si besoin UX).
  */
-const ADD_SLOT_TYPES = SLOT_TYPES.filter((t) => t.value !== "other");
+const ADD_SLOT_TYPES = SLOT_TYPES;
+
+// Groupe de repli utilisé lorsque le contexte ne permet pas d’inférer un type.
+const DEFAULT_SLOT_TYPE = "Plat";
 
 /* =========================
    Bootstrap / initialisation
@@ -480,7 +499,7 @@ function ensurePickRecipeModalExists() {
             <div class="form-check mt-4">
               <input class="form-check-input" type="checkbox" id="pickRecipeAllTypes">
               <label class="form-check-label" for="pickRecipeAllTypes">
-                Tous types (ignore le type du slot)
+                Tous groupes (ignore le groupe du slot)
               </label>
             </div>
           </div>
@@ -543,12 +562,12 @@ function renderPickResults() {
     return;
   }
 
-  const slotType = slot?.type || "plat";
+  const slotType = slot?.type || DEFAULT_SLOT_TYPE;
   const baseList = allTypes ? state.recipes : (state.pools[slotType] || []);
 
   hint.textContent = allTypes
-    ? `Recherche dans toutes les recettes (type du slot : ${slotType}).`
-    : `Recherche dans les recettes de type : ${slotType}.`;
+    ? `Recherche dans toutes les recettes (groupe du slot : ${slotType}).`
+    : `Recherche dans les recettes du groupe : ${slotType}.`;
 
   let filtered = baseList;
   if (q.length > 0) {
@@ -573,7 +592,7 @@ function renderPickResults() {
     const title = r?.title ?? "Recette sans titre";
     const kcalN = parseInt(r?.calories, 10);
     const kcal = Number.isFinite(kcalN) ? `${kcalN} kcal` : "— kcal";
-    const tpe = r?.meal_type ? `(${r.meal_type})` : "";
+    const tpe = r?.recipe_group ? `(${r.recipe_group})` : "";
 
     a.innerHTML = `<div class="d-flex justify-content-between gap-2">
       <div><strong>${escapeHtml(title)}</strong> <span class="text-muted">${escapeHtml(tpe)}</span></div>
@@ -727,7 +746,7 @@ function setupMenuInteractions() {
       return;
     }
 
-    const newType = String(sel.value || "plat");
+    const newType = String(sel.value || DEFAULT_SLOT_TYPE);
     const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
 
     const dayTotal = window.MenuEngine.getDayCaloriesFromMenu(state.menu, day);
@@ -904,7 +923,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
           el.setAttribute("data-slot", String(slotIndex));
         }
 
-        // Select type : tous les meal_type (y compris other) dans la grille
+        // Select groupe : tous les recipe_group (liste SLOT_TYPES) dans la grille
         typeSelect.innerHTML = "";
         for (const t of SLOT_TYPES) {
           const opt = document.createElement("option");
