@@ -54,6 +54,7 @@ const SLOT_TYPES = [
   { value: "Cake", label: "Cake" }, 
   { value: "Chocolats", label: "Chocolat" },  
   { value: "Desserts & crèmes", label: "Dessert" },
+  { value: "Final", label: "Final (au hasard)" },
   { value: "Fromages", label: "Fromage" },  
   { value: "Fruits à coque", label: "Fruits à coque" },
   { value: "Fruits frais", label: "Fruit(s) frai(s)" },

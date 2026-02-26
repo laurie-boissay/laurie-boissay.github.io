@@ -3,7 +3,7 @@ menu-engine.js — Moteur “métier” (sans DOM)
 ==============================================================================
 Rôle
 - Fournir des fonctions pures (ou quasi pures) pour :
-  • construire les pools de recettes par type
+  • construire les pools de recettes par type (recipe_group + types synthétiques)
   • calculer les kcal d’une journée
   • tirer des recettes sous plafond calorique
   • générer un menu hebdomadaire en respectant les slots verrouillés
@@ -12,8 +12,14 @@ Contrats
 - Aucune dépendance au DOM.
 - Aucune dépendance à Bootstrap.
 - Les fonctions n’accèdent pas à des variables globales : tout est injecté via arguments.
-- Le format attendu du menu est :
+- Format menu :
   menu[day][meal] = { slots: [ { type, recipe, locked } ] }
+
+Notes d’architecture
+- "Plat", "Snack" et "Final" sont des types synthétiques (agrégations de recipe_group).
+- Petit déjeuner : Plat + Final + Boissons
+- Déjeuner / Dîner : Plat + Final
+- Collation / Goûter : Boissons + Snack
 ============================================================================== */
 
 "use strict";
@@ -22,8 +28,8 @@ Contrats
   // ---------------------------------------------------------------------------
   // Types synthétiques (agrégation de groupes)
   // ---------------------------------------------------------------------------
-  // "Plat" est un type virtuel : il pioche au hasard dans l’ensemble des groupes
-  // "Plats à base de ...". Il ne correspond pas à un recipe_group en tant que tel.
+
+  // "Plat" : union des groupes "Plats à base de ...".
   const AGG_PLAT_KEY = "Plat";
   const AGG_PLAT_GROUPS = [
     "Plats à base de viande",
@@ -33,14 +39,16 @@ Contrats
     "Plats à base de fromages",
   ];
 
-  // "Snack" est un type virtuel destiné aux collations/goûters :
-  // il pioche dans plusieurs groupes “simples”.
-  // NOTE : Chocolat volontairement exclu (décision UX).
+  // "Snack" : collations/goûters (chocolat EXCLU).
   const AGG_SNACK_KEY = "Snack";
   const AGG_SNACK_GROUPS = ["Pains & substituts", "Yaourts", "Fruits à coque"];
 
+  // "Final" : fin de repas (ne présume pas du sucré).
+  const AGG_FINAL_KEY = "Final";
+  const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits frais", "Fruits à coque"];
+
   /**
-   * Normalise une valeur “kcal” (nombre entier ≥ 0).
+   * Normalise une valeur “kcal” (entier ≥ 0).
    * @param {any} recipe
    * @returns {number}
    */
@@ -68,7 +76,44 @@ Contrats
   }
 
   /**
+   * Construit un index complet recipe_group -> recettes, indépendamment de slotTypes.
+   * Contrat : l’UI peut choisir de ne pas afficher certains recipe_group, sans casser les agrégations.
+   * @param {Array} recipes
+   * @returns {Record<string, Array>}
+   */
+  function buildGroupIndex(recipes) {
+    const index = {};
+    for (const r of Array.isArray(recipes) ? recipes : []) {
+      const g = String(r?.recipe_group || "").trim();
+      if (!g) continue;
+      if (!index[g]) index[g] = [];
+      index[g].push(r);
+    }
+    return index;
+  }
+
+  /**
+   * Construit un pool agrégé = concat des pools des groupes fournis.
+   * @param {Record<string, Array>} groupIndex
+   * @param {string[]} groups
+   * @returns {Array}
+   */
+  function buildAggregatePoolFromIndex(groupIndex, groups) {
+    const agg = [];
+    for (const g of groups) {
+      const pool = groupIndex[g] || [];
+      if (pool.length > 0) agg.push(...pool);
+    }
+    return agg;
+  }
+
+  /**
    * Construit les pools de recettes par type.
+   * - Les types "réels" sont indexés par recipe_group.
+   * - Les types synthétiques (Plat/Snack/Final) sont des unions de recipe_group.
+   *
+   * Contrat : les clés de pools sont initialisées à partir de slotTypes.
+   *
    * @param {Array} recipes
    * @param {Array<{value:string,label:string}>} slotTypes
    * @returns {Record<string, Array>}
@@ -77,51 +122,21 @@ Contrats
     const pools = {};
     for (const t of slotTypes) pools[t.value] = [];
 
-    // Pools “réels” : indexés par recipe_group.
-    for (const r of Array.isArray(recipes) ? recipes : []) {
-      const t = String(r?.recipe_group || "").trim();
-      if (pools[t]) pools[t].push(r);
+    const groupIndex = buildGroupIndex(recipes);
+
+    // Pools “réels” : uniquement si la clé est prévue dans slotTypes.
+    for (const key of Object.keys(pools)) {
+      // Les types synthétiques sont remplis plus bas.
+      if (key === AGG_PLAT_KEY || key === AGG_SNACK_KEY || key === AGG_FINAL_KEY) continue;
+      pools[key] = groupIndex[key] ? [...groupIndex[key]] : [];
     }
 
-    // Pool “virtuel” : "Plat" = union des groupes "Plats à base de ...".
-    if (pools[AGG_PLAT_KEY]) {
-      const agg = [];
-      for (const g of AGG_PLAT_GROUPS) {
-        const pool = pools[g] || [];
-        if (pool.length > 0) agg.push(...pool);
-      }
-      pools[AGG_PLAT_KEY] = agg;
-    }
-
-    // Pool “virtuel” : "Snack" = union de groupes simples (collation/goûter).
-    if (pools[AGG_SNACK_KEY]) {
-      const agg = [];
-      for (const g of AGG_SNACK_GROUPS) {
-        const pool = pools[g] || [];
-        if (pool.length > 0) agg.push(...pool);
-      }
-      pools[AGG_SNACK_KEY] = agg;
-    }
+    // Pools synthétiques : construits uniquement si la clé existe dans slotTypes.
+    if (pools[AGG_PLAT_KEY]) pools[AGG_PLAT_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_PLAT_GROUPS);
+    if (pools[AGG_SNACK_KEY]) pools[AGG_SNACK_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_SNACK_GROUPS);
+    if (pools[AGG_FINAL_KEY]) pools[AGG_FINAL_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_FINAL_GROUPS);
 
     return pools;
-  }
-
-  /**
-   * Déduit les types par défaut.
-   * Priorité UX : 1 slot "Plat" + 1 slot "Desserts & crèmes".
-   * Fallback : l'ordre des clés reflète l'ordre de SLOT_TYPES (construction via buildPools()).
-   * @param {Record<string, Array>} pools
-   * @returns {{ primary: string, secondary: string }}
-   */
-  function getDefaultSlotTypes(pools) {
-    const desiredPrimary = AGG_PLAT_KEY;
-    const desiredSecondary = "Desserts & crèmes";
-
-    const keys = Object.keys(pools || {});
-    const primary = keys.includes(desiredPrimary) ? desiredPrimary : keys[0] || "";
-    const secondary = keys.includes(desiredSecondary) ? desiredSecondary : keys[1] || primary;
-
-    return { primary, secondary };
   }
 
   /**
@@ -140,28 +155,52 @@ Contrats
   }
 
   /**
-   * Déduit les types par défaut pour un repas donné.
-   * - Petit déjeuner / déjeuner / dîner : 1 "Plat" + 1 "Desserts & crèmes"
-   * - Collation / goûter : 1 "Boissons" + 1 "Snack" (pool agrégé)
+   * Indique si le repas est le petit déjeuner (quand mealsPerDay >= 3).
+   * Convention : index 0 = petit déjeuner.
+   * @param {number} mealsPerDay
+   * @param {number} mealIndex
+   * @returns {boolean}
+   */
+  function isBreakfastMeal(mealsPerDay, mealIndex) {
+    return mealsPerDay >= 3 && mealIndex === 0;
+  }
+
+  /**
+   * Remplace les types absents de pools par des alternatives existantes.
+   * Note : on garde le contrat "les clés viennent de slotTypes", donc ici on ne “devine” pas d’autres types.
+   * @param {Record<string, Array>} pools
+   * @param {string[]} wanted
+   * @returns {string[]}
+   */
+  function normalizeTypesAgainstPools(pools, wanted) {
+    const keys = Object.keys(pools || {});
+    const fallback0 = keys[0] || "";
+    const fallback1 = keys[1] || fallback0;
+
+    return wanted.map((t, idx) => (keys.includes(t) ? t : idx === 0 ? fallback0 : fallback1));
+  }
+
+  /**
+   * Retourne une liste ordonnée de types par défaut pour un repas.
+   * - Petit déjeuner : Plat + Final + Boissons
+   * - Déjeuner / Dîner : Plat + Final
+   * - Collation / Goûter : Boissons + Snack
+   *
    * @param {Record<string, Array>} pools
    * @param {number} mealsPerDay
    * @param {number} mealIndex
-   * @returns {{ primary: string, secondary: string }}
+   * @returns {string[]}
    */
-  function getDefaultSlotTypesForMeal(pools, mealsPerDay, mealIndex) {
-    const keys = Object.keys(pools || {});
-
+  function getDefaultSlotTypeListForMeal(pools, mealsPerDay, mealIndex) {
     if (isSnackMeal(mealsPerDay, mealIndex)) {
-      const desiredPrimary = "Boissons";
-      const desiredSecondary = AGG_SNACK_KEY;
-
-      const primary = keys.includes(desiredPrimary) ? desiredPrimary : keys[0] || "";
-      const secondary = keys.includes(desiredSecondary) ? desiredSecondary : keys[1] || primary;
-
-      return { primary, secondary };
+      return normalizeTypesAgainstPools(pools, ["Boissons", AGG_SNACK_KEY]);
     }
 
-    return getDefaultSlotTypes(pools);
+    if (isBreakfastMeal(mealsPerDay, mealIndex)) {
+      return normalizeTypesAgainstPools(pools, [AGG_PLAT_KEY, AGG_FINAL_KEY, "Boissons"]);
+    }
+
+    return normalizeTypesAgainstPools(pools, [AGG_PLAT_KEY, AGG_FINAL_KEY]);
   }
 
   /**
@@ -214,7 +253,7 @@ Contrats
   }
 
   /**
-   * Génère un squelette complet (7 jours) avec 2 slots de base par repas.
+   * Génère un squelette complet (7 jours) avec slots par défaut selon le repas.
    * @param {Record<string, Array>} pools
    * @param {number} mealsPerDay
    * @returns {Array}
@@ -225,20 +264,14 @@ Contrats
     for (let d = 0; d < 7; d++) {
       const dayMeals = [];
       for (let m = 0; m < mealsPerDay; m++) {
-        const defaults = getDefaultSlotTypesForMeal(pools, mealsPerDay, m);
+        const types = getDefaultSlotTypeListForMeal(pools, mealsPerDay, m);
+
         dayMeals.push({
-          slots: [
-            {
-              type: defaults.primary,
-              recipe: pickRecipeWithCalorieLimit(pools, defaults.primary, Infinity),
-              locked: false,
-            },
-            {
-              type: defaults.secondary,
-              recipe: pickRecipeWithCalorieLimit(pools, defaults.secondary, Infinity),
-              locked: false,
-            },
-          ],
+          slots: types.map((type) => ({
+            type,
+            recipe: pickRecipeWithCalorieLimit(pools, type, Infinity),
+            locked: false,
+          })),
         });
       }
       out.push(dayMeals);
@@ -254,7 +287,7 @@ Contrats
    * - tirage sous contrainte kcal restante
    *
    * IMPORTANT :
-   * - La fonction retourne un nouveau menu (pas de mutation sur prevMenu).
+   * - Retourne un nouveau menu (pas de mutation sur prevMenu).
    * - Si aucun tirage n’est possible sous plafond, le slot reste à recipe:null.
    *
    * @param {Record<string, Array>} pools
@@ -274,20 +307,19 @@ Contrats
         const prevMeal = prevDay[m];
         const prevSlots = Array.isArray(prevMeal?.slots) ? prevMeal.slots : null;
 
-        const mealDefaults = getDefaultSlotTypesForMeal(pools, mealsPerDay, m);
+        const defaultTypes = getDefaultSlotTypeListForMeal(pools, mealsPerDay, m);
 
         const baseSlots =
           prevSlots && prevSlots.length > 0
             ? prevSlots
-            : [
-                { type: mealDefaults.primary, recipe: null, locked: false },
-                { type: mealDefaults.secondary, recipe: null, locked: false },
-              ];
+            : defaultTypes.map((type) => ({ type, recipe: null, locked: false }));
 
         const newSlots = [];
 
-        for (const s of baseSlots) {
-          const type = String(s?.type || mealDefaults.primary);
+        for (let i = 0; i < baseSlots.length; i++) {
+          const s = baseSlots[i];
+          const fallbackType = defaultTypes[i] || defaultTypes[0] || "";
+          const type = String(s?.type || fallbackType);
           const locked = !!s?.locked;
 
           if (locked) {
@@ -295,7 +327,7 @@ Contrats
             continue;
           }
 
-          // Calcule les kcal consommées “jusqu’ici” dans le jour en cours.
+          // Kcal consommées “jusqu’ici” dans le jour en cours.
           const tmpDayMeals = [...newDay, { slots: newSlots }];
           const usedSoFar = getDayCaloriesFromMenu([tmpDayMeals], 0);
 
@@ -322,11 +354,7 @@ Contrats
    * @returns {{max:number, overs:Array<{dayIndex:number,total:number}>, empties:number}}
    */
   function computeCalorieStatus(menu, calorieMax) {
-    const status = {
-      max: calorieMax,
-      overs: [],
-      empties: 0,
-    };
+    const status = { max: calorieMax, overs: [], empties: 0 };
 
     for (let d = 0; d < 7; d++) {
       const total = getDayCaloriesFromMenu(menu, d);
@@ -337,9 +365,7 @@ Contrats
       const day = menu?.[d] || [];
       for (const meal of day) {
         const slots = Array.isArray(meal?.slots) ? meal.slots : [];
-        for (const s of slots) {
-          if (!s?.recipe) status.empties += 1;
-        }
+        for (const s of slots) if (!s?.recipe) status.empties += 1;
       }
     }
 
