@@ -35,6 +35,13 @@ Bootstrap JS (bundle)
   crossorigin="anonymous"
 ></script>
 
+<!--
+Dropdown "Recettes"
+- Injecte les groupes à partir de /assets/data/recipes.json.
+- Déplace hors Liquid les opérations coûteuses (scan + group_by + sort).
+-->
+<script defer src="{{ "/assets/js/navbar-recipes-dropdown.js" | relative_url }}"></script>
+
 <script>
   /**
    * Base URL du site (GitHub Pages).
@@ -186,4 +193,3 @@ Bootstrap JS (bundle)
     if (e.target && e.target.id === "recipesDropdown") lockBodyScroll(false);
   });
 </script>
-

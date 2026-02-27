@@ -1,7 +1,21 @@
+{%- comment -%}
+  _includes/navbar.html
+  Rôle : navigation principale du site (Bootstrap navbar + dropdown "Recettes").
+
+  Problème résolu (perf Jekyll) :
+  - Ancienne version : scan de `site.pages` + group_by + sort dans la navbar (recalculé sur chaque page).
+  - Nouvelle version : la navbar ne fait plus aucun scan global. La liste des groupes est injectée côté navigateur
+    à partir de /assets/data/recipes.json (via un script JS chargé globalement).
+
+  Contrat :
+  - Le script `assets/js/navbar-recipes-dropdown.js` doit être chargé sur toutes les pages (de préférence via _includes/scripts.html).
+  - Le JSON /assets/data/recipes.json doit contenir un champ `recipe_group` pour chaque recette.
+{%- endcomment -%}
+
 <nav class="navbar navbar-expand-lg" id="navigation" aria-label="Navigation principale">
   <div class="container-fluid site-container">
 
-    <a class="navbar-brand fw-bold" href="{{ site.baseurl }}/">
+    <a class="navbar-brand fw-bold" href="{{ "/" | relative_url }}">
       Régime low carb
     </a>
 
@@ -26,7 +40,7 @@
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle {% if current == '/' or current == '' %}active{% endif %}"
-            href="{{ site.baseurl }}/"
+            href="{{ "/" | relative_url }}"
             id="recipesDropdown"
             role="button"
             data-bs-toggle="dropdown"
@@ -35,78 +49,77 @@
             Recettes
           </a>
 
-          {% assign all_recipes_raw = site.pages | where: "layout", "recipe" %}
-          {% assign all_recipes = "" | split: "" %}
-          {% for p in all_recipes_raw %}
-            {% if p.recipe_group and p.recipe_group != "" %}
-              {% assign all_recipes = all_recipes | push: p %}
-            {% endif %}
-          {% endfor %}
-          {% assign grouped = all_recipes | group_by: "recipe_group" | sort: "name" %}
-
           <ul class="dropdown-menu recipes-dropdown-menu" aria-labelledby="recipesDropdown">
 
             <li>
-              <a class="dropdown-item" href="{{ site.baseurl }}/#random-pick">
+              <a class="dropdown-item" href="{{ "/#random-pick" | relative_url }}">
                 On mange quoi ?
               </a>
             </li>
 
             <li><hr class="dropdown-divider"></li>
 
-            {% for g in grouped %}
-              <li>
-                <a class="dropdown-item" href="{{ site.baseurl }}/#{{ g.name | slugify }}">
-                  {{ g.name }}
-                </a>
-              </li>
-            {% endfor %}
+            <!--
+              Liste des groupes injectée côté navigateur.
+              Les liens construits pointent vers : {{ site.baseurl }}/#<slug-du-groupe>
+            -->
+            <li class="px-3 py-2 small text-muted" id="recipes-groups-loading">
+              Chargement…
+            </li>
+
+            <li
+              id="recipes-groups-container"
+              class="d-none"
+              data-recipes-json="{{ "/assets/data/recipes.json" | relative_url }}"
+              data-baseurl="{{ site.baseurl }}"
+            ></li>
+
           </ul>
         </li>
 
         <!-- ===================== PAGES FIXES ===================== -->
-        
+
         <!--
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'menu' %}active{% endif %}"
-            href="{{ site.baseurl }}/menu.html"
+            href="{{ "/menu.html" | relative_url }}"
           >Menu</a>
         </li>
-       -->
+        -->
 
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'reperes-low-carb' %}active{% endif %}"
-            href="{{ site.baseurl }}/reperes-low-carb.html"
+            href="{{ "/reperes-low-carb.html" | relative_url }}"
           >Repères low carb</a>
         </li>
 
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'gestion-poids' %}active{% endif %}"
-            href="{{ site.baseurl }}/gestion-poids.html"
+            href="{{ "/gestion-poids.html" | relative_url }}"
           >Gestion du poids</a>
         </li>
 
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'sucres-caches' %}active{% endif %}"
-            href="{{ site.baseurl }}/sucres-caches.html"
+            href="{{ "/sucres-caches.html" | relative_url }}"
           >Sucres cachés</a>
         </li>
 
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'edulcorants' %}active{% endif %}"
-            href="{{ site.baseurl }}/edulcorants.html"
+            href="{{ "/edulcorants.html" | relative_url }}"
           >Édulcorants</a>
         </li>
 
         <li class="nav-item">
           <a
             class="nav-link {% if current contains 'apropos' %}active{% endif %}"
-            href="{{ site.baseurl }}/apropos.html"
+            href="{{ "/apropos.html" | relative_url }}"
           >À propos</a>
         </li>
 
