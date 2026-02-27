@@ -35,22 +35,19 @@ body_id: "home"
   {%- comment -%}
     Récupération de toutes les fiches :
     - Pages avec layout: recipe
-    - recipe_group obligatoire
+    - recipe_group obligatoire (contrat site)
   {%- endcomment -%}
-  {%- assign all_recipes_raw = site.pages | where: "layout", "recipe" -%}
-  {%- assign all_recipes = "" | split: "" -%}
-  {%- for p in all_recipes_raw -%}
-    {%- if p.recipe_group and p.recipe_group != "" -%}
-      {%- assign all_recipes = all_recipes | push: p -%}
-    {%- endif -%}
-  {%- endfor -%}
+  {%- assign all_recipes = site.pages
+    | where: "layout", "recipe"
+    | where_exp: "p", "p.recipe_group and p.recipe_group != ''"
+  -%}
 
   {%- comment -%}
-    Contrat random-pick :
-    - le script cible #recipes-index pour récupérer les .recipe-card candidates.
-    - on force l'existence du conteneur ici (include indépendant).
+    IMPORTANT :
+    - Ne PAS wrapper l’include dans un autre #recipes-index :
+      recipes-grouped-grid.html rend déjà ce conteneur.
+    - Contrat random-pick : il cible #recipes-index et les .recipe-card.
   {%- endcomment -%}
-  <div id="recipes-index">
-    {% include recipes-grouped-grid.html recipes=all_recipes cta_label="Voir la fiche" %}
-  </div>
+  {% include recipes-grouped-grid.html recipes=all_recipes cta_label="Voir la fiche" %}
+
 </section>

@@ -10,14 +10,16 @@ tag-index.html — Page d’index filtrée (tags fonctionnels / micronutriments)
 Objectif UX
 - Recherche au-dessus des raccourcis.
 - Compteur + filtre “recettes testées” AU-DESSUS de la description.
-- La grille est rendue sans compteur/filtre (gérés ici).
+- La grille est rendue côté client depuis `assets/data/recipes.json` afin d’éviter :
+  • scan global de `site.pages`
+  • filtrage Liquid répété sur toutes les pages tag/micro
 ==============================================================================
 {%- endcomment -%}
 
 <section class="site-container" id="tag-index">
 
   {%- comment -%}
-    Paramètres de filtre exposés au JS (random pick).
+    Paramètres de filtre exposés au JS (random pick + rendu grille).
   {%- endcomment -%}
   <script>
     document.body.dataset.filterType = "{{ page.filter_type | escape }}";
@@ -46,42 +48,22 @@ Objectif UX
   %}
 
   {%- comment -%}
-    Collection filtrée :
-    - Pages recipe avec recipe_group (contrat site).
-  {%- endcomment -%}
-  {%- assign recipes = site.pages | where: "layout", "recipe" | where_exp: "p", "p.recipe_group" -%}
-  {%- assign filtered = "" | split: "" -%}
-
-  {%- for r in recipes -%}
-    {%- if page.filter_type == "tag" and page.filter_id and r.tags contains page.filter_id -%}
-      {%- assign filtered = filtered | push: r -%}
-    {%- elsif page.filter_type == "micro" and page.filter_id and r.badges_nutritionnels contains page.filter_id -%}
-      {%- assign filtered = filtered | push: r -%}
-    {%- endif -%}
-  {%- endfor -%}
-
-  {%- comment -%}
     Compteur + filtre “testées” :
-    - Doit être AVANT la description sur cette page.
+    - construits côté client après chargement de recipes.json
+    - le filtre (UI) est inclus ici, mais affiché/masqué côté JS selon besoin.
   {%- endcomment -%}
-  {%- assign tested_count = 0 -%}
-  {%- for r in filtered -%}
-    {%- if r.recipe_tested == true -%}
-      {%- assign tested_count = tested_count | plus: 1 -%}
-    {%- endif -%}
-  {%- endfor -%}
-
-  <p class="small text-muted mb-2">
-    <strong>{{ filtered.size }}</strong> fiche(s).
-    <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
+  <p class="small text-muted mb-2" id="tag-counters">
+    <strong><span id="tag-count-total">0</span></strong> fiche(s).
+    <span class="ms-2">Testée(s) : <strong><span id="tag-count-tested">0</span></strong>.</span>
   </p>
 
-  {%- if filtered.size > tested_count -%}
+  <div id="tag-filter-tested-wrap" class="d-none">
     {% include filter-tested.html %}
-  {%- endif -%}
+  </div>
 
   {%- comment -%}
     Description (tag / micro) : après compteur + filtre.
+    - Ces contenus restent rendus côté serveur via _data (faible coût).
   {%- endcomment -%}
   {%- if page.filter_type == "tag" and page.filter_id -%}
     {%- assign taginfo = site.data.tags_fonctionnels[page.filter_id] -%}
@@ -123,9 +105,235 @@ Objectif UX
   {%- endif -%}
 
   {%- comment -%}
-    Grille : sans contrôles (déjà rendus plus haut).
+    Grille rendue côté client :
+    - Doit fournir `.recipe-item[data-tested][data-search]` pour les scripts existants.
+    - Doit rendre un conteneur #recipes-index (contrat historique random-pick).
   {%- endcomment -%}
-  {% include recipes-grouped-grid.html recipes=filtered cta_label="Voir la recette" show_controls=false %}
+  <div id="recipes-index" data-render-mode="client">
+    <noscript>
+      <p>Active JavaScript pour afficher les recettes de ce filtre.</p>
+    </noscript>
+  </div>
+
+  {%- comment -%}
+    Rendu côté client depuis recipes.json :
+    - filtre par tag ou micronutriment
+    - tri par recipe_group puis recipe_sort
+    - construit une grille compatible avec search + filter-tested
+  {%- endcomment -%}
+  <script>
+  (function () {
+    const filterType = document.body.dataset.filterType || "";
+    const filterId   = document.body.dataset.filterId || "";
+    const root       = document.getElementById("recipes-index");
+    if (!root || !filterType || !filterId) return;
+
+    const totalEl  = document.getElementById("tag-count-total");
+    const testedEl = document.getElementById("tag-count-tested");
+    const filterWrap = document.getElementById("tag-filter-tested-wrap");
+
+    const BASE = "{{ '/' | relative_url }}";
+    const DATA_URL = "{{ '/assets/data/recipes.json' | relative_url }}";
+
+    const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict"]);
+
+    const TAG_BADGES = {
+      "tres-proteine":   { emoji: "💪", title: "Très protéiné",      href: BASE + "tags/tres-proteine/" },
+      "riche-en-fibres": { emoji: "💩", title: "Riche en fibres",    href: BASE + "tags/riche-en-fibres/" },
+      "rapide":         { emoji: "⏱️", title: "Rapide",             href: BASE + "tags/rapide/" },
+      "congelable":     { emoji: "❄️", title: "Congélable",          href: BASE + "tags/congelable/" },
+      "micro-ondable":  { emoji: "♨️", title: "Micro-ondable",       href: BASE + "tags/micro-ondable/" },
+      "peu-calorique":  { emoji: "🪶", title: "Peu calorique",       href: BASE + "tags/peu-calorique/" },
+      "calorique":      { emoji: "🔥", title: "Calorique",           href: BASE + "tags/calorique/" },
+      "longue":         { emoji: "🐌", title: "Préparation longue",  href: BASE + "tags/longue/" },
+      "gout-sucre":     { emoji: "🍬", title: "Goût sucré",          href: BASE + "tags/gout-sucre/" }
+    };
+
+    const MICRO_BADGES = {
+      "omega-3":      { emoji: "🐟", title: "Oméga-3",     href: BASE + "micronutriments/omega-3/" },
+      "vitamine-a":   { emoji: "👁️", title: "Vitamine A",  href: BASE + "micronutriments/vitamine-a/" },
+      "vitamine-c":   { emoji: "🍋", title: "Vitamine C",  href: BASE + "micronutriments/vitamine-c/" },
+      "vitamine-d":   { emoji: "🌤️", title: "Vitamine D",  href: BASE + "micronutriments/vitamine-d/" },
+      "vitamine-e":   { emoji: "🛡️", title: "Vitamine E",  href: BASE + "micronutriments/vitamine-e/" },
+      "vitamine-k":   { emoji: "🩸", title: "Vitamine K",  href: BASE + "micronutriments/vitamine-k/" },
+      "vitamine-b9":  { emoji: "🌱", title: "Vitamine B9", href: BASE + "micronutriments/vitamine-b9/" },
+      "vitamine-b12": { emoji: "🥩", title: "Vitamine B12",href: BASE + "micronutriments/vitamine-b12/" },
+      "calcium":      { emoji: "🦴", title: "Calcium",     href: BASE + "micronutriments/calcium/" },
+      "fer":          { emoji: "🧲", title: "Fer",         href: BASE + "micronutriments/fer/" },
+      "magnesium":    { emoji: "⚡", title: "Magnésium",   href: BASE + "micronutriments/magnesium/" },
+      "potassium":    { emoji: "🍌", title: "Potassium",   href: BASE + "micronutriments/potassium/" },
+      "zinc":         { emoji: "🔩", title: "Zinc",        href: BASE + "micronutriments/zinc/" },
+      "selenium":     { emoji: "🧪", title: "Sélénium",    href: BASE + "micronutriments/selenium/" },
+      "iode":         { emoji: "🌊", title: "Iode",        href: BASE + "micronutriments/iode/" }
+    };
+
+    function escapeHtml(s) {
+      return String(s || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function asArray(v) {
+      return Array.isArray(v) ? v : [];
+    }
+
+    function hasTag(recipe, tag) {
+      return asArray(recipe.tags).includes(tag);
+    }
+
+    function hasMicro(recipe, micro) {
+      return asArray(recipe.badges_nutritionnels).includes(micro);
+    }
+
+    function recipeImage(recipe) {
+      const sort = recipe.recipe_sort || "";
+      if (!sort) return "";
+      return BASE + "images/recettes/" + encodeURIComponent(sort) + ".webp";
+    }
+
+    function renderBadgesTags(tags) {
+      const items = [];
+      for (const t of tags) {
+        if (HIDDEN_TAGS.has(t)) continue;
+        const b = TAG_BADGES[t];
+        if (!b) continue;
+        items.push(
+          `<li><a class="badge-link-card" href="${b.href}" title="${escapeHtml(b.title)}">${b.emoji}</a></li>`
+        );
+      }
+      if (!items.length) return "";
+      return `<ul class="recipe-badges-line badges-tags" aria-label="Tags fonctionnels">${items.join("")}</ul>`;
+    }
+
+    function renderBadgesMicros(micros) {
+      const items = [];
+      for (const m of micros) {
+        const b = MICRO_BADGES[m];
+        if (!b) continue;
+        items.push(
+          `<li><a class="badge-link-card" href="${b.href}" title="${escapeHtml(b.title)}">${b.emoji}</a></li>`
+        );
+      }
+      if (!items.length) return "";
+      return `<ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">${items.join("")}</ul>`;
+    }
+
+    function renderCard(recipe) {
+      const title = escapeHtml(recipe.recipe_title || recipe.title || "");
+      const subtitle = escapeHtml(recipe.recipe_subtitle || "");
+      const tested = recipe.recipe_tested === true;
+      const url = recipe.url ? recipe.url : "";
+      const img = recipeImage(recipe);
+      const tags = asArray(recipe.tags);
+      const micros = asArray(recipe.badges_nutritionnels);
+
+      const dataSearch = escapeHtml(recipe.recipe_title || "");
+      const dataTags = escapeHtml(tags.join(","));
+      const dataMicros = escapeHtml(micros.join(","));
+      const groupName = escapeHtml(recipe.recipe_group || "");
+
+      return `
+        <div class="recipe-item"
+          data-tested="${tested ? "true" : "false"}"
+          data-search="${dataSearch}"
+          data-recipe-group="${groupName}"
+        >
+          <article class="recipe-card mb-2" data-tags="${dataTags}" data-micros="${dataMicros}">
+            <div class="recipe-card-top">
+              <h4 class="recipe-card-title">
+                <a class="recipe-title-link" href="${url}">${title}</a>
+              </h4>
+            </div>
+
+            ${subtitle ? `<p class="recipe-card-subtitle mb-1">${subtitle}</p>` : ""}
+
+            ${tested ? "" : `<span class="badge bg-warning text-dark mb-2">Recette non testée</span>`}
+
+            <div class="recipe-card-actions">
+              <a class="btn btn-sm btn-primary" href="${url}">Voir la recette</a>
+            </div>
+
+            <div class="recipe-badges-wrap">
+              ${renderBadgesTags(tags)}
+              ${renderBadgesMicros(micros)}
+            </div>
+          </article>
+        </div>
+      `;
+    }
+
+    function renderGrouped(recipes) {
+      let html = "";
+      let current = "";
+
+      for (const r of recipes) {
+        const g = r.recipe_group || "";
+        if (g && g !== current) {
+          const slug = (g || "").toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/œ/g, "oe")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+          if (current) {
+            html += `</div></div>`;
+          }
+
+          html += `
+            <h3 id="${slug}" class="recipe-category-title">
+              <a href="#${slug}">${escapeHtml(g)}</a>
+            </h3>
+            <div class="recipe-group-block mb-4" data-recipe-group="${escapeHtml(g)}">
+              <div class="recipes-grid">
+          `;
+          current = g;
+        }
+
+        html += renderCard(r);
+      }
+
+      if (current) {
+        html += `</div></div>`;
+      }
+
+      return html;
+    }
+
+    fetch(DATA_URL, { cache: "force-cache" })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("recipes.json inaccessible")))
+      .then((all) => {
+        const list = Array.isArray(all) ? all : [];
+
+        const filtered = list.filter((r) => {
+          if (filterType === "tag") return hasTag(r, filterId);
+          if (filterType === "micro") return hasMicro(r, filterId);
+          return false;
+        });
+
+        const testedCount = filtered.reduce((acc, r) => acc + (r.recipe_tested === true ? 1 : 0), 0);
+
+        if (totalEl) totalEl.textContent = String(filtered.length);
+        if (testedEl) testedEl.textContent = String(testedCount);
+
+        if (filterWrap) {
+          filterWrap.classList.toggle("d-none", filtered.length <= testedCount);
+        }
+
+        filtered.sort((a, b) => {
+          const ga = (a.recipe_group || "").localeCompare(b.recipe_group || "", "fr", { sensitivity: "base" });
+          if (ga !== 0) return ga;
+          return (a.recipe_sort || "").localeCompare(b.recipe_sort || "", "fr", { sensitivity: "base" });
+        });
+
+        root.innerHTML = renderGrouped(filtered);
+      })
+      .catch(() => {
+        root.innerHTML = `<p class="text-muted">Impossible de charger la liste de recettes.</p>`;
+      });
+  })();
+  </script>
 
 </section>
-

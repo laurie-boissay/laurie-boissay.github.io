@@ -3,19 +3,25 @@
 _includes/random-pick.html — “On mange quoi ?” (suggestion aléatoire)
 ==============================================================================
 
-Évolutions UX :
-- Le titre de la recette dans la pick-card est désormais cliquable.
+Évolutions UX
+- Le titre de la recette dans la pick-card est cliquable.
 - Les badges (tags fonctionnels + micronutriments) sont cliquables.
 - Cohérent avec la structure “carte non cliquable + lien sur le titre”.
-- Filtrage par meal_type="plat" (exclut automatiquement boissons, pains, bases, etc.).
 
-Ajustements UI (stabilité) :
-- Placeholders pour sous-titre et badges : la hauteur de la carte ne varie plus.
-- Zone boutons poussée en bas via flex (CSS), même si contenu variable.
+Contrat fonctionnel (tirage)
+- Le tirage s’appuie sur le DOM rendu dans `#recipes-index` (cartes).
+- Compatible avec rendu serveur OU rendu côté client :
+  • si `#recipes-index` est rempli après DOMContentLoaded (fetch recipes.json),
+    le script attend via MutationObserver avant de tirer.
 
-Contrat fonctionnel (tirage) :
-- Le tirage est limité aux recettes dont meal_type = "plat".
-  (Le meal_type est attendu sur .recipe-item via data-meal-type, avec fallback sur .recipe-card.)
+Filtrage “plats”
+- `meal_type` n’existe plus (règle projet). Le filtrage est remplacé par une
+  whitelist de `recipe_group` correspondant aux plats complets.
+- Source canonique : `.recipe-item[data-recipe-group]` (fallback sur `.recipe-card`).
+
+Contraintes
+- Exclut `gout-sucre` du tirage (maintenu).
+- Respecte les filtres de page (tag/micro) via data-tags / data-micros.
 ==============================================================================
 {%- endcomment -%}
 
@@ -41,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return (document.body?.dataset?.onlyTested || "").toLowerCase().trim() === "true";
   }
 
+  const BASE = "{{ '/' | relative_url }}";
+
   const EXCLUDED_TAG = "gout-sucre";
 
   const HIDDEN_TAGS = new Set([
@@ -49,11 +57,25 @@ document.addEventListener("DOMContentLoaded", () => {
     "gout-sucre"
   ]);
 
+  /*
+    Filtrage “plats” par recipe_group (meal_type supprimé).
+    Ajuste cette liste si tu veux inclure/exclure certains groupes (ex. Soupe).
+  */
+  const PLAT_GROUPS = new Set([
+    "plats-a-base-de-viande",
+    "plats-a-base-de-poissons",
+    "plats-a-base-de-fruits-de-mer",
+    "plats-a-base-doeufs",
+    "plats-a-base-de-fromages"
+    // "soupe"   // (optionnel) décommente si tu veux inclure les soupes.
+  ]);
+
   const BADGES_MAP   = window.RECETTES_BADGES_MAP || { TAG_BADGES: {}, MICRO_BADGES: {} };
   const TAG_BADGES   = BADGES_MAP.TAG_BADGES   || {};
   const MICRO_BADGES = BADGES_MAP.MICRO_BADGES || {};
 
   let lastHref = null;
+  let observer = null;
 
   function parseList(str) {
     return (str || "")
@@ -84,20 +106,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /*
-    meal_type : filtrage global du tirage.
+    recipe_group : filtrage “plats”.
     Contrat attendu côté HTML :
-    - data-meal-type idéalement porté par .recipe-item (source canonique),
-      ex: <div class="recipe-item" data-meal-type="plat">…</div>
-    - fallback toléré si data-meal-type est sur .recipe-card.
+    - data-recipe-group idéalement porté par .recipe-item (source canonique),
+      ex: <div class="recipe-item" data-recipe-group="Plats à base de viande">…</div>
+    - fallback toléré si data-recipe-group est sur .recipe-card.
   */
-  function getMealType(card){
-    const itemType = card?.closest(".recipe-item")?.dataset?.mealType || "";
-    if (itemType) return itemType.toLowerCase().trim();
-    return (card?.dataset?.mealType || "").toLowerCase().trim();
+  function getRecipeGroup(card){
+    const itemGroup = card?.closest(".recipe-item")?.dataset?.recipeGroup || "";
+    if (itemGroup) return itemGroup.trim();
+    return (card?.dataset?.recipeGroup || "").trim();
   }
 
-  function isMealTypePlat(card){
-    return getMealType(card) === "plat";
+  function slugifyGroup(name){
+    return (name || "").toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/œ/g, "oe")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function isPlatGroup(card){
+    const g = getRecipeGroup(card);
+    if (!g) return false;
+    return PLAT_GROUPS.has(slugifyGroup(g));
   }
 
   function hasExcludedTag(card){
@@ -131,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return Array.from(indexRoot.querySelectorAll(".recipe-card"))
       .filter(isValidCard)
       .filter(card =>
-        isMealTypePlat(card) &&              // ✅ Tirage limité aux plats (meal_type="plat")
+        isPlatGroup(card) &&                 // ✅ Tirage limité aux plats (par recipe_group)
         !hasExcludedTag(card) &&
         matchesPageFilter(card) &&
         matchesOnlyTested(card)
@@ -162,8 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!info) return "";
 
       const url = type === "tag"
-        ? `/tags/${id}/`
-        : `/micronutriments/${id}/`;
+        ? `${BASE}tags/${id}/`
+        : `${BASE}micronutriments/${id}/`;
 
       return `
         <li>
@@ -253,8 +285,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function pickAndRender(){
     const cards = getCandidates();
+
     if (!cards.length){
       pickHost.innerHTML = "";
+      ensureObserver();
       return;
     }
 
@@ -264,11 +298,35 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    stopObserver();
     renderPick(card);
+  }
+
+  /*
+    Rendu côté client :
+    - Si la grille est injectée après DOMContentLoaded, on observe `#recipes-index`
+      et on relance le tirage dès que des cartes apparaissent.
+  */
+  function ensureObserver(){
+    if (observer) return;
+
+    observer = new MutationObserver(() => {
+      const cards = getCandidates();
+      if (cards.length) pickAndRender();
+    });
+
+    observer.observe(indexRoot, { childList: true, subtree: true });
+  }
+
+  function stopObserver(){
+    if (!observer) return;
+    observer.disconnect();
+    observer = null;
   }
 
   pickAndRender();
 
   document.addEventListener("testedFilterChanged", pickAndRender);
+
 });
 </script>
