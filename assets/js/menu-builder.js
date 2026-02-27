@@ -12,7 +12,7 @@ Dépendances
 
 Contrats
 - Format menu : menu[day][meal] = { slots: [ { type, recipe, locked } ] }.
-- La grille propose les recipe_group officiels (SLOT_TYPES).
+- La grille propose les recipe_group officiels (SLOT_TYPES) fournis par MenuEngine.
 - Le modal “Ajouter un slot” propose les mêmes groupes (pas de catégorie "other").
 ============================================================================== */
 
@@ -28,7 +28,7 @@ const state = {
   // state.menu[day][meal] = { slots: [ { type, recipe, locked } ] }
   menu: [],
   // Contextes temporaires pour modales
-  addCtx: null,  // { day, meal }
+  addCtx: null, // { day, meal }
   pickCtx: null, // { day, meal, slot }
 };
 
@@ -46,50 +46,10 @@ const MEAL_LABELS_BY_COUNT = {
   5: ["Petit déjeuner", "Collation", "Déjeuner", "Goûter", "Dîner"],
 };
 
-/**
- * Liste CANONIQUE des recipe_group affichés dans la grille (sélecteur de groupe de slot).
- * Contrat : doit matcher les valeurs de recipes.json (champ recipe_group).
- *
- * Notes :
- * - Certains types sont “virtuels” (Plat, Snack, Final) et doivent être gérés par MenuEngine.
- * - Tous les recipe_group “officiels” doivent être orthographiés exactement comme côté recettes.
- */
-const SLOT_TYPES = [
-  { value: "Légumes & accompagnements", label: "Accompagnement" },
-  { value: "Amuse-bouche", label: "Amuse-bouche" },
-  { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
-  { value: "Boissons", label: "Boisson" },
-  { value: "Cake", label: "Cake" },
-  { value: "Chocolat", label: "Chocolat" }, // ✅ correction : "Chocolat" (pas "Chocolats")
-  { value: "Desserts & crèmes", label: "Dessert" },
-  { value: "Final", label: "Final (au hasard)" }, // virtuel
-  { value: "Fromages", label: "Fromage" },
-  { value: "Fruits à coque", label: "Fruits à coque" },
-  { value: "Fruits frais", label: "Fruit(s) frai(s)" },
-  { value: "Gâteaux & biscuits", label: "Gâteau" },
-  { value: "Graines", label: "Graines" },
-  { value: "Œufs", label: "Œuf" },
-  { value: "Pains & substituts", label: "Pain" },
-  { value: "Pâtés", label: "Pâté" },
-  { value: "Plat", label: "Plat (au hasard)" }, // virtuel : dans tous les "Plats à base d..."
-  { value: "Plats à base de fromages", label: "Plat à base de fromages" },
-  { value: "Plats à base de fruits de mer", label: "Plat à base de fruits de mer" },
-  { value: "Plats à base de poissons", label: "Plat à base de poissons" },
-  { value: "Plats à base de viande", label: "Plat à base de viande" },
-  { value: "Plats à base d’œufs", label: "Plat à base d’œufs" },
-  { value: "Poissons", label: "Poisson" },
-  { value: "Sauces & assaisonnements", label: "Sauce" },
-  { value: "Snack", label: "Snack" }, // virtuel
-  { value: "Soupe", label: "Soupe" },
-  { value: "Viandes", label: "Viande" },
-  { value: "Yaourts", label: "Yaourt" },
-];
-
-/**
- * Groupes autorisés pour “Ajouter un slot”.
- * Contrat : identiques à SLOT_TYPES (filtrage possible plus tard si besoin UX).
- */
-const ADD_SLOT_TYPES = SLOT_TYPES;
+// Source unique : MenuEngine fournit les types.
+// Initialisé à DOMContentLoaded.
+let SLOT_TYPES = [];
+let ADD_SLOT_TYPES = [];
 
 // Groupe de repli utilisé lorsque le contexte ne permet pas d’inférer un type.
 const DEFAULT_SLOT_TYPE = "Plat";
@@ -147,6 +107,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  if (typeof window.MenuEngine.getSlotTypes !== "function") {
+    showMessage(
+      "Menu builder : MenuEngine.getSlotTypes() introuvable. Ajoute l’API côté menu-engine.js (source unique des types).",
+      "danger"
+    );
+    return;
+  }
+
   // Cache DOM
   dom.root = document.getElementById("menu-builder-root");
   dom.message = document.getElementById("menuMessage");
@@ -155,6 +123,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   dom.mealsPerDay = document.getElementById("mealsPerDay");
   dom.calorieTargetDay = document.getElementById("calorieTargetDay");
   dom.grid = document.getElementById("menuGrid");
+
+  // Source unique des types (MenuEngine)
+  SLOT_TYPES = window.MenuEngine.getSlotTypes();
+  if (!Array.isArray(SLOT_TYPES) || SLOT_TYPES.length === 0) {
+    showMessage("Menu builder : MenuEngine.getSlotTypes() a renvoyé une liste vide. Impossible de construire la grille.", "danger");
+    return;
+  }
+
+  // Pour l’instant, même liste (filtrage possible plus tard sans changer la source unique).
+  // Note : on copie la liste pour éviter toute dépendance à une référence partagée.
+  ADD_SLOT_TYPES = SLOT_TYPES.slice();
 
   dom.generateBtn.addEventListener("click", generateMenu);
 
@@ -335,7 +314,9 @@ async function loadRecipes() {
       return;
     }
 
-    state.pools = window.MenuEngine.buildPools(state.recipes, SLOT_TYPES);
+    // Source unique : buildPools utilise les SLOT_TYPES internes de MenuEngine.
+    // Rétrocompat : buildPools(recipes, slotTypes) peut exister, mais on n’injecte plus l’UI.
+    state.pools = window.MenuEngine.buildPools(state.recipes);
     hideMessage();
   } catch (err) {
     showMessage(`Erreur lors du chargement des recettes : ${String(err)} (URL: ${url})`, "danger");
@@ -434,6 +415,11 @@ function ensureAddSlotModalExists() {
   // À chaque ouverture, on recalcule le filtrage des types selon kcal restantes.
   document.getElementById("addSlotModal").addEventListener("shown.bs.modal", () => {
     refreshAddSlotTypeOptions();
+  });
+
+  // Nettoyage du contexte si fermeture “manuelle” (ESC/click backdrop).
+  document.getElementById("addSlotModal").addEventListener("hidden.bs.modal", () => {
+    state.addCtx = null;
   });
 
   document.getElementById("confirmAddSlot").addEventListener("click", () => {
@@ -605,6 +591,11 @@ function ensurePickRecipeModalExists() {
     input.focus();
     renderPickResults();
   });
+
+  // Nettoyage : si fermeture “manuelle”, on évite un contexte périmé.
+  document.getElementById("pickRecipeModal").addEventListener("hidden.bs.modal", () => {
+    state.pickCtx = null;
+  });
 }
 
 function renderPickResults() {
@@ -629,7 +620,7 @@ function renderPickResults() {
   }
 
   const slotType = slot?.type || DEFAULT_SLOT_TYPE;
-  const baseList = allTypes ? state.recipes : (state.pools[slotType] || []);
+  const baseList = allTypes ? state.recipes : state.pools[slotType] || [];
 
   hint.textContent = allTypes
     ? `Recherche dans toutes les recettes (groupe du slot : ${slotType}).`
@@ -700,6 +691,9 @@ function applyPickedRecipe(recipe) {
 
   s.recipe = recipe;
   s.locked = true;
+
+  // Le modal peut aussi être fermé par l’utilisateur : on force un reset propre ici.
+  state.pickCtx = null;
 
   closeModal("pickRecipeModal");
   rerender();
@@ -849,20 +843,12 @@ function getDayIndex(dayOffset, weekStart) {
   return (startIndex + dayOffset) % 7;
 }
 
-/**
- * Récupère un <template> par ID.
- * Retourne null si absent (le message est géré par renderMenu()).
- */
 function getTemplate(id) {
   const tpl = document.getElementById(id);
   if (!tpl || !(tpl instanceof HTMLTemplateElement)) return null;
   return tpl;
 }
 
-/**
- * Clone le contenu d’un <template>.
- * Contrat : on prend le premier élément du template (wrappers autorisés).
- */
 function cloneTemplate(id) {
   const tpl = getTemplate(id);
   if (!tpl) return null;
@@ -874,16 +860,6 @@ function cloneTemplate(id) {
   return root;
 }
 
-/**
- * Rendu UI (Option B — <template> HTML)
- * Contrat :
- * - Templates requis :
- *   • #tpl-menu-day   (hooks .js-day-title/.js-meals-wrap/.js-day-total)
- *   • #tpl-menu-meal  (hooks .js-meal-title/.js-slots-wrap + bouton data-action="add-slot")
- *   • #tpl-menu-slot  (hooks .js-slot-box/.js-recipe-line + contrôles data-action)
- * - Events gérés par délégation (setupMenuInteractions).
- * - Aucune logique métier ici (elle est dans menu-engine.js).
- */
 function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) {
   const grid = dom.grid || document.getElementById("menuGrid");
   if (!grid) return;
@@ -898,8 +874,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
 
   if (!dayTpl || !mealTpl || !slotTpl) {
     showMessage(
-      "Templates manquants : #tpl-menu-day / #tpl-menu-meal / #tpl-menu-slot. " +
-        "Vérifie que la page menu inclut bien les <template> requis.",
+      "Templates manquants : #tpl-menu-day / #tpl-menu-meal / #tpl-menu-slot. Vérifie que la page menu inclut bien les <template> requis.",
       "danger"
     );
     return;
@@ -951,7 +926,6 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
 
       mealTitleEl.textContent = mealLabels[mealIndex] || `Repas ${mealIndex + 1}`;
 
-      // Paramétrage du bouton “Ajouter un slot” (délégation events)
       addBtn.setAttribute("data-day", String(dayOffset));
       addBtn.setAttribute("data-meal", String(mealIndex));
 
@@ -975,21 +949,16 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
           return;
         }
 
-        // Style verrouillé
-        if (slotObj.locked) {
-          box.classList.add("bg-warning-subtle", "border-warning", "border-2");
-        } else {
-          box.classList.remove("bg-warning-subtle", "border-warning", "border-2");
-        }
+        if (slotObj.locked) box.classList.add("bg-warning-subtle", "border-warning", "border-2");
+        else box.classList.remove("bg-warning-subtle", "border-warning", "border-2");
 
-        // Data attrs (délégation events)
         for (const el of [typeSelect, lockBtn, pickBtn, rerollBtn, removeBtn]) {
           el.setAttribute("data-day", String(dayOffset));
           el.setAttribute("data-meal", String(mealIndex));
           el.setAttribute("data-slot", String(slotIndex));
         }
 
-        // Select groupe : tous les recipe_group (liste SLOT_TYPES) dans la grille
+        // Select groupe : tous les recipe_group (liste SLOT_TYPES) dans la grille.
         typeSelect.innerHTML = "";
         for (const t of SLOT_TYPES) {
           const opt = document.createElement("option");
@@ -1001,7 +970,6 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
 
         typeSelect.disabled = !!slotObj.locked;
 
-        // Boutons : état visuel + disabled
         lockBtn.textContent = slotObj.locked ? "🔒" : "🔓";
         lockBtn.setAttribute("title", slotObj.locked ? "Déverrouiller ce slot" : "Verrouiller ce slot");
         lockBtn.setAttribute("aria-label", slotObj.locked ? "Déverrouiller ce slot" : "Verrouiller ce slot");
@@ -1018,7 +986,6 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
         removeBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
         removeBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
 
-        // Ligne recette
         const r = slotObj.recipe;
         const title = r?.title ?? "— (non rempli)";
         const rawUrl = r?.url ?? "#";
@@ -1041,16 +1008,13 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
       mealsWrap.appendChild(mealCard);
     });
 
-    // Total jour
     if (hasMax) {
       const remaining = calorieTarget - totalCalories;
       dayTotalEl.innerHTML =
         `<strong>Total :</strong> ${totalCalories} kcal ` +
         `<span class="text-muted">(MAX : ${calorieTarget} kcal | Reste : ${remaining})</span>`;
 
-      if (remaining < 0) {
-        dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
-      }
+      if (remaining < 0) dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
     } else {
       dayTotalEl.innerHTML = `<strong>Total :</strong> ${totalCalories} kcal`;
     }
@@ -1084,7 +1048,6 @@ function getOrCreateModalInstance(id) {
 
   if (modalCache.has(id)) return modalCache.get(id);
 
-  // Si Bootstrap a déjà une instance (ex. créée ailleurs), on la réutilise.
   const existing = window.bootstrap.Modal.getInstance(el);
   if (existing) {
     modalCache.set(id, existing);

@@ -20,11 +20,59 @@ Notes d’architecture
 - Petit déjeuner : Plat + Final + Boissons
 - Déjeuner / Dîner : Plat + Final
 - Collation / Goûter : Boissons + Snack
+
+Source unique des types (SLOT_TYPES)
+- Ce fichier expose getSlotTypes() : l’UI (menu-builder) ne maintient plus SLOT_TYPES.
+- buildPools(recipes, slotTypes?) accepte encore un param optionnel pour rétrocompatibilité,
+  mais la source canonique est SLOT_TYPES interne.
 ============================================================================== */
 
 "use strict";
 
 (function attachMenuEngine(global) {
+  // ---------------------------------------------------------------------------
+  // Types canoniques (source unique)
+  // ---------------------------------------------------------------------------
+  const SLOT_TYPES = [
+    { value: "Légumes & accompagnements", label: "Accompagnement" },
+    { value: "Amuse-bouche", label: "Amuse-bouche" },
+    { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
+    { value: "Boissons", label: "Boisson" },
+    { value: "Cake", label: "Cake" },
+    { value: "Chocolat", label: "Chocolat" },
+    { value: "Desserts & crèmes", label: "Dessert" },
+    { value: "Final", label: "Final (au hasard)" }, // type synthétique
+    { value: "Fromages", label: "Fromage" },
+    { value: "Fruits à coque", label: "Fruits à coque" },
+    { value: "Fruits frais", label: "Fruit(s) frai(s)" },
+    { value: "Gâteaux & biscuits", label: "Gâteau" },
+    { value: "Graines", label: "Graines" },
+    { value: "Œufs", label: "Œuf" },
+    { value: "Pains & substituts", label: "Pain" },
+    { value: "Pâtés", label: "Pâté" },
+    { value: "Plat", label: "Plat (au hasard)" }, // type synthétique
+    { value: "Plats à base de fromages", label: "Plat à base de fromages" },
+    { value: "Plats à base de fruits de mer", label: "Plat à base de fruits de mer" },
+    { value: "Plats à base de poissons", label: "Plat à base de poissons" },
+    { value: "Plats à base de viande", label: "Plat à base de viande" },
+    { value: "Plats à base d’œufs", label: "Plat à base d’œufs" },
+    { value: "Poissons", label: "Poisson" },
+    { value: "Sauces & assaisonnements", label: "Sauce" },
+    { value: "Snack", label: "Snack" }, // type synthétique
+    { value: "Soupe", label: "Soupe" },
+    { value: "Viandes", label: "Viande" },
+    { value: "Yaourts", label: "Yaourt" },
+  ];
+
+  /**
+   * Fournit la liste canonique des types de slot.
+   * Contrat : retourne une copie (pas de mutation possible depuis l’extérieur).
+   * @returns {Array<{value:string,label:string}>}
+   */
+  function getSlotTypes() {
+    return SLOT_TYPES.map((t) => ({ value: t.value, label: t.label }));
+  }
+
   // ---------------------------------------------------------------------------
   // Types synthétiques (agrégation de groupes)
   // ---------------------------------------------------------------------------
@@ -112,26 +160,30 @@ Notes d’architecture
    * - Les types "réels" sont indexés par recipe_group.
    * - Les types synthétiques (Plat/Snack/Final) sont des unions de recipe_group.
    *
-   * Contrat : les clés de pools sont initialisées à partir de slotTypes.
+   * Contrat :
+   * - Les clés de pools sont initialisées à partir de la liste de types effective.
+   * - slotTypes est optionnel (rétrocompat). La source canonique est SLOT_TYPES interne.
    *
    * @param {Array} recipes
-   * @param {Array<{value:string,label:string}>} slotTypes
+   * @param {Array<{value:string,label:string}>} [slotTypes]
    * @returns {Record<string, Array>}
    */
   function buildPools(recipes, slotTypes) {
+    const effectiveTypes = Array.isArray(slotTypes) && slotTypes.length > 0 ? slotTypes : SLOT_TYPES;
+
     const pools = {};
-    for (const t of slotTypes) pools[t.value] = [];
+    for (const t of effectiveTypes) pools[t.value] = [];
 
     const groupIndex = buildGroupIndex(recipes);
 
-    // Pools “réels” : uniquement si la clé est prévue dans slotTypes.
+    // Pools “réels” : uniquement si la clé est prévue dans effectiveTypes.
     for (const key of Object.keys(pools)) {
       // Les types synthétiques sont remplis plus bas.
       if (key === AGG_PLAT_KEY || key === AGG_SNACK_KEY || key === AGG_FINAL_KEY) continue;
       pools[key] = groupIndex[key] ? [...groupIndex[key]] : [];
     }
 
-    // Pools synthétiques : construits uniquement si la clé existe dans slotTypes.
+    // Pools synthétiques : construits uniquement si la clé existe dans effectiveTypes.
     if (pools[AGG_PLAT_KEY]) pools[AGG_PLAT_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_PLAT_GROUPS);
     if (pools[AGG_SNACK_KEY]) pools[AGG_SNACK_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_SNACK_GROUPS);
     if (pools[AGG_FINAL_KEY]) pools[AGG_FINAL_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_FINAL_GROUPS);
@@ -167,7 +219,7 @@ Notes d’architecture
 
   /**
    * Remplace les types absents de pools par des alternatives existantes.
-   * Note : on garde le contrat "les clés viennent de slotTypes", donc ici on ne “devine” pas d’autres types.
+   * Note : on garde le contrat "les clés viennent des types effectifs", donc ici on ne “devine” pas d’autres types.
    * @param {Record<string, Array>} pools
    * @param {string[]} wanted
    * @returns {string[]}
@@ -373,6 +425,10 @@ Notes d’architecture
   }
 
   global.MenuEngine = Object.freeze({
+    // Source unique types (UI + buildPools)
+    getSlotTypes,
+
+    // API existante
     getRecipeCalories,
     getDayCaloriesFromMenu,
     buildPools,
