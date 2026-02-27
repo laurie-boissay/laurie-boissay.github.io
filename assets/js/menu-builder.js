@@ -32,6 +32,10 @@ const state = {
   pickCtx: null, // { day, meal, slot }
 };
 
+/* =========================
+   Constantes UI
+   ========================= */
+
 const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
 
 const MEAL_LABELS_BY_COUNT = {
@@ -45,33 +49,37 @@ const MEAL_LABELS_BY_COUNT = {
 /**
  * Liste CANONIQUE des recipe_group affichés dans la grille (sélecteur de groupe de slot).
  * Contrat : doit matcher les valeurs de recipes.json (champ recipe_group).
+ *
+ * Notes :
+ * - Certains types sont “virtuels” (Plat, Snack, Final) et doivent être gérés par MenuEngine.
+ * - Tous les recipe_group “officiels” doivent être orthographiés exactement comme côté recettes.
  */
 const SLOT_TYPES = [
   { value: "Légumes & accompagnements", label: "Accompagnement" },
   { value: "Amuse-bouche", label: "Amuse-bouche" },
   { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
   { value: "Boissons", label: "Boisson" },
-  { value: "Cake", label: "Cake" }, 
-  { value: "Chocolats", label: "Chocolat" },  
+  { value: "Cake", label: "Cake" },
+  { value: "Chocolat", label: "Chocolat" }, // ✅ correction : "Chocolat" (pas "Chocolats")
   { value: "Desserts & crèmes", label: "Dessert" },
-  { value: "Final", label: "Final (au hasard)" },
-  { value: "Fromages", label: "Fromage" },  
+  { value: "Final", label: "Final (au hasard)" }, // virtuel
+  { value: "Fromages", label: "Fromage" },
   { value: "Fruits à coque", label: "Fruits à coque" },
   { value: "Fruits frais", label: "Fruit(s) frai(s)" },
   { value: "Gâteaux & biscuits", label: "Gâteau" },
   { value: "Graines", label: "Graines" },
-  { value: "Œufs", label: "Œuf" },  
+  { value: "Œufs", label: "Œuf" },
   { value: "Pains & substituts", label: "Pain" },
   { value: "Pâtés", label: "Pâté" },
-  { value: "Plat", label: "Plat (au hasard)" }, // dans tous les "Plats à base d..."
-  { value: "Plats à base de fromages", label: "Plat à base de fromages" }, 
+  { value: "Plat", label: "Plat (au hasard)" }, // virtuel : dans tous les "Plats à base d..."
+  { value: "Plats à base de fromages", label: "Plat à base de fromages" },
   { value: "Plats à base de fruits de mer", label: "Plat à base de fruits de mer" },
   { value: "Plats à base de poissons", label: "Plat à base de poissons" },
   { value: "Plats à base de viande", label: "Plat à base de viande" },
   { value: "Plats à base d’œufs", label: "Plat à base d’œufs" },
   { value: "Poissons", label: "Poisson" },
   { value: "Sauces & assaisonnements", label: "Sauce" },
-  { value: "Snack", label: "Snack" }, // pain + yaourt + fruits à coque
+  { value: "Snack", label: "Snack" }, // virtuel
   { value: "Soupe", label: "Soupe" },
   { value: "Viandes", label: "Viande" },
   { value: "Yaourts", label: "Yaourt" },
@@ -85,6 +93,26 @@ const ADD_SLOT_TYPES = SLOT_TYPES;
 
 // Groupe de repli utilisé lorsque le contexte ne permet pas d’inférer un type.
 const DEFAULT_SLOT_TYPE = "Plat";
+
+/* =========================
+   Cache DOM + cache modals
+   ========================= */
+
+/**
+ * Contrat : initialisé au DOMContentLoaded, jamais réassigné ensuite.
+ * But : éviter les getElementById/querySelector répétitifs.
+ */
+const dom = {
+  root: null,
+  message: null,
+  generateBtn: null,
+  weekStart: null,
+  mealsPerDay: null,
+  calorieTargetDay: null,
+  grid: null,
+};
+
+const modalCache = new Map(); // id -> bootstrap.Modal instance
 
 /* =========================
    Bootstrap / initialisation
@@ -101,6 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "calorieTargetDay",
     "menuGrid",
   ];
+
   const missing = requiredIds.filter((id) => !document.getElementById(id));
   if (missing.length > 0) {
     showMessage(
@@ -118,7 +147,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  document.getElementById("generateMenu").addEventListener("click", generateMenu);
+  // Cache DOM
+  dom.root = document.getElementById("menu-builder-root");
+  dom.message = document.getElementById("menuMessage");
+  dom.generateBtn = document.getElementById("generateMenu");
+  dom.weekStart = document.getElementById("weekStart");
+  dom.mealsPerDay = document.getElementById("mealsPerDay");
+  dom.calorieTargetDay = document.getElementById("calorieTargetDay");
+  dom.grid = document.getElementById("menuGrid");
+
+  dom.generateBtn.addEventListener("click", generateMenu);
 
   setupCalorieTargetSync();
   setupMenuInteractions();
@@ -134,8 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    ========================= */
 
 function getBaseUrl() {
-  const root = document.getElementById("menu-builder-root");
-  return (root?.dataset?.baseurl || "").replace(/\/$/, "");
+  return (dom.root?.dataset?.baseurl || "").replace(/\/$/, "");
 }
 
 function withBaseUrl(path) {
@@ -144,12 +181,24 @@ function withBaseUrl(path) {
   return `${baseurl}${safePath}`;
 }
 
+/**
+ * Normalise une URL de recette :
+ * - si relative au site (ex. "/recettes/x.html"), on applique baseurl.
+ * - sinon, on laisse tel quel.
+ */
+function normalizeRecipeUrl(url) {
+  const u = String(url || "").trim();
+  if (!u) return "#";
+  if (u.startsWith("/")) return withBaseUrl(u);
+  return u;
+}
+
 /* =========================
    Messages
    ========================= */
 
 function showMessage(text, type = "secondary") {
-  const box = document.getElementById("menuMessage");
+  const box = dom.message || document.getElementById("menuMessage");
   if (!box) return;
 
   box.classList.remove("d-none", "alert-secondary", "alert-danger", "alert-success", "alert-warning");
@@ -158,10 +207,21 @@ function showMessage(text, type = "secondary") {
 }
 
 function hideMessage() {
-  const box = document.getElementById("menuMessage");
+  const box = dom.message || document.getElementById("menuMessage");
   if (!box) return;
   box.classList.add("d-none");
   box.textContent = "";
+}
+
+/* =========================
+   Lecture des paramètres UI
+   ========================= */
+
+function readParams() {
+  const mealsPerDay = readIntFromEl(dom.mealsPerDay, 3, 1, 5);
+  const weekStart = readIntFromEl(dom.weekStart, 1, 0, 6);
+  const calorieMax = readIntFromEl(dom.calorieTargetDay, 0, 0, 99999);
+  return { mealsPerDay, weekStart, calorieMax };
 }
 
 /* =========================
@@ -169,13 +229,14 @@ function hideMessage() {
    ========================= */
 
 function setupCalorieTargetSync() {
-  const targetInput = document.getElementById("calorieTargetDay");
+  const targetInput = dom.calorieTargetDay || document.getElementById("calorieTargetDay");
   if (!targetInput) return;
 
   const applyValue = (kcal) => {
     const n = parseInt(kcal, 10);
-    if (!Number.isFinite(n) || n <= 0) return;
+    if (!Number.isFinite(n) || n <= 0) return false;
     targetInput.value = String(n);
+    return true;
   };
 
   // Canal “officiel” : l’include calorie-target.html peut émettre un event.
@@ -216,28 +277,36 @@ function setupCalorieTargetSync() {
       if (!el) continue;
 
       if ("value" in el && el.value) {
-        applyValue(el.value);
-        return;
+        if (applyValue(el.value)) return;
       }
 
       const dt = el.getAttribute("data-calorie-target");
       if (dt) {
-        applyValue(dt);
-        return;
+        if (applyValue(dt)) return;
       }
 
       const txt = (el.textContent || "").trim();
       const m = txt.match(/(\d{3,4})/);
       if (m) {
-        applyValue(m[1]);
-        return;
+        if (applyValue(m[1])) return;
       }
     }
   };
 
   tryReadFromDom();
 
-  const observer = new MutationObserver(() => tryReadFromDom());
+  // Observation : utile si l’include est injecté tardivement.
+  // On garde l’observer mais on évite de faire trop de boulot à chaque mutation.
+  let pending = false;
+  const observer = new MutationObserver(() => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => {
+      pending = false;
+      tryReadFromDom();
+    });
+  });
+
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 
@@ -287,9 +356,7 @@ function generateMenu() {
 
   hideMessage();
 
-  const mealsPerDay = readInt("#mealsPerDay", 3, 1, 5);
-  const weekStart = readInt("#weekStart", 1, 0, 6);
-  const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+  const { mealsPerDay, weekStart, calorieMax } = readParams();
 
   const hasExisting = Array.isArray(state.menu) && state.menu.length === 7;
   const baseMenu = hasExisting ? state.menu : window.MenuEngine.createFreshSkeleton(state.pools, mealsPerDay);
@@ -322,10 +389,7 @@ function generateMenu() {
 }
 
 function rerender() {
-  const mealsPerDay = readInt("#mealsPerDay", 3, 1, 5);
-  const weekStart = readInt("#weekStart", 1, 0, 6);
-  const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
-
+  const { mealsPerDay, weekStart, calorieMax } = readParams();
   renderMenu({ calorieTarget: calorieMax, weekStart, mealsPerDay });
 }
 
@@ -367,7 +431,7 @@ function ensureAddSlotModalExists() {
   wrap.innerHTML = modalHtml;
   document.body.appendChild(wrap.firstElementChild);
 
-  // À chaque ouverture, on recalcul le filtrage des types selon kcal restantes.
+  // À chaque ouverture, on recalcule le filtrage des types selon kcal restantes.
   document.getElementById("addSlotModal").addEventListener("shown.bs.modal", () => {
     refreshAddSlotTypeOptions();
   });
@@ -381,13 +445,12 @@ function ensureAddSlotModalExists() {
 
     if (!state.menu?.[day]?.[meal]) return;
 
-    // Aucune option => rien à faire.
     if (!type) {
       showMessage("Impossible d’ajouter : aucune catégorie ne rentre dans les kcal restantes pour ce jour.", "warning");
       return;
     }
 
-    const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+    const { calorieMax } = readParams();
     const used = window.MenuEngine.getDayCaloriesFromMenu(state.menu, day);
     const remaining = Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - used : Infinity;
 
@@ -434,7 +497,7 @@ function refreshAddSlotTypeOptions() {
     return;
   }
 
-  const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+  const { calorieMax } = readParams();
   const used = window.MenuEngine.getDayCaloriesFromMenu(state.menu, state.addCtx.day);
   const remaining = Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - used : Infinity;
 
@@ -550,6 +613,8 @@ function renderPickResults() {
   const q = String(document.getElementById("pickRecipeQuery")?.value || "").trim().toLowerCase();
   const allTypes = !!document.getElementById("pickRecipeAllTypes")?.checked;
 
+  if (!results || !hint) return;
+
   results.innerHTML = "";
 
   if (!state.pickCtx) {
@@ -586,22 +651,22 @@ function renderPickResults() {
   }
 
   for (const r of filtered) {
-    const a = document.createElement("button");
-    a.type = "button";
-    a.className = "list-group-item list-group-item-action";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "list-group-item list-group-item-action";
 
     const title = r?.title ?? "Recette sans titre";
     const kcalN = parseInt(r?.calories, 10);
     const kcal = Number.isFinite(kcalN) ? `${kcalN} kcal` : "— kcal";
-    const tpe = r?.recipe_group ? `(${r.recipe_group})` : "";
+    const group = r?.recipe_group ? `(${r.recipe_group})` : "";
 
-    a.innerHTML = `<div class="d-flex justify-content-between gap-2">
-      <div><strong>${escapeHtml(title)}</strong> <span class="text-muted">${escapeHtml(tpe)}</span></div>
+    btn.innerHTML = `<div class="d-flex justify-content-between gap-2">
+      <div><strong>${escapeHtml(title)}</strong> <span class="text-muted">${escapeHtml(group)}</span></div>
       <div class="text-muted">${escapeHtml(kcal)}</div>
     </div>`;
 
-    a.addEventListener("click", () => applyPickedRecipe(r));
-    results.appendChild(a);
+    btn.addEventListener("click", () => applyPickedRecipe(r));
+    results.appendChild(btn);
   }
 }
 
@@ -616,7 +681,7 @@ function applyPickedRecipe(recipe) {
     return;
   }
 
-  const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+  const { calorieMax } = readParams();
   const currentSlotKcal = window.MenuEngine.getRecipeCalories(s?.recipe);
   const dayTotal = window.MenuEngine.getDayCaloriesFromMenu(state.menu, state.pickCtx.day);
   const remaining =
@@ -645,7 +710,7 @@ function applyPickedRecipe(recipe) {
    ========================= */
 
 function setupMenuInteractions() {
-  const grid = document.getElementById("menuGrid");
+  const grid = dom.grid || document.getElementById("menuGrid");
   if (!grid) return;
 
   grid.addEventListener("click", (e) => {
@@ -688,7 +753,7 @@ function setupMenuInteractions() {
       if (!s) return;
       if (s.locked) return;
 
-      const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+      const { calorieMax } = readParams();
       const dayTotal = window.MenuEngine.getDayCaloriesFromMenu(state.menu, day);
       const currentSlotKcal = window.MenuEngine.getRecipeCalories(s?.recipe);
       const remaining =
@@ -748,7 +813,7 @@ function setupMenuInteractions() {
     }
 
     const newType = String(sel.value || DEFAULT_SLOT_TYPE);
-    const calorieMax = readInt("#calorieTargetDay", 0, 0, 99999);
+    const { calorieMax } = readParams();
 
     const dayTotal = window.MenuEngine.getDayCaloriesFromMenu(state.menu, day);
     const currentSlotKcal = window.MenuEngine.getRecipeCalories(s?.recipe);
@@ -812,7 +877,7 @@ function cloneTemplate(id) {
 /**
  * Rendu UI (Option B — <template> HTML)
  * Contrat :
- * - Templates requis dans la page :
+ * - Templates requis :
  *   • #tpl-menu-day   (hooks .js-day-title/.js-meals-wrap/.js-day-total)
  *   • #tpl-menu-meal  (hooks .js-meal-title/.js-slots-wrap + bouton data-action="add-slot")
  *   • #tpl-menu-slot  (hooks .js-slot-box/.js-recipe-line + contrôles data-action)
@@ -820,7 +885,7 @@ function cloneTemplate(id) {
  * - Aucune logique métier ici (elle est dans menu-engine.js).
  */
 function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) {
-  const grid = document.getElementById("menuGrid");
+  const grid = dom.grid || document.getElementById("menuGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
@@ -956,14 +1021,16 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
         // Ligne recette
         const r = slotObj.recipe;
         const title = r?.title ?? "— (non rempli)";
-        const url = r?.url ?? "#";
+        const rawUrl = r?.url ?? "#";
+        const url = normalizeRecipeUrl(rawUrl);
         const kcal = window.MenuEngine.getRecipeCalories(r);
 
-        totalCalories += kcal;
+        if (Number.isFinite(kcal) && kcal > 0) totalCalories += kcal;
 
         if (r) {
           recipeLine.innerHTML =
-            `<a href="${url}" target="_blank"><strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`;
+            `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">` +
+            `<strong>${escapeHtml(title)}</strong></a> — ${kcal > 0 ? kcal : "—"} kcal`;
         } else {
           recipeLine.innerHTML = `<span class="text-muted"><strong>${escapeHtml(title)}</strong></span>`;
         }
@@ -996,8 +1063,7 @@ function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3 } = {}) 
    Utils
    ========================= */
 
-function readInt(selector, fallback, min, max) {
-  const el = document.querySelector(selector);
+function readIntFromEl(el, fallback, min, max) {
   const raw = parseInt(el?.value ?? "", 10);
   const n = Number.isFinite(raw) ? raw : fallback;
   return Math.max(min, Math.min(max, n));
@@ -1012,16 +1078,32 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-function openModal(id) {
+function getOrCreateModalInstance(id) {
   const el = document.getElementById(id);
-  if (!el || !window.bootstrap) return;
-  const modal = new window.bootstrap.Modal(el);
-  modal.show();
+  if (!el || !window.bootstrap?.Modal) return null;
+
+  if (modalCache.has(id)) return modalCache.get(id);
+
+  // Si Bootstrap a déjà une instance (ex. créée ailleurs), on la réutilise.
+  const existing = window.bootstrap.Modal.getInstance(el);
+  if (existing) {
+    modalCache.set(id, existing);
+    return existing;
+  }
+
+  const inst = new window.bootstrap.Modal(el);
+  modalCache.set(id, inst);
+  return inst;
+}
+
+function openModal(id) {
+  const inst = getOrCreateModalInstance(id);
+  if (!inst) return;
+  inst.show();
 }
 
 function closeModal(id) {
-  const el = document.getElementById(id);
-  if (!el || !window.bootstrap) return;
-  const inst = window.bootstrap?.Modal?.getInstance(el) || new window.bootstrap.Modal(el);
+  const inst = getOrCreateModalInstance(id);
+  if (!inst) return;
   inst.hide();
 }
