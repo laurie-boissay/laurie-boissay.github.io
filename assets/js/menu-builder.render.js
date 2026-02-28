@@ -2,14 +2,8 @@
 menu-builder.render.js — UI (rendu grille via <template>)
 ==============================================================================
 Rôle
-- Construire l’UI du menu à partir de templates HTML.
-- Injecter les data-attrs nécessaires à la délégation d’événements.
-
-Contrats
-- Templates requis dans la page :
-  • #tpl-menu-day   (hooks .js-day-title/.js-meals-wrap/.js-day-total)
-  • #tpl-menu-meal  (hooks .js-meal-title/.js-slots-wrap + bouton data-action="add-slot")
-  • #tpl-menu-slot  (hooks .js-slot-box/.js-recipe-line + contrôles data-action)
+- Rendre le menu sur N jours (défaut 3).
+- Afficher les compteurs jour : kcal + glucides nets + lipides + protéines.
 ============================================================================== */
 
 "use strict";
@@ -37,7 +31,19 @@ Contrats
     return root || null;
   }
 
-  MB.renderMenu = function renderMenu({ calorieTarget = 0, weekStart = 1, mealsPerDay = 3, daysCount = 3 } = {}) {
+  function fmt1(n) {
+    const x = Math.round((Number(n) || 0) * 10) / 10;
+    return String(x).replace(".0", "");
+  }
+
+  MB.renderMenu = function renderMenu({
+    calorieTarget = 0,
+    carbMax = 0,
+    fatMax = 0,
+    weekStart = 1,
+    mealsPerDay = 3,
+    daysCount = 3,
+  } = {}) {
     const grid = MB.dom.grid || document.getElementById("menuGrid");
     if (!grid) return;
 
@@ -58,7 +64,9 @@ Contrats
     }
 
     const mealLabels = MB.MEAL_LABELS_BY_COUNT[mealsPerDay] || MB.MEAL_LABELS_BY_COUNT[3];
-    const hasMax = Number.isFinite(calorieTarget) && calorieTarget > 0;
+    const hasKMax = Number.isFinite(calorieTarget) && calorieTarget > 0;
+    const hasCMax = Number.isFinite(carbMax) && carbMax > 0;
+    const hasFMax = Number.isFinite(fatMax) && fatMax > 0;
 
     const safeDaysCount = Math.max(1, Math.min(7, parseInt(daysCount, 10) || 3));
 
@@ -84,6 +92,9 @@ Contrats
       dayTitleEl.textContent = dayLabel;
 
       let totalCalories = 0;
+      let totalNetCarbs = 0;
+      let totalFat = 0;
+      let totalProtein = 0;
 
       dayMeals.forEach((mealObj, mealIndex) => {
         const slots = Array.isArray(mealObj?.slots) ? mealObj.slots : [];
@@ -153,24 +164,23 @@ Contrats
           lockBtn.setAttribute("aria-label", slotObj.locked ? "Déverrouiller ce slot" : "Verrouiller ce slot");
 
           pickBtn.disabled = !!slotObj.locked;
-          pickBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Rechercher une recette");
-          pickBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Rechercher une recette");
-
           rerollBtn.disabled = !!slotObj.locked;
-          rerollBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Relancer ce slot");
-          rerollBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Relancer ce slot");
-
           removeBtn.disabled = slots.length <= 1 || !!slotObj.locked;
-          removeBtn.setAttribute("title", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
-          removeBtn.setAttribute("aria-label", slotObj.locked ? "Slot verrouillé" : "Supprimer ce slot");
 
           const r = slotObj.recipe;
           const title = r?.title ?? "— (non rempli)";
           const rawUrl = r?.url ?? "#";
           const url = MB.normalizeRecipeUrl(rawUrl);
-          const kcal = global.MenuEngine.getRecipeCalories(r);
 
-          if (Number.isFinite(kcal) && kcal > 0) totalCalories += kcal;
+          const kcal = global.MenuEngine.getRecipeCalories(r);
+          const netCarbs = global.MenuEngine.getRecipeNetCarbs(r);
+          const fat = global.MenuEngine.getRecipeFat(r);
+          const prot = global.MenuEngine.getRecipeProtein(r);
+
+          totalCalories += kcal;
+          totalNetCarbs += netCarbs;
+          totalFat += fat;
+          totalProtein += prot;
 
           if (r) {
             recipeLine.innerHTML =
@@ -186,15 +196,41 @@ Contrats
         mealsWrap.appendChild(mealCard);
       });
 
-      if (hasMax) {
-        const remaining = calorieTarget - totalCalories;
+      // Kcal (MAX + reste)
+      if (hasKMax) {
+        const rem = calorieTarget - totalCalories;
         dayTotalEl.innerHTML =
           `<strong>Total :</strong> ${totalCalories} kcal ` +
-          `<span class="text-muted">(MAX : ${calorieTarget} kcal | Reste : ${remaining})</span>`;
-        if (remaining < 0) dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
+          `<span class="text-muted">(MAX : ${calorieTarget} kcal | Reste : ${rem})</span>`;
+        if (rem < 0) dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
       } else {
         dayTotalEl.innerHTML = `<strong>Total :</strong> ${totalCalories} kcal`;
       }
+
+      // Glucides nets (MAX + reste)
+      if (hasCMax) {
+        const rem = carbMax - totalNetCarbs;
+        dayTotalEl.innerHTML +=
+          `<br><strong>Glucides nets :</strong> ${fmt1(totalNetCarbs)} g ` +
+          `<span class="text-muted">(MAX : ${carbMax} g | Reste : ${fmt1(rem)})</span>`;
+        if (rem < 0) dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
+      } else {
+        dayTotalEl.innerHTML += `<br><strong>Glucides nets :</strong> ${fmt1(totalNetCarbs)} g`;
+      }
+
+      // Lipides (MAX + reste)
+      if (hasFMax) {
+        const rem = fatMax - totalFat;
+        dayTotalEl.innerHTML +=
+          `<br><strong>Lipides :</strong> ${fmt1(totalFat)} g ` +
+          `<span class="text-muted">(MAX : ${fatMax} g | Reste : ${fmt1(rem)})</span>`;
+        if (rem < 0) dayTotalEl.innerHTML += ` <span class="badge text-bg-danger ms-2">Dépassement</span>`;
+      } else {
+        dayTotalEl.innerHTML += `<br><strong>Lipides :</strong> ${fmt1(totalFat)} g`;
+      }
+
+      // Protéines (affichage simple)
+      dayTotalEl.innerHTML += `<br><strong>Protéines :</strong> ${fmt1(totalProtein)} g`;
 
       grid.appendChild(dayCard);
     });

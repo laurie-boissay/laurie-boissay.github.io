@@ -63,6 +63,8 @@ Contrats
     weekStart: null,
     mealsPerDay: null,
     daysCount: null,
+    carbMax: null,
+    fatMax: null,
     calorieTargetDay: null,
     grid: null,
   };
@@ -109,8 +111,10 @@ Contrats
     const mealsPerDay = MenuBuilder.readIntFromEl(MenuBuilder.dom.mealsPerDay, 3, 1, 5);
     const weekStart = MenuBuilder.readIntFromEl(MenuBuilder.dom.weekStart, 1, 0, 6);
     const daysCount = MenuBuilder.readIntFromEl(MenuBuilder.dom.daysCount, 3, 1, 7);
+    const carbMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.carbMax, 0, 0, 99999);
+    const fatMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.fatMax, 0, 0, 99999);
     const calorieMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.calorieTargetDay, 0, 0, 99999);
-    return { mealsPerDay, weekStart, daysCount, calorieMax };
+    return { mealsPerDay, weekStart, daysCount, carbMax, fatMax, calorieMax };
   };
 
   // Messages
@@ -178,6 +182,8 @@ Contrats
       "weekStart",
       "mealsPerDay",
       "daysCount",
+      "carbMax",
+      "fatMax",
       "calorieTargetDay",
       "menuGrid",
     ];
@@ -214,6 +220,8 @@ Contrats
     MenuBuilder.dom.weekStart = document.getElementById("weekStart");
     MenuBuilder.dom.mealsPerDay = document.getElementById("mealsPerDay");
     MenuBuilder.dom.daysCount = document.getElementById("daysCount");
+    MenuBuilder.dom.carbMax = document.getElementById("carbMax");
+    MenuBuilder.dom.fatMax = document.getElementById("fatMax");
     MenuBuilder.dom.calorieTargetDay = document.getElementById("calorieTargetDay");
     MenuBuilder.dom.grid = document.getElementById("menuGrid");
 

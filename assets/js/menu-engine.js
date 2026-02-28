@@ -4,8 +4,8 @@ menu-engine.js — Moteur “métier” (sans DOM)
 Rôle
 - Fournir des fonctions pures (ou quasi pures) pour :
   • construire les pools de recettes par type (recipe_group + types synthétiques)
-  • calculer les kcal d’une journée
-  • tirer des recettes sous plafond calorique
+  • calculer les totaux (kcal, lipides, glucides nets, protéines) d’une journée
+  • tirer des recettes sous plafonds (kcal + glucides nets + lipides)
   • générer un menu hebdomadaire en respectant les slots verrouillés
   • fournir la liste canonique des types (source unique UI)
 
@@ -15,12 +15,6 @@ Contrats
 - Les fonctions n’accèdent pas à des variables globales : tout est injecté via arguments.
 - Format menu :
   menu[day][meal] = { slots: [ { type, recipe, locked } ] }
-
-Notes d’architecture
-- "Plat", "Snack" et "Final" sont des types synthétiques (agrégations de recipe_group).
-- Petit déjeuner : Plat + Final + Boissons
-- Déjeuner / Dîner : Plat + Final
-- Collation / Goûter : Boissons + Snack
 ============================================================================== */
 
 "use strict";
@@ -95,6 +89,56 @@ Notes d’architecture
   const AGG_FINAL_KEY = "Final";
   const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits frais", "Fruits à coque"];
 
+  // ---------------------------------------------------------------------------
+  // Helpers robustes : parsing + chemins alternatifs
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Parse un nombre “userland” (gère "11,5" => 11.5).
+   * @param {any} v
+   * @returns {number|null}
+   */
+  function parseNumberLike(v) {
+    if (v === null || v === undefined) return null;
+    if (typeof v === "number") return Number.isFinite(v) ? v : null;
+
+    const s = String(v).trim();
+    if (!s) return null;
+
+    const normalized = s.replace(",", ".");
+    const n = parseFloat(normalized);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /**
+   * Retourne le 1er nombre valide (>= 0) parmi plusieurs chemins possibles.
+   * @param {any} recipe
+   * @param {Array<(r:any)=>any>} pickers
+   * @returns {number}
+   */
+  function getFirstNonNegativeNumber(recipe, pickers) {
+    for (const pick of pickers) {
+      const n = parseNumberLike(pick(recipe));
+      if (n === null) continue;
+      if (n >= 0) return n;
+    }
+    return 0;
+  }
+
+  /**
+   * Plafond absent/0 => Infinity (pas de contrainte).
+   * @param {any} limit
+   * @returns {number}
+   */
+  function normalizeLimitToInfinity(limit) {
+    const n = parseNumberLike(limit);
+    return n !== null && n > 0 ? n : Infinity;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Getters nutrition (source unique côté moteur)
+  // ---------------------------------------------------------------------------
+
   /**
    * Normalise une valeur “kcal” (entier ≥ 0).
    * @param {any} recipe
@@ -106,11 +150,57 @@ Notes d’architecture
   }
 
   /**
-   * Calcule le total kcal d’un jour.
-   * @param {Array} menuRef
-   * @param {number} dayIndex
+   * Lipides (g) — tolérant aux variations de structure JSON.
+   * @param {any} recipe
    * @returns {number}
    */
+  function getRecipeFat(recipe) {
+    return getFirstNonNegativeNumber(recipe, [
+      (r) => r?.nutrition?.lipides,
+      (r) => r?.lipides,
+      (r) => r?.nutrition?.fat,
+      (r) => r?.fat,
+      (r) => r?.macros?.lipides,
+      (r) => r?.macros?.fat,
+    ]);
+  }
+
+  /**
+   * Glucides nets (g) — tolérant.
+   * @param {any} recipe
+   * @returns {number}
+   */
+  function getRecipeNetCarbs(recipe) {
+    return getFirstNonNegativeNumber(recipe, [
+      (r) => r?.glucides_nets,
+      (r) => r?.nutrition?.glucides_nets,
+      (r) => r?.net_carbs,
+      (r) => r?.nutrition?.net_carbs,
+      (r) => r?.macros?.glucides_nets,
+      (r) => r?.macros?.net_carbs,
+    ]);
+  }
+
+  /**
+   * Protéines (g) — tolérant.
+   * @param {any} recipe
+   * @returns {number}
+   */
+  function getRecipeProtein(recipe) {
+    return getFirstNonNegativeNumber(recipe, [
+      (r) => r?.proteines,
+      (r) => r?.nutrition?.proteines,
+      (r) => r?.protein,
+      (r) => r?.nutrition?.protein,
+      (r) => r?.macros?.proteines,
+      (r) => r?.macros?.protein,
+    ]);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Totaux jour
+  // ---------------------------------------------------------------------------
+
   function getDayCaloriesFromMenu(menuRef, dayIndex) {
     const day = menuRef?.[dayIndex];
     if (!Array.isArray(day)) return 0;
@@ -122,6 +212,46 @@ Notes d’architecture
     }
     return total;
   }
+
+  function getDayFatFromMenu(menuRef, dayIndex) {
+    const day = menuRef?.[dayIndex];
+    if (!Array.isArray(day)) return 0;
+
+    let total = 0;
+    for (const meal of day) {
+      const slots = Array.isArray(meal?.slots) ? meal.slots : [];
+      for (const s of slots) total += getRecipeFat(s?.recipe);
+    }
+    return total;
+  }
+
+  function getDayNetCarbsFromMenu(menuRef, dayIndex) {
+    const day = menuRef?.[dayIndex];
+    if (!Array.isArray(day)) return 0;
+
+    let total = 0;
+    for (const meal of day) {
+      const slots = Array.isArray(meal?.slots) ? meal.slots : [];
+      for (const s of slots) total += getRecipeNetCarbs(s?.recipe);
+    }
+    return total;
+  }
+
+  function getDayProteinFromMenu(menuRef, dayIndex) {
+    const day = menuRef?.[dayIndex];
+    if (!Array.isArray(day)) return 0;
+
+    let total = 0;
+    for (const meal of day) {
+      const slots = Array.isArray(meal?.slots) ? meal.slots : [];
+      for (const s of slots) total += getRecipeProtein(s?.recipe);
+    }
+    return total;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Pools
+  // ---------------------------------------------------------------------------
 
   /**
    * Construit un index complet recipe_group -> recettes.
@@ -156,13 +286,6 @@ Notes d’architecture
 
   /**
    * Construit les pools de recettes par type.
-   * - Types “réels” : recipe_group.
-   * - Types synthétiques : unions de recipe_group.
-   *
-   * Contrat :
-   * - Si `slotTypesOverride` est fourni, il remplace la liste canonique.
-   * - Sinon, la liste canonique (SLOT_TYPES) est utilisée.
-   *
    * @param {Array} recipes
    * @param {Array<{value:string,label:string}>=} slotTypesOverride
    * @returns {Record<string, Array>}
@@ -195,34 +318,20 @@ Notes d’architecture
     return pools;
   }
 
-  /**
-   * Indique si un repas est une collation/goûter selon le nombre de repas/jour.
-   * @param {number} mealsPerDay
-   * @param {number} mealIndex
-   * @returns {boolean}
-   */
+  // ---------------------------------------------------------------------------
+  // Slots par défaut / tirages
+  // ---------------------------------------------------------------------------
+
   function isSnackMeal(mealsPerDay, mealIndex) {
     if (mealsPerDay === 4) return mealIndex === 2;
     if (mealsPerDay === 5) return mealIndex === 1 || mealIndex === 3;
     return false;
   }
 
-  /**
-   * Indique si le repas est le petit déjeuner (quand mealsPerDay >= 3).
-   * @param {number} mealsPerDay
-   * @param {number} mealIndex
-   * @returns {boolean}
-   */
   function isBreakfastMeal(mealsPerDay, mealIndex) {
     return mealsPerDay >= 3 && mealIndex === 0;
   }
 
-  /**
-   * Remplace les types absents de pools par des alternatives existantes.
-   * @param {Record<string, Array>} pools
-   * @param {string[]} wanted
-   * @returns {string[]}
-   */
   function normalizeTypesAgainstPools(pools, wanted) {
     const keys = Object.keys(pools || {});
     const fallback0 = keys[0] || "";
@@ -230,13 +339,6 @@ Notes d’architecture
     return wanted.map((t, idx) => (keys.includes(t) ? t : idx === 0 ? fallback0 : fallback1));
   }
 
-  /**
-   * Retourne une liste ordonnée de types par défaut pour un repas.
-   * @param {Record<string, Array>} pools
-   * @param {number} mealsPerDay
-   * @param {number} mealIndex
-   * @returns {string[]}
-   */
   function getDefaultSlotTypeListForMeal(pools, mealsPerDay, mealIndex) {
     if (isSnackMeal(mealsPerDay, mealIndex)) {
       return normalizeTypesAgainstPools(pools, ["Boissons", AGG_SNACK_KEY]);
@@ -250,50 +352,30 @@ Notes d’architecture
   }
 
   /**
-   * Tire une recette aléatoire dans un pool sous contrainte maxKcal.
+   * Tirage sous plafonds : kcal + glucides nets + lipides.
    * @param {Record<string, Array>} pools
    * @param {string} type
-   * @param {number} maxKcal
+   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
    * @returns {any|null}
    */
-  function pickRecipeWithCalorieLimit(pools, type, maxKcal) {
+  function pickRecipeWithLimits(pools, type, limits) {
     const pool = pools?.[String(type || "")] || [];
     if (pool.length === 0) return null;
 
-    if (!Number.isFinite(maxKcal) || maxKcal <= 0 || maxKcal === Infinity) {
+    const kcalMax = normalizeLimitToInfinity(limits?.kcalMax);
+    const carbMax = normalizeLimitToInfinity(limits?.carbMax);
+    const fatMax = normalizeLimitToInfinity(limits?.fatMax);
+
+    if (kcalMax === Infinity && carbMax === Infinity && fatMax === Infinity) {
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
-    const filtered = pool.filter((r) => getRecipeCalories(r) <= maxKcal);
-    if (filtered.length === 0) return null;
-
-    return filtered[Math.floor(Math.random() * filtered.length)];
-  }
-
-  /**
-   * Retourne les types ajoutables pour un jour, sous plafond calorique.
-   * @param {Array} menu
-   * @param {Record<string, Array>} pools
-   * @param {number} dayIndex
-   * @param {number} calorieMax
-   * @param {Array<{value:string,label:string}>} addSlotTypes
-   * @returns {Array<{value:string,label:string}>}
-   */
-  function getAddableTypesForDay(menu, pools, dayIndex, calorieMax, addSlotTypes) {
-    const used = getDayCaloriesFromMenu(menu, dayIndex);
-
-    if (!Number.isFinite(calorieMax) || calorieMax <= 0) {
-      return addSlotTypes.filter((t) => (pools[t.value] || []).length > 0);
-    }
-
-    const remaining = calorieMax - used;
-    if (remaining <= 0) return [];
-
-    return addSlotTypes.filter((t) => {
-      const pool = pools[t.value] || [];
-      if (pool.length === 0) return false;
-      return pool.some((r) => getRecipeCalories(r) <= remaining);
+    const filtered = pool.filter((r) => {
+      return getRecipeCalories(r) <= kcalMax && getRecipeNetCarbs(r) <= carbMax && getRecipeFat(r) <= fatMax;
     });
+
+    if (filtered.length === 0) return null;
+    return filtered[Math.floor(Math.random() * filtered.length)];
   }
 
   /**
@@ -313,7 +395,7 @@ Notes d’architecture
         dayMeals.push({
           slots: types.map((type) => ({
             type,
-            recipe: pickRecipeWithCalorieLimit(pools, type, Infinity),
+            recipe: pickRecipeWithLimits(pools, type, { kcalMax: Infinity, carbMax: Infinity, fatMax: Infinity }),
             locked: false,
           })),
         });
@@ -325,19 +407,25 @@ Notes d’architecture
   }
 
   /**
-   * Construit un menu sous plafond (si défini), en respectant :
+   * Construit un menu sous plafonds, en respectant :
    * - slots verrouillés (conservés)
    * - types des slots existants
-   * - tirage sous contrainte kcal restante
+   * - tirage sous plafonds restants (kcal + glucides nets + lipides)
+   *
+   * Bloquant : si aucune recette ne passe, slot vide (recipe = null).
    *
    * @param {Record<string, Array>} pools
    * @param {Array} prevMenu
    * @param {number} mealsPerDay
-   * @param {number} calorieMax
+   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
    * @returns {Array}
    */
-  function buildMenuUnderCalorieMax(pools, prevMenu, mealsPerDay, calorieMax) {
+  function buildMenuUnderLimits(pools, prevMenu, mealsPerDay, limits) {
     const out = [];
+
+    const kcalMax = normalizeLimitToInfinity(limits?.kcalMax);
+    const carbMax = normalizeLimitToInfinity(limits?.carbMax);
+    const fatMax = normalizeLimitToInfinity(limits?.fatMax);
 
     for (let d = 0; d < 7; d++) {
       const prevDay = prevMenu?.[d] || [];
@@ -367,13 +455,22 @@ Notes d’architecture
             continue;
           }
 
+          // Conso “déjà posée” dans le jour en construction
           const tmpDayMeals = [...newDay, { slots: newSlots }];
-          const usedSoFar = getDayCaloriesFromMenu([tmpDayMeals], 0);
+          const usedK = getDayCaloriesFromMenu([tmpDayMeals], 0);
+          const usedC = getDayNetCarbsFromMenu([tmpDayMeals], 0);
+          const usedF = getDayFatFromMenu([tmpDayMeals], 0);
 
-          let remaining = Infinity;
-          if (Number.isFinite(calorieMax) && calorieMax > 0) remaining = calorieMax - usedSoFar;
+          const remainingK = kcalMax - usedK;
+          const remainingC = carbMax - usedC;
+          const remainingF = fatMax - usedF;
 
-          const picked = pickRecipeWithCalorieLimit(pools, type, remaining);
+          const picked = pickRecipeWithLimits(pools, type, {
+            kcalMax: remainingK,
+            carbMax: remainingC,
+            fatMax: remainingF,
+          });
+
           newSlots.push({ type, recipe: picked, locked: false });
         }
 
@@ -387,19 +484,37 @@ Notes d’architecture
   }
 
   /**
-   * Analyse un menu (dépassements, slots vides) au regard du plafond.
+   * Analyse un menu : dépassements plafonds + slots vides.
    * @param {Array} menu
-   * @param {number} calorieMax
-   * @returns {{max:number, overs:Array<{dayIndex:number,total:number}>, empties:number}}
+   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
+   * @param {number=} daysCount
+   * @returns {{
+   *   limits:{kcalMax:number,carbMax:number,fatMax:number},
+   *   overs:{kcal:Array<{dayIndex:number,total:number}>,carb:Array<{dayIndex:number,total:number}>,fat:Array<{dayIndex:number,total:number}>},
+   *   empties:number
+   * }}
    */
-  function computeCalorieStatus(menu, calorieMax) {
-    const status = { max: calorieMax, overs: [], empties: 0 };
+  function computeLimitsStatus(menu, limits, daysCount) {
+    const safeDaysCount = Math.max(1, Math.min(7, parseInt(daysCount, 10) || 7));
 
-    for (let d = 0; d < 7; d++) {
-      const total = getDayCaloriesFromMenu(menu, d);
-      if (Number.isFinite(calorieMax) && calorieMax > 0 && total > calorieMax) {
-        status.overs.push({ dayIndex: d, total });
-      }
+    const lk = normalizeLimitToInfinity(limits?.kcalMax);
+    const lc = normalizeLimitToInfinity(limits?.carbMax);
+    const lf = normalizeLimitToInfinity(limits?.fatMax);
+
+    const status = {
+      limits: { kcalMax: lk, carbMax: lc, fatMax: lf },
+      overs: { kcal: [], carb: [], fat: [] },
+      empties: 0,
+    };
+
+    for (let d = 0; d < safeDaysCount; d++) {
+      const k = getDayCaloriesFromMenu(menu, d);
+      const c = getDayNetCarbsFromMenu(menu, d);
+      const f = getDayFatFromMenu(menu, d);
+
+      if (lk !== Infinity && k > lk) status.overs.kcal.push({ dayIndex: d, total: k });
+      if (lc !== Infinity && c > lc) status.overs.carb.push({ dayIndex: d, total: c });
+      if (lf !== Infinity && f > lf) status.overs.fat.push({ dayIndex: d, total: f });
 
       const day = menu?.[d] || [];
       for (const meal of day) {
@@ -415,14 +530,23 @@ Notes d’architecture
     // Source unique des types
     getSlotTypes,
 
-    // API métier
+    // Getters nutrition
     getRecipeCalories,
+    getRecipeFat,
+    getRecipeNetCarbs,
+    getRecipeProtein,
+
+    // Totaux jour
     getDayCaloriesFromMenu,
+    getDayFatFromMenu,
+    getDayNetCarbsFromMenu,
+    getDayProteinFromMenu,
+
+    // API pools / génération
     buildPools,
-    pickRecipeWithCalorieLimit,
-    getAddableTypesForDay,
+    pickRecipeWithLimits,
     createFreshSkeleton,
-    buildMenuUnderCalorieMax,
-    computeCalorieStatus,
+    buildMenuUnderLimits,
+    computeLimitsStatus,
   });
 })(window);

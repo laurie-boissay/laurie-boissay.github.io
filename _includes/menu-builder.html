@@ -2,17 +2,14 @@
 ==============================================================================
 _includes/menu-builder.html — Générateur de menu (UI)
 ==============================================================================
-
 Rôle
 - UI du générateur de menu.
 - Le JS lit les champs et rend le menu dans #menuGrid.
-- Le JS récupère aussi la cible kcal/jour depuis les calculateurs plus haut.
 
-Dépendances DOM
+Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
-- #menuMessage, #generateMenu, #weekStart, #mealsPerDay
-- #daysCount (nombre de jours affichés)
-- #proteinPerKg, #carbMax, #fatMax, #calorieTargetDay
+- #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
+- #carbMax, #fatMax, #calorieTargetDay
 - #menuGrid
 ==============================================================================
 {%- endcomment -%}
@@ -25,43 +22,6 @@ Dépendances DOM
     <div id="menu-builder-root" data-baseurl="{{ site.baseurl }}"></div>
 
     <div id="menuMessage" class="alert alert-secondary d-none" role="status"></div>
-
-    {%- comment -%}
-    Contrat UX
-    - Par défaut, le menu affiche 3 jours (grille plus courte, plus utilisable).
-    - Un bouton permet d’ouvrir le choix (1 → 7 jours).
-    {%- endcomment -%}
-
-    <div class="mb-3">
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#daysCountCollapse"
-        aria-expanded="false"
-        aria-controls="daysCountCollapse"
-      >
-        Choisir le nombre de jours (1 → 7)
-      </button>
-
-      <div class="collapse mt-2" id="daysCountCollapse">
-        <div class="card">
-          <div class="card-body">
-            <label class="form-label" for="daysCount">Nombre de jours affichés</label>
-            <select id="daysCount" class="form-select" style="max-width: 180px;">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3" selected>3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-            </select>
-            <div class="form-text">Par défaut : 3 jours.</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="row g-3 mb-4">
 
@@ -99,29 +59,58 @@ Dépendances DOM
 
     <div class="row g-3 mb-4">
 
-      <div class="col-md-3">
-        <label class="form-label" for="proteinPerKg">Protéines minimum (g/kg)</label>
-        <input type="number" id="proteinPerKg" class="form-control" value="2" step="0.1" min="0">
+      <div class="col-md-4">
+        <label class="form-label">Jours affichés</label>
+
+        <!-- Requis par menu-builder.core.js -->
+        <input type="number" id="daysCount" class="form-control d-none" value="3" min="1" max="7">
+
+        <div class="btn-group w-100">
+          <button
+            id="daysCountBtn"
+            type="button"
+            class="btn btn-outline-secondary dropdown-toggle w-100"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Afficher 3 jours
+          </button>
+          <ul class="dropdown-menu w-100">
+            <li><button class="dropdown-item" type="button" data-days="1">1 jour</button></li>
+            <li><button class="dropdown-item" type="button" data-days="2">2 jours</button></li>
+            <li><button class="dropdown-item" type="button" data-days="3">3 jours</button></li>
+            <li><button class="dropdown-item" type="button" data-days="4">4 jours</button></li>
+            <li><button class="dropdown-item" type="button" data-days="5">5 jours</button></li>
+            <li><button class="dropdown-item" type="button" data-days="6">6 jours</button></li>
+            <li><button class="dropdown-item" type="button" data-days="7">7 jours</button></li>
+          </ul>
+        </div>
+
+        <div class="form-text">
+          Par défaut : 3 jours. Tu peux afficher 1 à 7 jours sans régénérer.
+        </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label class="form-label" for="carbMax">Glucides nets max / jour (g)</label>
         <input type="number" id="carbMax" class="form-control" value="50" step="1" min="0">
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label class="form-label" for="fatMax">Lipides max / jour (g)</label>
         <input type="number" id="fatMax" class="form-control" value="80" step="1" min="0">
       </div>
 
-      <div class="col-md-3">
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
         <label class="form-label" for="calorieTargetDay">Calories cible / jour (kcal)</label>
         <input type="number" id="calorieTargetDay" class="form-control" value="0" step="50" min="0">
         <div class="form-text">
-          Auto-rempli depuis le calculateur “calories cible” (modifiable si besoin).
+          Auto-rempli depuis le calculateur “calories cible” (modifiable).
         </div>
       </div>
-
     </div>
 
     <div id="menuGrid" class="mt-4"></div>

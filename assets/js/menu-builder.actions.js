@@ -2,10 +2,10 @@
 menu-builder.actions.js — UI (délégation événements + actions)
 ==============================================================================
 Rôle
-- Gérer les interactions sur la grille via délégation :
-  • add-slot / remove-slot / reroll-slot / toggle-lock / pick-recipe
-  • change-type (select)
-- Centraliser generateMenu / rerender.
+- Générer / rerender le menu.
+- Appliquer les contraintes bloquantes : kcal + glucides nets + lipides.
+- Gérer les interactions (reroll / change-type) en respectant les plafonds.
+- Gérer le picker “jours affichés” (bouton 1..7) et rerender.
 
 Contrat
 - Ne fait pas de rendu direct : utilise MenuBuilder.renderMenu().
@@ -15,6 +15,50 @@ Contrat
 
 (function attachMenuBuilderActions(global) {
   const MB = global.MenuBuilder;
+
+  function buildLimitsFromParams(params) {
+    return {
+      kcalMax: params.calorieMax,
+      carbMax: params.carbMax,
+      fatMax: params.fatMax,
+    };
+  }
+
+  function formatOvers(overs, getDayLabel, unit) {
+    return overs.map((x) => `${getDayLabel(x.dayIndex)} (${Math.round(x.total * 10) / 10} ${unit})`).join(", ");
+  }
+
+  function normalizeDaysCountLabel(n) {
+    return n === 1 ? "Afficher 1 jour" : `Afficher ${n} jours`;
+  }
+
+  MB.setupDaysCountPicker = function setupDaysCountPicker() {
+    const input = document.getElementById("daysCount");
+    const btn = document.getElementById("daysCountBtn");
+    if (!input || !btn) return;
+
+    // Init label (au chargement)
+    const initial = parseInt(input.value, 10);
+    const safeInitial = Math.max(1, Math.min(7, Number.isFinite(initial) ? initial : 3));
+    input.value = String(safeInitial);
+    btn.textContent = normalizeDaysCountLabel(safeInitial);
+
+    // Délégation sur les items dropdown
+    btn.closest(".btn-group")?.addEventListener("click", (e) => {
+      const item = e.target?.closest?.("button[data-days]");
+      if (!item) return;
+
+      const n = parseInt(item.getAttribute("data-days"), 10);
+      if (!Number.isFinite(n)) return;
+
+      const safe = Math.max(1, Math.min(7, n));
+      input.value = String(safe);
+      btn.textContent = normalizeDaysCountLabel(safe);
+
+      // Rerender sans régénérer
+      MB.rerender?.();
+    });
+  };
 
   // ---------------------------------------------------------------------------
   // Génération / rerender
@@ -28,63 +72,66 @@ Contrat
 
     MB.hideMessage();
 
-    const { mealsPerDay, weekStart, daysCount, calorieMax } = MB.readParams();
+    const params = MB.readParams();
+    const limits = buildLimitsFromParams(params);
 
     const hasExisting = Array.isArray(MB.state.menu) && MB.state.menu.length === 7;
-    const baseMenu = hasExisting ? MB.state.menu : global.MenuEngine.createFreshSkeleton(MB.state.pools, mealsPerDay);
+    const baseMenu = hasExisting ? MB.state.menu : global.MenuEngine.createFreshSkeleton(MB.state.pools, params.mealsPerDay);
 
-    const newMenu = global.MenuEngine.buildMenuUnderCalorieMax(MB.state.pools, baseMenu, mealsPerDay, calorieMax);
+    // Plafonds bloquants : kcal + glucides nets + lipides
+    const newMenu = global.MenuEngine.buildMenuUnderLimits(MB.state.pools, baseMenu, params.mealsPerDay, limits);
 
-    // Analyse limitée aux jours affichés (UX : éviter des warnings sur des jours masqués).
-    const status = (() => {
-      const out = { max: calorieMax, overs: [], empties: 0 };
-      const hasMax = Number.isFinite(calorieMax) && calorieMax > 0;
+    // Analyse : dépassements (souvent slots verrouillés) + slots vides (bloquant)
+    const status = global.MenuEngine.computeLimitsStatus(newMenu, limits, params.daysCount);
 
-      // weekStart: 1..6 = Lundi..Samedi, 0 = Dimanche (contrat UI)
-      const startIndex = weekStart === 0 ? 6 : weekStart - 1;
-      const getDayIndex = (dayOffset) => (startIndex + dayOffset) % 7;
+    const getDayLabel = (dayOffset) => {
+      const startIndex = params.weekStart === 0 ? 6 : params.weekStart - 1;
+      const dayIndex = (startIndex + dayOffset) % 7;
+      return MB.DAYS[dayIndex];
+    };
 
-      for (let d = 0; d < daysCount; d++) {
-        const total = global.MenuEngine.getDayCaloriesFromMenu(newMenu, d);
-        if (hasMax && total > calorieMax) out.overs.push({ dayIndex: getDayIndex(d), total });
+    const parts = [];
 
-        const day = newMenu?.[d] || [];
-        for (const meal of day) {
-          const slots = Array.isArray(meal?.slots) ? meal.slots : [];
-          for (const s of slots) if (!s?.recipe) out.empties += 1;
-        }
-      }
+    if (status.overs.kcal.length > 0) parts.push(`Kcal dépassées : ${formatOvers(status.overs.kcal, getDayLabel, "kcal")}`);
+    if (status.overs.carb.length > 0) parts.push(`Glucides nets dépassés : ${formatOvers(status.overs.carb, getDayLabel, "g")}`);
+    if (status.overs.fat.length > 0) parts.push(`Lipides dépassés : ${formatOvers(status.overs.fat, getDayLabel, "g")}`);
 
-      return out;
-    })();
-
-    if (Number.isFinite(calorieMax) && calorieMax > 0) {
-      if (status.overs.length > 0) {
-        const days = status.overs.map((x) => `${MB.DAYS[x.dayIndex]} (${x.total} kcal)`).join(", ");
-        MB.showMessage(
-          `Menu généré, mais certaines journées dépassent le MAX ${calorieMax} kcal/jour. ` +
-            `Cause probable : un ou plusieurs slots verrouillés sont trop caloriques. ` +
-            `Jours concernés : ${days}. Déverrouille/ajuste des slots, ou augmente le MAX.`,
-          "warning"
-        );
-      } else if (status.empties > 0) {
-        MB.showMessage(
-          `Menu généré sous le MAX ${calorieMax} kcal/jour, mais ${status.empties} slot(s) n’ont pas pu être remplis ` +
-            `sans dépasser le plafond (aucune recette assez légère dans le type).`,
-          "warning"
-        );
-      } else {
-        MB.hideMessage();
-      }
+    if (parts.length > 0) {
+      MB.showMessage(
+        `Menu généré, mais certains plafonds sont dépassés (cause probable : slots verrouillés). ${parts.join(" | ")}.`,
+        "warning"
+      );
+    } else if (status.empties > 0) {
+      MB.showMessage(
+        `Menu généré, mais ${status.empties} slot(s) n’ont pas pu être remplis sans dépasser au moins un plafond (bloquant).`,
+        "warning"
+      );
+    } else {
+      MB.hideMessage();
     }
 
     MB.state.menu = newMenu;
-    MB.renderMenu({ calorieTarget: calorieMax, weekStart, mealsPerDay, daysCount });
+
+    MB.renderMenu({
+      calorieTarget: params.calorieMax,
+      carbMax: params.carbMax,
+      fatMax: params.fatMax,
+      weekStart: params.weekStart,
+      mealsPerDay: params.mealsPerDay,
+      daysCount: params.daysCount,
+    });
   };
 
   MB.rerender = function rerender() {
-    const { mealsPerDay, weekStart, daysCount, calorieMax } = MB.readParams();
-    MB.renderMenu({ calorieTarget: calorieMax, weekStart, mealsPerDay, daysCount });
+    const params = MB.readParams();
+    MB.renderMenu({
+      calorieTarget: params.calorieMax,
+      carbMax: params.carbMax,
+      fatMax: params.fatMax,
+      weekStart: params.weekStart,
+      mealsPerDay: params.mealsPerDay,
+      daysCount: params.daysCount,
+    });
   };
 
   // ---------------------------------------------------------------------------
@@ -92,6 +139,8 @@ Contrat
   // ---------------------------------------------------------------------------
 
   MB.setupMenuInteractions = function setupMenuInteractions() {
+    MB.setupDaysCountPicker?.();
+
     const grid = MB.dom.grid || document.getElementById("menuGrid");
     if (!grid) return;
 
@@ -134,21 +183,29 @@ Contrat
       if (action === "reroll-slot") {
         if (!s || s.locked) return;
 
-        const { calorieMax } = MB.readParams();
-        const dayTotal = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, day);
-        const currentSlotKcal = global.MenuEngine.getRecipeCalories(s?.recipe);
-        const remaining =
-          Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - (dayTotal - currentSlotKcal) : Infinity;
+        const p = MB.readParams();
+        const limits = buildLimitsFromParams(p);
 
-        const next = global.MenuEngine.pickRecipeWithCalorieLimit(MB.state.pools, s.type, remaining);
-        if (Number.isFinite(calorieMax) && calorieMax > 0 && next === null) {
-          MB.showMessage(
-            `Aucune recette "${s.type}" ne rentre dans les ${Math.max(0, remaining)} kcal restantes pour ce jour.`,
-            "warning"
-          );
-          return;
-        }
+        const dayK = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, day);
+        const dayC = global.MenuEngine.getDayNetCarbsFromMenu(MB.state.menu, day);
+        const dayF = global.MenuEngine.getDayFatFromMenu(MB.state.menu, day);
 
+        const curK = global.MenuEngine.getRecipeCalories(s?.recipe);
+        const curC = global.MenuEngine.getRecipeNetCarbs(s?.recipe);
+        const curF = global.MenuEngine.getRecipeFat(s?.recipe);
+
+        // Reroll : on “retire” le slot actuel, puis tirage sous plafonds restants.
+        const remK = (limits.kcalMax > 0 ? limits.kcalMax : Infinity) - (dayK - curK);
+        const remC = (limits.carbMax > 0 ? limits.carbMax : Infinity) - (dayC - curC);
+        const remF = (limits.fatMax > 0 ? limits.fatMax : Infinity) - (dayF - curF);
+
+        const next = global.MenuEngine.pickRecipeWithLimits(MB.state.pools, s.type, {
+          kcalMax: remK,
+          carbMax: remC,
+          fatMax: remF,
+        });
+
+        // Bloquant : si aucune recette ne passe, slot vidé (visible).
         s.recipe = next;
         MB.rerender();
         return;
@@ -190,24 +247,30 @@ Contrat
         return;
       }
 
+      const p = MB.readParams();
+      const limits = buildLimitsFromParams(p);
+
       const newType = String(sel.value || MB.DEFAULT_SLOT_TYPE);
-      const { calorieMax } = MB.readParams();
 
-      const dayTotal = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, day);
-      const currentSlotKcal = global.MenuEngine.getRecipeCalories(s?.recipe);
-      const remaining =
-        Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - (dayTotal - currentSlotKcal) : Infinity;
+      const dayK = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, day);
+      const dayC = global.MenuEngine.getDayNetCarbsFromMenu(MB.state.menu, day);
+      const dayF = global.MenuEngine.getDayFatFromMenu(MB.state.menu, day);
 
-      const next = global.MenuEngine.pickRecipeWithCalorieLimit(MB.state.pools, newType, remaining);
-      if (Number.isFinite(calorieMax) && calorieMax > 0 && next === null) {
-        MB.showMessage(
-          `Impossible de passer ce slot en "${newType}" : aucune recette ne rentre dans les ${Math.max(0, remaining)} kcal restantes pour ce jour.`,
-          "warning"
-        );
-        sel.value = s.type;
-        return;
-      }
+      const curK = global.MenuEngine.getRecipeCalories(s?.recipe);
+      const curC = global.MenuEngine.getRecipeNetCarbs(s?.recipe);
+      const curF = global.MenuEngine.getRecipeFat(s?.recipe);
 
+      const remK = (limits.kcalMax > 0 ? limits.kcalMax : Infinity) - (dayK - curK);
+      const remC = (limits.carbMax > 0 ? limits.carbMax : Infinity) - (dayC - curC);
+      const remF = (limits.fatMax > 0 ? limits.fatMax : Infinity) - (dayF - curF);
+
+      const next = global.MenuEngine.pickRecipeWithLimits(MB.state.pools, newType, {
+        kcalMax: remK,
+        carbMax: remC,
+        fatMax: remF,
+      });
+
+      // Bloquant : type accepté, mais slot vide si impossible.
       s.type = newType;
       s.recipe = next;
       s.locked = false;
