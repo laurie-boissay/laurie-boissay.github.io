@@ -11,6 +11,7 @@ Rôle
 Dépendances DOM
 - #menu-builder-root[data-baseurl]
 - #menuMessage, #generateMenu, #weekStart, #mealsPerDay
+- #daysCount (nombre de jours affichés)
 - #proteinPerKg, #carbMax, #fatMax, #calorieTargetDay
 - #menuGrid
 ==============================================================================
@@ -24,6 +25,43 @@ Dépendances DOM
     <div id="menu-builder-root" data-baseurl="{{ site.baseurl }}"></div>
 
     <div id="menuMessage" class="alert alert-secondary d-none" role="status"></div>
+
+    {%- comment -%}
+    Contrat UX
+    - Par défaut, le menu affiche 3 jours (grille plus courte, plus utilisable).
+    - Un bouton permet d’ouvrir le choix (1 → 7 jours).
+    {%- endcomment -%}
+
+    <div class="mb-3">
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#daysCountCollapse"
+        aria-expanded="false"
+        aria-controls="daysCountCollapse"
+      >
+        Choisir le nombre de jours (1 → 7)
+      </button>
+
+      <div class="collapse mt-2" id="daysCountCollapse">
+        <div class="card">
+          <div class="card-body">
+            <label class="form-label" for="daysCount">Nombre de jours affichés</label>
+            <select id="daysCount" class="form-select" style="max-width: 180px;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+            <div class="form-text">Par défaut : 3 jours.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="row g-3 mb-4">
 
@@ -90,4 +128,3 @@ Dépendances DOM
 
   </div>
 </section>
-

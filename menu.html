@@ -58,10 +58,6 @@ body_id: "menu"
   <!-- ================= MENU BUILDER ================= -->
   {% include menu-builder.html %}
 
-  <button type="button" id="generatePdfMenu" class="btn btn-primary mt-3">
-    Générer le PDF du menu
-  </button>
-
 </section>
 
 <!-- ================= TEMPLATES MENU BUILDER ================= -->
@@ -125,7 +121,12 @@ body_id: "menu"
 <!-- ================= SCRIPTS ================= -->
 
 <script src="{{ '/assets/js/menu-engine.js' | relative_url }}"></script>
-<script src="{{ '/assets/js/menu-builder.js' | relative_url }}"></script>
+
+<script src="{{ '/assets/js/menu-builder.core.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/menu-builder.sync.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/menu-builder.modals.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/menu-builder.actions.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/menu-builder.render.js' | relative_url }}"></script>
 
 <script>
 (function () {

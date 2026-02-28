@@ -7,6 +7,7 @@ Rôle
   • calculer les kcal d’une journée
   • tirer des recettes sous plafond calorique
   • générer un menu hebdomadaire en respectant les slots verrouillés
+  • fournir la liste canonique des types (source unique UI)
 
 Contrats
 - Aucune dépendance au DOM.
@@ -20,20 +21,26 @@ Notes d’architecture
 - Petit déjeuner : Plat + Final + Boissons
 - Déjeuner / Dîner : Plat + Final
 - Collation / Goûter : Boissons + Snack
-
-Source unique des types (SLOT_TYPES)
-- Ce fichier expose getSlotTypes() : l’UI (menu-builder) ne maintient plus SLOT_TYPES.
-- buildPools(recipes, slotTypes?) accepte encore un param optionnel pour rétrocompatibilité,
-  mais la source canonique est SLOT_TYPES interne.
 ============================================================================== */
 
 "use strict";
 
 (function attachMenuEngine(global) {
   // ---------------------------------------------------------------------------
-  // Types canoniques (source unique)
+  // Source unique des types (UI)
   // ---------------------------------------------------------------------------
-  const SLOT_TYPES = [
+
+  /**
+   * Liste CANONIQUE des types affichables.
+   * - Inclut les recipe_group officiels utiles au menu-builder.
+   * - Inclut les types synthétiques (Plat/Snack/Final).
+   *
+   * Contrat :
+   * - `value` correspond aux clés utilisées dans `pools` et aux `slot.type`.
+   * - `label` est l’étiquette UI.
+   */
+  const SLOT_TYPES = Object.freeze([
+    // Groupes “réels” (recipe_group)
     { value: "Légumes & accompagnements", label: "Accompagnement" },
     { value: "Amuse-bouche", label: "Amuse-bouche" },
     { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
@@ -41,32 +48,28 @@ Source unique des types (SLOT_TYPES)
     { value: "Cake", label: "Cake" },
     { value: "Chocolat", label: "Chocolat" },
     { value: "Desserts & crèmes", label: "Dessert" },
-    { value: "Final", label: "Final (au hasard)" }, // type synthétique
     { value: "Fromages", label: "Fromage" },
     { value: "Fruits à coque", label: "Fruits à coque" },
-    { value: "Fruits frais", label: "Fruit(s) frai(s)" },
-    { value: "Gâteaux & biscuits", label: "Gâteau" },
+    { value: "Fruits frais", label: "Fruits frais" },
+    { value: "Gâteaux & biscuits", label: "Gâteaux & biscuits" },
     { value: "Graines", label: "Graines" },
-    { value: "Œufs", label: "Œuf" },
-    { value: "Pains & substituts", label: "Pain" },
-    { value: "Pâtés", label: "Pâté" },
-    { value: "Plat", label: "Plat (au hasard)" }, // type synthétique
-    { value: "Plats à base de fromages", label: "Plat à base de fromages" },
-    { value: "Plats à base de fruits de mer", label: "Plat à base de fruits de mer" },
-    { value: "Plats à base de poissons", label: "Plat à base de poissons" },
-    { value: "Plats à base de viande", label: "Plat à base de viande" },
-    { value: "Plats à base d’œufs", label: "Plat à base d’œufs" },
-    { value: "Poissons", label: "Poisson" },
-    { value: "Sauces & assaisonnements", label: "Sauce" },
-    { value: "Snack", label: "Snack" }, // type synthétique
+    { value: "Œufs", label: "Œufs" },
+    { value: "Pains & substituts", label: "Pains & substituts" },
+    { value: "Pâtés", label: "Pâtés" },
+    { value: "Poissons", label: "Poissons" },
+    { value: "Sauces & assaisonnements", label: "Sauces & assaisonnements" },
     { value: "Soupe", label: "Soupe" },
-    { value: "Viandes", label: "Viande" },
-    { value: "Yaourts", label: "Yaourt" },
-  ];
+    { value: "Viandes", label: "Viandes" },
+    { value: "Yaourts", label: "Yaourts" },
+
+    // Types synthétiques
+    { value: "Plat", label: "Plat (au hasard)" },
+    { value: "Snack", label: "Snack (au hasard)" },
+    { value: "Final", label: "Final (au hasard)" },
+  ]);
 
   /**
-   * Fournit la liste canonique des types de slot.
-   * Contrat : retourne une copie (pas de mutation possible depuis l’extérieur).
+   * API publique : retourne une copie défensive de la liste canonique.
    * @returns {Array<{value:string,label:string}>}
    */
   function getSlotTypes() {
@@ -77,7 +80,6 @@ Source unique des types (SLOT_TYPES)
   // Types synthétiques (agrégation de groupes)
   // ---------------------------------------------------------------------------
 
-  // "Plat" : union des groupes "Plats à base de ...".
   const AGG_PLAT_KEY = "Plat";
   const AGG_PLAT_GROUPS = [
     "Plats à base de viande",
@@ -87,11 +89,9 @@ Source unique des types (SLOT_TYPES)
     "Plats à base de fromages",
   ];
 
-  // "Snack" : collations/goûters (chocolat EXCLU).
   const AGG_SNACK_KEY = "Snack";
   const AGG_SNACK_GROUPS = ["Pains & substituts", "Yaourts", "Fruits à coque"];
 
-  // "Final" : fin de repas (ne présume pas du sucré).
   const AGG_FINAL_KEY = "Final";
   const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits frais", "Fruits à coque"];
 
@@ -124,8 +124,7 @@ Source unique des types (SLOT_TYPES)
   }
 
   /**
-   * Construit un index complet recipe_group -> recettes, indépendamment de slotTypes.
-   * Contrat : l’UI peut choisir de ne pas afficher certains recipe_group, sans casser les agrégations.
+   * Construit un index complet recipe_group -> recettes.
    * @param {Array} recipes
    * @returns {Record<string, Array>}
    */
@@ -157,45 +156,47 @@ Source unique des types (SLOT_TYPES)
 
   /**
    * Construit les pools de recettes par type.
-   * - Les types "réels" sont indexés par recipe_group.
-   * - Les types synthétiques (Plat/Snack/Final) sont des unions de recipe_group.
+   * - Types “réels” : recipe_group.
+   * - Types synthétiques : unions de recipe_group.
    *
    * Contrat :
-   * - Les clés de pools sont initialisées à partir de la liste de types effective.
-   * - slotTypes est optionnel (rétrocompat). La source canonique est SLOT_TYPES interne.
+   * - Si `slotTypesOverride` est fourni, il remplace la liste canonique.
+   * - Sinon, la liste canonique (SLOT_TYPES) est utilisée.
    *
    * @param {Array} recipes
-   * @param {Array<{value:string,label:string}>} [slotTypes]
+   * @param {Array<{value:string,label:string}>=} slotTypesOverride
    * @returns {Record<string, Array>}
    */
-  function buildPools(recipes, slotTypes) {
-    const effectiveTypes = Array.isArray(slotTypes) && slotTypes.length > 0 ? slotTypes : SLOT_TYPES;
+  function buildPools(recipes, slotTypesOverride) {
+    const slotTypes = Array.isArray(slotTypesOverride) && slotTypesOverride.length > 0 ? slotTypesOverride : SLOT_TYPES;
 
     const pools = {};
-    for (const t of effectiveTypes) pools[t.value] = [];
+    for (const t of slotTypes) pools[t.value] = [];
 
     const groupIndex = buildGroupIndex(recipes);
 
-    // Pools “réels” : uniquement si la clé est prévue dans effectiveTypes.
+    // Pools “réels” : uniquement si la clé existe dans slotTypes.
     for (const key of Object.keys(pools)) {
-      // Les types synthétiques sont remplis plus bas.
       if (key === AGG_PLAT_KEY || key === AGG_SNACK_KEY || key === AGG_FINAL_KEY) continue;
       pools[key] = groupIndex[key] ? [...groupIndex[key]] : [];
     }
 
-    // Pools synthétiques : construits uniquement si la clé existe dans effectiveTypes.
-    if (pools[AGG_PLAT_KEY]) pools[AGG_PLAT_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_PLAT_GROUPS);
-    if (pools[AGG_SNACK_KEY]) pools[AGG_SNACK_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_SNACK_GROUPS);
-    if (pools[AGG_FINAL_KEY]) pools[AGG_FINAL_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_FINAL_GROUPS);
+    // Pools synthétiques.
+    if (Object.prototype.hasOwnProperty.call(pools, AGG_PLAT_KEY)) {
+      pools[AGG_PLAT_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_PLAT_GROUPS);
+    }
+    if (Object.prototype.hasOwnProperty.call(pools, AGG_SNACK_KEY)) {
+      pools[AGG_SNACK_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_SNACK_GROUPS);
+    }
+    if (Object.prototype.hasOwnProperty.call(pools, AGG_FINAL_KEY)) {
+      pools[AGG_FINAL_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_FINAL_GROUPS);
+    }
 
     return pools;
   }
 
   /**
    * Indique si un repas est une collation/goûter selon le nombre de repas/jour.
-   * Convention (alignée sur MEAL_LABELS_BY_COUNT côté UI) :
-   * - 4 repas : index 2 = Goûter
-   * - 5 repas : index 1 = Collation, index 3 = Goûter
    * @param {number} mealsPerDay
    * @param {number} mealIndex
    * @returns {boolean}
@@ -208,7 +209,6 @@ Source unique des types (SLOT_TYPES)
 
   /**
    * Indique si le repas est le petit déjeuner (quand mealsPerDay >= 3).
-   * Convention : index 0 = petit déjeuner.
    * @param {number} mealsPerDay
    * @param {number} mealIndex
    * @returns {boolean}
@@ -219,7 +219,6 @@ Source unique des types (SLOT_TYPES)
 
   /**
    * Remplace les types absents de pools par des alternatives existantes.
-   * Note : on garde le contrat "les clés viennent des types effectifs", donc ici on ne “devine” pas d’autres types.
    * @param {Record<string, Array>} pools
    * @param {string[]} wanted
    * @returns {string[]}
@@ -228,16 +227,11 @@ Source unique des types (SLOT_TYPES)
     const keys = Object.keys(pools || {});
     const fallback0 = keys[0] || "";
     const fallback1 = keys[1] || fallback0;
-
     return wanted.map((t, idx) => (keys.includes(t) ? t : idx === 0 ? fallback0 : fallback1));
   }
 
   /**
    * Retourne une liste ordonnée de types par défaut pour un repas.
-   * - Petit déjeuner : Plat + Final + Boissons
-   * - Déjeuner / Dîner : Plat + Final
-   * - Collation / Goûter : Boissons + Snack
-   *
    * @param {Record<string, Array>} pools
    * @param {number} mealsPerDay
    * @param {number} mealIndex
@@ -266,7 +260,6 @@ Source unique des types (SLOT_TYPES)
     const pool = pools?.[String(type || "")] || [];
     if (pool.length === 0) return null;
 
-    // Pas de plafond => tirage simple.
     if (!Number.isFinite(maxKcal) || maxKcal <= 0 || maxKcal === Infinity) {
       return pool[Math.floor(Math.random() * pool.length)];
     }
@@ -289,7 +282,6 @@ Source unique des types (SLOT_TYPES)
   function getAddableTypesForDay(menu, pools, dayIndex, calorieMax, addSlotTypes) {
     const used = getDayCaloriesFromMenu(menu, dayIndex);
 
-    // Pas de plafond => on propose tous les types dispos (au moins 1 recette).
     if (!Number.isFinite(calorieMax) || calorieMax <= 0) {
       return addSlotTypes.filter((t) => (pools[t.value] || []).length > 0);
     }
@@ -338,10 +330,6 @@ Source unique des types (SLOT_TYPES)
    * - types des slots existants
    * - tirage sous contrainte kcal restante
    *
-   * IMPORTANT :
-   * - Retourne un nouveau menu (pas de mutation sur prevMenu).
-   * - Si aucun tirage n’est possible sous plafond, le slot reste à recipe:null.
-   *
    * @param {Record<string, Array>} pools
    * @param {Array} prevMenu
    * @param {number} mealsPerDay
@@ -379,7 +367,6 @@ Source unique des types (SLOT_TYPES)
             continue;
           }
 
-          // Kcal consommées “jusqu’ici” dans le jour en cours.
           const tmpDayMeals = [...newDay, { slots: newSlots }];
           const usedSoFar = getDayCaloriesFromMenu([tmpDayMeals], 0);
 
@@ -425,10 +412,10 @@ Source unique des types (SLOT_TYPES)
   }
 
   global.MenuEngine = Object.freeze({
-    // Source unique types (UI + buildPools)
+    // Source unique des types
     getSlotTypes,
 
-    // API existante
+    // API métier
     getRecipeCalories,
     getDayCaloriesFromMenu,
     buildPools,
