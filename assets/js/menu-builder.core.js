@@ -107,14 +107,30 @@ Contrats
     return Math.max(min, Math.min(max, n));
   };
 
+  MenuBuilder.readFloatFromEl = function readFloatFromEl(el, fallback, min, max) {
+    const raw = String(el?.value ?? "")
+      .trim()
+      .replace(",", ".");
+    const n = parseFloat(raw);
+    const safe = Number.isFinite(n) ? n : fallback;
+    return Math.max(min, Math.min(max, safe));
+  };
+
+  /**
+   * Lecture canonique des paramètres UI.
+   * Contrat : doit matcher les attentes de menu-builder.actions.js
+   */
   MenuBuilder.readParams = function readParams() {
     const mealsPerDay = MenuBuilder.readIntFromEl(MenuBuilder.dom.mealsPerDay, 3, 1, 5);
     const weekStart = MenuBuilder.readIntFromEl(MenuBuilder.dom.weekStart, 1, 0, 6);
+
     const daysCount = MenuBuilder.readIntFromEl(MenuBuilder.dom.daysCount, 3, 1, 7);
-    const carbMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.carbMax, 0, 0, 99999);
-    const fatMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.fatMax, 0, 0, 99999);
+
     const calorieMax = MenuBuilder.readIntFromEl(MenuBuilder.dom.calorieTargetDay, 0, 0, 99999);
-    return { mealsPerDay, weekStart, daysCount, carbMax, fatMax, calorieMax };
+    const carbMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.carbMax, 0, 0, 99999);
+    const fatMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.fatMax, 0, 0, 99999);
+
+    return { mealsPerDay, weekStart, daysCount, calorieMax, carbMax, fatMax };
   };
 
   // Messages
@@ -233,8 +249,17 @@ Contrats
     }
     MenuBuilder.ADD_SLOT_TYPES = MenuBuilder.SLOT_TYPES.slice();
 
-    // Wiring (les fonctions sont ajoutées par les autres modules).
-    MenuBuilder.dom.generateBtn.addEventListener("click", () => MenuBuilder.generateMenu());
+    // Wiring : on évite de planter si actions.js n’est pas chargé / pas encore défini.
+    MenuBuilder.dom.generateBtn.addEventListener("click", () => {
+      if (typeof MenuBuilder.generateMenu !== "function") {
+        MenuBuilder.showMessage(
+          "Menu builder : generateMenu() introuvable. Vérifie que menu-builder.actions.js est chargé (et sans erreur).",
+          "danger"
+        );
+        return;
+      }
+      MenuBuilder.generateMenu();
+    });
 
     MenuBuilder.setupCalorieTargetSync?.();
     MenuBuilder.setupMenuInteractions?.();

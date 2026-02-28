@@ -2,10 +2,6 @@
 ==============================================================================
 _includes/menu-builder.html — Générateur de menu (UI)
 ==============================================================================
-Rôle
-- UI du générateur de menu.
-- Le JS lit les champs et rend le menu dans #menuGrid.
-
 Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
 - #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
@@ -62,7 +58,6 @@ Contrat DOM attendu
       <div class="col-md-4">
         <label class="form-label">Jours affichés</label>
 
-        <!-- Requis par menu-builder.core.js -->
         <input type="number" id="daysCount" class="form-control d-none" value="3" min="1" max="7">
 
         <div class="btn-group w-100">
@@ -104,13 +99,12 @@ Contrat DOM attendu
     </div>
 
     <div class="row g-3 mb-4">
+
       <div class="col-md-4">
         <label class="form-label" for="calorieTargetDay">Calories cible / jour (kcal)</label>
         <input type="number" id="calorieTargetDay" class="form-control" value="0" step="50" min="0">
-        <div class="form-text">
-          Auto-rempli depuis le calculateur “calories cible” (modifiable).
-        </div>
       </div>
+
     </div>
 
     <div id="menuGrid" class="mt-4"></div>

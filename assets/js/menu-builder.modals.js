@@ -5,10 +5,12 @@ Rôle
 - Créer et gérer les modales :
   • "Ajouter un slot"
   • "Rechercher une recette"
-- Isoler la logique de construction HTML modale + open/close + render des résultats.
+- Le contenu proposé respecte les plafonds bloquants :
+  kcal + glucides nets + lipides.
 
 Contrat
-- La logique métier (tirage, kcal) reste dans MenuEngine.
+- S’appuie sur MenuEngine pour les getters et le tirage sous plafonds.
+- Ne dépend pas du rendu grille (menu-builder.render.js) sauf via MB.state.menu.
 ============================================================================== */
 
 "use strict";
@@ -24,16 +26,16 @@ Contrat
     const el = document.getElementById(id);
     if (!el || !global.bootstrap?.Modal) return null;
 
-    if (MB.modalCache.has(id)) return MB.modalCache.get(id);
+    if (MB.modalCache?.has?.(id)) return MB.modalCache.get(id);
 
     const existing = global.bootstrap.Modal.getInstance(el);
     if (existing) {
-      MB.modalCache.set(id, existing);
+      MB.modalCache?.set?.(id, existing);
       return existing;
     }
 
     const inst = new global.bootstrap.Modal(el);
-    MB.modalCache.set(id, inst);
+    MB.modalCache?.set?.(id, inst);
     return inst;
   };
 
@@ -48,6 +50,94 @@ Contrat
     if (!inst) return;
     inst.hide();
   };
+
+  // ---------------------------------------------------------------------------
+  // Utils : plafonds (kcal + carbs + fat)
+  // ---------------------------------------------------------------------------
+
+  function normalizeLimitToInfinity(v) {
+    const n =
+      typeof v === "number"
+        ? v
+        : parseFloat(String(v ?? "").trim().replace(",", "."));
+    return Number.isFinite(n) && n > 0 ? n : Infinity;
+  }
+
+  function getAllSlotTypesForAdd() {
+    // Ordre de préférence :
+    // 1) MB.ADD_SLOT_TYPES (si le core l’a initialisé)
+    // 2) MB.SLOT_TYPES (liste canonique UI)
+    // 3) MenuEngine.getSlotTypes() (source unique côté moteur)
+    if (Array.isArray(MB.ADD_SLOT_TYPES) && MB.ADD_SLOT_TYPES.length > 0) return MB.ADD_SLOT_TYPES;
+    if (Array.isArray(MB.SLOT_TYPES) && MB.SLOT_TYPES.length > 0) return MB.SLOT_TYPES;
+    if (typeof global.MenuEngine?.getSlotTypes === "function") return global.MenuEngine.getSlotTypes();
+    return [];
+  }
+
+  function buildRemainingLimitsForDay(dayIndex) {
+    const p = MB.readParams();
+
+    const dayK = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, dayIndex);
+    const dayC = global.MenuEngine.getDayNetCarbsFromMenu(MB.state.menu, dayIndex);
+    const dayF = global.MenuEngine.getDayFatFromMenu(MB.state.menu, dayIndex);
+
+    const maxK = normalizeLimitToInfinity(p.calorieMax);
+    const maxC = normalizeLimitToInfinity(p.carbMax);
+    const maxF = normalizeLimitToInfinity(p.fatMax);
+
+    return {
+      max: { kcalMax: maxK, carbMax: maxC, fatMax: maxF },
+      used: { kcal: dayK, carb: dayC, fat: dayF },
+      remaining: {
+        kcalMax: maxK - dayK,
+        carbMax: maxC - dayC,
+        fatMax: maxF - dayF,
+      },
+    };
+  }
+
+  function getAddableTypesForDayUnderLimits(dayIndex) {
+    const types = getAllSlotTypesForAdd();
+    const { remaining } = buildRemainingLimitsForDay(dayIndex);
+
+    return types.filter((t) => {
+      const pool = MB.state.pools?.[t.value] || [];
+      if (!Array.isArray(pool) || pool.length === 0) return false;
+
+      // Au moins 1 recette doit passer les plafonds restants.
+      return pool.some((r) => {
+        return (
+          global.MenuEngine.getRecipeCalories(r) <= remaining.kcalMax &&
+          global.MenuEngine.getRecipeNetCarbs(r) <= remaining.carbMax &&
+          global.MenuEngine.getRecipeFat(r) <= remaining.fatMax
+        );
+      });
+    });
+  }
+
+  function formatRemainingHint(dayIndex) {
+    const { max, used, remaining } = buildRemainingLimitsForDay(dayIndex);
+
+    const hasAnyLimit = max.kcalMax !== Infinity || max.carbMax !== Infinity || max.fatMax !== Infinity;
+    if (!hasAnyLimit) {
+      return "Aucun plafond défini : toutes les catégories avec recettes sont proposées.";
+    }
+
+    const overParts = [];
+    if (max.kcalMax !== Infinity && used.kcal > max.kcalMax) overParts.push("kcal");
+    if (max.carbMax !== Infinity && used.carb > max.carbMax) overParts.push("glucides nets");
+    if (max.fatMax !== Infinity && used.fat > max.fatMax) overParts.push("lipides");
+
+    if (overParts.length > 0) {
+      return `Plafond déjà dépassé (${overParts.join(", ")}) : ajout impossible sans dépasser.`;
+    }
+
+    const parts = [];
+    if (max.kcalMax !== Infinity) parts.push(`Kcal restantes : ${Math.round(Math.max(0, remaining.kcalMax))} kcal`);
+    if (max.carbMax !== Infinity) parts.push(`Glucides nets restants : ${Math.round(Math.max(0, remaining.carbMax) * 10) / 10} g`);
+    if (max.fatMax !== Infinity) parts.push(`Lipides restants : ${Math.round(Math.max(0, remaining.fatMax) * 10) / 10} g`);
+    return parts.join(" | ");
+  }
 
   // ---------------------------------------------------------------------------
   // Modal “Ajouter un slot”
@@ -69,9 +159,8 @@ Contrat
       <div class="modal-body">
         <label class="form-label" for="addSlotType">Type à ajouter</label>
         <select id="addSlotType" class="form-select"></select>
-        <div class="form-text mt-2" id="addSlotHint">
-          Une recette sera tirée au hasard dans ce type si disponible, en respectant le MAX kcal/jour.
-        </div>
+
+        <div class="form-text mt-2" id="addSlotHint"></div>
       </div>
 
       <div class="modal-footer">
@@ -109,37 +198,38 @@ Contrat
     sel.innerHTML = "";
 
     const ctx = MB.state.addCtx;
-    if (!ctx || !Number.isFinite(ctx.day)) {
+    if (!ctx || !Number.isFinite(ctx.day) || !Number.isFinite(ctx.meal)) {
       hint.textContent = "Contexte introuvable (jour/repas non sélectionné).";
       sel.disabled = true;
       confirmBtn.disabled = true;
       return;
     }
 
-    const { calorieMax } = MB.readParams();
-    const used = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, ctx.day);
-    const remaining = Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - used : Infinity;
+    // Diagnostic utile (sans console)
+    const poolsKeys = Object.keys(MB.state.pools || {});
+    if (poolsKeys.length === 0) {
+      hint.textContent = "Aucune recette chargée (pools vides) : impossible de proposer des types.";
+      sel.disabled = true;
+      confirmBtn.disabled = true;
+      return;
+    }
 
-    const addable = global.MenuEngine.getAddableTypesForDay(
-      MB.state.menu,
-      MB.state.pools,
-      ctx.day,
-      calorieMax,
-      MB.ADD_SLOT_TYPES
-    );
+    hint.textContent = formatRemainingHint(ctx.day);
 
-    hint.textContent =
-      Number.isFinite(calorieMax) && calorieMax > 0
-        ? `Kcal restantes pour ce jour : ${Math.max(0, remaining)} kcal.`
-        : "Aucun MAX kcal/jour défini : toutes les catégories disponibles sont proposées.";
+    const addable = getAddableTypesForDayUnderLimits(ctx.day);
 
     if (addable.length === 0) {
       sel.disabled = true;
       confirmBtn.disabled = true;
-      hint.textContent =
-        Number.isFinite(calorieMax) && calorieMax > 0
-          ? `Aucune catégorie ne rentre dans les ${Math.max(0, remaining)} kcal restantes pour ce jour.`
-          : "Aucune catégorie disponible (pools vides).";
+
+      // Explication complémentaire (cas typique : types non init OU plafonds trop bas)
+      const allTypes = getAllSlotTypesForAdd();
+      if (allTypes.length === 0) {
+        hint.textContent = "Liste des types introuvable (SLOT_TYPES/ADD_SLOT_TYPES vides). Vérifie l’init MenuBuilder.SLOT_TYPES.";
+      } else {
+        // On a des types, mais rien d’addable => soit plafonds trop bas, soit pools vides pour ces types.
+        hint.textContent = `${formatRemainingHint(ctx.day)} — Aucun type ne passe (plafonds trop bas ou pools vides pour les types).`;
+      }
       return;
     }
 
@@ -163,21 +253,21 @@ Contrat
     if (!MB.state.menu?.[ctx.day]?.[ctx.meal]) return;
 
     if (!type) {
-      MB.showMessage("Impossible d’ajouter : aucune catégorie ne rentre dans les kcal restantes pour ce jour.", "warning");
+      MB.showMessage("Ajout impossible : aucun type ne respecte les plafonds restants.", "warning");
       return;
     }
 
-    const { calorieMax } = MB.readParams();
-    const used = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, ctx.day);
-    const remaining = Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - used : Infinity;
+    const { remaining } = buildRemainingLimitsForDay(ctx.day);
 
-    const recipe = global.MenuEngine.pickRecipeWithCalorieLimit(MB.state.pools, type, remaining);
+    const recipe = global.MenuEngine.pickRecipeWithLimits(MB.state.pools, type, {
+      kcalMax: remaining.kcalMax,
+      carbMax: remaining.carbMax,
+      fatMax: remaining.fatMax,
+    });
 
-    if (Number.isFinite(calorieMax) && calorieMax > 0 && recipe === null) {
-      MB.showMessage(
-        `Aucune recette "${type}" ne rentre dans les ${Math.max(0, remaining)} kcal restantes pour ce jour. Je retire ce type de la liste.`,
-        "warning"
-      );
+    // Bloquant : si aucune recette ne passe, on refuse l’ajout.
+    if (recipe === null) {
+      MB.showMessage(`Aucune recette "${type}" ne respecte les plafonds restants pour ce jour.`, "warning");
       MB.refreshAddSlotTypeOptions();
       return;
     }
@@ -241,122 +331,134 @@ Contrat
     wrap.innerHTML = modalHtml;
     document.body.appendChild(wrap.firstElementChild);
 
-    const input = document.getElementById("pickRecipeQuery");
-    const allTypes = document.getElementById("pickRecipeAllTypes");
-
-    let t = null;
-    const trigger = () => {
-      if (t) clearTimeout(t);
-      t = setTimeout(MB.renderPickResults, 120);
-    };
-
-    input.addEventListener("input", trigger);
-    allTypes.addEventListener("change", MB.renderPickResults);
-
-    document.getElementById("pickRecipeModal").addEventListener("shown.bs.modal", () => {
-      input.value = "";
-      allTypes.checked = false;
-      input.focus();
-      MB.renderPickResults();
-    });
-
     document.getElementById("pickRecipeModal").addEventListener("hidden.bs.modal", () => {
       MB.state.pickCtx = null;
+      MB._pickRecipeList = [];
+      const q = document.getElementById("pickRecipeQuery");
+      const all = document.getElementById("pickRecipeAllTypes");
+      const res = document.getElementById("pickRecipeResults");
+      const hint = document.getElementById("pickRecipeHint");
+      if (q) q.value = "";
+      if (all) all.checked = false;
+      if (res) res.innerHTML = "";
+      if (hint) hint.textContent = "";
+    });
+
+    document.getElementById("pickRecipeQuery").addEventListener("input", () => MB.refreshPickRecipeResults());
+    document.getElementById("pickRecipeAllTypes").addEventListener("change", () => MB.refreshPickRecipeResults());
+
+    document.getElementById("pickRecipeResults").addEventListener("click", (e) => {
+      const btn = e.target?.closest?.("button[data-recipe-idx]");
+      if (!btn) return;
+      const idx = parseInt(btn.getAttribute("data-recipe-idx"), 10);
+      if (!Number.isFinite(idx)) return;
+      MB.confirmPickRecipe(idx);
+    });
+
+    document.getElementById("pickRecipeModal").addEventListener("shown.bs.modal", () => {
+      MB.refreshPickRecipeResults();
+      document.getElementById("pickRecipeQuery")?.focus();
     });
   };
 
-  MB.renderPickResults = function renderPickResults() {
-    const results = document.getElementById("pickRecipeResults");
-    const hint = document.getElementById("pickRecipeHint");
-    if (!results || !hint) return;
-
-    const q = String(document.getElementById("pickRecipeQuery")?.value || "").trim().toLowerCase();
-    const allTypes = !!document.getElementById("pickRecipeAllTypes")?.checked;
-
-    results.innerHTML = "";
-
+  MB.refreshPickRecipeResults = function refreshPickRecipeResults() {
     const ctx = MB.state.pickCtx;
+    const hint = document.getElementById("pickRecipeHint");
+    const res = document.getElementById("pickRecipeResults");
+    const q = document.getElementById("pickRecipeQuery");
+    const all = document.getElementById("pickRecipeAllTypes");
+
+    if (!hint || !res || !q || !all) return;
+
+    res.innerHTML = "";
+
     if (!ctx) {
       hint.textContent = "Contexte introuvable (slot non sélectionné).";
       return;
     }
 
     const slot = MB.state.menu?.[ctx.day]?.[ctx.meal]?.slots?.[ctx.slot];
-    if (slot?.locked) {
-      hint.textContent = "Slot verrouillé : recherche désactivée.";
+    if (!slot) {
+      hint.textContent = "Slot introuvable.";
       return;
     }
 
-    const slotType = slot?.type || MB.DEFAULT_SLOT_TYPE;
-    const baseList = allTypes ? MB.state.recipes : MB.state.pools[slotType] || [];
+    const query = String(q.value || "").trim().toLowerCase();
 
-    hint.textContent = allTypes
-      ? `Recherche dans toutes les recettes (groupe du slot : ${slotType}).`
-      : `Recherche dans les recettes du groupe : ${slotType}.`;
+    const type = String(slot.type || "");
+    const pool = all.checked ? MB.state.recipes : MB.state.pools?.[type] || [];
 
-    let filtered = baseList;
-    if (q.length > 0) filtered = baseList.filter((r) => String(r?.title || "").toLowerCase().includes(q));
-    filtered = filtered.slice(0, 30);
+    const filtered = (Array.isArray(pool) ? pool : []).filter((r) => {
+      if (!query) return true;
+      const hay = `${r?.recipe_title || ""} ${r?.title || ""} ${r?.description || ""}`.toLowerCase();
+      return hay.includes(query);
+    });
 
-    if (filtered.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "text-muted small";
-      empty.textContent = "Aucun résultat.";
-      results.appendChild(empty);
-      return;
+    hint.textContent = `${filtered.length} résultat(s)`;
+
+    const maxShow = 60;
+    const slice = filtered.slice(0, maxShow);
+
+    slice.forEach((r, i) => {
+      const name = r?.recipe_title || r?.title || "Recette";
+      const kcal = global.MenuEngine.getRecipeCalories(r);
+      const carbs = global.MenuEngine.getRecipeNetCarbs(r);
+      const fat = global.MenuEngine.getRecipeFat(r);
+      const prot = typeof global.MenuEngine.getRecipeProtein === "function" ? global.MenuEngine.getRecipeProtein(r) : 0;
+
+      const item = document.createElement("div");
+      item.className = "list-group-item d-flex justify-content-between align-items-start gap-2";
+
+      item.innerHTML = `
+        <div class="flex-grow-1">
+          <div class="fw-semibold">${MB.escapeHtml(name)}</div>
+          <div class="small text-muted">
+            ${kcal} kcal · P ${Math.round(prot * 10) / 10} g · G ${Math.round(carbs * 10) / 10} g · L ${Math.round(fat * 10) / 10} g
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" type="button" data-recipe-idx="${i}">
+          Choisir
+        </button>
+      `;
+      res.appendChild(item);
+    });
+
+    if (filtered.length > maxShow) {
+      const more = document.createElement("div");
+      more.className = "small text-muted mt-2";
+      more.textContent = `Affichage limité à ${maxShow} résultats. Affine la recherche.`;
+      res.appendChild(more);
     }
 
-    for (const r of filtered) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "list-group-item list-group-item-action";
-
-      const title = r?.title ?? "Recette sans titre";
-      const kcalN = parseInt(r?.calories, 10);
-      const kcal = Number.isFinite(kcalN) ? `${kcalN} kcal` : "— kcal";
-      const group = r?.recipe_group ? `(${r.recipe_group})` : "";
-
-      btn.innerHTML = `<div class="d-flex justify-content-between gap-2">
-        <div><strong>${MB.escapeHtml(title)}</strong> <span class="text-muted">${MB.escapeHtml(group)}</span></div>
-        <div class="text-muted">${MB.escapeHtml(kcal)}</div>
-      </div>`;
-
-      btn.addEventListener("click", () => MB.applyPickedRecipe(r));
-      results.appendChild(btn);
-    }
+    MB._pickRecipeList = slice;
   };
 
-  MB.applyPickedRecipe = function applyPickedRecipe(recipe) {
+  MB.confirmPickRecipe = function confirmPickRecipe(idx) {
     const ctx = MB.state.pickCtx;
     if (!ctx) return;
 
-    const s = MB.state.menu?.[ctx.day]?.[ctx.meal]?.slots?.[ctx.slot];
-    if (!s) return;
+    const list = Array.isArray(MB._pickRecipeList) ? MB._pickRecipeList : [];
+    const picked = list[idx];
+    if (!picked) return;
 
-    if (s.locked) {
-      MB.showMessage("Slot verrouillé : tu dois d’abord déverrouiller pour changer la recette.", "warning");
+    const slot = MB.state.menu?.[ctx.day]?.[ctx.meal]?.slots?.[ctx.slot];
+    if (!slot) return;
+
+    const { remaining } = buildRemainingLimitsForDay(ctx.day);
+
+    const kcal = global.MenuEngine.getRecipeCalories(picked);
+    const carbs = global.MenuEngine.getRecipeNetCarbs(picked);
+    const fat = global.MenuEngine.getRecipeFat(picked);
+
+    const ok = kcal <= remaining.kcalMax && carbs <= remaining.carbMax && fat <= remaining.fatMax;
+    if (!ok) {
+      MB.showMessage("Cette recette ferait dépasser au moins un plafond pour ce jour (bloquant).", "warning");
       return;
     }
 
-    const { calorieMax } = MB.readParams();
-    const currentSlotKcal = global.MenuEngine.getRecipeCalories(s?.recipe);
-    const dayTotal = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, ctx.day);
-    const remaining =
-      Number.isFinite(calorieMax) && calorieMax > 0 ? calorieMax - (dayTotal - currentSlotKcal) : Infinity;
+    slot.recipe = picked;
+    slot.locked = false;
 
-    const pickedKcal = global.MenuEngine.getRecipeCalories(recipe);
-    if (Number.isFinite(calorieMax) && calorieMax > 0 && pickedKcal > remaining) {
-      MB.showMessage(
-        `Recette trop calorique pour ce jour : ${pickedKcal} kcal (MAX restant : ${Math.max(0, remaining)} kcal).`,
-        "warning"
-      );
-      return;
-    }
-
-    s.recipe = recipe;
-    s.locked = true;
-
-    MB.state.pickCtx = null;
     MB.closeModal("pickRecipeModal");
     MB.rerender();
   };
