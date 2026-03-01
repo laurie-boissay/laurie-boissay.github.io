@@ -356,8 +356,7 @@ Dépendances
 
     if (/\b(legumes|legume|légumes|légume)\b/.test(g)) return "Légumes";
     if (/\b(viandes|viande)\b/.test(g)) return "Viandes";
-    if (/\b(poissons|poisson|fruits de mer|fruits-de-mer|fruit de mer|crevettes)\b/.test(g))
-      return "Poissons & fruits de mer";
+    if (/\b(poissons|poisson|fruits de mer|fruits-de-mer|fruit de mer|crevettes)\b/.test(g)) return "Poissons & fruits de mer";
     if (/\b(fromages|fromage|cremerie|crèmerie|lait|yaourt)\b/.test(g)) return "Crèmerie";
     if (/\b(epicerie|épicerie)\b/.test(g)) return "Épicerie";
     if (/\b(assaisonnements|assaisonnement|epices|épices)\b/.test(g)) return "Assaisonnements";
@@ -388,8 +387,7 @@ Dépendances
   }
 
   function collectShoppingList(menu) {
-    // 1) Recenser les recettes présentes au moins une fois dans le menu.
-    //    Note : pour l'instant, les doublons dans le menu ne multiplient pas la liste de courses.
+    // 1) Compter les occurrences de recettes (un slot = une portion)
     const usage = new Map();
     for (const dayMeals of menu) {
       if (!Array.isArray(dayMeals)) continue;
@@ -403,25 +401,24 @@ Dépendances
           if (!id) continue;
 
           const cur = usage.get(id) || { recipe: r, portions: 0 };
-          cur.portions += 1; // conservé (debug/évolutions), mais non utilisé pour le calcul actuel
+          cur.portions += 1;
           cur.recipe = r;
           usage.set(id, cur);
         }
       }
     }
 
-    // 2) Agréger ingrédients (règle actuelle : recette complète, sans multiplication)
+    // 2) Agréger ingrédients (mise à l'échelle via servings si présent)
     const agg = new Map(); // key → { name, unit, qty, group? }
     const misc = []; // lignes non parsées (affichées dans un bloc séparé)
 
     for (const { recipe } of usage.values()) {
-      // Règle demandée :
+      // Règle actuelle :
       // - si une recette apparaît dans le menu, on prend les quantités telles qu’écrites
       //   (donc pour le servings de la recette)
       // - on ne multiplie pas même si la recette apparaît plusieurs fois
       const factor = 1;
-
-      const ing = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
+const ing = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
       for (const line of ing) {
         // --- NOUVEAU FORMAT : ingrédient structuré (objet YAML) ----------------
         const structured = normalizeStructuredIngredient(line);
@@ -515,7 +512,14 @@ Dépendances
     setText(doc, 9.5, 235, 242, 255, "normal");
     doc.text("(agrégée à partir des recettes du menu)", pageW - 14, 12, { align: "right" });
 
-    cursor.y = 26;
+    // Avertissement : la liste de courses repose sur des heuristiques (parsing legacy, regroupements, arrondis).
+    // Elle est signalée comme "travail en cours" pour éviter une confiance excessive.
+    setText(doc, 9.5, palette.warn[0], palette.warn[1], palette.warn[2], "bold");
+    doc.text("Liste de courses : travail en cours (peut contenir des imprécisions).", 14, 22);
+    setText(doc, 9.5, palette.muted[0], palette.muted[1], palette.muted[2], "normal");
+    doc.text("Vérifie surtout les unités/quantités et le bloc \"À vérifier (non agrégé)\".", 14, 27);
+
+    cursor.y = 34;
 
     const order = [
       "Légumes",
