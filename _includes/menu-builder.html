@@ -2,6 +2,7 @@
 ==============================================================================
 _includes/menu-builder.html — Générateur de menu (UI)
 ==============================================================================
+
 Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
 - #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
@@ -93,7 +94,18 @@ Contrat DOM attendu
 
       <div class="col-md-4">
         <label class="form-label" for="fatMax">Lipides max / jour (g)</label>
-        <input type="number" id="fatMax" class="form-control" value="80" step="1" min="0">
+        <input
+          type="number"
+          id="fatMax"
+          class="form-control"
+          value=""
+          placeholder="(optionnel)"
+          step="1"
+          min="0"
+        >
+        <div class="form-text">
+          Laisse vide (ou 0) pour désactiver ce plafond.
+        </div>
       </div>
 
     </div>

@@ -37,13 +37,11 @@ Contrat
     const btn = document.getElementById("daysCountBtn");
     if (!input || !btn) return;
 
-    // Init label (au chargement)
     const initial = parseInt(input.value, 10);
     const safeInitial = Math.max(1, Math.min(7, Number.isFinite(initial) ? initial : 3));
     input.value = String(safeInitial);
     btn.textContent = normalizeDaysCountLabel(safeInitial);
 
-    // Délégation sur les items dropdown
     btn.closest(".btn-group")?.addEventListener("click", (e) => {
       const item = e.target?.closest?.("button[data-days]");
       if (!item) return;
@@ -55,7 +53,6 @@ Contrat
       input.value = String(safe);
       btn.textContent = normalizeDaysCountLabel(safe);
 
-      // Rerender sans régénérer
       MB.rerender?.();
     });
   };
@@ -66,22 +63,27 @@ Contrat
 
   MB.generateMenu = function generateMenu() {
     if (!Array.isArray(MB.state.recipes) || MB.state.recipes.length === 0) {
+      // Message utile uniquement si aucune donnée : c’est un vrai blocage.
       MB.showMessage("Aucune recette disponible. Le menu ne peut pas être généré.", "danger");
       return;
     }
-
-    MB.hideMessage();
 
     const params = MB.readParams();
     const limits = buildLimitsFromParams(params);
 
     const hasExisting = Array.isArray(MB.state.menu) && MB.state.menu.length === 7;
+
+    // Premier tirage : aucune alerte UI (silencieux).
+    if (!hasExisting) MB.hideMessage();
+
     const baseMenu = hasExisting ? MB.state.menu : global.MenuEngine.createFreshSkeleton(MB.state.pools, params.mealsPerDay);
 
-    // Plafonds bloquants : kcal + glucides nets + lipides
-    const newMenu = global.MenuEngine.buildMenuUnderLimits(MB.state.pools, baseMenu, params.mealsPerDay, limits);
+    // Tirage “meilleur effort” : tentatives par jour pour réduire les slots vides.
+    const newMenu = global.MenuEngine.buildMenuUnderLimits(MB.state.pools, baseMenu, params.mealsPerDay, limits, {
+      dayRestarts: 20,
+      pickTries: 80,
+    });
 
-    // Analyse : dépassements (souvent slots verrouillés) + slots vides (bloquant)
     const status = global.MenuEngine.computeLimitsStatus(newMenu, limits, params.daysCount);
 
     const getDayLabel = (dayOffset) => {
@@ -90,24 +92,24 @@ Contrat
       return MB.DAYS[dayIndex];
     };
 
-    const parts = [];
+    // À partir du 2e tirage : messages neutres et courts, uniquement si nécessaire.
+    if (hasExisting) {
+      const parts = [];
+      if (status.overs.kcal.length > 0) parts.push(`Kcal : ${formatOvers(status.overs.kcal, getDayLabel, "kcal")}`);
+      if (status.overs.carb.length > 0) parts.push(`Glucides nets : ${formatOvers(status.overs.carb, getDayLabel, "g")}`);
+      if (status.overs.fat.length > 0) parts.push(`Lipides : ${formatOvers(status.overs.fat, getDayLabel, "g")}`);
 
-    if (status.overs.kcal.length > 0) parts.push(`Kcal dépassées : ${formatOvers(status.overs.kcal, getDayLabel, "kcal")}`);
-    if (status.overs.carb.length > 0) parts.push(`Glucides nets dépassés : ${formatOvers(status.overs.carb, getDayLabel, "g")}`);
-    if (status.overs.fat.length > 0) parts.push(`Lipides dépassés : ${formatOvers(status.overs.fat, getDayLabel, "g")}`);
-
-    if (parts.length > 0) {
-      MB.showMessage(
-        `Menu généré, mais certains plafonds sont dépassés (cause probable : slots verrouillés). ${parts.join(" | ")}.`,
-        "warning"
-      );
-    } else if (status.empties > 0) {
-      MB.showMessage(
-        `Menu généré, mais ${status.empties} slot(s) n’ont pas pu être remplis sans dépasser au moins un plafond (bloquant).`,
-        "warning"
-      );
-    } else {
-      MB.hideMessage();
+      if (parts.length > 0) {
+        // Dépassements = généralement slots verrouillés : on l’indique sans ton “erreur”.
+        MB.showMessage(`Info : certains plafonds sont dépassés (souvent dû à des slots verrouillés). ${parts.join(" | ")}.`, "secondary");
+      } else if (status.empties > 0) {
+        MB.showMessage(
+          `Info : ${status.empties} slot(s) n’ont pas trouvé de recette compatible avec les plafonds actuels.`,
+          "secondary"
+        );
+      } else {
+        MB.hideMessage();
+      }
     }
 
     MB.state.menu = newMenu;
@@ -135,7 +137,7 @@ Contrat
   };
 
   // ---------------------------------------------------------------------------
-  // Interactions sur la grille
+  // Interactions sur la grille (inchangé)
   // ---------------------------------------------------------------------------
 
   MB.setupMenuInteractions = function setupMenuInteractions() {
@@ -170,11 +172,7 @@ Contrat
 
       if (action === "remove-slot") {
         if (!s) return;
-        if (s.locked) {
-          MB.showMessage("Slot verrouillé : suppression interdite. Déverrouille d’abord.", "warning");
-          return;
-        }
-        if (slots.length <= 1) return;
+        if (s.locked) return;
         slots.splice(slot, 1);
         MB.rerender();
         return;
@@ -194,7 +192,6 @@ Contrat
         const curC = global.MenuEngine.getRecipeNetCarbs(s?.recipe);
         const curF = global.MenuEngine.getRecipeFat(s?.recipe);
 
-        // Reroll : on “retire” le slot actuel, puis tirage sous plafonds restants.
         const remK = (limits.kcalMax > 0 ? limits.kcalMax : Infinity) - (dayK - curK);
         const remC = (limits.carbMax > 0 ? limits.carbMax : Infinity) - (dayC - curC);
         const remF = (limits.fatMax > 0 ? limits.fatMax : Infinity) - (dayF - curF);
@@ -205,7 +202,6 @@ Contrat
           fatMax: remF,
         });
 
-        // Bloquant : si aucune recette ne passe, slot vidé (visible).
         s.recipe = next;
         MB.rerender();
         return;
@@ -219,11 +215,7 @@ Contrat
       }
 
       if (action === "pick-recipe") {
-        if (!s) return;
-        if (s.locked) {
-          MB.showMessage("Slot verrouillé : recherche interdite. Déverrouille d’abord.", "warning");
-          return;
-        }
+        if (!s || s.locked) return;
         MB.state.pickCtx = { day, meal, slot };
         MB.openModal("pickRecipeModal");
       }
@@ -242,7 +234,6 @@ Contrat
       if (!s) return;
 
       if (s.locked) {
-        MB.showMessage("Slot verrouillé : changement de type interdit. Déverrouille d’abord.", "warning");
         sel.value = s.type;
         return;
       }
@@ -270,7 +261,6 @@ Contrat
         fatMax: remF,
       });
 
-      // Bloquant : type accepté, mais slot vide si impossible.
       s.type = newType;
       s.recipe = next;
       s.locked = false;

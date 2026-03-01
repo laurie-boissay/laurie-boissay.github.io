@@ -15,6 +15,10 @@ Contrats
 - Les fonctions n’accèdent pas à des variables globales : tout est injecté via arguments.
 - Format menu :
   menu[day][meal] = { slots: [ { type, recipe, locked } ] }
+
+Notes importantes
+- Le tirage “bloquant” est conservé : si aucun candidat ne passe, recipe = null.
+- Pour limiter les slots vides, la génération fait des tentatives (restart de journée).
 ============================================================================== */
 
 "use strict";
@@ -24,17 +28,7 @@ Contrats
   // Source unique des types (UI)
   // ---------------------------------------------------------------------------
 
-  /**
-   * Liste CANONIQUE des types affichables.
-   * - Inclut les recipe_group officiels utiles au menu-builder.
-   * - Inclut les types synthétiques (Plat/Snack/Final).
-   *
-   * Contrat :
-   * - `value` correspond aux clés utilisées dans `pools` et aux `slot.type`.
-   * - `label` est l’étiquette UI.
-   */
   const SLOT_TYPES = Object.freeze([
-    // Groupes “réels” (recipe_group)
     { value: "Légumes & accompagnements", label: "Accompagnement" },
     { value: "Amuse-bouche", label: "Amuse-bouche" },
     { value: "Barres nutritionnelles", label: "Barre nutritionnelle" },
@@ -56,16 +50,11 @@ Contrats
     { value: "Viandes", label: "Viandes" },
     { value: "Yaourts", label: "Yaourts" },
 
-    // Types synthétiques
     { value: "Plat", label: "Plat (au hasard)" },
     { value: "Snack", label: "Snack (au hasard)" },
     { value: "Final", label: "Final (au hasard)" },
   ]);
 
-  /**
-   * API publique : retourne une copie défensive de la liste canonique.
-   * @returns {Array<{value:string,label:string}>}
-   */
   function getSlotTypes() {
     return SLOT_TYPES.map((t) => ({ value: t.value, label: t.label }));
   }
@@ -90,14 +79,9 @@ Contrats
   const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits frais", "Fruits à coque"];
 
   // ---------------------------------------------------------------------------
-  // Helpers robustes : parsing + chemins alternatifs
+  // Helpers robustes : parsing + limites
   // ---------------------------------------------------------------------------
 
-  /**
-   * Parse un nombre “userland” (gère "11,5" => 11.5).
-   * @param {any} v
-   * @returns {number|null}
-   */
   function parseNumberLike(v) {
     if (v === null || v === undefined) return null;
     if (typeof v === "number") return Number.isFinite(v) ? v : null;
@@ -110,12 +94,6 @@ Contrats
     return Number.isFinite(n) ? n : null;
   }
 
-  /**
-   * Retourne le 1er nombre valide (>= 0) parmi plusieurs chemins possibles.
-   * @param {any} recipe
-   * @param {Array<(r:any)=>any>} pickers
-   * @returns {number}
-   */
   function getFirstNonNegativeNumber(recipe, pickers) {
     for (const pick of pickers) {
       const n = parseNumberLike(pick(recipe));
@@ -125,35 +103,24 @@ Contrats
     return 0;
   }
 
-  /**
-   * Plafond absent/0 => Infinity (pas de contrainte).
-   * @param {any} limit
-   * @returns {number}
-   */
   function normalizeLimitToInfinity(limit) {
     const n = parseNumberLike(limit);
     return n !== null && n > 0 ? n : Infinity;
+  }
+
+  function clampNonNegative(n) {
+    return Number.isFinite(n) ? Math.max(0, n) : 0;
   }
 
   // ---------------------------------------------------------------------------
   // Getters nutrition (source unique côté moteur)
   // ---------------------------------------------------------------------------
 
-  /**
-   * Normalise une valeur “kcal” (entier ≥ 0).
-   * @param {any} recipe
-   * @returns {number}
-   */
   function getRecipeCalories(recipe) {
     const kcal = parseInt(recipe?.calories ?? 0, 10);
     return Number.isFinite(kcal) && kcal > 0 ? kcal : 0;
   }
 
-  /**
-   * Lipides (g) — tolérant aux variations de structure JSON.
-   * @param {any} recipe
-   * @returns {number}
-   */
   function getRecipeFat(recipe) {
     return getFirstNonNegativeNumber(recipe, [
       (r) => r?.nutrition?.lipides,
@@ -165,11 +132,6 @@ Contrats
     ]);
   }
 
-  /**
-   * Glucides nets (g) — tolérant.
-   * @param {any} recipe
-   * @returns {number}
-   */
   function getRecipeNetCarbs(recipe) {
     return getFirstNonNegativeNumber(recipe, [
       (r) => r?.glucides_nets,
@@ -181,11 +143,6 @@ Contrats
     ]);
   }
 
-  /**
-   * Protéines (g) — tolérant.
-   * @param {any} recipe
-   * @returns {number}
-   */
   function getRecipeProtein(recipe) {
     return getFirstNonNegativeNumber(recipe, [
       (r) => r?.proteines,
@@ -253,11 +210,6 @@ Contrats
   // Pools
   // ---------------------------------------------------------------------------
 
-  /**
-   * Construit un index complet recipe_group -> recettes.
-   * @param {Array} recipes
-   * @returns {Record<string, Array>}
-   */
   function buildGroupIndex(recipes) {
     const index = {};
     for (const r of Array.isArray(recipes) ? recipes : []) {
@@ -269,12 +221,6 @@ Contrats
     return index;
   }
 
-  /**
-   * Construit un pool agrégé = concat des pools des groupes fournis.
-   * @param {Record<string, Array>} groupIndex
-   * @param {string[]} groups
-   * @returns {Array}
-   */
   function buildAggregatePoolFromIndex(groupIndex, groups) {
     const agg = [];
     for (const g of groups) {
@@ -284,12 +230,6 @@ Contrats
     return agg;
   }
 
-  /**
-   * Construit les pools de recettes par type.
-   * @param {Array} recipes
-   * @param {Array<{value:string,label:string}>=} slotTypesOverride
-   * @returns {Record<string, Array>}
-   */
   function buildPools(recipes, slotTypesOverride) {
     const slotTypes = Array.isArray(slotTypesOverride) && slotTypesOverride.length > 0 ? slotTypesOverride : SLOT_TYPES;
 
@@ -298,13 +238,11 @@ Contrats
 
     const groupIndex = buildGroupIndex(recipes);
 
-    // Pools “réels” : uniquement si la clé existe dans slotTypes.
     for (const key of Object.keys(pools)) {
       if (key === AGG_PLAT_KEY || key === AGG_SNACK_KEY || key === AGG_FINAL_KEY) continue;
       pools[key] = groupIndex[key] ? [...groupIndex[key]] : [];
     }
 
-    // Pools synthétiques.
     if (Object.prototype.hasOwnProperty.call(pools, AGG_PLAT_KEY)) {
       pools[AGG_PLAT_KEY] = buildAggregatePoolFromIndex(groupIndex, AGG_PLAT_GROUPS);
     }
@@ -319,7 +257,7 @@ Contrats
   }
 
   // ---------------------------------------------------------------------------
-  // Slots par défaut / tirages
+  // Slots par défaut
   // ---------------------------------------------------------------------------
 
   function isSnackMeal(mealsPerDay, mealIndex) {
@@ -351,14 +289,25 @@ Contrats
     return normalizeTypesAgainstPools(pools, [AGG_PLAT_KEY, AGG_FINAL_KEY]);
   }
 
+  // ---------------------------------------------------------------------------
+  // Tirage sous plafonds (amélioré)
+  // ---------------------------------------------------------------------------
+
+  function passesLimits(recipe, kcalMax, carbMax, fatMax) {
+    return getRecipeCalories(recipe) <= kcalMax && getRecipeNetCarbs(recipe) <= carbMax && getRecipeFat(recipe) <= fatMax;
+  }
+
   /**
-   * Tirage sous plafonds : kcal + glucides nets + lipides.
+   * Tirage sous plafonds : tente plusieurs échantillons aléatoires avant abandon.
+   * Objectif : éviter les "slots vides" dus au hasard, sans faire de backtracking lourd.
+   *
    * @param {Record<string, Array>} pools
    * @param {string} type
    * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
+   * @param {{maxTries?:number}=} opts
    * @returns {any|null}
    */
-  function pickRecipeWithLimits(pools, type, limits) {
+  function pickRecipeWithLimits(pools, type, limits, opts) {
     const pool = pools?.[String(type || "")] || [];
     if (pool.length === 0) return null;
 
@@ -370,20 +319,31 @@ Contrats
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
-    const filtered = pool.filter((r) => {
-      return getRecipeCalories(r) <= kcalMax && getRecipeNetCarbs(r) <= carbMax && getRecipeFat(r) <= fatMax;
-    });
+    const maxTries = Math.max(5, Math.min(200, parseInt(opts?.maxTries ?? 60, 10) || 60));
 
+    // Cas pools petits : filtrage direct (simple et rapide)
+    if (pool.length <= 40) {
+      const filtered = pool.filter((r) => passesLimits(r, kcalMax, carbMax, fatMax));
+      if (filtered.length === 0) return null;
+      return filtered[Math.floor(Math.random() * filtered.length)];
+    }
+
+    // Cas pools moyens/grands : échantillonnage aléatoire (évite filter complet à répétition)
+    for (let i = 0; i < maxTries; i++) {
+      const r = pool[Math.floor(Math.random() * pool.length)];
+      if (passesLimits(r, kcalMax, carbMax, fatMax)) return r;
+    }
+
+    // Fallback : filtrage complet si l’échantillonnage n’a rien trouvé (peut être très contraint)
+    const filtered = pool.filter((r) => passesLimits(r, kcalMax, carbMax, fatMax));
     if (filtered.length === 0) return null;
     return filtered[Math.floor(Math.random() * filtered.length)];
   }
 
-  /**
-   * Génère un squelette complet (7 jours) avec slots par défaut selon le repas.
-   * @param {Record<string, Array>} pools
-   * @param {number} mealsPerDay
-   * @returns {Array}
-   */
+  // ---------------------------------------------------------------------------
+  // Génération : squelette + construction sous plafonds
+  // ---------------------------------------------------------------------------
+
   function createFreshSkeleton(pools, mealsPerDay) {
     const out = [];
 
@@ -406,36 +366,54 @@ Contrats
     return out;
   }
 
-  /**
-   * Construit un menu sous plafonds, en respectant :
-   * - slots verrouillés (conservés)
-   * - types des slots existants
-   * - tirage sous plafonds restants (kcal + glucides nets + lipides)
-   *
-   * Bloquant : si aucune recette ne passe, slot vide (recipe = null).
-   *
-   * @param {Record<string, Array>} pools
-   * @param {Array} prevMenu
-   * @param {number} mealsPerDay
-   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
-   * @returns {Array}
-   */
-  function buildMenuUnderLimits(pools, prevMenu, mealsPerDay, limits) {
-    const out = [];
+  function cloneDayStructure(dayMeals) {
+    return (Array.isArray(dayMeals) ? dayMeals : []).map((meal) => ({
+      slots: (Array.isArray(meal?.slots) ? meal.slots : []).map((s) => ({
+        type: String(s?.type || ""),
+        recipe: s?.recipe ?? null,
+        locked: !!s?.locked,
+      })),
+    }));
+  }
 
+  function countDayEmpties(dayMeals) {
+    let empties = 0;
+    for (const meal of Array.isArray(dayMeals) ? dayMeals : []) {
+      for (const s of Array.isArray(meal?.slots) ? meal.slots : []) {
+        if (!s?.recipe) empties += 1;
+      }
+    }
+    return empties;
+  }
+
+  /**
+   * Construit UNE journée sous plafonds, avec tentatives.
+   * - On conserve les slots verrouillés tels quels (même s’ils dépassent).
+   * - Pour les slots non verrouillés, on tire sous "restant" à l’instant T.
+   * - Si un slot est impossible, on retente la journée complète quelques fois.
+   */
+  function buildOneDayUnderLimits(pools, baseDay, mealsPerDay, limits, opts) {
     const kcalMax = normalizeLimitToInfinity(limits?.kcalMax);
     const carbMax = normalizeLimitToInfinity(limits?.carbMax);
     const fatMax = normalizeLimitToInfinity(limits?.fatMax);
 
-    for (let d = 0; d < 7; d++) {
-      const prevDay = prevMenu?.[d] || [];
+    const dayRestarts = Math.max(1, Math.min(60, parseInt(opts?.dayRestarts ?? 20, 10) || 20));
+    const pickTries = Math.max(10, Math.min(200, parseInt(opts?.pickTries ?? 80, 10) || 80));
+
+    const defaultTypesByMeal = [];
+    for (let m = 0; m < mealsPerDay; m++) defaultTypesByMeal.push(getDefaultSlotTypeListForMeal(pools, mealsPerDay, m));
+
+    let best = null;
+    let bestEmpties = Infinity;
+
+    for (let attempt = 0; attempt < dayRestarts; attempt++) {
       const newDay = [];
 
       for (let m = 0; m < mealsPerDay; m++) {
-        const prevMeal = prevDay[m];
+        const prevMeal = baseDay?.[m];
         const prevSlots = Array.isArray(prevMeal?.slots) ? prevMeal.slots : null;
 
-        const defaultTypes = getDefaultSlotTypeListForMeal(pools, mealsPerDay, m);
+        const defaultTypes = defaultTypesByMeal[m];
 
         const baseSlots =
           prevSlots && prevSlots.length > 0
@@ -465,11 +443,12 @@ Contrats
           const remainingC = carbMax - usedC;
           const remainingF = fatMax - usedF;
 
-          const picked = pickRecipeWithLimits(pools, type, {
-            kcalMax: remainingK,
-            carbMax: remainingC,
-            fatMax: remainingF,
-          });
+          const picked = pickRecipeWithLimits(
+            pools,
+            type,
+            { kcalMax: remainingK, carbMax: remainingC, fatMax: remainingF },
+            { maxTries: pickTries }
+          );
 
           newSlots.push({ type, recipe: picked, locked: false });
         }
@@ -477,23 +456,48 @@ Contrats
         newDay.push({ slots: newSlots });
       }
 
-      out.push(newDay);
+      const empties = countDayEmpties(newDay);
+
+      // Optimisation : si on a 0 vide, on prend direct.
+      if (empties === 0) return newDay;
+
+      // Sinon, on garde la meilleure tentative.
+      if (empties < bestEmpties) {
+        bestEmpties = empties;
+        best = newDay;
+      }
+    }
+
+    // Si on n’a jamais réussi à remplir tout, on retourne la meilleure version.
+    return best || cloneDayStructure(baseDay);
+  }
+
+  /**
+   * Construit un menu sous plafonds, avec tentatives par journée pour réduire les slots vides.
+   *
+   * @param {Record<string, Array>} pools
+   * @param {Array} prevMenu
+   * @param {number} mealsPerDay
+   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
+   * @param {{dayRestarts?:number,pickTries?:number}=} opts
+   * @returns {Array}
+   */
+  function buildMenuUnderLimits(pools, prevMenu, mealsPerDay, limits, opts) {
+    const out = [];
+
+    for (let d = 0; d < 7; d++) {
+      const prevDay = prevMenu?.[d] || [];
+      const builtDay = buildOneDayUnderLimits(pools, prevDay, mealsPerDay, limits, opts);
+      out.push(builtDay);
     }
 
     return out;
   }
 
-  /**
-   * Analyse un menu : dépassements plafonds + slots vides.
-   * @param {Array} menu
-   * @param {{kcalMax?:number,carbMax?:number,fatMax?:number}} limits
-   * @param {number=} daysCount
-   * @returns {{
-   *   limits:{kcalMax:number,carbMax:number,fatMax:number},
-   *   overs:{kcal:Array<{dayIndex:number,total:number}>,carb:Array<{dayIndex:number,total:number}>,fat:Array<{dayIndex:number,total:number}>},
-   *   empties:number
-   * }}
-   */
+  // ---------------------------------------------------------------------------
+  // Analyse : dépassements plafonds + slots vides
+  // ---------------------------------------------------------------------------
+
   function computeLimitsStatus(menu, limits, daysCount) {
     const safeDaysCount = Math.max(1, Math.min(7, parseInt(daysCount, 10) || 7));
 

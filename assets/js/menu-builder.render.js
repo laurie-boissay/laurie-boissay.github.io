@@ -165,7 +165,10 @@ Rôle
 
           pickBtn.disabled = !!slotObj.locked;
           rerollBtn.disabled = !!slotObj.locked;
-          removeBtn.disabled = slots.length <= 1 || !!slotObj.locked;
+
+          // Permet de supprimer aussi le dernier slot d’un repas.
+          // Contrat UX : un repas peut temporairement avoir 0 slot ; le bouton "+" permet d’en recréer.
+          removeBtn.disabled = !!slotObj.locked;
 
           const r = slotObj.recipe;
           const title = r?.title ?? "— (non rempli)";

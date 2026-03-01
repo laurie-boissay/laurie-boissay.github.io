@@ -5,12 +5,14 @@ Rôle
 - Créer et gérer les modales :
   • "Ajouter un slot"
   • "Rechercher une recette"
-- Le contenu proposé respecte les plafonds bloquants :
+- Proposer des choix compatibles avec les plafonds bloquants :
   kcal + glucides nets + lipides.
 
-Contrat
-- S’appuie sur MenuEngine pour les getters et le tirage sous plafonds.
-- Ne dépend pas du rendu grille (menu-builder.render.js) sauf via MB.state.menu.
+Choix UX
+- "Ajouter un slot" : affiche tous les types, désactive ceux impossibles.
+- "Rechercher une recette" : calcule la compatibilité en mode REMPLACEMENT
+  (on retire d’abord la recette du slot courant), et désactive "Choisir"
+  si la recette ne passe pas (pas de clic “qui ne fait rien”).
 ============================================================================== */
 
 "use strict";
@@ -55,12 +57,22 @@ Contrat
   // Utils : plafonds (kcal + carbs + fat)
   // ---------------------------------------------------------------------------
 
+  function parseNumberLike(v) {
+    if (v === null || v === undefined) return null;
+    if (typeof v === "number") return Number.isFinite(v) ? v : null;
+    const s = String(v ?? "").trim();
+    if (!s) return null;
+    const n = parseFloat(s.replace(",", "."));
+    return Number.isFinite(n) ? n : null;
+  }
+
   function normalizeLimitToInfinity(v) {
-    const n =
-      typeof v === "number"
-        ? v
-        : parseFloat(String(v ?? "").trim().replace(",", "."));
-    return Number.isFinite(n) && n > 0 ? n : Infinity;
+    const n = parseNumberLike(v);
+    return n !== null && n > 0 ? n : Infinity;
+  }
+
+  function clamp0(n) {
+    return Number.isFinite(n) ? Math.max(0, n) : 0;
   }
 
   function getAllSlotTypesForAdd() {
@@ -96,47 +108,64 @@ Contrat
     };
   }
 
-  function getAddableTypesForDayUnderLimits(dayIndex) {
-    const types = getAllSlotTypesForAdd();
-    const { remaining } = buildRemainingLimitsForDay(dayIndex);
+  /**
+   * Calcule les plafonds restants pour REMPLACER un slot :
+   * restant = max - (totalJour - contributionSlotActuel)
+   */
+  function buildRemainingLimitsForSlot(dayIndex, mealIndex, slotIndex) {
+    const p = MB.readParams();
 
-    return types.filter((t) => {
-      const pool = MB.state.pools?.[t.value] || [];
-      if (!Array.isArray(pool) || pool.length === 0) return false;
+    const maxK = normalizeLimitToInfinity(p.calorieMax);
+    const maxC = normalizeLimitToInfinity(p.carbMax);
+    const maxF = normalizeLimitToInfinity(p.fatMax);
 
-      // Au moins 1 recette doit passer les plafonds restants.
-      return pool.some((r) => {
-        return (
-          global.MenuEngine.getRecipeCalories(r) <= remaining.kcalMax &&
-          global.MenuEngine.getRecipeNetCarbs(r) <= remaining.carbMax &&
-          global.MenuEngine.getRecipeFat(r) <= remaining.fatMax
-        );
-      });
+    const dayK = global.MenuEngine.getDayCaloriesFromMenu(MB.state.menu, dayIndex);
+    const dayC = global.MenuEngine.getDayNetCarbsFromMenu(MB.state.menu, dayIndex);
+    const dayF = global.MenuEngine.getDayFatFromMenu(MB.state.menu, dayIndex);
+
+    const slot = MB.state.menu?.[dayIndex]?.[mealIndex]?.slots?.[slotIndex];
+    const curK = global.MenuEngine.getRecipeCalories(slot?.recipe);
+    const curC = global.MenuEngine.getRecipeNetCarbs(slot?.recipe);
+    const curF = global.MenuEngine.getRecipeFat(slot?.recipe);
+
+    // Totaux si on retire le slot courant
+    const baseK = dayK - curK;
+    const baseC = dayC - curC;
+    const baseF = dayF - curF;
+
+    return {
+      max: { kcalMax: maxK, carbMax: maxC, fatMax: maxF },
+      base: { kcal: baseK, carb: baseC, fat: baseF },
+      remaining: {
+        kcalMax: maxK - baseK,
+        carbMax: maxC - baseC,
+        fatMax: maxF - baseF,
+      },
+    };
+  }
+
+  function hasAnyCandidateForType(typeValue, remaining) {
+    const pool = MB.state.pools?.[typeValue] || [];
+    if (!Array.isArray(pool) || pool.length === 0) return false;
+
+    return pool.some((r) => {
+      return (
+        global.MenuEngine.getRecipeCalories(r) <= remaining.kcalMax &&
+        global.MenuEngine.getRecipeNetCarbs(r) <= remaining.carbMax &&
+        global.MenuEngine.getRecipeFat(r) <= remaining.fatMax
+      );
     });
   }
 
-  function formatRemainingHint(dayIndex) {
-    const { max, used, remaining } = buildRemainingLimitsForDay(dayIndex);
-
+  function formatRemainingHintParts(max, remaining) {
     const hasAnyLimit = max.kcalMax !== Infinity || max.carbMax !== Infinity || max.fatMax !== Infinity;
-    if (!hasAnyLimit) {
-      return "Aucun plafond défini : toutes les catégories avec recettes sont proposées.";
-    }
-
-    const overParts = [];
-    if (max.kcalMax !== Infinity && used.kcal > max.kcalMax) overParts.push("kcal");
-    if (max.carbMax !== Infinity && used.carb > max.carbMax) overParts.push("glucides nets");
-    if (max.fatMax !== Infinity && used.fat > max.fatMax) overParts.push("lipides");
-
-    if (overParts.length > 0) {
-      return `Plafond déjà dépassé (${overParts.join(", ")}) : ajout impossible sans dépasser.`;
-    }
+    if (!hasAnyLimit) return "";
 
     const parts = [];
-    if (max.kcalMax !== Infinity) parts.push(`Kcal restantes : ${Math.round(Math.max(0, remaining.kcalMax))} kcal`);
-    if (max.carbMax !== Infinity) parts.push(`Glucides nets restants : ${Math.round(Math.max(0, remaining.carbMax) * 10) / 10} g`);
-    if (max.fatMax !== Infinity) parts.push(`Lipides restants : ${Math.round(Math.max(0, remaining.fatMax) * 10) / 10} g`);
-    return parts.join(" | ");
+    if (max.kcalMax !== Infinity) parts.push(`${Math.round(clamp0(remaining.kcalMax))} kcal`);
+    if (max.carbMax !== Infinity) parts.push(`${Math.round(clamp0(remaining.carbMax) * 10) / 10} g glucides nets`);
+    if (max.fatMax !== Infinity) parts.push(`${Math.round(clamp0(remaining.fatMax) * 10) / 10} g lipides`);
+    return parts.length > 0 ? `Restant : ${parts.join(" · ")}` : "";
   }
 
   // ---------------------------------------------------------------------------
@@ -199,49 +228,54 @@ Contrat
 
     const ctx = MB.state.addCtx;
     if (!ctx || !Number.isFinite(ctx.day) || !Number.isFinite(ctx.meal)) {
-      hint.textContent = "Contexte introuvable (jour/repas non sélectionné).";
+      hint.textContent = "";
       sel.disabled = true;
       confirmBtn.disabled = true;
       return;
     }
 
-    // Diagnostic utile (sans console)
     const poolsKeys = Object.keys(MB.state.pools || {});
     if (poolsKeys.length === 0) {
-      hint.textContent = "Aucune recette chargée (pools vides) : impossible de proposer des types.";
+      hint.textContent = "";
       sel.disabled = true;
       confirmBtn.disabled = true;
       return;
     }
 
-    hint.textContent = formatRemainingHint(ctx.day);
-
-    const addable = getAddableTypesForDayUnderLimits(ctx.day);
-
-    if (addable.length === 0) {
+    const allTypes = getAllSlotTypesForAdd();
+    if (allTypes.length === 0) {
+      hint.textContent = "";
       sel.disabled = true;
       confirmBtn.disabled = true;
-
-      // Explication complémentaire (cas typique : types non init OU plafonds trop bas)
-      const allTypes = getAllSlotTypesForAdd();
-      if (allTypes.length === 0) {
-        hint.textContent = "Liste des types introuvable (SLOT_TYPES/ADD_SLOT_TYPES vides). Vérifie l’init MenuBuilder.SLOT_TYPES.";
-      } else {
-        // On a des types, mais rien d’addable => soit plafonds trop bas, soit pools vides pour ces types.
-        hint.textContent = `${formatRemainingHint(ctx.day)} — Aucun type ne passe (plafonds trop bas ou pools vides pour les types).`;
-      }
       return;
     }
 
-    for (const t of addable) {
+    const { max, remaining } = buildRemainingLimitsForDay(ctx.day);
+    hint.textContent = formatRemainingHintParts(max, remaining);
+
+    let firstEnabledValue = "";
+
+    for (const t of allTypes) {
+      const enabled = hasAnyCandidateForType(t.value, remaining);
+
       const opt = document.createElement("option");
       opt.value = t.value;
-      opt.textContent = t.label;
+      opt.textContent = enabled ? t.label : `${t.label} — indisponible`;
+      opt.disabled = !enabled;
       sel.appendChild(opt);
+
+      if (enabled && !firstEnabledValue) firstEnabledValue = t.value;
+    }
+
+    if (!firstEnabledValue) {
+      sel.disabled = false;
+      confirmBtn.disabled = true;
+      return;
     }
 
     sel.disabled = false;
     confirmBtn.disabled = false;
+    sel.value = firstEnabledValue;
   };
 
   MB.confirmAddSlot = function confirmAddSlot() {
@@ -249,13 +283,11 @@ Contrat
     if (!ctx) return;
 
     const typeSelect = document.getElementById("addSlotType");
+    const selectedOption = typeSelect?.selectedOptions?.[0];
     const type = String(typeSelect?.value || "");
-    if (!MB.state.menu?.[ctx.day]?.[ctx.meal]) return;
+    if (!type || selectedOption?.disabled) return;
 
-    if (!type) {
-      MB.showMessage("Ajout impossible : aucun type ne respecte les plafonds restants.", "warning");
-      return;
-    }
+    if (!MB.state.menu?.[ctx.day]?.[ctx.meal]) return;
 
     const { remaining } = buildRemainingLimitsForDay(ctx.day);
 
@@ -265,9 +297,7 @@ Contrat
       fatMax: remaining.fatMax,
     });
 
-    // Bloquant : si aucune recette ne passe, on refuse l’ajout.
     if (recipe === null) {
-      MB.showMessage(`Aucune recette "${type}" ne respecte les plafonds restants pour ce jour.`, "warning");
       MB.refreshAddSlotTypeOptions();
       return;
     }
@@ -334,6 +364,8 @@ Contrat
     document.getElementById("pickRecipeModal").addEventListener("hidden.bs.modal", () => {
       MB.state.pickCtx = null;
       MB._pickRecipeList = [];
+      MB._pickRecipeOkMap = [];
+
       const q = document.getElementById("pickRecipeQuery");
       const all = document.getElementById("pickRecipeAllTypes");
       const res = document.getElementById("pickRecipeResults");
@@ -350,6 +382,9 @@ Contrat
     document.getElementById("pickRecipeResults").addEventListener("click", (e) => {
       const btn = e.target?.closest?.("button[data-recipe-idx]");
       if (!btn) return;
+
+      if (btn.disabled) return;
+
       const idx = parseInt(btn.getAttribute("data-recipe-idx"), 10);
       if (!Number.isFinite(idx)) return;
       MB.confirmPickRecipe(idx);
@@ -371,17 +406,23 @@ Contrat
     if (!hint || !res || !q || !all) return;
 
     res.innerHTML = "";
+    MB._pickRecipeList = [];
+    MB._pickRecipeOkMap = [];
 
     if (!ctx) {
-      hint.textContent = "Contexte introuvable (slot non sélectionné).";
+      hint.textContent = "";
       return;
     }
 
     const slot = MB.state.menu?.[ctx.day]?.[ctx.meal]?.slots?.[ctx.slot];
     if (!slot) {
-      hint.textContent = "Slot introuvable.";
+      hint.textContent = "";
       return;
     }
+
+    // Plafonds restants en mode REMPLACEMENT
+    const { max, remaining } = buildRemainingLimitsForSlot(ctx.day, ctx.meal, ctx.slot);
+    const remainingHint = formatRemainingHintParts(max, remaining);
 
     const query = String(q.value || "").trim().toLowerCase();
 
@@ -394,7 +435,7 @@ Contrat
       return hay.includes(query);
     });
 
-    hint.textContent = `${filtered.length} résultat(s)`;
+    hint.textContent = remainingHint ? `${filtered.length} résultat(s) — ${remainingHint}` : `${filtered.length} résultat(s)`;
 
     const maxShow = 60;
     const slice = filtered.slice(0, maxShow);
@@ -406,8 +447,17 @@ Contrat
       const fat = global.MenuEngine.getRecipeFat(r);
       const prot = typeof global.MenuEngine.getRecipeProtein === "function" ? global.MenuEngine.getRecipeProtein(r) : 0;
 
+      const ok =
+        kcal <= remaining.kcalMax &&
+        carbs <= remaining.carbMax &&
+        fat <= remaining.fatMax;
+
       const item = document.createElement("div");
       item.className = "list-group-item d-flex justify-content-between align-items-start gap-2";
+
+      const btnLabel = "Choisir";
+      const btnDisabledAttr = ok ? "" : "disabled";
+      const btnTitle = ok ? "" : "title=\"Dépasse au moins un plafond\"";
 
       item.innerHTML = `
         <div class="flex-grow-1">
@@ -416,11 +466,13 @@ Contrat
             ${kcal} kcal · P ${Math.round(prot * 10) / 10} g · G ${Math.round(carbs * 10) / 10} g · L ${Math.round(fat * 10) / 10} g
           </div>
         </div>
-        <button class="btn btn-sm btn-outline-primary" type="button" data-recipe-idx="${i}">
-          Choisir
+        <button class="btn btn-sm btn-outline-primary" type="button" data-recipe-idx="${i}" ${btnDisabledAttr} ${btnTitle}>
+          ${btnLabel}
         </button>
       `;
+
       res.appendChild(item);
+      MB._pickRecipeOkMap[i] = ok;
     });
 
     if (filtered.length > maxShow) {
@@ -438,24 +490,17 @@ Contrat
     if (!ctx) return;
 
     const list = Array.isArray(MB._pickRecipeList) ? MB._pickRecipeList : [];
+    const okMap = Array.isArray(MB._pickRecipeOkMap) ? MB._pickRecipeOkMap : [];
+
     const picked = list[idx];
     if (!picked) return;
+
+    if (okMap[idx] === false) return;
 
     const slot = MB.state.menu?.[ctx.day]?.[ctx.meal]?.slots?.[ctx.slot];
     if (!slot) return;
 
-    const { remaining } = buildRemainingLimitsForDay(ctx.day);
-
-    const kcal = global.MenuEngine.getRecipeCalories(picked);
-    const carbs = global.MenuEngine.getRecipeNetCarbs(picked);
-    const fat = global.MenuEngine.getRecipeFat(picked);
-
-    const ok = kcal <= remaining.kcalMax && carbs <= remaining.carbMax && fat <= remaining.fatMax;
-    if (!ok) {
-      MB.showMessage("Cette recette ferait dépasser au moins un plafond pour ce jour (bloquant).", "warning");
-      return;
-    }
-
+    // Sélection valide (plafonds calculés en mode remplacement) => applique, ferme, rerender.
     slot.recipe = picked;
     slot.locked = false;
 
