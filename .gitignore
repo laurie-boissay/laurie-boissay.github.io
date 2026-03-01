@@ -5,3 +5,8 @@ Gemfile.lock
 vendor/
 .bundle/
 vendor/
+# Environnement virtuel Python
+.venv/
+
+# Script local utilitaire
+tag_microbiote.py
