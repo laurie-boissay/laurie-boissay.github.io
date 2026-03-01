@@ -5,7 +5,7 @@ Rôle
 - Exporter le menu (jours → repas → recettes) en PDF lisible.
 - Mettre en forme : bandeaux, sections, couleurs.
 - Rendre les titres de recettes cliquables via des URL ABSOLUES (compat PDF).
-- Ajouter une "Liste des courses" basée sur les ingrédients des recettes du menu.
+- Générer une liste de courses agrégée à partir des ingrédients des recettes du menu.
 
 Point clé (liens PDF)
 - Beaucoup de lecteurs PDF ignorent les annotations dont l’URL est relative.
@@ -14,10 +14,6 @@ Point clé (liens PDF)
 Dépendances
 - jsPDF UMD : window.jspdf.jsPDF
 - MenuBuilder + MenuEngine déjà chargés
-
-Limites (liste des courses)
-- On agrège les lignes d’ingrédients telles qu’elles existent dans les fiches.
-- Sans parse "intelligent" des quantités : on affiche xN (occurrences) plutôt qu’une somme.
 ============================================================================== */
 
 "use strict";
@@ -123,6 +119,8 @@ Limites (liste des courses)
     if (u.startsWith("//")) return `https:${u}`;
 
     // 4) Absolutisation via l’origine courante (prod ou local)
+    //    Note : en prod GitHub Pages, window.location.origin = https://laurie-boissay.github.io
+    //    et MB.normalizeRecipeUrl renvoie typiquement /laurie-boissay/recettes/....
     if (u.startsWith("/")) return `${window.location.origin}${u}`;
 
     // 5) Dernier recours : construire sur l’URL de la page (pour les chemins relatifs sans /)
@@ -162,122 +160,324 @@ Limites (liste des courses)
   }
 
   // ---------------------------------------------------------------------------
-  // Liste des courses
+  // Liste de courses (agrégation)
   // ---------------------------------------------------------------------------
 
   /**
-   * Extrait une liste d’ingrédients "affichables" depuis l’objet recette.
-   * Supporte :
-   * - ingredients: ["2 œufs", "..."]
-   * - ingredients: [{ label: "2 œufs", link: "/..." }, ...]
+   * Normalise une chaîne pour faire une clé d'agrégation stable.
+   * Objectif : regrouper les ingrédients sans tenter de faire du NLP lourd.
    */
-  function extractIngredientLines(recipe) {
-    const ing = recipe?.ingredients;
-    if (!Array.isArray(ing)) return [];
+  function toKey(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ");
+  }
 
-    const out = [];
-    for (const item of ing) {
-      if (typeof item === "string") {
-        const s = item.trim();
-        if (s) out.push(s);
-        continue;
-      }
-      if (item && typeof item === "object") {
-        const label = String(item.label || "").trim();
-        if (label) out.push(label);
-      }
+  function roundToStep(n, step) {
+    const x = Number(n);
+    const s = Number(step) || 1;
+    if (!Number.isFinite(x)) return 0;
+    return Math.round(x / s) * s;
+  }
+
+  function formatQty(qty, unit) {
+    const u = String(unit || "").trim();
+    const q = Number(qty);
+    if (!Number.isFinite(q) || q <= 0) return "";
+
+    // Règles de lisibilité : arrondis modestes, sans sur-précision.
+    if (u === "g") return `${roundToStep(q, 5)} g`;
+    if (u === "ml") return `${roundToStep(q, 10)} ml`;
+
+    // Unités "compte" : éviter 3,333...
+    if (u === "x") {
+      const v = Math.round(q * 10) / 10;
+      return `${String(v).replace(".0", "")} ×`;
     }
-    return out;
+
+    // Cas générique
+    const v = Math.round(q * 100) / 100;
+    return `${String(v).replace(".0", "")} ${u}`.trim();
   }
 
   /**
-   * Construit une Map(label -> count) à partir du menu actuel.
-   * Note : "count" = nombre d’occurrences (recettes) où la ligne apparaît.
+   * Extrait un "(quantité, unité, nom)" depuis une ligne d'ingrédient.
+   * Contrat :
+   * - Supporte les formats simples : "800 g de skyr", "2 concombres moyens", "4 c. à soupe de vinaigre".
+   * - Si parsing incertain : retourne { raw } pour garder l'information.
    */
-  function buildShoppingListCounts(menu) {
-    const counts = new Map();
+  function parseIngredientLine(line) {
+    const raw = String(line || "").trim();
+    if (!raw) return null;
 
-    if (!Array.isArray(menu)) return counts;
+    // Split simple "Sel, poivre" → deux items.
+    if (/[,;]/.test(raw) && !/\d/.test(raw)) {
+      const parts = raw
+        .split(/[,;]/)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      if (parts.length >= 2) return parts.map((p) => ({ qty: 1, unit: "x", name: p, raw: p }));
+    }
 
+    // "1/2" ou "1,5" ou "2".
+    const num = "(?:\\d+(?:[.,]\\d+)?|\\d+\\/\\d+)";
+    const re = new RegExp(
+      `^\\s*(${num})\\s*(kg|g|gr|mg|l|L|ml|cl|c\\.?\\s*a\\.?\\s*soupe|c\\.?\\s*a\\.?\\s*cafe|cs|cac|cc|sachet(?:s)?|tranche(?:s)?|gousse(?:s)?|oeuf(?:s)?|œuf(?:s)?)?\\s*(?:de\\s+|d\\'|d\\u\\s+|d\\es\\s+)?(.+)$`,
+      "i"
+    );
+
+    const m = raw.match(re);
+    if (!m) return { raw };
+
+    let qtyStr = m[1];
+    const unitRaw = (m[2] || "").trim();
+    let name = (m[3] || "").trim();
+
+    // Quantité : fraction "1/2".
+    let qty = 0;
+    if (/\//.test(qtyStr)) {
+      const [a, b] = qtyStr.split("/").map((x) => Number(String(x).replace(",", ".")));
+      if (Number.isFinite(a) && Number.isFinite(b) && b !== 0) qty = a / b;
+    } else {
+      qty = Number(qtyStr.replace(",", "."));
+    }
+
+    if (!Number.isFinite(qty) || qty <= 0) return { raw };
+
+    // Normalisation unité.
+    let unit = unitRaw.toLowerCase();
+    unit = unit
+      .replace(/\s+/g, " ")
+      .replace(/^gr$/, "g")
+      .replace(/^cs$/, "c. à soupe")
+      .replace(/^(cac|cc)$/, "c. à café")
+      .replace(/^oeufs?$/, "x")
+      .replace(/^œufs?$/, "x")
+      .replace(/^tranches?$/, "x")
+      .replace(/^sachets?$/, "x")
+      .replace(/^gousses?$/, "x");
+
+    // Conversion g/ kg ; ml/ cl/ l (on agrège en g et ml pour limiter les cas).
+    if (unit === "kg") {
+      qty *= 1000;
+      unit = "g";
+    }
+    if (unit === "mg") {
+      qty /= 1000;
+      unit = "g";
+    }
+    if (unit === "l" || unit === "L") {
+      qty *= 1000;
+      unit = "ml";
+    }
+    if (unit === "cl") {
+      qty *= 10;
+      unit = "ml";
+    }
+
+    // Nettoyage nom : enlever "de" résiduel, parenthèses et doubles espaces.
+    name = name
+      .replace(/^de\s+/i, "")
+      .replace(/^d['’]\s*/i, "")
+      .replace(/\s*\([^)]*\)\s*/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    /*
+      Garde-fou (Option 1) : unité incohérente → bascule en "non agrégé".
+      Exemple réel : "250 ml lapin entier découpé".
+
+      Principe
+      - Si l'unité est en volume (ml) mais que le libellé ressemble à un ingrédient solide
+        (viande/poisson), on ne tente pas d'agréger.
+      - On renvoie { raw } pour que la ligne apparaisse dans le bloc
+        "À vérifier (non agrégé)".
+
+      Remarque
+      - On s'appuie volontairement sur raw + name : si une lettre saute (ex. "lapin" → "apin")
+        le mot-clé peut encore être détecté dans la ligne brute.
+    */
+    if (unit === "ml") {
+      const probe = `${toKey(raw)} ${toKey(name)}`;
+      if (/\b(lapin|poulet|dinde|porc|jambon|saucisse|steak|boeuf|viande|poisson|saumon|truite|thon|crevette|saint jacques|st jacques)\b/.test(probe)) {
+        return { raw };
+      }
+    }
+
+    if (!name) return { raw };
+
+    return { qty, unit: unit || "x", name, raw };
+  }
+
+  function classifyIngredient(name) {
+    const k = toKey(name);
+
+    // Catégories volontairement grossières : on privilégie la lisibilité et la stabilité.
+    if (/\b(sel|poivre|vinaigre|moutarde|epice|epices|curry|piment|herbe|sauce|soja)\b/.test(k)) return "Assaisonnements";
+    if (/\b(beurre|creme|cr[eè]me|fromage|yaourt|yogourt|skyr|lait|oeuf|œuf)\b/.test(k)) return "Crèmerie";
+    if (/\b(poulet|boeuf|bœuf|porc|saucisse|jambon|steak|dinde)\b/.test(k)) return "Viandes";
+    if (/\b(saumon|truite|thon|poisson|crevette|crevettes|saint-jacques|st jacques)\b/.test(k)) return "Poissons & fruits de mer";
+    if (/\b(concombre|salade|courgette|brocoli|chou|poireau|asperge|champignon|epinard|épinard|tomate|avocat|oignon|ail)\b/.test(k)) return "Légumes";
+    if (/\b(amande|noix|noisette|chia|lin|psyllium|graines)\b/.test(k)) return "Graines & fruits à coque";
+    return "Épicerie";
+  }
+
+  function collectShoppingList(menu) {
+    // 1) Compter les occurrences de recettes (un slot = une portion)
+    const usage = new Map();
     for (const dayMeals of menu) {
       if (!Array.isArray(dayMeals)) continue;
-
       for (const mealObj of dayMeals) {
         const slots = Array.isArray(mealObj?.slots) ? mealObj.slots : [];
         for (const s of slots) {
           const r = s?.recipe;
           if (!r) continue;
 
-          const lines = extractIngredientLines(r);
-          for (const line of lines) {
-            const key = line; // volontairement "brut" (pas de parsing quantités)
-            counts.set(key, (counts.get(key) || 0) + 1);
-          }
+          const id = r.recipe_sort || r.url || r.title;
+          if (!id) continue;
+
+          const cur = usage.get(id) || { recipe: r, portions: 0 };
+          cur.portions += 1;
+          cur.recipe = r;
+          usage.set(id, cur);
         }
       }
     }
 
-    return counts;
+    // 2) Agréger ingrédients (mise à l'échelle via servings si présent)
+    const agg = new Map(); // key → { name, unit, qty }
+    const misc = []; // lignes non parsées (affichées dans un bloc séparé)
+
+    for (const { recipe, portions } of usage.values()) {
+      const servings = safeNum(recipe?.servings) || 4;
+      const factor = portions / servings;
+
+      const ing = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
+      for (const line of ing) {
+        const parsed = parseIngredientLine(line);
+        if (!parsed) continue;
+
+        const items = Array.isArray(parsed) ? parsed : [parsed];
+        for (const it of items) {
+          // Cas "non parsé" : on garde la ligne telle quelle + indicateur de recette.
+          if (it.raw && !it.name) {
+            const t = recipe?.title ? ` (${recipe.title})` : "";
+            misc.push(`${String(it.raw)}${t}`);
+            continue;
+          }
+
+          const name = String(it.name || it.raw || "").trim();
+          if (!name) continue;
+
+          const unit = String(it.unit || "x").trim();
+          const qty = safeNum(it.qty) * factor;
+
+          if (!Number.isFinite(qty) || qty <= 0) {
+            misc.push(name);
+            continue;
+          }
+
+          const key = `${toKey(name)}|${unit}`;
+          const cur = agg.get(key) || { name, unit, qty: 0 };
+          cur.qty += qty;
+          agg.set(key, cur);
+        }
+      }
+    }
+
+    // 3) Grouper + trier pour rendu
+    const grouped = new Map();
+    for (const it of agg.values()) {
+      const cat = classifyIngredient(it.name);
+      const arr = grouped.get(cat) || [];
+      arr.push(it);
+      grouped.set(cat, arr);
+    }
+
+    for (const [cat, arr] of grouped.entries()) {
+      arr.sort((a, b) => toKey(a.name).localeCompare(toKey(b.name), "fr"));
+      grouped.set(cat, arr);
+    }
+
+    misc.sort((a, b) => toKey(a).localeCompare(toKey(b), "fr"));
+
+    return { grouped, misc };
   }
 
-  function renderShoppingList(doc, cursor, X, W, C, countsMap) {
-    // Titre section (nouvelle page si nécessaire)
-    ensureSpace(doc, cursor, 22);
+  function renderShoppingList(doc, cursor, MB, menu, palette, pageW) {
+    const X = 14;
+    const W = pageW - 28;
 
-    // Si on est trop bas, on préfère une nouvelle page pour un bloc propre.
-    const pageH = doc.internal.pageSize.getHeight();
-    if (cursor.y > pageH - 60) {
-      doc.addPage();
-      cursor.y = 18;
-    }
+    const { grouped, misc } = collectShoppingList(menu);
+    const hasAny = grouped.size > 0 || misc.length > 0;
+    if (!hasAny) return cursor;
 
-    // Bandeau
-    drawBand(doc, X, cursor.y - 5, W, 10, C.accent[0], C.accent[1], C.accent[2]);
-    setText(doc, 12, 255, 255, 255, "bold");
-    doc.text("Liste des courses", X + 3, cursor.y + 2);
-    cursor.y += 12;
+    // Page dédiée : la liste de courses doit être facile à imprimer / utiliser.
+    doc.addPage();
+    cursor.y = 18;
 
-    setText(doc, 9.5, C.muted[0], C.muted[1], C.muted[2], "italic");
-    doc.text("Basée sur les ingrédients des recettes du menu (xN = occurrences).", X, cursor.y);
-    cursor.y += 7;
+    drawBand(doc, 0, 0, pageW, 18, palette.accent[0], palette.accent[1], palette.accent[2]);
+    setText(doc, 16, 255, 255, 255, "bold");
+    doc.text("Liste de courses", 14, 12);
 
-    const entries = Array.from(countsMap.entries())
-      .filter(([label]) => String(label || "").trim().length > 0)
-      .sort((a, b) => String(a[0]).localeCompare(String(b[0]), "fr", { sensitivity: "base" }));
+    setText(doc, 9.5, 235, 242, 255, "normal");
+    doc.text("(agrégée à partir des recettes du menu)", pageW - 14, 12, { align: "right" });
 
-    if (entries.length === 0) {
-      setText(doc, 10, C.muted[0], C.muted[1], C.muted[2], "italic");
-      doc.text("— Aucun ingrédient détecté —", X, cursor.y);
+    cursor.y = 26;
+
+    const order = [
+      "Légumes",
+      "Viandes",
+      "Poissons & fruits de mer",
+      "Crèmerie",
+      "Graines & fruits à coque",
+      "Épicerie",
+      "Assaisonnements",
+    ];
+
+    const cats = order.filter((c) => grouped.has(c));
+    for (const cat of cats) {
+      const items = grouped.get(cat) || [];
+
+      ensureSpace(doc, cursor, 12);
+      setText(doc, 12, palette.ink[0], palette.ink[1], palette.ink[2], "bold");
+      doc.text(cat, X, cursor.y);
       cursor.y += 6;
-      return;
+
+      for (const it of items) {
+        ensureSpace(doc, cursor, 6);
+
+        const qty = formatQty(it.qty, it.unit);
+        const line = qty ? `${qty} ${it.name}` : it.name;
+
+        setText(doc, 10, palette.ink[0], palette.ink[1], palette.ink[2], "normal");
+        doc.text("•", X + 2, cursor.y);
+        doc.text(ellipsisToWidth(doc, line, W - 10), X + 6, cursor.y);
+        cursor.y += 5.5;
+      }
+
+      cursor.y += 2;
     }
 
-    // Rendu : une ligne par ingrédient (tronquée si besoin)
-    const leftX = X + 6;
-    const rightX = X + W - 3;
-
-    for (const [label, count] of entries) {
-      ensureSpace(doc, cursor, 6);
-
-      // Puce
-      setText(doc, 9.5, C.ink[0], C.ink[1], C.ink[2], "normal");
-      doc.text("•", X + 3.5, cursor.y);
-
-      // Compteur à droite
-      setText(doc, 9.5, C.muted[0], C.muted[1], C.muted[2], "normal");
-      const countTxt = `x${count}`;
-      const countW = doc.getTextWidth(countTxt);
-      doc.text(countTxt, rightX, cursor.y, { align: "right" });
-
-      // Libellé (tronqué pour ne pas chevaucher le compteur)
-      const gap = 6;
-      const maxLabelW = Math.max(50, (rightX - leftX) - countW - gap);
-      setText(doc, 9.5, C.ink[0], C.ink[1], C.ink[2], "normal");
-      const line = ellipsisToWidth(doc, label, maxLabelW);
-      doc.text(line, leftX, cursor.y);
-
+    if (misc.length > 0) {
+      ensureSpace(doc, cursor, 10);
+      setText(doc, 12, palette.ink[0], palette.ink[1], palette.ink[2], "bold");
+      doc.text("À vérifier (non agrégé)", X, cursor.y);
       cursor.y += 6;
+
+      setText(doc, 10, palette.muted[0], palette.muted[1], palette.muted[2], "normal");
+      for (const raw of misc) {
+        ensureSpace(doc, cursor, 6);
+        doc.text("•", X + 2, cursor.y);
+        doc.text(ellipsisToWidth(doc, raw, W - 10), X + 6, cursor.y);
+        cursor.y += 5.5;
+      }
     }
+
+    return cursor;
   }
 
   // ---------------------------------------------------------------------------
@@ -482,16 +682,8 @@ Limites (liste des courses)
       cursor.y += 14;
     }
 
-    // -----------------------------------------------------------------------
-    // Ajout : Liste des courses (fin du PDF)
-    // -----------------------------------------------------------------------
-    const shoppingCounts = buildShoppingListCounts(menu);
-
-    // On force une nouvelle page pour garder un bloc propre.
-    doc.addPage();
-    cursor.y = 18;
-
-    renderShoppingList(doc, cursor, X, W, C, shoppingCounts);
+    // Liste de courses (dernière page dédiée)
+    renderShoppingList(doc, cursor, MB, menu.slice(0, safeDaysCount), C, pageW);
 
     doc.save(buildPdfFileName());
   }
