@@ -66,6 +66,8 @@ Contrats
     carbMax: null,
     fatMax: null,
     calorieTargetDay: null,
+    weightKg: null,
+    proteinTargetDay: null,
     grid: null,
   };
 
@@ -130,7 +132,11 @@ Contrats
     const carbMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.carbMax, 0, 0, 99999);
     const fatMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.fatMax, 0, 0, 99999);
 
-    return { mealsPerDay, weekStart, daysCount, calorieMax, carbMax, fatMax };
+    // Optionnel : utilisé uniquement pour pré-remplir et/ou valider l’objectif protéines.
+    const weightKg = MenuBuilder.readFloatFromEl(MenuBuilder.dom.weightKg, 0, 0, 99999);
+    const proteinTargetDay = MenuBuilder.readFloatFromEl(MenuBuilder.dom.proteinTargetDay, 0, 0, 99999);
+
+    return { mealsPerDay, weekStart, daysCount, calorieMax, carbMax, fatMax, weightKg, proteinTargetDay };
   };
 
   // Messages
@@ -201,6 +207,8 @@ Contrats
       "carbMax",
       "fatMax",
       "calorieTargetDay",
+      "weightKg",
+      "proteinTargetDay",
       "menuGrid",
     ];
 
@@ -239,6 +247,8 @@ Contrats
     MenuBuilder.dom.carbMax = document.getElementById("carbMax");
     MenuBuilder.dom.fatMax = document.getElementById("fatMax");
     MenuBuilder.dom.calorieTargetDay = document.getElementById("calorieTargetDay");
+    MenuBuilder.dom.weightKg = document.getElementById("weightKg");
+    MenuBuilder.dom.proteinTargetDay = document.getElementById("proteinTargetDay");
     MenuBuilder.dom.grid = document.getElementById("menuGrid");
 
     // Source unique : types fournis par MenuEngine
@@ -262,6 +272,7 @@ Contrats
     });
 
     MenuBuilder.setupCalorieTargetSync?.();
+    MenuBuilder.setupProteinTargetSync?.();
     MenuBuilder.setupMenuInteractions?.();
     MenuBuilder.ensureAddSlotModalExists?.();
     MenuBuilder.ensurePickRecipeModalExists?.();

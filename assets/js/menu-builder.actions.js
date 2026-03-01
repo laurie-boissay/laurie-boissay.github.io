@@ -20,6 +20,7 @@ Contrat
     return {
       kcalMax: params.calorieMax,
       carbMax: params.carbMax,
+      // IMPORTANT : fatMax = 0 => pas de plafond (géré dans MenuEngine via >0 ? ... : Infinity).
       fatMax: params.fatMax,
     };
   }
@@ -63,7 +64,6 @@ Contrat
 
   MB.generateMenu = function generateMenu() {
     if (!Array.isArray(MB.state.recipes) || MB.state.recipes.length === 0) {
-      // Message utile uniquement si aucune donnée : c’est un vrai blocage.
       MB.showMessage("Aucune recette disponible. Le menu ne peut pas être généré.", "danger");
       return;
     }
@@ -73,12 +73,10 @@ Contrat
 
     const hasExisting = Array.isArray(MB.state.menu) && MB.state.menu.length === 7;
 
-    // Premier tirage : aucune alerte UI (silencieux).
     if (!hasExisting) MB.hideMessage();
 
     const baseMenu = hasExisting ? MB.state.menu : global.MenuEngine.createFreshSkeleton(MB.state.pools, params.mealsPerDay);
 
-    // Tirage “meilleur effort” : tentatives par jour pour réduire les slots vides.
     const newMenu = global.MenuEngine.buildMenuUnderLimits(MB.state.pools, baseMenu, params.mealsPerDay, limits, {
       dayRestarts: 20,
       pickTries: 80,
@@ -92,7 +90,6 @@ Contrat
       return MB.DAYS[dayIndex];
     };
 
-    // À partir du 2e tirage : messages neutres et courts, uniquement si nécessaire.
     if (hasExisting) {
       const parts = [];
       if (status.overs.kcal.length > 0) parts.push(`Kcal : ${formatOvers(status.overs.kcal, getDayLabel, "kcal")}`);
@@ -100,13 +97,9 @@ Contrat
       if (status.overs.fat.length > 0) parts.push(`Lipides : ${formatOvers(status.overs.fat, getDayLabel, "g")}`);
 
       if (parts.length > 0) {
-        // Dépassements = généralement slots verrouillés : on l’indique sans ton “erreur”.
         MB.showMessage(`Info : certains plafonds sont dépassés (souvent dû à des slots verrouillés). ${parts.join(" | ")}.`, "secondary");
       } else if (status.empties > 0) {
-        MB.showMessage(
-          `Info : ${status.empties} slot(s) n’ont pas trouvé de recette compatible avec les plafonds actuels.`,
-          "secondary"
-        );
+        MB.showMessage(`Info : ${status.empties} slot(s) n’ont pas trouvé de recette compatible avec les plafonds actuels.`, "secondary");
       } else {
         MB.hideMessage();
       }
@@ -118,6 +111,11 @@ Contrat
       calorieTarget: params.calorieMax,
       carbMax: params.carbMax,
       fatMax: params.fatMax,
+
+      // Validation protéines (optionnelles)
+      weightKg: params.weightKg,                 // pour 0,3 g/kg/repas
+      proteinTargetDay: params.proteinTargetDay, // pour 2 g/kg/jour (ou override)
+
       weekStart: params.weekStart,
       mealsPerDay: params.mealsPerDay,
       daysCount: params.daysCount,
@@ -126,10 +124,16 @@ Contrat
 
   MB.rerender = function rerender() {
     const params = MB.readParams();
+
     MB.renderMenu({
       calorieTarget: params.calorieMax,
       carbMax: params.carbMax,
       fatMax: params.fatMax,
+
+      // Validation protéines (optionnelles)
+      weightKg: params.weightKg,
+      proteinTargetDay: params.proteinTargetDay,
+
       weekStart: params.weekStart,
       mealsPerDay: params.mealsPerDay,
       daysCount: params.daysCount,
@@ -137,7 +141,7 @@ Contrat
   };
 
   // ---------------------------------------------------------------------------
-  // Interactions sur la grille (inchangé)
+  // Interactions sur la grille
   // ---------------------------------------------------------------------------
 
   MB.setupMenuInteractions = function setupMenuInteractions() {
@@ -173,6 +177,7 @@ Contrat
       if (action === "remove-slot") {
         if (!s) return;
         if (s.locked) return;
+        // Permet de supprimer aussi le dernier slot du repas.
         slots.splice(slot, 1);
         MB.rerender();
         return;

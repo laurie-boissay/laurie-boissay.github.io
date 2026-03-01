@@ -2,22 +2,13 @@
 ==============================================================================
 _includes/menu-builder.html — Générateur de menu (UI)
 ==============================================================================
-
-Rôle
-- UI de paramétrage (jours, repas/jour, plafonds, cible kcal).
-- Point d’entrée de l’export PDF (bouton dédié).
-- Point d’entrée du repère protéines/repas (poids optionnel).
-
 Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
-- #menuMessage, #generateMenu, #exportMenuPdf
-- #weekStart, #mealsPerDay, #daysCount
-- #carbMax, #fatMax, #calorieTargetDay, #proteinWeightKg
+- #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
+- #carbMax, #fatMax, #calorieTargetDay
+- #weightKg, #proteinTargetDay
+- (optionnel) #exportMenuPdf si export PDF activé
 - #menuGrid
-
-Notes UX
-- Lipides max : optionnel. Si vide (ou 0), le plafond n’est pas appliqué.
-- Export PDF : désactivé tant qu’aucun menu n’est généré (géré en JS).
 ==============================================================================
 {%- endcomment -%}
 
@@ -62,6 +53,10 @@ Notes UX
             Générer le menu
           </button>
 
+          {%- comment -%}
+          Optionnel : si tu as activé l’export PDF, garde ce bouton.
+          Le JS menu-pdf.js l’activera après rendu.
+          {%- endcomment -%}
           <button id="exportMenuPdf" class="btn btn-outline-primary" type="button" disabled>
             Exporter en PDF
           </button>
@@ -134,18 +129,37 @@ Notes UX
       </div>
 
       <div class="col-md-4">
-        <label class="form-label" for="proteinWeightKg">Poids (kg) — repère protéines/repas</label>
+        <label class="form-label" for="weightKg">Poids (kg)</label>
         <input
           type="number"
-          id="proteinWeightKg"
+          id="weightKg"
           class="form-control"
           value=""
-          placeholder="(optionnel)"
           step="0.1"
           min="0"
+          placeholder="Ex : 71"
         >
         <div class="form-text">
-          Optionnel. Si renseigné, le menu peut afficher une cible indicatrice (~0,3 g/kg/repas).
+          Optionnel. Sert à :
+          (1) calculer la cible protéines/repas ~0,3 g/kg
+          (2) pré-remplir la cible protéines/jour à 2 g/kg.
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="proteinTargetDay">Protéines cible / jour (g)</label>
+        <input
+          type="number"
+          id="proteinTargetDay"
+          class="form-control"
+          value=""
+          step="1"
+          min="0"
+          placeholder="Auto : 2 g/kg"
+        >
+        <div class="form-text">
+          Laisse vide pour désactiver la validation/jour.
+          Par défaut : 2 g/kg si poids renseigné. Tu peux ensuite modifier.
         </div>
       </div>
 
