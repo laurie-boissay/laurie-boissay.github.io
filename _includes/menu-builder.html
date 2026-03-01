@@ -52,10 +52,6 @@ Contrat DOM attendu
           <button id="generateMenu" class="btn btn-primary" type="button">
             Générer le menu
           </button>
-
-          <button id="exportMenuPdf" class="btn btn-outline-primary" type="button" disabled>
-            Exporter en PDF
-          </button>
         </div>
       </div>
 
@@ -180,6 +176,22 @@ Contrat DOM attendu
     </div>
 
     <div id="menuGrid" class="mt-4"></div>
+
+    {%- comment -%}
+      Export PDF (UX)
+      - Placé en bas (fin de page/builder) pour éviter de “polluer” l’entrée.
+      - Caché par défaut ; l’affichage est piloté côté JS quand le bouton devient activable.
+    {%- endcomment -%}
+    <div class="mt-4 text-center">
+      <button
+        id="exportMenuPdf"
+        class="btn btn-primary"
+        type="button"
+        disabled
+        style="display: none;">
+        Exporter en PDF
+      </button>
+    </div>
 
   </div>
 </section>

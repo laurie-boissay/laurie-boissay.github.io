@@ -155,3 +155,36 @@ body_id: "menu"
   });
 })();
 </script>
+
+<script>
+/* ==============================================================================
+menu.html — Pilotage UX du bouton "Exporter en PDF"
+==============================================================================
+
+Objectif
+- Le bouton PDF est placé en bas du builder et caché par défaut.
+- Il apparaît automatiquement quand le JS du menu-builder l’active (disabled=false).
+- Il se recache si le builder le redésactive (régénération, reset, etc.).
+
+Contrat
+- Le code existant (menu-builder/menu-pdf) gère déjà l’attribut disabled.
+- Ici on observe uniquement les changements de cet attribut, sans dépendance au moteur.
+============================================================================== */
+(function () {
+  "use strict";
+
+  const btn = document.getElementById("exportMenuPdf");
+  if (!btn) return;
+
+  function syncVisibility() {
+    btn.style.display = btn.disabled ? "none" : "inline-block";
+  }
+
+  // État initial (au chargement : normalement disabled=true -> caché)
+  syncVisibility();
+
+  // Observe les changements de l’attribut disabled (activation/désactivation par le builder).
+  const obs = new MutationObserver(syncVisibility);
+  obs.observe(btn, { attributes: true, attributeFilter: ["disabled"] });
+})();
+</script>
