@@ -5,6 +5,7 @@ Rôle
 - Exporter le menu (jours → repas → recettes) en PDF lisible.
 - Mettre en forme : bandeaux, sections, couleurs.
 - Rendre les titres de recettes cliquables via des URL ABSOLUES (compat PDF).
+- Ajouter une "Liste des courses" basée sur les ingrédients des recettes du menu.
 
 Point clé (liens PDF)
 - Beaucoup de lecteurs PDF ignorent les annotations dont l’URL est relative.
@@ -13,6 +14,10 @@ Point clé (liens PDF)
 Dépendances
 - jsPDF UMD : window.jspdf.jsPDF
 - MenuBuilder + MenuEngine déjà chargés
+
+Limites (liste des courses)
+- On agrège les lignes d’ingrédients telles qu’elles existent dans les fiches.
+- Sans parse "intelligent" des quantités : on affiche xN (occurrences) plutôt qu’une somme.
 ============================================================================== */
 
 "use strict";
@@ -118,8 +123,6 @@ Dépendances
     if (u.startsWith("//")) return `https:${u}`;
 
     // 4) Absolutisation via l’origine courante (prod ou local)
-    //    Note : en prod GitHub Pages, window.location.origin = https://laurie-boissay.github.io
-    //    et MB.normalizeRecipeUrl renvoie typiquement /laurie-boissay/recettes/....
     if (u.startsWith("/")) return `${window.location.origin}${u}`;
 
     // 5) Dernier recours : construire sur l’URL de la page (pour les chemins relatifs sans /)
@@ -156,6 +159,125 @@ Dépendances
     const startIndex = weekStart === 0 ? 6 : weekStart - 1;
     const dayIndex = (startIndex + dayOffset) % 7;
     return daysArr[dayIndex] || `Jour ${dayOffset + 1}`;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Liste des courses
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Extrait une liste d’ingrédients "affichables" depuis l’objet recette.
+   * Supporte :
+   * - ingredients: ["2 œufs", "..."]
+   * - ingredients: [{ label: "2 œufs", link: "/..." }, ...]
+   */
+  function extractIngredientLines(recipe) {
+    const ing = recipe?.ingredients;
+    if (!Array.isArray(ing)) return [];
+
+    const out = [];
+    for (const item of ing) {
+      if (typeof item === "string") {
+        const s = item.trim();
+        if (s) out.push(s);
+        continue;
+      }
+      if (item && typeof item === "object") {
+        const label = String(item.label || "").trim();
+        if (label) out.push(label);
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Construit une Map(label -> count) à partir du menu actuel.
+   * Note : "count" = nombre d’occurrences (recettes) où la ligne apparaît.
+   */
+  function buildShoppingListCounts(menu) {
+    const counts = new Map();
+
+    if (!Array.isArray(menu)) return counts;
+
+    for (const dayMeals of menu) {
+      if (!Array.isArray(dayMeals)) continue;
+
+      for (const mealObj of dayMeals) {
+        const slots = Array.isArray(mealObj?.slots) ? mealObj.slots : [];
+        for (const s of slots) {
+          const r = s?.recipe;
+          if (!r) continue;
+
+          const lines = extractIngredientLines(r);
+          for (const line of lines) {
+            const key = line; // volontairement "brut" (pas de parsing quantités)
+            counts.set(key, (counts.get(key) || 0) + 1);
+          }
+        }
+      }
+    }
+
+    return counts;
+  }
+
+  function renderShoppingList(doc, cursor, X, W, C, countsMap) {
+    // Titre section (nouvelle page si nécessaire)
+    ensureSpace(doc, cursor, 22);
+
+    // Si on est trop bas, on préfère une nouvelle page pour un bloc propre.
+    const pageH = doc.internal.pageSize.getHeight();
+    if (cursor.y > pageH - 60) {
+      doc.addPage();
+      cursor.y = 18;
+    }
+
+    // Bandeau
+    drawBand(doc, X, cursor.y - 5, W, 10, C.accent[0], C.accent[1], C.accent[2]);
+    setText(doc, 12, 255, 255, 255, "bold");
+    doc.text("Liste des courses", X + 3, cursor.y + 2);
+    cursor.y += 12;
+
+    setText(doc, 9.5, C.muted[0], C.muted[1], C.muted[2], "italic");
+    doc.text("Basée sur les ingrédients des recettes du menu (xN = occurrences).", X, cursor.y);
+    cursor.y += 7;
+
+    const entries = Array.from(countsMap.entries())
+      .filter(([label]) => String(label || "").trim().length > 0)
+      .sort((a, b) => String(a[0]).localeCompare(String(b[0]), "fr", { sensitivity: "base" }));
+
+    if (entries.length === 0) {
+      setText(doc, 10, C.muted[0], C.muted[1], C.muted[2], "italic");
+      doc.text("— Aucun ingrédient détecté —", X, cursor.y);
+      cursor.y += 6;
+      return;
+    }
+
+    // Rendu : une ligne par ingrédient (tronquée si besoin)
+    const leftX = X + 6;
+    const rightX = X + W - 3;
+
+    for (const [label, count] of entries) {
+      ensureSpace(doc, cursor, 6);
+
+      // Puce
+      setText(doc, 9.5, C.ink[0], C.ink[1], C.ink[2], "normal");
+      doc.text("•", X + 3.5, cursor.y);
+
+      // Compteur à droite
+      setText(doc, 9.5, C.muted[0], C.muted[1], C.muted[2], "normal");
+      const countTxt = `x${count}`;
+      const countW = doc.getTextWidth(countTxt);
+      doc.text(countTxt, rightX, cursor.y, { align: "right" });
+
+      // Libellé (tronqué pour ne pas chevaucher le compteur)
+      const gap = 6;
+      const maxLabelW = Math.max(50, (rightX - leftX) - countW - gap);
+      setText(doc, 9.5, C.ink[0], C.ink[1], C.ink[2], "normal");
+      const line = ellipsisToWidth(doc, label, maxLabelW);
+      doc.text(line, leftX, cursor.y);
+
+      cursor.y += 6;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -359,6 +481,17 @@ Dépendances
 
       cursor.y += 14;
     }
+
+    // -----------------------------------------------------------------------
+    // Ajout : Liste des courses (fin du PDF)
+    // -----------------------------------------------------------------------
+    const shoppingCounts = buildShoppingListCounts(menu);
+
+    // On force une nouvelle page pour garder un bloc propre.
+    doc.addPage();
+    cursor.y = 18;
+
+    renderShoppingList(doc, cursor, X, W, C, shoppingCounts);
 
     doc.save(buildPdfFileName());
   }
