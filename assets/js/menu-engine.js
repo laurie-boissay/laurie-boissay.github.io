@@ -38,7 +38,7 @@ Notes importantes
     { value: "Desserts & crèmes", label: "Dessert" },
     { value: "Fromages", label: "Fromage" },
     { value: "Fruits à coque", label: "Fruits à coque" },
-    { value: "Fruits frais", label: "Fruits frais" },
+    { value: "Fruits", label: "Fruit(s)" },
     { value: "Gâteaux & biscuits", label: "Gâteaux & biscuits" },
     { value: "Graines", label: "Graines" },
     { value: "Œufs", label: "Œufs" },
@@ -76,7 +76,7 @@ Notes importantes
   const AGG_SNACK_GROUPS = ["Pains & substituts", "Yaourts", "Fruits à coque"];
 
   const AGG_FINAL_KEY = "Final";
-  const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits frais", "Fruits à coque"];
+  const AGG_FINAL_GROUPS = ["Gâteaux & biscuits", "Desserts & crèmes", "Yaourts", "Fruits", "Fruits à coque"];
 
   // ---------------------------------------------------------------------------
   // Helpers robustes : parsing + limites

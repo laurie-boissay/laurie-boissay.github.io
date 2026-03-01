@@ -106,6 +106,7 @@ Rôle
         }
 
         const mealTitleEl = mealCard.querySelector(".js-meal-title");
+        const mealTotalEl = mealCard.querySelector(".js-meal-total");
         const slotsWrap = mealCard.querySelector(".js-slots-wrap");
         const addBtn = mealCard.querySelector("button[data-action='add-slot']");
 
@@ -118,6 +119,9 @@ Rôle
 
         addBtn.setAttribute("data-day", String(dayOffset));
         addBtn.setAttribute("data-meal", String(mealIndex));
+
+        // Total protéines du repas (utile pour viser un seuil par repas).
+        let mealProtein = 0;
 
         slots.forEach((slotObj, slotIndex) => {
           const slotBox = cloneTemplate("tpl-menu-slot");
@@ -165,7 +169,6 @@ Rôle
 
           pickBtn.disabled = !!slotObj.locked;
           rerollBtn.disabled = !!slotObj.locked;
-
           // Permet de supprimer aussi le dernier slot d’un repas.
           // Contrat UX : un repas peut temporairement avoir 0 slot ; le bouton "+" permet d’en recréer.
           removeBtn.disabled = !!slotObj.locked;
@@ -179,6 +182,8 @@ Rôle
           const netCarbs = global.MenuEngine.getRecipeNetCarbs(r);
           const fat = global.MenuEngine.getRecipeFat(r);
           const prot = global.MenuEngine.getRecipeProtein(r);
+
+          mealProtein += prot;
 
           totalCalories += kcal;
           totalNetCarbs += netCarbs;
@@ -195,6 +200,10 @@ Rôle
 
           slotsWrap.appendChild(slotBox);
         });
+
+        if (mealTotalEl) {
+          mealTotalEl.innerHTML = `<strong>Protéines (repas) :</strong> ${fmt1(mealProtein)} g`;
+        }
 
         mealsWrap.appendChild(mealCard);
       });
