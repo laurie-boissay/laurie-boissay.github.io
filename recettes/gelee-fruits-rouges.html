@@ -9,7 +9,18 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "gelee-fruits-rouges"
 recipe_tested: false
 
-meal_type: "dessert"
+image: "/images/recettes/gelee-fruits-rouges.webp"
+image_alt: "Gelée de fruits rouges en ramequin"
+
+tags:
+  - low-carb-modere
+  - gout-sucre
+  - rapide
+  - peu-calorique
+  - longue
+
+badges_nutritionnels:
+  - vitamine-c
 
 servings: 4
 serving_size: "1 ramequin"
@@ -24,22 +35,38 @@ nutrition:
   fibres: 2
   fructose: 2
 
-tags:
-  - low-carb-modere
-  - gout-sucre
-  - rapide
-  - peu-calorique
-  - longue
-
-badges_nutritionnels:
-  - vitamine-c
-
 ingredients:
-  - "300 g de fruits rouges (frais ou surgelés)"
-  - "500 ml d’eau"
-  - "3 g d’agar-agar"
-  - "1 c. à café rase de stévia Pure Via"
-  - "1 c. à café de jus de citron"
+  - item: "fruits-rouges"
+    label: "Fruits rouges"
+    qty: 300
+    unit: "g"
+    note: "frais ou surgelés"
+    group: "fruits"
+
+  - item: "eau"
+    label: "Eau"
+    qty: 500
+    unit: "ml"
+    group: "epicerie"
+
+  - item: "agar-agar"
+    label: "Agar-agar"
+    qty: 3
+    unit: "g"
+    group: "epicerie"
+
+  - item: "stevia-purevia"
+    label: "Stévia (Pure Via)"
+    qty: 1
+    unit: "c-a-c"
+    note: "rase"
+    group: "epicerie"
+
+  - item: "citron-jus"
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-c"
+    group: "fruits"
 
 steps:
   - "Mixer les fruits rouges avec l’eau."
@@ -52,9 +79,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré (portion contrôlée de fruits)."
+  - "⚠️ Contient du sucre réel (fructose naturel des fruits rouges)."
   - "Très peu calorique (~45 kcal par portion)."
-  - "Glucides et fructose uniquement issus des fruits rouges."
   - "Temps passif important (repos au froid)."
   - "Se conserve 48 h au réfrigérateur."
 ---
-

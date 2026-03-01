@@ -9,11 +9,12 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "tarte-fruits-rouges"
 recipe_tested: false
 
-meal_type: "dessert"
-
-# Portions
 servings: 8
 serving_size: "1 part (1/8 tarte, diamètre 26–28 cm)"
+
+calories: 225
+proteines: 5
+glucides_nets: 3
 
 tags:
   - low-carb-modere
@@ -22,36 +23,43 @@ tags:
 
 badges_nutritionnels: []
 
-# =============================
-# Données nutritionnelles
-# Portion = 1 part (1/8 tarte)
-# =============================
-
-calories: 225
-proteines: 5
-glucides_nets: 3
-
 nutrition:
   lipides: 19
   glucides: 6
   fibres: 3
   fructose: 2
 
-# =============================
-# Ingrédients (8 parts)
-# =============================
-
 ingredients:
-  - "120 g de poudre d’amandes"
-  - "40 g de beurre fondu"
-  - "1 œuf"
-  - "1 c. à soupe de stévia Pure Via pâtisserie"
-  - "500 g de crème pâtissière low carb (froide)"
-  - "250 g de fruits rouges (framboises, fraises, myrtilles)"
-
-# =============================
-# Étapes
-# =============================
+  - item: "poudre-amandes"
+    label: "Poudre d’amandes"
+    qty: 120
+    unit: "g"
+    group: "epicerie"
+  - item: "beurre"
+    label: "Beurre fondu"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+  - item: "oeuf"
+    label: "Œuf"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+  - item: "stevia"
+    label: "Stévia Pure Via pâtisserie"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "creme-patissiere-lowcarb"
+    label: "Crème pâtissière low carb (froide)"
+    qty: 500
+    unit: "g"
+    group: "epicerie"
+  - item: "fruits-rouges"
+    label: "Fruits rouges (framboises, fraises, myrtilles)"
+    qty: 250
+    unit: "g"
+    group: "fruits"
 
 steps:
   - "Préchauffer le four à 170 °C."
@@ -68,4 +76,3 @@ notes_low_carb:
   - "Zone calorique neutre pour un dessert (~225 kcal/part)."
   - "Conservation idéale dans les 24 h (les fruits rendent du jus)."
 ---
-

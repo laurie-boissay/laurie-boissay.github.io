@@ -9,14 +9,8 @@ recipe_group: "Plats à base de fromages"
 recipe_sort: "mont-d-or-poulet-brocoli"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 6
-serving_size: "1 portion (≈ 83 g Mont d’Or + 150 g poulet + 250 g brocoli)"
-
-calories: 445
-proteines: 48
-glucides_nets: 8
+image: "/images/recettes/mont-d-or-poulet-brocoli.webp"
+image_alt: "Mont d’Or rôti servi avec poulet grillé et brocoli"
 
 tags:
   - low-carb-modere
@@ -27,6 +21,13 @@ badges_nutritionnels:
   - vitamine-b12
   - potassium
 
+servings: 6
+serving_size: "1 portion (≈ 83 g Mont d’Or + 150 g poulet + 250 g brocoli)"
+
+calories: 445
+proteines: 48
+glucides_nets: 8
+
 nutrition:
   lipides: 22
   glucides: 11
@@ -34,14 +35,38 @@ nutrition:
   fructose: 3
 
 ingredients:
-  - "1 Mont d’Or (500 g)"
-  - "900 g de filet de poulet"
-  - "1,5 kg de brocoli"
-  - "1 cuillère à soupe d’huile de colza"
-  - "Poivre"
+  - item: "mont-d-or"
+    label: "Mont d’Or"
+    qty: 500
+    unit: "g"
+    group: "fromages"
+
+  - item: "filet-poulet"
+    label: "Filet de poulet"
+    qty: 900
+    unit: "g"
+    group: "viandes"
+
+  - item: "brocoli"
+    label: "Brocoli"
+    qty: 1500
+    unit: "g"
+    group: "legumes"
+
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
-  - "Préchauffer le four à 180°C."
+  - "Préchauffer le four à 180 °C."
   - "Retirer le film du Mont d’Or."
   - "Enfourner 20 à 25 minutes jusqu’à texture fondante."
   - "Couper le poulet en morceaux et le griller à la poêle sans ajout de matière grasse."

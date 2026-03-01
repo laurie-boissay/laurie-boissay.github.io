@@ -9,10 +9,15 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "chili-con-carne"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/chili-con-carne.webp"
+image_alt: "Chili con carne sans haricots"
 
 servings: 4
 serving_size: "1 portion"
+
+calories: 470
+proteines: 45
+glucides_nets: 6
 
 tags:
   - low-carb-modere
@@ -26,10 +31,6 @@ badges_nutritionnels:
   - zinc
   - fer
 
-calories: 470
-proteines: 45
-glucides_nets: 6
-
 nutrition:
   lipides: 28
   glucides: 8
@@ -37,31 +38,85 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "800 g de bœuf haché 10 % MG"
-  - "1 oignon"
-  - "2 gousses d’ail"
-  - "500 g de tomates fraîches bien mûres"
-  - "1 poivron rouge"
-  - "1 c. à soupe d’huile neutre"
-  - "1 c. à café de cumin moulu"
-  - "1/2 c. à café de piment (ou selon tolérance)"
-  - "Sel, poivre"
+  - item: boeuf-hache-10
+    label: "Bœuf haché 10 % MG"
+    qty: 800
+    unit: "g"
+    group: "viandes"
+    note: "rendement 100 % consommable"
+
+  - item: oignon
+    label: "Oignon"
+    qty: 150
+    unit: "g"
+    group: "legumes"
+
+  - item: ail
+    label: "Ail"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+
+  - item: tomates-fraiches
+    label: "Tomates fraîches"
+    qty: 500
+    unit: "g"
+    group: "legumes"
+
+  - item: poivron-rouge
+    label: "Poivron rouge"
+    qty: 150
+    unit: "g"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile neutre"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: cumin
+    label: "Cumin moulu"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: piment
+    label: "Piment moulu"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "adapter selon tolérance"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
-  - "Couper les tomates en petits dés (mondées si souhaité)."
+  - "Couper les tomates en petits dés."
   - "Émincer l’oignon et le poivron. Hacher l’ail."
-  - "Faire revenir l’oignon dans l’huile dans une grande sauteuse."
+  - "Faire revenir l’oignon dans l’huile."
   - "Ajouter le bœuf haché et faire colorer."
-  - "Incorporer l’ail, le cumin et le piment. Mélanger."
+  - "Incorporer l’ail, le cumin et le piment."
   - "Ajouter les tomates fraîches et le poivron."
   - "Saler et poivrer."
-  - "Laisser mijoter 40 à 45 minutes à feu doux, partiellement découvert pour faire évaporer l’eau."
+  - "Laisser mijoter 40 à 45 minutes à feu doux, partiellement découvert."
   - "Rectifier l’assaisonnement avant de servir."
 
 notes_low_carb:
-  - "Compatible low carb modéré : haricots volontairement exclus."
-  - "Très protéiné : environ 45 g par portion."
-  - "Plat encore meilleur réchauffé le lendemain."
+  - "Compatible low carb modéré : haricots exclus."
+  - "Très protéiné (~45 g par portion)."
+  - "Encore meilleur réchauffé le lendemain."
   - "Congélation possible en portions individuelles."
+  - "Protéines calculées sur rendement 100 % (bœuf haché)."
 ---
-

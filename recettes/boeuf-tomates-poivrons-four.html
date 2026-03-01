@@ -9,7 +9,8 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "boeuf-poivrons-four"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/boeuf-poivrons-four.webp"
+image_alt: "Bœuf rôti au four avec poivrons"
 
 servings: 4
 serving_size: "1 portion"
@@ -40,27 +41,72 @@ nutrition:
   fructose: 1.5
 
 ingredients:
-  - "800 g de bœuf à rôtir (paleron, rumsteck ou tende de tranche)"
-  - "600 g de poivrons (mélange rouge/jaune/vert)"
-  - "1 oignon ou oignon semoule"
-  - "2 gousses d’ail ou ail semoule"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "1 c. à café d’herbes de Provence"
-  - "Sel (léger), poivre"
+  - item: boeuf-roti
+    label: "Bœuf à rôtir (paleron, rumsteck ou tende de tranche)"
+    qty: 800
+    unit: "g"
+    group: "viandes"
+    note: "rôti ficelé, rendement 98 %"
+
+  - item: poivrons
+    label: "Poivrons (mélange rouge/jaune/vert)"
+    qty: 600
+    unit: "g"
+    group: "legumes"
+
+  - item: oignon
+    label: "Oignon"
+    qty: 1
+    unit: "piece"
+    group: "legumes"
+
+  - item: ail
+    label: "Ail"
+    qty: 2
+    unit: "piece"
+    note: "gousses"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: herbes-provence
+    label: "Herbes de Provence"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "léger, ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
   - "Couper les poivrons en lanières et émincer l’oignon."
   - "Déposer le bœuf dans un plat allant au four."
-  - "Répartir les poivrons, l’oignon, l’ail, l’huile et les herbes de Provence."
+  - "Répartir les poivrons, l’oignon, l’ail, l’huile et les herbes."
   - "Saler légèrement et poivrer."
   - "Couvrir et enfourner 30 minutes."
   - "Découvrir et poursuivre la cuisson 5 minutes pour colorer légèrement."
+  - "Laisser reposer 5 minutes avant de trancher."
 
 notes_low_carb:
-  - "Plat complet : bœuf et légumes rôtis intégrés."
+  - "Plat conforme à la charte : ≥ 30 g de protéines par portion."
   - "Compatible low carb modéré."
-  - "Recette sans tomate."
+  - "Recette sans tomate ni concentré."
   - "Micro-ondable et congelable en portions individuelles."
+  - "Protéines calculées sur rendement moyen 98 % (référentiel interne)."
 ---
-

@@ -198,13 +198,53 @@ Dépendances
       return `${String(v).replace(".0", "")} ×`;
     }
 
+    // Unités textuelles (cuillères, etc.) : pas d'arrondi agressif.
+    if (u === "c. à soupe" || u === "c. à café") {
+      const v = Math.round(q * 10) / 10;
+      return `${String(v).replace(".0", "")} ${u}`;
+    }
+
     // Cas générique
     const v = Math.round(q * 100) / 100;
     return `${String(v).replace(".0", "")} ${u}`.trim();
   }
 
   /**
-   * Extrait un "(quantité, unité, nom)" depuis une ligne d'ingrédient.
+   * Normalise un ingrédient structuré (objet YAML) pour l'agrégation.
+   * Contrat attendu :
+   * - item (id stable) / label (affichage)
+   * - qty (nombre) + unit (unité normalisée)
+   * - group (optionnel, rayon)
+   *
+   * Retourne null si non exploitable.
+   */
+  function normalizeStructuredIngredient(obj) {
+    if (!obj || typeof obj !== "object") return null;
+
+    const label = String(obj.label || obj.item || "").trim();
+    const item = String(obj.item || "").trim();
+    const qty = Number(obj.qty);
+    const unit = String(obj.unit || "x").trim();
+    const group = obj.group ? String(obj.group).trim() : "";
+
+    if (!label) return null;
+    if (!Number.isFinite(qty) || qty <= 0) return null;
+
+    // IMPORTANT : on agrège par item si présent, sinon par label.
+    const aggKey = item ? toKey(item) : toKey(label);
+
+    return {
+      aggKey,
+      name: label,
+      qty,
+      unit,
+      group,
+      raw: label,
+    };
+  }
+
+  /**
+   * Extrait un "(quantité, unité, nom)" depuis une ligne d'ingrédient (format legacy string).
    * Contrat :
    * - Supporte les formats simples : "800 g de skyr", "2 concombres moyens", "4 c. à soupe de vinaigre".
    * - Si parsing incertain : retourne { raw } pour garder l'information.
@@ -289,20 +329,14 @@ Dépendances
     /*
       Garde-fou (Option 1) : unité incohérente → bascule en "non agrégé".
       Exemple réel : "250 ml lapin entier découpé".
-
-      Principe
-      - Si l'unité est en volume (ml) mais que le libellé ressemble à un ingrédient solide
-        (viande/poisson), on ne tente pas d'agréger.
-      - On renvoie { raw } pour que la ligne apparaisse dans le bloc
-        "À vérifier (non agrégé)".
-
-      Remarque
-      - On s'appuie volontairement sur raw + name : si une lettre saute (ex. "lapin" → "apin")
-        le mot-clé peut encore être détecté dans la ligne brute.
     */
     if (unit === "ml") {
       const probe = `${toKey(raw)} ${toKey(name)}`;
-      if (/\b(lapin|poulet|dinde|porc|jambon|saucisse|steak|boeuf|viande|poisson|saumon|truite|thon|crevette|saint jacques|st jacques)\b/.test(probe)) {
+      if (
+        /\b(lapin|poulet|dinde|porc|jambon|saucisse|steak|boeuf|viande|poisson|saumon|truite|thon|crevette|saint jacques|st jacques)\b/.test(
+          probe
+        )
+      ) {
         return { raw };
       }
     }
@@ -312,21 +346,50 @@ Dépendances
     return { qty, unit: unit || "x", name, raw };
   }
 
-  function classifyIngredient(name) {
+  /**
+   * Mapping simple "group" (ingrédients structurés) → libellé catégorie.
+   * Si group est absent : fallback heuristique (regex) sur le nom.
+   */
+  function mapGroupToCategory(group) {
+    const g = toKey(group);
+    if (!g) return "";
+
+    if (/\b(legumes|legume|légumes|légume)\b/.test(g)) return "Légumes";
+    if (/\b(viandes|viande)\b/.test(g)) return "Viandes";
+    if (/\b(poissons|poisson|fruits de mer|fruits-de-mer|fruit de mer|crevettes)\b/.test(g))
+      return "Poissons & fruits de mer";
+    if (/\b(fromages|fromage|cremerie|crèmerie|lait|yaourt)\b/.test(g)) return "Crèmerie";
+    if (/\b(epicerie|épicerie)\b/.test(g)) return "Épicerie";
+    if (/\b(assaisonnements|assaisonnement|epices|épices)\b/.test(g)) return "Assaisonnements";
+    if (/\b(graines|noix|fruits a coque|fruits-à-coque)\b/.test(g)) return "Graines & fruits à coque";
+
+    return "";
+  }
+
+  function classifyIngredient(name, explicitGroup) {
+    const fromGroup = mapGroupToCategory(explicitGroup);
+    if (fromGroup) return fromGroup;
+
     const k = toKey(name);
 
     // Catégories volontairement grossières : on privilégie la lisibilité et la stabilité.
-    if (/\b(sel|poivre|vinaigre|moutarde|epice|epices|curry|piment|herbe|sauce|soja)\b/.test(k)) return "Assaisonnements";
+    if (/\b(sel|poivre|vinaigre|moutarde|epice|epices|curry|piment|herbe|sauce|soja)\b/.test(k))
+      return "Assaisonnements";
     if (/\b(beurre|creme|cr[eè]me|fromage|yaourt|yogourt|skyr|lait|oeuf|œuf)\b/.test(k)) return "Crèmerie";
     if (/\b(poulet|boeuf|bœuf|porc|saucisse|jambon|steak|dinde)\b/.test(k)) return "Viandes";
-    if (/\b(saumon|truite|thon|poisson|crevette|crevettes|saint-jacques|st jacques)\b/.test(k)) return "Poissons & fruits de mer";
-    if (/\b(concombre|salade|courgette|brocoli|chou|poireau|asperge|champignon|epinard|épinard|tomate|avocat|oignon|ail)\b/.test(k)) return "Légumes";
+    if (/\b(saumon|truite|thon|poisson|crevette|crevettes|saint-jacques|st jacques)\b/.test(k))
+      return "Poissons & fruits de mer";
+    if (
+      /\b(concombre|salade|courgette|brocoli|chou|poireau|asperge|champignon|epinard|épinard|tomate|avocat|oignon|ail)\b/.test(k)
+    )
+      return "Légumes";
     if (/\b(amande|noix|noisette|chia|lin|psyllium|graines)\b/.test(k)) return "Graines & fruits à coque";
     return "Épicerie";
   }
 
   function collectShoppingList(menu) {
-    // 1) Compter les occurrences de recettes (un slot = une portion)
+    // 1) Recenser les recettes présentes au moins une fois dans le menu.
+    //    Note : pour l'instant, les doublons dans le menu ne multiplient pas la liste de courses.
     const usage = new Map();
     for (const dayMeals of menu) {
       if (!Array.isArray(dayMeals)) continue;
@@ -340,23 +403,49 @@ Dépendances
           if (!id) continue;
 
           const cur = usage.get(id) || { recipe: r, portions: 0 };
-          cur.portions += 1;
+          cur.portions += 1; // conservé (debug/évolutions), mais non utilisé pour le calcul actuel
           cur.recipe = r;
           usage.set(id, cur);
         }
       }
     }
 
-    // 2) Agréger ingrédients (mise à l'échelle via servings si présent)
-    const agg = new Map(); // key → { name, unit, qty }
+    // 2) Agréger ingrédients (règle actuelle : recette complète, sans multiplication)
+    const agg = new Map(); // key → { name, unit, qty, group? }
     const misc = []; // lignes non parsées (affichées dans un bloc séparé)
 
-    for (const { recipe, portions } of usage.values()) {
-      const servings = safeNum(recipe?.servings) || 4;
-      const factor = portions / servings;
+    for (const { recipe } of usage.values()) {
+      // Règle demandée :
+      // - si une recette apparaît dans le menu, on prend les quantités telles qu’écrites
+      //   (donc pour le servings de la recette)
+      // - on ne multiplie pas même si la recette apparaît plusieurs fois
+      const factor = 1;
 
       const ing = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
       for (const line of ing) {
+        // --- NOUVEAU FORMAT : ingrédient structuré (objet YAML) ----------------
+        const structured = normalizeStructuredIngredient(line);
+        if (structured) {
+          const qty = safeNum(structured.qty) * factor;
+          if (!Number.isFinite(qty) || qty <= 0) {
+            misc.push(structured.name);
+            continue;
+          }
+
+          const unit = String(structured.unit || "x").trim();
+          const key = `${structured.aggKey}|${unit}`;
+
+          const cur = agg.get(key) || { name: structured.name, unit, qty: 0, group: structured.group || "" };
+          cur.qty += qty;
+
+          // On conserve un group si présent (rayon) — utile pour le tri.
+          if (!cur.group && structured.group) cur.group = structured.group;
+
+          agg.set(key, cur);
+          continue;
+        }
+
+        // --- FORMAT LEGACY : string -> parsing tolérant ------------------------
         const parsed = parseIngredientLine(line);
         if (!parsed) continue;
 
@@ -381,7 +470,7 @@ Dépendances
           }
 
           const key = `${toKey(name)}|${unit}`;
-          const cur = agg.get(key) || { name, unit, qty: 0 };
+          const cur = agg.get(key) || { name, unit, qty: 0, group: "" };
           cur.qty += qty;
           agg.set(key, cur);
         }
@@ -391,7 +480,7 @@ Dépendances
     // 3) Grouper + trier pour rendu
     const grouped = new Map();
     for (const it of agg.values()) {
-      const cat = classifyIngredient(it.name);
+      const cat = classifyIngredient(it.name, it.group);
       const arr = grouped.get(cat) || [];
       arr.push(it);
       grouped.set(cat, arr);
@@ -450,8 +539,8 @@ Dépendances
       for (const it of items) {
         ensureSpace(doc, cursor, 6);
 
-        const qty = formatQty(it.qty, it.unit);
-        const line = qty ? `${qty} ${it.name}` : it.name;
+        const qtyTxt = formatQty(it.qty, it.unit);
+        const line = qtyTxt ? `${qtyTxt} ${it.name}` : it.name;
 
         setText(doc, 10, palette.ink[0], palette.ink[1], palette.ink[2], "normal");
         doc.text("•", X + 2, cursor.y);

@@ -9,8 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "dinde-ail-citron-courgettes"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 portion (¼ de la recette)"
 
@@ -34,14 +32,56 @@ tags:
 badges_nutritionnels: []
 
 ingredients:
-  - "800 g d’escalopes de dinde"
-  - "3 courgettes (≈ 600 g)"
-  - "2 gousses d’ail"
-  - "1 citron (zeste + jus)"
-  - "2 c. à soupe d’huile de colza"
-  - "Thym ou herbes de Provence"
-  - "Sel"
-  - "Poivre"
+  - item: escalopes-dinde
+    label: "Escalopes de dinde"
+    qty: 800
+    unit: "g"
+    group: "viandes"
+
+  - item: courgettes
+    label: "Courgettes"
+    qty: 600
+    unit: "g"
+    group: "legumes"
+    note: "environ 3 pièces"
+
+  - item: ail
+    label: "Ail"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+    note: "gousses"
+
+  - item: citron
+    label: "Citron"
+    qty: 1
+    unit: "piece"
+    group: "fruits"
+    note: "zeste et jus"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: herbes
+    label: "Thym ou herbes de Provence"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Couper la dinde en lanières."
@@ -49,7 +89,7 @@ steps:
   - "Chauffer l’huile dans une grande poêle à feu moyen-vif."
   - "Saisir la dinde 4 à 5 minutes jusqu’à légère coloration."
   - "Ajouter l’ail haché, les courgettes et les herbes."
-  - "Cuire 8 à 10 minutes en remuant, jusqu’à cuisson complète."
+  - "Cuire 8 à 10 minutes en remuant jusqu’à cuisson complète."
   - "Hors du feu, ajouter le zeste et le jus de citron."
   - "Saler, poivrer et servir immédiatement."
 
@@ -57,7 +97,6 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Très protéiné (≈ 44 g par portion)."
   - "Peu calorique pour un plat."
-  - "Glucides uniquement issus des légumes."
+  - "Glucides issus uniquement des légumes."
   - "Micro-ondable en réchauffage doux."
 ---
-

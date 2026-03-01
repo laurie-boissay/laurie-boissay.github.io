@@ -9,10 +9,11 @@ recipe_group: "Pains & substituts"
 recipe_sort: "crepes-salees"
 recipe_tested: true
 
-meal_type: "other"
-
 image: "/images/recettes/crepes-salees.webp"
 image_alt: "Crêpes salées low carb (base pour wraps)"
+
+servings: 12
+serving_size: "1 crêpe"
 
 tags:
   - low-carb-modere
@@ -25,10 +26,7 @@ tags:
 badges_nutritionnels:
   - magnesium
 
-servings: 12
-serving_size: "1 crêpe"
-
-# Valeurs par crêpe (1/12 recette) – recalculées
+# Valeurs par crêpe (1/12 recette)
 calories: 85
 proteines: 4
 glucides_nets: 0
@@ -40,19 +38,48 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "5 œufs"
-  - "500 ml de lait d’amande non sucré"
-  - "60 g de poudre d’amandes"
-  - "18 g de psyllium blond"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "1 pincée de sel"
+  - item: oeufs
+    label: "Œufs"
+    qty: 5
+    unit: "piece"
+    group: "oeufs"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 500
+    unit: "ml"
+    group: "epicerie"
+
+  - item: poudre-amandes
+    label: "Poudre d’amandes"
+    qty: 60
+    unit: "g"
+    group: "epicerie"
+
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 18
+    unit: "g"
+    group: "epicerie"
+
+  - item: huile-colza-tournesol
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Mettre tous les ingrédients dans un blender."
   - "Mixer jusqu’à obtenir une pâte parfaitement lisse."
   - "Laisser reposer 45 minutes à température ambiante pour permettre l’hydratation complète des fibres."
-  - "Après repos, mélanger rapidement : la pâte sera plus épaisse qu’une pâte à crêpes classique (normal)."
-  - "Si nécessaire, ajouter un peu de lait d’amande par petites quantités pour obtenir une pâte nappante mais fluide."
+  - "Après repos, mélanger rapidement : la pâte sera plus épaisse qu’une pâte à crêpes classique."
+  - "Si nécessaire, ajouter un peu de lait d’amande pour obtenir une pâte nappante mais fluide."
   - "Chauffer une poêle antiadhésive légèrement huilée."
   - "Verser une petite louche de pâte et étaler finement."
   - "Cuire plus longtemps qu’une crêpe traditionnelle et laisser bien colorer pour améliorer la tenue."
@@ -69,4 +96,3 @@ notes_low_carb:
   - "Congélation possible (séparer avec papier cuisson)."
   - "Conservation : 48 h au réfrigérateur."
 ---
-

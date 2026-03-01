@@ -9,8 +9,6 @@ recipe_group: "Œufs"
 recipe_sort: "oeufs-mollets"
 recipe_tested: false
 
-meal_type: "œuf"
-
 tags:
   - low-carb-modere
   - rapide
@@ -34,8 +32,15 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "2 œufs"
-  - "Eau"
+  - item: oeufs
+    label: "Œufs"
+    qty: 2
+    unit: piece
+  - item: eau
+    label: "Eau"
+    qty: 500
+    unit: ml
+    note: "pour cuisson"
 
 steps:
   - "Porter une casserole d’eau à ébullition."

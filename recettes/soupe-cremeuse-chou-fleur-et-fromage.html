@@ -1,5 +1,6 @@
 ---
 layout: recipe
+
 title: "Soupe crémeuse chou-fleur & fromage (version protéinée)"
 description: "Velouté de chou-fleur enrichi en poulet, sans pomme de terre. Low carb modéré, rassasiant et optimisé pour une densité protéique élevée."
 recipe_title: "Soupe chou-fleur & fromage"
@@ -8,14 +9,8 @@ recipe_group: "Soupe"
 recipe_sort: "soupe-chou-fleur-fromage-proteine"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 bol"
-
-calories: 405
-proteines: 38
-glucides_nets: 9
 
 tags:
   - low-carb-modere
@@ -27,6 +22,10 @@ tags:
 badges_nutritionnels:
   - calcium
 
+calories: 405
+proteines: 38
+glucides_nets: 9
+
 nutrition:
   lipides: 22
   glucides: 13
@@ -34,15 +33,53 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "1 gros chou-fleur (~900 g)"
-  - "1/2 oignon"
-  - "1 L d’eau"
-  - "450 g de blanc de poulet cuit"
-  - "80 g de fromage râpé (emmental ou comté)"
-  - "80 ml de crème entière"
-  - "Sel"
-  - "Poivre"
-  - "Muscade (optionnel)"
+  - item: "chou-fleur"
+    label: "Chou-fleur"
+    qty: 900
+    unit: "g"
+    group: "legumes"
+    note: "1 gros chou-fleur"
+  - item: "oignon"
+    label: "Oignon"
+    qty: 0.5
+    unit: "piece"
+    group: "legumes"
+  - item: "eau"
+    label: "Eau"
+    qty: 1000
+    unit: "ml"
+    group: "epicerie"
+  - item: "blanc-poulet"
+    label: "Blanc de poulet cuit"
+    qty: 450
+    unit: "g"
+    group: "viandes"
+  - item: "fromage-rape"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 80
+    unit: "g"
+    group: "fromages"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 80
+    unit: "ml"
+    group: "produits-laitiers"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "muscade"
+    label: "Muscade"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+    note: "optionnel"
 
 steps:
   - "Émincer finement le demi-oignon."
@@ -61,4 +98,3 @@ notes_low_carb:
   - "Congélation possible."
   - "Réchauffage doux recommandé."
 ---
-

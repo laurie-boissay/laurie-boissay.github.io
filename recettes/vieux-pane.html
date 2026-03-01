@@ -9,8 +9,6 @@ recipe_group: "Fromages"
 recipe_sort: "vieux-pane"
 recipe_tested: true
 
-meal_type: "fromage"
-
 servings: 1
 serving_size: "30 g (1 part)"
 
@@ -34,7 +32,11 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "30 g de Vieux Pané"
+  - item: "vieux-pane"
+    label: "Vieux Pané"
+    qty: 30
+    unit: "g"
+    group: "fromages"
 
 steps:
   - "Découper une portion de 30 g."

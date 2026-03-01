@@ -9,8 +9,6 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "creme-chocolat-oeufs-cremeuse"
 recipe_tested: false
 
-meal_type: "dessert"
-
 servings: 4
 serving_size: "1 ramequin"
 
@@ -34,22 +32,58 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 jaunes d’œufs"
-  - "2 blancs d’œufs"
-  - "300 ml de lait d’amande non sucré"
-  - "25 g de cacao non sucré"
-  - "½ à 1 c. à café rase de Stévia Pure Via"
-  - "1 c. à café d’extrait de vanille (optionnel)"
-  - "1 pincée de sel"
+  - item: jaunes-oeufs
+    label: "Jaunes d’œufs"
+    qty: 4
+    unit: "piece"
+    group: "oeufs"
+
+  - item: blancs-oeufs
+    label: "Blancs d’œufs"
+    qty: 2
+    unit: "piece"
+    group: "oeufs"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 300
+    unit: "ml"
+    group: "epicerie"
+
+  - item: cacao-non-sucre
+    label: "Cacao non sucré"
+    qty: 25
+    unit: "g"
+    group: "epicerie"
+
+  - item: stevia-pure-via
+    label: "Stévia Pure Via"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "ajuster entre 0.5 et 1 c-a-c selon goût"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "optionnel"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 150 °C."
   - "Fouetter les jaunes d’œufs avec le cacao, la stévia et le sel."
   - "Incorporer progressivement le lait d’amande et la vanille."
-  - "Monter les blancs en mousse souple (non fermes)."
+  - "Monter les blancs en mousse souple."
   - "Incorporer délicatement les blancs à la préparation."
   - "Répartir dans 4 ramequins."
-  - "Placer les ramequins dans un plat rempli d’eau chaude."
+  - "Placer les ramequins dans un plat rempli d’eau chaude (cuisson au bain-marie)."
   - "Cuire environ 20 minutes : le centre doit rester légèrement tremblotant."
   - "Laisser refroidir puis placer au réfrigérateur au moins 2 heures."
 
@@ -57,8 +91,7 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Peu calorique : environ 90 kcal par portion."
   - "Glucides nets faibles grâce aux fibres du cacao."
-  - "Commencer par ½ c. à café de stévia pour éviter tout arrière-goût."
+  - "Commencer par 0.5 c-a-c de stévia pour éviter tout arrière-goût."
   - "Ne pas surcuire : la texture doit rester crémeuse."
   - "À consommer bien froid après repos."
 ---
-

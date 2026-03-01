@@ -9,7 +9,8 @@ recipe_group: "Viandes"
 recipe_sort: "gigot-agneau-roti"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/gigot-agneau-roti.webp"
+image_alt: "Gigot d’agneau rôti au four"
 
 tags:
   - low-carb-strict
@@ -35,18 +36,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 kg de gigot d’agneau (avec os)"
-  - "Sel"
-  - "Poivre"
+  - item: "gigot-agneau-avec-os"
+    label: "Gigot d’agneau (avec os)"
+    qty: 1000
+    unit: "g"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
-  - "Déposer le gigot dans un plat."
-  - "Cuire 45 à 60 minutes selon cuisson souhaitée."
+  - "Déposer le gigot dans un plat adapté."
+  - "Cuire 45 à 60 minutes selon la cuisson souhaitée."
   - "Laisser reposer 15 minutes avant découpe."
   - "Trancher et servir."
 
 notes_low_carb:
-  - "Protéines calculées sur rendement moyen de 70 % (référentiel interne)."
-  - "Aucun ingrédient non low carb."
+  - "Strictement sans glucides."
+  - "Protéines calculées sur rendement moyen de 70 % (référentiel interne, gigot avec os)."
+  - "Poids indiqué cru avec os."
 ---

@@ -9,13 +9,8 @@ recipe_group: "Amuse-bouche"
 recipe_sort: "roules-jambon-fromage"
 recipe_tested: true
 
-meal_type: "amuse-bouche"
-
 image: "/images/recettes/roules-jambon-fromage.webp"
 image_alt: "Roulés de jambon au fromage coupés en bouchées"
-
-servings: 4
-serving_size: "1 portion (≈ 4 bouchées)"
 
 tags:
   - low-carb-strict
@@ -25,6 +20,9 @@ tags:
 badges_nutritionnels:
   - calcium
   - vitamine-b12
+
+servings: 4
+serving_size: "1 portion (≈ 4 bouchées)"
 
 calories: 250
 proteines: 30
@@ -37,9 +35,20 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "8 grandes tranches de jambon blanc sans sucre ajouté"
-  - "150 g de fromage (emmental, comté ou fromage frais épais)"
-  - "Poivre (optionnel)"
+  - item: jambon-blanc
+    label: "Jambon blanc sans sucre ajouté"
+    qty: 8
+    unit: slice
+    note: "grandes tranches"
+  - item: fromage
+    label: "Fromage (emmental, comté ou fromage frais épais)"
+    qty: 150
+    unit: g
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+    note: "optionnel"
 
 steps:
   - "Déposer le fromage sur chaque tranche."
@@ -54,4 +63,3 @@ notes_low_carb:
   - "Compatible low carb strict si jambon sans sucre ajouté."
   - "⚠️ Vérifier la composition du jambon (éviter dextrose et amidon)."
 ---
-

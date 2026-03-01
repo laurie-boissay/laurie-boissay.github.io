@@ -2,14 +2,12 @@
 layout: recipe
 
 title: "Beignets au four à la confiture de fruits rouges"
-description: "Beignets au four, texture moelleuse, fourrés à la confiture low carb (fruits rouges). Compatible low carb modéré, portion maîtrisée."
+description: "Beignets au four, texture moelleuse, fourrés à la confiture low carb (fruits rouges)."
 recipe_title: "Beignets au four à la confiture"
-recipe_subtitle: "Recette simple sans pousse + fourrage confiture maison"
+recipe_subtitle: "Recette simple sans pousse"
 recipe_group: "Desserts & crèmes"
 recipe_sort: "beignets-confiture-fruits-rouges"
 recipe_tested: true
-
-meal_type: "dessert"
 
 image: "/images/recettes/beignets-confiture-fruits-rouges.webp"
 image_alt: "Beignets au four low carb fourrés à la confiture de fruits rouges"
@@ -23,6 +21,7 @@ glucides_nets: 3.4
 
 tags:
   - low-carb-modere
+  - gout-sucre
   - peu-calorique
   - longue
 
@@ -33,28 +32,68 @@ nutrition:
   fructose: 1.0
 
 ingredients:
-  - "2 œufs"
-  - "100 g de poudre d’amande fine"
-  - "160 g de fromage blanc 3 % MG"
-  - "20 g de beurre fondu"
-  - "1 c. à café de levure chimique"
-  - "1 c. à café rase de psyllium"
-  - "1 pincée de sel"
-  - label: "80 g de confiture low carb (fruits rouges)"
-    link: "/recettes/confiture-de-fruits-rouges.html"
+  - item: oeufs
+    label: "Œufs"
+    qty: 2
+    unit: "piece"
+    group: "oeufs"
+
+  - item: poudre-amande
+    label: "Poudre d’amande fine"
+    qty: 100
+    unit: "g"
+    group: "epicerie"
+
+  - item: fromage-blanc-3
+    label: "Fromage blanc 3 % MG"
+    qty: 160
+    unit: "g"
+    group: "cremerie"
+
+  - item: beurre
+    label: "Beurre fondu"
+    qty: 20
+    unit: "g"
+    group: "cremerie"
+
+  - item: levure-chimique
+    label: "Levure chimique"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "pincée"
+    group: "epicerie"
+
+  - item: confiture-fruits-rouges-low-carb
+    label: "Confiture low carb (fruits rouges)"
+    qty: 80
+    unit: "g"
+    group: "epicerie"
+    link: "{{ '/recettes/confiture-de-fruits-rouges.html' | relative_url }}"
 
 steps:
   - "Préchauffer le four à 170 °C."
   - "Mélanger les œufs, le fromage blanc et le beurre fondu."
   - "Ajouter la poudre d’amande, la levure chimique, le psyllium et le sel."
-  - "Former 8 boules légèrement aplaties avec les mains légèrement humides."
+  - "Former 8 boules légèrement aplaties avec les mains humides."
   - "Cuire 15 à 18 minutes jusqu’à légère coloration."
-  - "Laisser refroidir avant de garnir."
-  - "Couper et fourrer avec 10 g de confiture par beignet."
+  - "Laisser refroidir complètement."
+  - "Couper et fourrer avec environ 10 g de confiture par beignet."
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Texture plus dense qu’un beignet au gluten."
-  - "Psyllium dosé au minimum pour éviter une texture gommeuse."
+  - "Texture plus dense qu’un beignet traditionnel."
+  - "Psyllium dosé au minimum fonctionnel."
+  - "Portion contrôlée pour maintien zone peu calorique."
 ---
-

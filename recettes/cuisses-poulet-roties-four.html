@@ -9,7 +9,8 @@ recipe_group: "Viandes"
 recipe_sort: "cuisses-poulet-roties"
 recipe_tested: false
 
-meal_type: "viande"
+servings: 1
+serving_size: "2 cuisses (300 g cru avec os)"
 
 tags:
   - low-carb-strict
@@ -20,9 +21,6 @@ badges_nutritionnels:
   - selenium
   - vitamine-b12
   - zinc
-
-servings: 1
-serving_size: "2 cuisses (300 g cru)"
 
 calories: 600
 proteines: 45
@@ -35,18 +33,35 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "2 cuisses de poulet"
-  - "Sel"
-  - "Poivre"
+  - item: cuisses-poulet-avec-os
+    label: "Cuisses de poulet (crues avec os)"
+    qty: 300
+    unit: "g"
+    group: "viandes"
+    note: "2 pièces"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 190 °C."
-  - "Déposer les cuisses sur une grille."
-  - "Cuire 35 à 45 minutes."
+  - "Déposer les cuisses sur une grille ou dans un plat."
+  - "Saler et poivrer."
+  - "Cuire 35 à 45 minutes selon la taille."
   - "Vérifier une température interne ≥ 75 °C."
   - "Laisser reposer 5 minutes avant service."
 
 notes_low_carb:
   - "Strictement sans glucides."
-  - "Protéines élevées grâce à la portion complète."
+  - "Protéines calculées sur rendement moyen de 55 % (référentiel interne)."
+  - "Portion protéique élevée."
 ---

@@ -9,8 +9,6 @@ recipe_group: "Barres nutritionnelles"
 recipe_sort: "barres-proteinees-cacao-cacahuete"
 recipe_tested: false
 
-meal_type: "dessert"
-
 servings: 8
 serving_size: "1 barre"
 
@@ -20,6 +18,7 @@ glucides_nets: 1
 
 tags:
   - low-carb-modere
+  - tres-proteine
   - rapide
   - congelable
 
@@ -33,25 +32,54 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "120 g de purée de cacahuètes 100 %"
-  - "40 g de protéine en poudre neutre (whey ou autre, sans édulcorant)"
-  - "20 g de cacao non sucré"
-  - "30 g de beurre de cacao (ou beurre)"
-  - "20 g de graines de sésame ou de cacahuètes concassées"
-  - "1 pincée de sel"
+  - item: puree-cacahuete
+    label: "Purée de cacahuètes 100 %"
+    qty: 120
+    unit: "g"
+    group: "epicerie"
+
+  - item: proteine-poudre-nature
+    label: "Protéine en poudre nature (sans édulcorant)"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+
+  - item: cacao-non-sucre
+    label: "Cacao non sucré"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+
+  - item: beurre-cacao
+    label: "Beurre de cacao (ou beurre)"
+    qty: 30
+    unit: "g"
+    group: "epicerie"
+
+  - item: graines-sesame
+    label: "Graines de sésame ou cacahuètes concassées"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "pincée"
+    group: "epicerie"
 
 steps:
   - "Faire fondre doucement le beurre de cacao (ou le beurre)."
   - "Mélanger la purée de cacahuètes avec le cacao, la protéine et le sel."
-  - "Incorporer le beurre fondu jusqu’à obtenir une pâte homogène."
-  - "Ajouter les graines de sésame ou les cacahuètes concassées."
+  - "Incorporer le beurre fondu jusqu’à obtention d’une pâte homogène."
+  - "Ajouter les graines ou les cacahuètes concassées."
   - "Tasser dans un moule tapissé de papier cuisson."
-  - "Réfrigérer 1 heure minimum puis découper en 8 barres."
+  - "Réfrigérer au moins 1 heure avant découpe en 8 barres."
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Sans stévia ni vanille : pas d’arrière-goût d’édulcorant."
-  - "Texture fondante et stable grâce à l’ajout de beurre de cacao (ou beurre)."
-  - "Congelable : bonne tenue après décongélation."
+  - "Sans édulcorant."
+  - "Texture fondante stabilisée par le beurre de cacao."
+  - "Congelable."
 ---
-

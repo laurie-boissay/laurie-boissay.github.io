@@ -9,10 +9,8 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "mousse-fruits-rouges"
 recipe_tested: false
 
-meal_type: "dessert"
-
-servings: 4
-serving_size: "1 verrine (1/4 de la recette)"
+image: "/images/recettes/mousse-fruits-rouges.webp"
+image_alt: "Mousse de fruits rouges"
 
 tags:
   - low-carb-modere
@@ -22,6 +20,9 @@ tags:
 
 badges_nutritionnels:
   - vitamine-c
+
+servings: 4
+serving_size: "1 verrine (1/4 de la recette)"
 
 calories: 65
 proteines: 3
@@ -34,12 +35,45 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "300 g de fruits rouges (frais ou surgelés)"
-  - "2 blancs d’œufs"
-  - "1 c. à café rase d’agar-agar"
-  - "100 ml d’eau"
-  - "Stévia Pure Via (selon goût)"
-  - "Quelques gouttes de jus de citron (facultatif)"
+  - item: "fruits-rouges"
+    label: "Fruits rouges"
+    qty: 300
+    unit: "g"
+    note: "frais ou surgelés"
+    group: "fruits"
+
+  - item: "blancs-oeufs"
+    label: "Blancs d’œufs"
+    qty: 2
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "agar-agar"
+    label: "Agar-agar"
+    qty: 1
+    unit: "c-a-c"
+    note: "rase"
+    group: "epicerie"
+
+  - item: "eau"
+    label: "Eau"
+    qty: 100
+    unit: "ml"
+    group: "epicerie"
+
+  - item: "stevia-purevia"
+    label: "Stévia Pure Via"
+    qty: 1
+    unit: "c-a-c"
+    note: "selon goût"
+    group: "epicerie"
+
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 2
+    unit: "gouttes"
+    note: "facultatif"
+    group: "fruits"
 
 steps:
   - "Mettre l’eau et l’agar-agar dans une casserole."
@@ -58,4 +92,3 @@ notes_low_carb:
   - "Source naturelle de vitamine C."
   - "À consommer sous 24 h en raison des blancs d’œufs crus."
 ---
-

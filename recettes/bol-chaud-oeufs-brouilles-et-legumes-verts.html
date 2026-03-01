@@ -9,7 +9,8 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "bol-chaud-oeufs-brouilles-proteines-legumes"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/bol-chaud-oeufs-brouilles-proteines-legumes.webp"
+image_alt: "Bol chaud œufs brouillés et légumes verts"
 
 servings: 4
 serving_size: "1 bol"
@@ -37,15 +38,52 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "12 œufs"
-  - "200 g de skyr nature"
-  - "200 g de brocoli"
-  - "200 g de haricots verts"
-  - "20 g de beurre"
-  - "Sel, poivre"
+  - item: oeufs
+    label: "Œufs"
+    qty: 12
+    unit: "piece"
+    group: "oeufs"
+
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 200
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: brocoli
+    label: "Brocoli"
+    qty: 200
+    unit: "g"
+    group: "legumes"
+
+  - item: haricots-verts
+    label: "Haricots verts"
+    qty: 200
+    unit: "g"
+    group: "legumes"
+
+  - item: beurre
+    label: "Beurre"
+    qty: 20
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
-  - "Cuire le brocoli et les haricots verts à la vapeur jusqu’à tendreté. Égoutter."
+  - "Cuire le brocoli et les haricots verts à la vapeur jusqu’à tendreté puis égoutter."
   - "Battre les œufs avec le skyr. Saler et poivrer."
   - "Faire fondre le beurre à feu doux dans une poêle."
   - "Verser les œufs et cuire doucement en remuant pour obtenir des œufs brouillés crémeux."
@@ -53,9 +91,8 @@ steps:
   - "Ajouter les œufs brouillés par-dessus et servir immédiatement."
 
 notes_low_carb:
-  - "Plat complet : protéines élevées et légumes intégrés."
+  - "Plat complet conforme à la charte : ≥ 30 g de protéines par portion."
   - "Compatible low carb modéré."
-  - "Suppression de la crème pour éviter la double matière grasse."
-  - "Apport protéique conforme à la charte ≥ 30 g par portion."
+  - "Pas de double matière grasse (pas de crème ajoutée)."
+  - "Glucides nets maîtrisés (3 g par portion)."
 ---
-

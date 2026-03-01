@@ -9,15 +9,8 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "coeurs-palmier-citron"
 recipe_tested: false
 
-meal_type: "accompagnement"
-
-tags:
-  - low-carb-modere
-  - rapide
-  - peu-calorique
-
-badges_nutritionnels:
-  - potassium
+image: "/images/recettes/coeurs-palmier-citron.webp"
+image_alt: "Salade de cœurs de palmier citronnés"
 
 servings: 4
 serving_size: "150 g égouttés"
@@ -26,6 +19,15 @@ calories: 80
 proteines: 3
 glucides_nets: 4
 
+tags:
+  - low-carb-modere
+  - rapide
+  - peu-calorique
+  - riche-en-fibres
+
+badges_nutritionnels:
+  - potassium
+
 nutrition:
   lipides: 5
   glucides: 6
@@ -33,18 +35,47 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "2 bocaux de cœurs de palmier (égouttés)"
-  - "2 c. à soupe d’huile de colza"
-  - "Jus d’un demi-citron"
-  - "Sel"
-  - "Poivre"
+  - item: coeurs-palmier
+    label: "Cœurs de palmier"
+    qty: 600
+    unit: "g"
+    note: "poids égoutté"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: citron
+    label: "Jus de citron"
+    qty: 0.5
+    unit: "piece"
+    note: "½ citron"
+    group: "legumes"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Égoutter et couper les cœurs de palmier."
-  - "Ajouter huile et citron."
+  - "Ajouter l’huile et le jus de citron."
   - "Assaisonner et mélanger."
 
 notes_low_carb:
   - "Très faible charge glucidique."
   - "Se consomme cru."
+  - "Compatible low carb modéré."
 ---

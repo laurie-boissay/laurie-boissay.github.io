@@ -9,7 +9,8 @@ recipe_group: "Boissons"
 recipe_sort: "boisson-electrolytes-citron-sel"
 recipe_tested: false
 
-meal_type: "boisson"
+image: "/images/recettes/boisson-electrolytes-citron-sel.webp"
+image_alt: "Boisson citron sel maison"
 
 servings: 4
 serving_size: "1 verre (250 ml)"
@@ -32,15 +33,43 @@ nutrition:
   fructose: 0.5
 
 ingredients:
-  - "1 L d’eau"
-  - "Jus d’1 citron"
-  - "1/2 c. à café de sel"
-  - "1/8 c. à café de bicarbonate (optionnel)"
-  - "Stévia (optionnel)"
+  - item: eau
+    label: "Eau"
+    qty: 1
+    unit: "l"
+    group: "epicerie"
+
+  - item: citron
+    label: "Citron"
+    qty: 1
+    unit: "piece"
+    note: "jus pressé"
+    group: "fruits"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: bicarbonate-soude
+    label: "Bicarbonate de soude alimentaire"
+    qty: 0.125
+    unit: "c-a-c"
+    note: "optionnel"
+    group: "epicerie"
+
+  - item: stevia
+    label: "Stévia"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel, selon goût"
+    group: "epicerie"
 
 steps:
   - "Verser l’eau dans une bouteille ou une carafe."
-  - "Ajouter le jus de citron et le sel."
+  - "Presser le citron et ajouter le jus."
+  - "Ajouter le sel."
   - "Ajouter le bicarbonate si utilisé et attendre la fin de la réaction."
   - "Ajouter la stévia si souhaité."
   - "Mélanger jusqu’à dissolution complète."
@@ -48,8 +77,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
+  - "⚠️ Contient du jus de citron (fructose naturellement présent)."
   - "Boisson sans sucre ajouté."
-  - "Apporte principalement du sodium ; aucun autre électrolyte n’est ajouté."
+  - "Apporte principalement du sodium ; aucun autre électrolyte majeur n’est ajouté."
   - "Ne remplace pas une boisson complète en électrolytes."
 ---
-

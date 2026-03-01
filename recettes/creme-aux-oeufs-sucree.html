@@ -9,10 +9,15 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "creme-oeufs-sucree-allegee"
 recipe_tested: false
 
-meal_type: "dessert"
+image: "/images/recettes/creme-oeufs-sucree-allegee.webp"
+image_alt: "Crème aux œufs low carb en ramequin"
 
 servings: 4
 serving_size: "1 portion"
+
+calories: 260
+proteines: 11
+glucides_nets: 2
 
 tags:
   - low-carb-modere
@@ -23,10 +28,6 @@ badges_nutritionnels:
   - vitamine-b12
   - calcium
 
-calories: 260
-proteines: 11
-glucides_nets: 2
-
 nutrition:
   lipides: 24
   glucides: 2
@@ -34,11 +35,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "6 œufs"
-  - "200 ml de crème entière"
-  - "200 ml de lait d’amande non sucré"
-  - "½ à 1 c. à café rase d’édulcorant adapté cuisson"
-  - "Cannelle ou extrait de vanille (facultatif)"
+  - item: oeuf
+    label: "Œufs"
+    qty: 6
+    unit: "pieces"
+    group: "frais"
+
+  - item: creme-entiere
+    label: "Crème entière"
+    qty: 200
+    unit: "ml"
+    group: "frais"
+
+  - item: lait-amande
+    label: "Lait d’amande non sucré"
+    qty: 200
+    unit: "ml"
+    group: "frais"
+
+  - item: edulcorant
+    label: "Édulcorant compatible cuisson"
+    qty: 1
+    unit: "c-a-c"
+    note: "½ à 1 c. à café rase selon tolérance"
+    group: "epicerie"
+
+  - item: vanille
+    label: "Cannelle ou extrait de vanille"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 160 °C."
@@ -51,9 +78,7 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Version plus légère : environ 260 kcal par portion."
-  - "Zone calorique neutre pour un dessert."
-  - "Texture toujours ferme grâce aux œufs."
+  - "Zone calorique neutre pour un dessert (≈ 260 kcal)."
+  - "Texture ferme grâce aux œufs."
   - "Micro-ondable : réchauffage doux possible."
 ---
-

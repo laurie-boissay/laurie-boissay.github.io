@@ -9,8 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "samossas-viande"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 samossa (1/4 de la recette)"
 
@@ -23,12 +21,6 @@ badges_nutritionnels:
   - vitamine-b12
   - fer
 
-# =============================
-# Données nutritionnelles
-# Portion = 1/4 recette
-# Hypothèse : bœuf 5–10 %
-# =============================
-
 calories: 375
 proteines: 40
 glucides_nets: 3
@@ -39,24 +31,52 @@ nutrition:
   fibres: 0.5
   fructose: 1
 
-# =============================
-# Ingrédients (4 portions)
-# =============================
-
 ingredients:
-  - "600 g de bœuf haché 5–10 %"
-  - "4 œufs"
-  - "1 oignon"
-  - "1 c. à soupe d’huile de colza"
-  - "1 c. à café de cumin"
-  - "1 c. à café de coriandre moulue"
-  - "1/2 c. à café de curcuma"
-  - "Sel"
-  - "Poivre"
-
-# =============================
-# Étapes
-# =============================
+  - item: "boeuf-hache"
+    label: "Bœuf haché 5–10 % MG"
+    qty: 600
+    unit: "g"
+    group: "viandes"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 4
+    unit: "piece"
+    group: "oeufs"
+  - item: "oignon"
+    label: "Oignon"
+    qty: 1
+    unit: "piece"
+    group: "legumes"
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "cumin"
+    label: "Cumin"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "coriandre-moulue"
+    label: "Coriandre moulue"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "curcuma"
+    label: "Curcuma"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
 
 steps:
   - "Émincer finement l’oignon."
@@ -76,4 +96,3 @@ notes_low_carb:
   - "Faible charge glucidique (≈ 3 g nets)."
   - "⚠️ Contient de faibles quantités de sucres naturels issus de l’oignon."
 ---
-

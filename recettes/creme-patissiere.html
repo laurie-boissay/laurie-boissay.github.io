@@ -9,8 +9,6 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "creme-patissiere"
 recipe_tested: false
 
-meal_type: "dessert"
-
 # Portion de référence : 100 g
 servings: 6
 serving_size: "100 g"
@@ -38,12 +36,42 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "500 ml de lait d’amande non sucré"
-  - "4 jaunes d’œufs"
-  - "100 ml de crème entière"
-  - "1 c. à café rase de psyllium blond"
-  - "1 c. à café d’extrait de vanille"
-  - "½ à 1 c. à café rase de Stévia Pure Via (selon goût)"
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 500
+    unit: "ml"
+    group: "epicerie"
+
+  - item: jaunes-oeufs
+    label: "Jaunes d’œufs"
+    qty: 4
+    unit: "piece"
+    group: "oeufs"
+
+  - item: creme-entiere
+    label: "Crème entière"
+    qty: 100
+    unit: "ml"
+    group: "produits-laitiers"
+
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: stevia-pure-via
+    label: "Stévia Pure Via"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "ajuster entre 0.5 et 1 c-a-c selon goût"
 
 steps:
   - "Chauffer le lait d’amande avec la vanille sans faire bouillir."
@@ -52,15 +80,14 @@ steps:
   - "Remettre à feu doux."
   - "Ajouter le psyllium en pluie en fouettant vigoureusement."
   - "Cuire 2 à 4 minutes jusqu’à épaississement net."
-  - "Retirer du feu dès la texture obtenue."
+  - "Retirer du feu dès que la texture est obtenue."
   - "Filmer au contact et laisser refroidir."
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Commencer par ½ c. à café de stévia puis ajuster après refroidissement."
+  - "Commencer par 0.5 c-a-c de stévia puis ajuster après refroidissement."
   - "Texture plus ferme après refroidissement."
   - "Base neutre modulable : chocolat noir, citron ou café."
   - "À consommer sous 48 h au réfrigérateur."
   - "Micro-ondable : réchauffage très doux en mélangeant."
 ---
-

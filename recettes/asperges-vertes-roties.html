@@ -9,7 +9,12 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "asperges-vertes-roties"
 recipe_tested: false
 
-meal_type: "accompagnement"
+servings: 4
+serving_size: "200 g cuits"
+
+calories: 95
+proteines: 6
+glucides_nets: 5
 
 tags:
   - low-carb-modere
@@ -20,13 +25,6 @@ badges_nutritionnels:
   - vitamine-b9
   - potassium
 
-servings: 4
-serving_size: "200 g cuits"
-
-calories: 95
-proteines: 6
-glucides_nets: 5
-
 nutrition:
   lipides: 6
   glucides: 7
@@ -34,19 +32,41 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "800 g d’asperges vertes"
-  - "2 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
+  - item: asperge-verte
+    label: "Asperges vertes"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 200 °C."
   - "Couper la base dure des asperges."
-  - "Mélanger avec l’huile."
-  - "Cuire 15 à 20 minutes."
-  - "Assaisonner en fin de cuisson."
+  - "Mélanger les asperges avec l’huile."
+  - "Rôtir 15 à 20 minutes jusqu’à légère coloration."
+  - "Assaisonner au moment de servir."
 
 notes_low_carb:
-  - "Très faible en glucides nets."
-  - "Compatible perte de poids."
+  - "Compatible low carb modéré."
+  - "Apport glucidique net modéré (5 g par portion)."
+  - "La cuisson au four concentre légèrement la saveur."
 ---

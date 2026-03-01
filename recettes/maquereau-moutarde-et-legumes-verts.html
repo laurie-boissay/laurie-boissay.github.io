@@ -9,10 +9,8 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "maquereau-moutarde-legumes-verts"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
+image: "/images/recettes/maquereau-moutarde-legumes-verts.webp"
+image_alt: "Maquereau poêlé avec sauce moutarde et légumes verts"
 
 tags:
   - low-carb-modere
@@ -22,6 +20,9 @@ tags:
 
 badges_nutritionnels:
   - omega-3
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 390
 proteines: 35
@@ -34,26 +35,63 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 maquereaux frais entiers ou 8 filets (≈ 600 g net)"
-  - "400 g de haricots verts (frais ou surgelés)"
-  - "200 g de brocoli (frais ou surgelé)"
-  - "3 c. à soupe de moutarde"
-  - "100 ml de crème entière"
-  - "Poivre"
-  - "Sel (facultatif)"
+  - item: "maquereau-frais"
+    label: "Maquereaux frais entiers ou filets"
+    qty: 600
+    unit: "g"
+    note: "≈ 4 poissons entiers ou 8 filets"
+    group: "poissons"
+
+  - item: "haricots-verts"
+    label: "Haricots verts"
+    qty: 400
+    unit: "g"
+    note: "frais ou surgelés"
+    group: "legumes"
+
+  - item: "brocoli"
+    label: "Brocoli"
+    qty: 200
+    unit: "g"
+    note: "frais ou surgelé"
+    group: "legumes"
+
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 3
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 100
+    unit: "ml"
+    group: "cremerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
   - "Cuire les haricots verts et le brocoli à la vapeur (ou à l’eau) jusqu’à tendreté. Égoutter soigneusement."
-  - "Saisir les maquereaux dans une grande poêle antiadhésive 3 à 4 minutes par face, jusqu’à cuisson juste (sans ajout de matière grasse si la poêle le permet)."
+  - "Saisir les maquereaux dans une grande poêle antiadhésive 3 à 4 minutes par face, cuisson juste (sans ajout de matière grasse si la poêle le permet)."
   - "Baisser le feu. Ajouter la moutarde et la crème, puis mélanger pour obtenir une sauce nappante."
   - "Laisser mijoter 2 à 3 minutes sans faire bouillir."
-  - "Poivrer (et saler légèrement si besoin), puis servir immédiatement avec les légumes verts."
+  - "Poivrer et saler légèrement si besoin, puis servir immédiatement avec les légumes verts."
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné : ≈ 35 g de protéines par portion (objectif plat ≥ 30 g atteint)."
-  - "Lipides modérés : crème réduite et cuisson sans huile pour éviter la double matière grasse."
+  - "Très protéiné (~35 g par portion, objectif ≥ 30 g atteint)."
+  - "Lipides modérés : crème réduite et cuisson sans huile."
   - "Glucides nets ≈ 2 g par portion (principalement légumes + moutarde)."
   - "Riche en oméga-3 grâce au maquereau."
 ---
-

@@ -9,8 +9,6 @@ recipe_group: "Œufs"
 recipe_sort: "omelette-fromage"
 recipe_tested: false
 
-meal_type: "œuf"
-
 tags:
   - low-carb-modere
   - rapide
@@ -34,11 +32,26 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "2 œufs"
-  - "20 g d’emmental râpé"
-  - "1 c. à café d’huile de colza"
-  - "Sel"
-  - "Poivre"
+  - item: oeufs
+    label: "Œufs"
+    qty: 2
+    unit: piece
+  - item: emmental-rape
+    label: "Emmental râpé"
+    qty: 20
+    unit: g
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 1
+    unit: c-a-c
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Battre les œufs."

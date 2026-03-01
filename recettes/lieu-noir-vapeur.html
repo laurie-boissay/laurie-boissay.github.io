@@ -9,7 +9,8 @@ recipe_group: "Poissons"
 recipe_sort: "lieu-noir-vapeur"
 recipe_tested: false
 
-meal_type: "poisson"
+image: "/images/recettes/lieu-noir-vapeur.webp"
+image_alt: "Filet de lieu noir cuit à la vapeur"
 
 tags:
   - low-carb-modere
@@ -22,7 +23,6 @@ badges_nutritionnels:
   - selenium
   - iode
 
-# Estimations par portion : 1 filet ~150 g (sur 4 portions)
 servings: 4
 serving_size: "1 filet (~150 g)"
 
@@ -37,10 +37,31 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 filets de lieu noir (~150 g chacun)"
-  - "Sel"
-  - "Poivre"
-  - "Citron (facultatif)"
+  - item: "lieu-noir-filet"
+    label: "Filets de lieu noir"
+    qty: 600
+    unit: "g"
+    note: "4 portions de ~150 g"
+    group: "poissons"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "citron"
+    label: "Citron"
+    qty: 0.5
+    unit: "piece"
+    note: "facultatif"
+    group: "fruits"
 
 steps:
   - "Porter l’eau du cuiseur vapeur à ébullition."
@@ -51,7 +72,7 @@ steps:
   - "Poivrer et servir immédiatement."
 
 notes_low_carb:
-  - "Aliment simple, 0 glucide."
+  - "Strictement sans glucides."
   - "Très riche en protéines."
   - "Compatible low carb modéré et strict."
   - "Poisson maigre : attention à la surcuisson."

@@ -9,9 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "steak-asperges"
 recipe_tested: true
 
-meal_type: "plat"
-
-# Portions
 servings: 4
 serving_size: "1 assiette (1 steak + 1/4 des asperges)"
 
@@ -28,11 +25,6 @@ badges_nutritionnels:
   - fer
   - vitamine-b12
 
-# =============================
-# Données nutritionnelles
-# Portion = 1 assiette
-# =============================
-
 calories: 480
 proteines: 55
 glucides_nets: 3
@@ -43,20 +35,41 @@ nutrition:
   fibres: 4
   fructose: 2
 
-# =============================
-# Ingrédients (4 portions)
-# =============================
-
 ingredients:
-  - "4 steaks de bœuf (≈ 180 g chacun)"
-  - "1 kg d’asperges vertes"
-  - "2 c. à soupe d’huile (colza ou tournesol)"
-  - "1 noix de beurre (facultatif)"
-  - "Sel, poivre"
-
-# =============================
-# Étapes
-# =============================
+  - item: "steak-boeuf"
+    label: "Steak de bœuf"
+    qty: 4
+    unit: "piece"
+    group: "viandes"
+    note: "≈ 180 g chacun"
+  - item: "asperges-vertes"
+    label: "Asperges vertes"
+    qty: 1000
+    unit: "g"
+    group: "legumes"
+  - item: "huile-colza"
+    label: "Huile (colza ou tournesol)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "beurre"
+    label: "Noix de beurre"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+    note: "Facultatif"
+  - item: "sel"
+    label: "Sel"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
 
 steps:
   - "Laver les asperges et couper la base fibreuse."
@@ -75,4 +88,3 @@ notes_low_carb:
   - "Très protéiné : adapté à un objectif élevé en protéines."
   - "Aucun ingrédient non compatible low carb."
 ---
-

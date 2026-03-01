@@ -9,11 +9,6 @@ recipe_group: "Amuse-bouche"
 recipe_sort: "oeufs-mimosa-thon"
 recipe_tested: false
 
-meal_type: "amuse-bouche"
-
-servings: 4
-serving_size: "3 demi-œufs (1/4 de la recette)"
-
 tags:
   - low-carb-modere
   - tres-proteine
@@ -23,7 +18,9 @@ badges_nutritionnels:
   - omega-3
   - vitamine-b12
 
-# Estimations par portion (1/4 recette)
+servings: 4
+serving_size: "3 demi-œufs (1/4 de la recette)"
+
 calories: 240
 proteines: 31
 glucides_nets: 2
@@ -35,19 +32,42 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "6 œufs"
-  - "200 g de thon en conserve, égoutté"
-  - "120 g de skyr"
-  - "1 c. à soupe de moutarde"
-  - "1 c. à soupe de jus de citron"
-  - "Poivre"
-  - "Sel (si besoin)"
+  - item: oeufs
+    label: "Œufs"
+    qty: 6
+    unit: piece
+  - item: thon
+    label: "Thon en conserve"
+    qty: 200
+    unit: g
+    note: "égoutté"
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 120
+    unit: g
+  - item: moutarde
+    label: "Moutarde"
+    qty: 1
+    unit: c-a-s
+  - item: citron
+    label: "Jus de citron"
+    qty: 1
+    unit: c-a-s
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+    note: "si besoin"
 
 steps:
   - "Cuire les œufs 10 minutes dans l’eau bouillante. Refroidir puis écaler."
   - "Couper les œufs en deux dans la longueur et récupérer les jaunes."
   - "Émietter le thon."
-  - "Écraser les jaunes avec le thon, le skyr, la moutarde et le citron jusqu’à texture homogène."
+  - "Écraser les jaunes avec le thon, le skyr, la moutarde et le jus de citron jusqu’à texture homogène."
   - "Poivrer et saler légèrement si nécessaire."
   - "Garnir les blancs d’œufs avec la préparation."
   - "Réserver au frais 15 à 30 minutes avant service."
@@ -59,4 +79,3 @@ notes_low_carb:
   - "Glucides très faibles, aucune source sucrée ajoutée."
   - "Conservation : 24 h au réfrigérateur, filmé."
 ---
-

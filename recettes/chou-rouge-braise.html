@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "chou-rouge-braise"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/chou-rouge-braise.webp"
+image_alt: "Chou rouge braisé mijoté"
+
+servings: 4
+serving_size: "250 g cuits"
+
+calories: 135
+proteines: 4
+glucides_nets: 10
 
 tags:
   - low-carb-modere
@@ -21,13 +29,6 @@ badges_nutritionnels:
   - vitamine-c
   - potassium
 
-servings: 4
-serving_size: "250 g cuits"
-
-calories: 135
-proteines: 4
-glucides_nets: 10
-
 nutrition:
   lipides: 8
   glucides: 16
@@ -35,20 +36,47 @@ nutrition:
   fructose: 5
 
 ingredients:
-  - "1 chou rouge (~1 kg)"
-  - "2 c. à soupe d’huile de colza"
-  - "2 c. à soupe de vinaigre de cidre"
-  - "Sel"
-  - "Poivre"
+  - item: chou-rouge
+    label: "Chou rouge"
+    qty: 1000
+    unit: "g"
+    note: "≈ 1 kg"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: vinaigre-cidre
+    label: "Vinaigre de cidre"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Émincer finement le chou rouge."
-  - "Faire revenir dans l’huile 5 minutes."
+  - "Faire revenir 5 minutes dans l’huile."
   - "Ajouter le vinaigre, couvrir et cuire 35 à 45 minutes à feu doux."
   - "Remuer régulièrement."
   - "Assaisonner en fin de cuisson."
 
 notes_low_carb:
   - "Glucides modérés mais compatibles low carb modéré."
-  - "Cuisson longue améliore digestibilité."
+  - "Cuisson longue améliore la digestibilité."
 ---

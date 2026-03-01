@@ -9,10 +9,8 @@ recipe_group: "Plats à base de fruits de mer"
 recipe_sort: "saint-jacques-creme-ail-citron"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
+image: "/images/recettes/saint-jacques-creme-ail-citron.webp"
+image_alt: "Noix de Saint-Jacques à la crème, ail et citron"
 
 tags:
   - low-carb-modere
@@ -23,6 +21,9 @@ tags:
 badges_nutritionnels:
   - vitamine-b12
   - iode
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 380
 proteines: 34
@@ -35,14 +36,54 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "700 g de noix de Saint-Jacques"
-  - "300 g de poireaux émincés"
-  - "2 gousses d’ail"
-  - "120 ml de crème entière"
-  - "Zeste et jus d’1 citron"
-  - "10 g de beurre"
-  - "Sel"
-  - "Poivre"
+  - item: "saint-jacques"
+    label: "Noix de Saint-Jacques"
+    qty: 700
+    unit: "g"
+    group: "fruits-de-mer"
+
+  - item: "poireaux"
+    label: "Poireaux émincés"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+
+  - item: "ail"
+    label: "Gousses d’ail"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 120
+    unit: "ml"
+    group: "cremerie"
+
+  - item: "citron"
+    label: "Citron"
+    qty: 1
+    unit: "piece"
+    note: "zeste et jus"
+    group: "fruits"
+
+  - item: "beurre"
+    label: "Beurre"
+    qty: 10
+    unit: "g"
+    group: "cremerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Nettoyer et émincer finement les poireaux."
@@ -55,9 +96,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné : ≈ 34 g de protéines par portion."
+  - "Très protéiné (~34 g de protéines par portion)."
   - "Lipides maîtrisés pour rester dans une zone santé."
   - "Glucides issus principalement des poireaux et du citron."
   - "Source naturelle de vitamine B12 et d’iode."
 ---
-

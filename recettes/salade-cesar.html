@@ -9,8 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "salade-cesar-low-carb"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 portion"
 
@@ -35,15 +33,51 @@ nutrition:
   fructose: 0.8
 
 ingredients:
-  - "400 g de salade romaine"
-  - "500 g de blancs de poulet cuits"
-  - "80 g de fromage à pâte dure en copeaux (comté ou équivalent)"
-  - "40 g de moutarde"
-  - "90 g de crème entière"
-  - "30 g de fromage blanc 3 %"
-  - "20 g de jus de citron"
-  - "Sel"
-  - "Poivre"
+  - item: "salade-romaine"
+    label: "Salade romaine"
+    qty: 400
+    unit: "g"
+    group: "legumes"
+  - item: "blancs-poulet"
+    label: "Blancs de poulet cuits"
+    qty: 500
+    unit: "g"
+    group: "viandes"
+  - item: "fromage-dur-copeaux"
+    label: "Fromage à pâte dure en copeaux (comté ou équivalent)"
+    qty: 80
+    unit: "g"
+    group: "fromages"
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 90
+    unit: "g"
+    group: "produits-laitiers"
+  - item: "fromage-blanc"
+    label: "Fromage blanc 3 %"
+    qty: 30
+    unit: "g"
+    group: "produits-laitiers"
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
 
 steps:
   - "Laver, essorer et couper la salade romaine."
@@ -59,4 +93,3 @@ notes_low_carb:
   - "≤ 550 kcal → peu-calorique selon seuil plat."
   - "À consommer rapidement après assaisonnement."
 ---
-

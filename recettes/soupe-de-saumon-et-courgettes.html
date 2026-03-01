@@ -8,8 +8,6 @@ recipe_group: "Soupe"
 recipe_sort: "soupe-saumon-courgettes"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 bol"
 
@@ -37,15 +35,53 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "600 g de saumon frais"
-  - "700 g de courgettes"
-  - "1/2 oignon"
-  - "2 gousses d’ail"
-  - "1,2 L d’eau"
-  - "1 feuille de laurier"
-  - "1 c. à soupe de jus de citron"
-  - "Poivre"
-  - "Sel (si besoin)"
+  - item: "saumon"
+    label: "Saumon frais"
+    qty: 600
+    unit: "g"
+    group: "poissons"
+  - item: "courgettes"
+    label: "Courgettes"
+    qty: 700
+    unit: "g"
+    group: "legumes"
+  - item: "oignon"
+    label: "Oignon"
+    qty: 0.5
+    unit: "piece"
+    group: "legumes"
+  - item: "ail"
+    label: "Gousses d’ail"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+  - item: "eau"
+    label: "Eau"
+    qty: 1200
+    unit: "ml"
+    group: "epicerie"
+  - item: "laurier"
+    label: "Feuille de laurier"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "sel"
+    label: "Sel"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "Si besoin"
 
 steps:
   - "Émincer finement l’oignon et l’ail. Couper les courgettes en demi-rondelles."
@@ -61,4 +97,3 @@ notes_low_carb:
   - "Lipides majoritairement issus du saumon (oméga-3)."
   - "Compatible congélation, texture légèrement plus ferme après décongélation."
 ---
-

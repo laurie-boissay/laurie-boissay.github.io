@@ -1,15 +1,6 @@
 ---
 layout: recipe
 
-# =========================================================
-# Recette (data-only) — Préparations & conservations
-# =========================================================
-# Contrat :
-# - Le layout génère tout l’affichage (ingrédients, étapes, nutrition).
-# - Aucune micro-donnée ni tableau HTML ici.
-# - Catégorie sans badge calorique (règle site).
-# =========================================================
-
 title: "Confiture low carb de fruits rouges"
 description: "Confiture maison low carb aux fruits rouges, sans sucre ajouté. Texture épaisse, riche en fibres, compatible low carb modéré."
 recipe_title: "Confiture de fruits rouges"
@@ -24,6 +15,10 @@ image_alt: "Confiture low carb de fruits rouges maison"
 servings: 30
 serving_size: "10 g"
 
+calories: 6
+proteines: 0.1
+glucides_nets: 1.1
+
 tags:
   - low-carb-modere
   - riche-en-fibres
@@ -33,11 +28,6 @@ tags:
 badges_nutritionnels:
   - vitamine-c
 
-# Estimation par portion : 10 g
-calories: 6
-proteines: 0.1
-glucides_nets: 1.1
-
 nutrition:
   lipides: 0
   glucides: 1.5
@@ -45,29 +35,49 @@ nutrition:
   fructose: 0.8
 
 ingredients:
-  - "300 g de fruits rouges (frais ou surgelés, non sucrés)"
-  - "1 c. à soupe de jus de citron"
-  - "1/2 c. à café rase de konjac en poudre"
-  - "Édulcorant au goût (facultatif, éviter le surdosage)"
+  - item: fruits-rouges
+    label: "Fruits rouges"
+    qty: 300
+    unit: "g"
+    note: "frais ou surgelés, non sucrés"
+    group: "fruits"
+
+  - item: citron
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-s"
+    group: "fruits"
+
+  - item: konjac-poudre
+    label: "Konjac en poudre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "rase"
+    group: "epicerie"
+
+  - item: edulcorant
+    label: "Édulcorant"
+    qty: 0
+    unit: ""
+    note: "facultatif, au goût, éviter le surdosage"
+    group: "epicerie"
 
 steps:
   - "Mettre les fruits rouges dans une casserole à feu doux."
   - "Laisser compoter 10 à 15 minutes en remuant régulièrement."
   - "Ajouter le jus de citron."
   - "Mixer légèrement si une texture plus lisse est souhaitée."
-  - "Saupoudrer le konjac en pluie très fine tout en mélangeant vigoureusement pour éviter les grumeaux."
+  - "Saupoudrer le konjac en pluie très fine tout en mélangeant vigoureusement."
   - "Laisser épaissir 2 à 3 minutes à feu doux."
   - "Retirer du feu (le gel final se stabilise en refroidissant)."
-  - "Ajuster l’édulcorant si nécessaire, sans excès."
+  - "Ajuster l’édulcorant si nécessaire."
   - "Verser dans un pot propre et laisser refroidir avant fermeture."
 
 notes_low_carb:
-  - "Compatible low carb modéré."
-  - "⚠️ Présence de sucres naturellement présents dans les fruits (fructose)."
-  - "Glucides nets modérés : environ 1,1 g par portion de 10 g."
-  - "Texture plus nette qu’avec le psyllium grâce au konjac."
-  - "La confiture est plus acide qu’une confiture traditionnelle."
+  - "⚠️ Contient des sucres naturellement présents dans les fruits (fructose)."
+  - "Glucides nets ≈ 1,1 g par portion de 10 g."
+  - "Compatible low carb modéré en portion maîtrisée."
+  - "Texture plus nette qu’avec le psyllium."
   - "Se conserve 4 à 5 jours au réfrigérateur."
-  - "Peut être congelée en petites portions."
+  - "Congélation possible en petites portions."
 ---
-

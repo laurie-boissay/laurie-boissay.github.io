@@ -9,7 +9,8 @@ recipe_group: "Boissons"
 recipe_sort: "boisson-lactee-skyr-vanille"
 recipe_tested: false
 
-meal_type: "boisson"
+image: "/images/recettes/boisson-lactee-skyr-vanille.webp"
+image_alt: "Skyr vanille à boire"
 
 servings: 1
 serving_size: "1 grand verre"
@@ -33,11 +34,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "200 g de skyr nature"
-  - "200 ml de lait d’amande non sucré"
-  - "1/2 c. à café d’extrait de vanille"
-  - "Stévia (optionnel, selon goût)"
-  - "Glaçons (optionnel)"
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 200
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 200
+    unit: "ml"
+    group: "epicerie"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: stevia
+    label: "Stévia"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel, selon goût"
+    group: "epicerie"
+
+  - item: glacons
+    label: "Glaçons"
+    qty: 4
+    unit: "piece"
+    note: "optionnel"
+    group: "epicerie"
 
 steps:
   - "Mettre le skyr, le lait d’amande et l’extrait de vanille dans un blender."
@@ -47,7 +74,7 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné, sans sucre ajouté."
+  - "Très protéiné (22 g par verre)."
+  - "Sans sucre ajouté."
   - "Convient en collation ou après une séance de sport."
 ---
-

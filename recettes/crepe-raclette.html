@@ -9,8 +9,6 @@ recipe_group: "Plats à base de fromages"
 recipe_sort: "crepe-raclette"
 recipe_tested: true
 
-meal_type: "plat"
-
 image: "/images/recettes/crepe-raclette.webp"
 image_alt: "Crêpe low carb roulée garnie de fromage à raclette fondu et jambon grillé"
 
@@ -21,9 +19,9 @@ tags:
   - low-carb-modere
   - riche-en-fibres
   - longue
-  - calorique
   - micro-ondable
   - tres-proteine
+  - peu-calorique
 
 badges_nutritionnels:
   - calcium
@@ -43,25 +41,40 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 crêpe salée low carb"
-  - "2 tranches de fromage à raclette (2 × 26 g = 52 g)"
-  - "2 tranches de jambon blanc"
+  - item: crepe-salees
+    label: "Crêpe salée low carb"
+    qty: 1
+    unit: "piece"
+    group: "pains-substituts"
+    link: "{{ '/recettes/crepes-salees.html' | relative_url }}"
+
+  - item: fromage-raclette
+    label: "Fromage à raclette"
+    qty: 52
+    unit: "g"
+    group: "fromages"
+    note: "2 tranches de 26 g"
+
+  - item: jambon-blanc
+    label: "Jambon blanc"
+    qty: 2
+    unit: "piece"
+    group: "viandes"
 
 steps:
   - "Chauffer une poêle antiadhésive."
   - "Griller légèrement les tranches de jambon 1 à 2 minutes par face."
   - "Déposer la crêpe dans la poêle."
-  - "Ajouter immédiatement les tranches de raclette."
+  - "Ajouter immédiatement le fromage à raclette."
   - "Laisser fondre à feu moyen."
   - "Ajouter le jambon."
   - "Rouler bien serré."
-  - "Laisser 20 à 30 secondes pour stabiliser."
+  - "Laisser 20 à 30 secondes pour stabiliser la forme."
 
 notes_low_carb:
-  - "Plat calorique (≥ 750 kcal seuil non atteint, mais densité lipidique élevée)."
+  - "Plat peu calorique au regard du seuil des plats (≤ 550 kcal)."
   - "Très protéiné."
   - "Low carb modéré : glucides nets très faibles."
   - "Compatible micro-ondes."
-  - "Le tag longue tient compte du temps de préparation des crêpes de base."
+  - "Le tag longue tient compte du temps de préparation préalable des crêpes."
 ---
-

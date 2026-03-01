@@ -9,10 +9,15 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "bol-thon-avocat-sesame"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/bol-thon-avocat-sesame.webp"
+image_alt: "Bol froid thon avocat et sésame"
 
 servings: 4
 serving_size: "1 bol"
+
+calories: 360
+proteines: 35
+glucides_nets: 2
 
 tags:
   - low-carb-modere
@@ -25,11 +30,6 @@ badges_nutritionnels:
   - vitamine-b12
   - potassium
 
-# Estimation par portion (1 bol sur 4)
-calories: 360
-proteines: 35
-glucides_nets: 2
-
 nutrition:
   lipides: 22
   glucides: 6
@@ -37,26 +37,62 @@ nutrition:
   fructose: 0.5
 
 ingredients:
-  - "600 g de thon au naturel, bien égoutté"
-  - "2 avocats mûrs mais fermes"
-  - "2 c. à soupe de graines de sésame"
-  - "2 c. à soupe de sauce soja (sans sucre ajouté)"
-  - "1 c. à soupe d’huile de sésame"
-  - "1 c. à soupe de vinaigre de riz"
-  - "Poivre"
+  - item: thon-naturel
+    label: "Thon au naturel, bien égoutté"
+    qty: 600
+    unit: "g"
+    group: "poissons"
+    note: "rendement 100 % consommable"
+
+  - item: avocat
+    label: "Avocat"
+    qty: 2
+    unit: "piece"
+    group: "fruits"
+
+  - item: graines-sesame
+    label: "Graines de sésame"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sauce-soja-sans-sucre
+    label: "Sauce soja sans sucre ajouté"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: huile-sesame
+    label: "Huile de sésame"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: vinaigre-riz
+    label: "Vinaigre de riz"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Égoutter soigneusement le thon et l’émietter grossièrement."
   - "Couper les avocats en dés."
   - "Mélanger la sauce soja, l’huile de sésame et le vinaigre de riz."
   - "Répartir le thon et l’avocat dans 4 bols."
-  - "Arroser de sauce, poivrer."
+  - "Arroser de sauce et poivrer."
   - "Parsemer de graines de sésame et servir immédiatement."
 
 notes_low_carb:
-  - "Plat complet : protéines (thon) + lipides et fibres (avocat)."
-  - "Compatible low carb modéré, sans féculents."
-  - "Peu calorique pour un plat (~360 kcal/portion)."
+  - "Plat complet conforme à la charte : ≥ 30 g de protéines par portion."
+  - "Compatible low carb modéré."
+  - "Glucides nets faibles (2 g par portion)."
   - "À consommer rapidement après préparation (avocat : oxydation)."
+  - "Protéines calculées sur rendement 100 % (thon égoutté)."
 ---
-

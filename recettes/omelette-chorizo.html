@@ -9,16 +9,14 @@ recipe_group: "Œufs"
 recipe_sort: "omelette-chorizo"
 recipe_tested: false
 
-meal_type: "œuf"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
-
 tags:
   - low-carb-strict
   - rapide
 
 badges_nutritionnels: []
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 312
 proteines: 18
@@ -31,11 +29,27 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "8 œufs"
-  - "120 g de chorizo (doux ou fort)"
-  - "20 g de beurre"
-  - "Poivre"
-  - "Sel (facultatif)"
+  - item: oeufs
+    label: "Œufs"
+    qty: 8
+    unit: piece
+  - item: chorizo
+    label: "Chorizo (doux ou fort)"
+    qty: 120
+    unit: g
+  - item: beurre
+    label: "Beurre"
+    qty: 20
+    unit: g
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+    note: "facultatif"
 
 steps:
   - "Couper le chorizo en petits dés ou fines rondelles."

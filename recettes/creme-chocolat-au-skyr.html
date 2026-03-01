@@ -9,8 +9,6 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "creme-chocolat-proteinee-sans-skyr"
 recipe_tested: false
 
-meal_type: "dessert"
-
 servings: 4
 serving_size: "1 verrine"
 
@@ -36,19 +34,52 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "400 g de fromage blanc nature 0 %"
-  - "40 g de whey (chocolat ou neutre)"
-  - "20 g de cacao non sucré"
-  - "½ à 1 c. à café rase de Stévia Pure Via"
-  - "1 c. à café d’extrait de vanille (optionnel)"
-  - "2 à 4 c. à soupe de lait d’amande non sucré (ajustement texture)"
+  - item: fromage-blanc-0
+    label: "Fromage blanc nature 0 %"
+    qty: 400
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: whey
+    label: "Whey (chocolat ou neutre)"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+    note: "sans sucres ajoutés"
+
+  - item: cacao-non-sucre
+    label: "Cacao non sucré"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+
+  - item: stevia-pure-via
+    label: "Stévia Pure Via"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "ajuster entre 0.5 et 1 c-a-c selon goût"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "optionnel"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 4
+    unit: "c-a-s"
+    group: "epicerie"
+    note: "ajuster texture (2 à 4 c-a-s)"
 
 steps:
   - "Verser le fromage blanc dans un saladier."
-  - "Ajouter la whey et le cacao, puis mélanger jusqu’à texture homogène."
-  - "Incorporer la stévia progressivement et ajuster au goût."
-  - "Ajouter la vanille si souhaitée."
-  - "Ajuster la texture avec un peu de lait d’amande si nécessaire."
+  - "Ajouter la whey et le cacao, puis mélanger jusqu’à obtention d’une texture homogène."
+  - "Incorporer progressivement la stévia et ajuster le niveau de sucre."
+  - "Ajouter l’extrait de vanille si utilisé."
+  - "Ajuster la texture avec le lait d’amande jusqu’à consistance lisse et crémeuse."
   - "Répartir en 4 verrines."
   - "Réserver au frais 15 minutes avant service."
 
@@ -56,7 +87,6 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Peu calorique : environ 100 kcal par portion."
   - "Très protéiné grâce à l’association whey + fromage blanc."
-  - "Commencer par ½ c. à café de stévia pour éviter tout arrière-goût."
-  - "Peut servir de base pour mousse en incorporant des blancs montés."
+  - "Commencer par 0.5 c-a-c de stévia pour éviter tout arrière-goût."
+  - "Peut servir de base pour une mousse en incorporant délicatement des blancs montés."
 ---
-

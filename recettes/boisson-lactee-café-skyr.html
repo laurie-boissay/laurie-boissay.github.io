@@ -9,7 +9,8 @@ recipe_group: "Boissons"
 recipe_sort: "boisson-lactee-cafe-skyr"
 recipe_tested: false
 
-meal_type: "boisson"
+image: "/images/recettes/boisson-lactee-cafe-skyr.webp"
+image_alt: "Café glacé protéiné au skyr"
 
 servings: 1
 serving_size: "1 grand verre"
@@ -33,11 +34,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "200 g de skyr nature"
-  - "150 ml de café fort refroidi"
-  - "100 ml de lait d’amande non sucré"
-  - "Stévia (optionnel, selon goût)"
-  - "Glaçons (optionnel)"
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 200
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: cafe
+    label: "Café fort refroidi"
+    qty: 150
+    unit: "ml"
+    group: "epicerie"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 100
+    unit: "ml"
+    group: "epicerie"
+
+  - item: stevia
+    label: "Stévia"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel, selon goût"
+    group: "epicerie"
+
+  - item: glacons
+    label: "Glaçons"
+    qty: 4
+    unit: "piece"
+    note: "optionnel"
+    group: "epicerie"
 
 steps:
   - "Préparer un café fort et le laisser refroidir."
@@ -48,7 +75,7 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné, sans sucre ajouté."
+  - "Très protéiné (22 g par verre)."
+  - "Sans sucre ajouté."
   - "Contient de la caféine : à éviter en fin de journée."
 ---
-

@@ -9,23 +9,20 @@ recipe_group: "Viandes"
 recipe_sort: "blanc-poulet-grille"
 recipe_tested: false
 
-meal_type: "viande"
-
-tags:
-  - low-carb-strict
-  - rapide
-  - tres-proteine
-  - peu-calorique
-
-badges_nutritionnels:
-  - selenium
-
 servings: 1
 serving_size: "1 blanc (170 g)"
 
 calories: 190
 proteines: 38
 glucides_nets: 0
+
+tags:
+  - low-carb-strict
+  - rapide
+  - tres-proteine
+
+badges_nutritionnels:
+  - selenium
 
 nutrition:
   lipides: 3
@@ -34,15 +31,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 blanc de poulet (170 g)"
-  - "Sel"
-  - "Poivre"
+  - item: blanc-poulet
+    label: "Blanc de poulet"
+    qty: 170
+    unit: "g"
+    group: "viandes"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
-  - "Cuire 4 à 5 minutes par face."
-  - "Vérifier cuisson complète."
-  - "Laisser reposer avant service."
+  - "Cuire 4 à 5 minutes par face selon l’épaisseur."
+  - "Vérifier la cuisson complète (chair opaque)."
+  - "Laisser reposer quelques minutes avant service."
 
 notes_low_carb:
-  - "Excellent ratio protéines/lipides."
+  - "0 glucide : compatible low carb strict."
+  - "Protéines calculées sur poids net consommable (rendement 100 %)."
+  - "Excellente densité protéique."
 ---

@@ -9,8 +9,6 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "sardines-tomates-fraiches-courgettes"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1/4 de la recette"
 
@@ -24,11 +22,6 @@ badges_nutritionnels:
   - omega-3
   - vitamine-b12
 
-# =============================
-# Données nutritionnelles
-# Portion = 1/4 recette
-# =============================
-
 calories: 380
 proteines: 30
 glucides_nets: 4
@@ -39,27 +32,51 @@ nutrition:
   fibres: 4
   fructose: 2
 
-# =============================
-# Ingrédients (4 portions)
-# =============================
-
 ingredients:
-  - "4 boîtes de sardines (au naturel ou à l’huile), égouttées"
-  - "600 g de courgettes"
-  - "300 g de tomates fraîches"
-  - "1 gousse d’ail (ou ail semoule)"
-  - "1 c. à soupe d’huile (si sardines au naturel)"
-  - "Poivre"
-  - "Herbes de Provence (facultatif)"
-
-# =============================
-# Étapes
-# =============================
+  - item: "sardines-boite"
+    label: "Sardines en boîte (au naturel ou à l’huile)"
+    qty: 4
+    unit: "boite"
+    group: "poissons"
+    note: "égouttées"
+  - item: "courgettes"
+    label: "Courgettes"
+    qty: 600
+    unit: "g"
+    group: "legumes"
+  - item: "tomates-fraiches"
+    label: "Tomates fraîches"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+  - item: "ail"
+    label: "Gousse d’ail"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+    note: "ou ail semoule"
+  - item: "huile"
+    label: "Huile"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+    note: "si sardines au naturel"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "herbes-provence"
+    label: "Herbes de Provence"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+    note: "facultatif"
 
 steps:
   - "Couper les courgettes en demi-rondelles et les tomates fraîches en morceaux."
   - "Faire revenir les courgettes avec l’ail 7 à 8 minutes à feu moyen."
-  - "Ajouter les tomates fraîches et cuire 3 à 4 minutes (elles doivent rester légèrement en morceaux)."
+  - "Ajouter les tomates fraîches et cuire 3 à 4 minutes, elles doivent rester légèrement en morceaux."
   - "Ajouter les sardines égouttées et réchauffer doucement 2 minutes sans les écraser."
   - "Poivrer, ajouter les herbes si souhaité et servir immédiatement."
 
@@ -69,4 +86,3 @@ notes_low_carb:
   - "Apport significatif en oméga-3 et vitamine B12 via les sardines."
   - "⚠️ Contient des sucres naturels issus des tomates."
 ---
-

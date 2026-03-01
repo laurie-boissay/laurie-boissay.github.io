@@ -9,14 +9,8 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "souffle-proteine-fromage"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1/4 du soufflé + salade"
-
-calories: 395
-proteines: 36
-glucides_nets: 4
 
 tags:
   - low-carb-modere
@@ -28,6 +22,10 @@ badges_nutritionnels:
   - calcium
   - vitamine-b12
 
+calories: 395
+proteines: 36
+glucides_nets: 4
+
 nutrition:
   lipides: 22
   glucides: 7
@@ -35,25 +33,66 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "6 œufs"
-  - "100 ml de crème entière"
-  - "200 g de fromage blanc entier"
-  - "100 g de fromage râpé (emmental ou comté)"
-  - "Sel"
-  - "Poivre"
-  - "Noix de muscade (facultatif)"
-  - "1 grande salade verte (~300 g)"
-  - "2 c. à café d’huile de colza"
-  - "Vinaigre"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 6
+    unit: "piece"
+    group: "oeufs"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 100
+    unit: "ml"
+    group: "produits-laitiers"
+  - item: "fromage-blanc"
+    label: "Fromage blanc entier"
+    qty: 200
+    unit: "g"
+    group: "produits-laitiers"
+  - item: "fromage-rape"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 100
+    unit: "g"
+    group: "fromages"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "noix-muscade"
+    label: "Noix de muscade"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+    note: "facultatif"
+  - item: "salade-verte"
+    label: "Salade verte"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "vinaigre"
+    label: "Vinaigre"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C et préparer un moule antiadhésif."
   - "Séparer les blancs des jaunes."
   - "Mélanger la crème, le fromage blanc et le fromage râpé."
-  - "Ajouter les jaunes, saler, poivrer et muscader."
+  - "Ajouter les jaunes, saler, poivrer et ajouter la noix de muscade si désiré."
   - "Monter les blancs en neige ferme."
   - "Incorporer délicatement les blancs à la spatule."
-  - "Verser dans le moule."
+  - "Verser la préparation dans le moule."
   - "Cuire 25 minutes sans ouvrir le four."
   - "Assaisonner la salade avec l’huile et le vinaigre."
   - "Servir immédiatement."
@@ -65,4 +104,3 @@ notes_low_carb:
   - "Beurre supprimé."
   - "À consommer immédiatement."
 ---
-

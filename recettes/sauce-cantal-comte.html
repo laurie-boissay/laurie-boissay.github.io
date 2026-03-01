@@ -9,8 +9,6 @@ recipe_group: "Sauces & assaisonnements"
 recipe_sort: "sauce-cantal-comte"
 recipe_tested: true
 
-meal_type: "other"
-
 servings: 20
 serving_size: "1 c. à soupe"
 
@@ -25,11 +23,6 @@ badges_nutritionnels:
   - calcium
   - vitamine-b12
 
-# =============================
-# Données nutritionnelles
-# Portion = 1 c. à soupe
-# =============================
-
 calories: 45
 proteines: 2
 glucides_nets: 0.4
@@ -40,25 +33,34 @@ nutrition:
   fibres: 0
   fructose: 0
 
-# =============================
-# Ingrédients (20 portions)
-# =============================
-
 ingredients:
-  - "200 ml de crème liquide entière"
-  - "120 g de cantal ou comté, râpé finement"
-  - "Poivre noir"
-  - "Facultatif : 1 pincée de muscade"
-
-# =============================
-# Étapes
-# =============================
+  - item: "creme-liquide"
+    label: "Crème liquide entière"
+    qty: 200
+    unit: "ml"
+    group: "produits-laitiers"
+  - item: "cantal-comte"
+    label: "Cantal ou comté râpé finement"
+    qty: 120
+    unit: "g"
+    group: "fromages"
+  - item: "poivre-noir"
+    label: "Poivre noir"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "muscade"
+    label: "Muscade"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+    note: "facultatif"
 
 steps:
   - "Chauffer doucement la crème dans une petite casserole à feu moyen-doux."
   - "Lorsque la crème est chaude (sans ébullition), ajouter le fromage râpé progressivement."
   - "Mélanger constamment jusqu’à fonte complète et texture lisse."
-  - "Poivrer. Ajouter une pincée de muscade si souhaité."
+  - "Poivrer et ajouter une pincée de muscade si souhaité."
   - "Servir immédiatement."
 
 notes_low_carb:
@@ -68,4 +70,3 @@ notes_low_carb:
   - "Ne pas faire bouillir pour éviter la séparation des matières grasses."
   - "Texture plus douce avec comté, goût plus marqué avec cantal."
 ---
-

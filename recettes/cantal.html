@@ -9,10 +9,11 @@ recipe_group: "Fromages"
 recipe_sort: "cantal"
 recipe_tested: true
 
-meal_type: "fromage"
+image: "/images/recettes/cantal.webp"
+image_alt: "Portion de cantal 30 g"
 
 servings: 1
-serving_size: "30 g (1 portion)"
+serving_size: "30 g"
 
 calories: 120
 proteines: 8
@@ -21,7 +22,6 @@ glucides_nets: 0
 tags:
   - low-carb-strict
   - tres-proteine
-  - calorique
 
 badges_nutritionnels:
   - calcium
@@ -34,7 +34,11 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "30 g de Cantal"
+  - item: cantal
+    label: "Cantal"
+    qty: 30
+    unit: "g"
+    group: "produits-laitiers"
 
 steps:
   - "Découper une portion de 30 g."

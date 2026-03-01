@@ -9,10 +9,8 @@ recipe_group: "Amuse-bouche"
 recipe_sort: "mousse-thon-fromage-frais"
 recipe_tested: false
 
-meal_type: "amuse-bouche"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
+image: "/images/recettes/mousse-thon-fromage-frais.webp"
+image_alt: "Mousse salée au thon et fromage frais"
 
 tags:
   - low-carb-modere
@@ -23,6 +21,9 @@ tags:
 badges_nutritionnels:
   - omega-3
   - vitamine-b12
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 170
 proteines: 25
@@ -35,12 +36,43 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "300 g de thon au naturel, égoutté"
-  - "200 g de fromage frais"
-  - "1 c. à soupe de moutarde"
-  - "1 c. à soupe de jus de citron"
-  - "Poivre"
-  - "Ciboulette ou herbes fraîches (facultatif)"
+  - item: "thon-au-naturel"
+    label: "Thon au naturel"
+    qty: 300
+    unit: "g"
+    note: "égoutté"
+    group: "poissons"
+
+  - item: "fromage-frais"
+    label: "Fromage frais"
+    qty: 200
+    unit: "g"
+    group: "fromages"
+
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-s"
+    group: "fruits"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "ciboulette-herbes"
+    label: "Ciboulette ou herbes fraîches"
+    qty: 5
+    unit: "g"
+    note: "facultatif"
+    group: "legumes"
 
 steps:
   - "Égoutter soigneusement le thon."
@@ -56,4 +88,3 @@ notes_low_carb:
   - "À servir avec concombre, endive ou céleri."
   - "Conservation : 48 h au réfrigérateur."
 ---
-

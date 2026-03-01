@@ -9,10 +9,15 @@ recipe_group: "Préparations & conservations"
 recipe_sort: "bouillon-concentre"
 recipe_tested: false
 
-meal_type: "other"
+image: "/images/recettes/bouillon-concentre.webp"
+image_alt: "Bouillon maison concentré"
 
 servings: 8
 serving_size: "250 ml"
+
+calories: 20
+proteines: 3
+glucides_nets: 1
 
 tags:
   - low-carb-modere
@@ -21,11 +26,6 @@ tags:
 
 badges_nutritionnels: []
 
-# Estimation par portion (250 ml)
-calories: 20
-proteines: 3
-glucides_nets: 1
-
 nutrition:
   lipides: 1
   glucides: 1
@@ -33,26 +33,64 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 carcasse de poulet ou 1 kg d’os de bœuf"
-  - "2 L d’eau"
-  - "1 oignon coupé en deux"
-  - "2 gousses d’ail écrasées"
-  - "1 feuille de laurier"
-  - "1 branche de thym"
-  - "Poivre"
+  - item: carcasse-poulet
+    label: "Carcasse de poulet ou os de bœuf"
+    qty: 1
+    unit: "kg"
+    note: "environ 1 kg"
+    group: "viandes"
+
+  - item: eau
+    label: "Eau"
+    qty: 2
+    unit: "l"
+    group: "epicerie"
+
+  - item: oignon
+    label: "Oignon"
+    qty: 1
+    unit: "piece"
+    note: "coupé en deux"
+    group: "legumes"
+
+  - item: ail
+    label: "Ail"
+    qty: 2
+    unit: "piece"
+    note: "gousses écrasées"
+    group: "legumes"
+
+  - item: laurier
+    label: "Feuille de laurier"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+
+  - item: thym
+    label: "Branche de thym"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Mettre tous les ingrédients dans une grande marmite."
-  - "Porter à frémissement (éviter l’ébullition forte)."
+  - "Porter à frémissement sans ébullition forte."
   - "Cuire 1 h 30 à feu doux."
   - "Écumer si nécessaire."
-  - "Filtrer."
-  - "Option : réduire encore pour concentrer le goût."
+  - "Filtrer soigneusement."
+  - "Réduire encore si souhaité pour concentrer le goût."
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Glucides issus principalement de l’oignon."
+  - "Glucides principalement issus de l’oignon."
   - "Éviter carotte et céleri pour rester très bas en glucides."
   - "Se congèle idéalement en portions de 250 ml."
+  - "Valeurs nutritionnelles estimées sur extraction moyenne des protéines."
 ---
-

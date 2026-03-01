@@ -9,7 +9,17 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "gratin-courgettes-poulet"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/gratin-courgettes-poulet.webp"
+image_alt: "Gratin de courgettes et poulet"
+
+tags:
+  - low-carb-modere
+  - tres-proteine
+  - congelable
+  - micro-ondable
+
+badges_nutritionnels:
+  - calcium
 
 servings: 4
 serving_size: "1 part (¼ du plat)"
@@ -24,24 +34,56 @@ nutrition:
   fibres: 2.5
   fructose: 1
 
-tags:
-  - low-carb-modere
-  - tres-proteine
-  - congelable
-  - micro-ondable
-
-badges_nutritionnels:
-  - calcium
-
 ingredients:
-  - "1 kg de courgettes"
-  - "150 ml de crème entière (30 % MG)"
-  - "100 g de fromage râpé (emmental ou comté)"
-  - "2 œufs"
-  - "300 g de blanc de poulet cuit en dés"
-  - "Sel"
-  - "Poivre"
-  - "Ail (facultatif)"
+  - item: "courgette"
+    label: "Courgettes"
+    qty: 1000
+    unit: "g"
+    group: "legumes"
+
+  - item: "creme-entiere"
+    label: "Crème entière (30 % MG)"
+    qty: 150
+    unit: "ml"
+    group: "cremerie"
+
+  - item: "fromage-rape"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 100
+    unit: "g"
+    group: "fromages"
+
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 2
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "blanc-poulet-cuit"
+    label: "Blanc de poulet cuit"
+    qty: 300
+    unit: "g"
+    note: "en dés"
+    group: "viandes"
+
+  - item: "ail"
+    label: "Ail"
+    qty: 1
+    unit: "piece"
+    note: "facultatif"
+    group: "legumes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -57,8 +99,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné (≈33 g par portion)."
+  - "Très protéiné (~33 g par portion)."
   - "Glucides issus uniquement des courgettes."
   - "Congélation possible en parts."
+  - "Protéines calculées sur rendement moyen de 100 % (référentiel interne, blanc de poulet)."
 ---
-

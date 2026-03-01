@@ -9,10 +9,15 @@ recipe_group: "Cake"
 recipe_sort: "cake-jambon-olives-proteine"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/cake-jambon-olives-proteine.webp"
+image_alt: "Tranche de cake jambon olives"
 
 servings: 6
 serving_size: "1 tranche épaisse"
+
+calories: 325
+proteines: 32
+glucides_nets: 3
 
 tags:
   - low-carb-modere
@@ -24,10 +29,6 @@ badges_nutritionnels:
   - vitamine-b12
   - calcium
 
-calories: 325
-proteines: 32
-glucides_nets: 3
-
 nutrition:
   lipides: 19
   glucides: 5
@@ -35,23 +36,71 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "6 œufs"
-  - "300 g de jambon blanc"
-  - "100 g de fromage râpé"
-  - "50 g d’olives"
-  - "60 g de poudre d’amande"
-  - "40 g de whey neutre"
-  - "1 sachet de levure chimique"
-  - "Sel, poivre"
+  - item: oeufs
+    label: "Œufs"
+    qty: 6
+    unit: "piece"
+    group: "oeufs"
+
+  - item: jambon-blanc
+    label: "Jambon blanc"
+    qty: 300
+    unit: "g"
+    group: "viandes"
+
+  - item: fromage-rape
+    label: "Fromage râpé"
+    qty: 100
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: olives
+    label: "Olives"
+    qty: 50
+    unit: "g"
+    group: "epicerie"
+
+  - item: poudre-amande
+    label: "Poudre d’amande"
+    qty: 60
+    unit: "g"
+    group: "epicerie"
+
+  - item: whey-neutre
+    label: "Whey neutre"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+
+  - item: levure-chimique
+    label: "Levure chimique"
+    qty: 1
+    unit: "piece"
+    note: "1 sachet"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 170 °C."
   - "Battre les œufs."
   - "Ajouter la poudre d’amande et la whey."
-  - "Incorporer fromage, jambon et olives."
+  - "Incorporer le fromage, le jambon et les olives."
   - "Assaisonner et ajouter la levure."
   - "Verser dans un moule à cake graissé."
-  - "Cuire 40 à 45 minutes."
+  - "Cuire 40 à 45 minutes jusqu’à cuisson complète."
   - "Laisser tiédir avant de trancher en 6 parts."
 
 notes_low_carb:
@@ -59,5 +108,5 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Glucides nets faibles (~3 g)."
   - "Congélation possible en tranches."
+  - "Micro-ondable sans perte majeure de texture."
 ---
-

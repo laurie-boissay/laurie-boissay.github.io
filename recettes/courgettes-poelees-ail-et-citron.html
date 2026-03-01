@@ -9,20 +9,21 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "courgettes-poelees-ail-citron"
 recipe_tested: false
 
-meal_type: "other"
+image: "/images/recettes/courgettes-poelees-ail-citron.webp"
+image_alt: "Courgettes poêlées à l’ail et au citron"
 
 servings: 4
-serving_size: "≈ 200 g"
+serving_size: "200 g cuits"
+
+calories: 55
+proteines: 2
+glucides_nets: 3
 
 tags:
   - low-carb-modere
   - rapide
   - micro-ondable
   - peu-calorique
-
-calories: 55
-proteines: 2
-glucides_nets: 3
 
 nutrition:
   lipides: 4
@@ -31,11 +32,45 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "800 g de courgettes"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "1 à 2 gousses d’ail (ou 1 c. à café d’ail semoule)"
-  - "1 à 2 c. à soupe de jus de citron"
-  - "Sel, poivre"
+  - item: courgette
+    label: "Courgettes"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: ail
+    label: "Ail"
+    qty: 2
+    unit: "gousses"
+    note: "ou 1 c. à café d’ail semoule"
+    group: "epicerie"
+
+  - item: citron
+    label: "Jus de citron"
+    qty: 2
+    unit: "c-a-s"
+    note: "ajuster selon goût"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Laver les courgettes et les couper en demi-rondelles ou en bâtonnets."
@@ -51,4 +86,3 @@ notes_low_carb:
   - "Micro-ondable : réchauffage 1 à 2 minutes en couvrant."
   - "Conservation : jusqu’à 48 h au réfrigérateur."
 ---
-

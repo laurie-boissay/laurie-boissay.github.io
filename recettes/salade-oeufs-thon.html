@@ -9,8 +9,6 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "salade-oeufs-thon"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 portion"
 
@@ -35,22 +33,59 @@ nutrition:
   fructose: 0.6
 
 ingredients:
-  - "8 œufs"
-  - "2 boîtes de thon au naturel (≈ 280 g égoutté)"
-  - "300 g de salade verte"
-  - "40 g de moutarde"
-  - "60 g de crème entière"
-  - "40 g de fromage blanc 3 %"
-  - "20 g de vinaigre"
-  - "Sel"
-  - "Poivre"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 8
+    unit: "piece"
+    group: "oeufs"
+  - item: "thon-au-naturel"
+    label: "Thon au naturel"
+    qty: 280
+    unit: "g"
+    group: "poissons"
+    note: "≈ 2 boîtes égouttées"
+  - item: "salade-verte"
+    label: "Salade verte"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 60
+    unit: "g"
+    group: "produits-laitiers"
+  - item: "fromage-blanc"
+    label: "Fromage blanc 3 %"
+    qty: 40
+    unit: "g"
+    group: "produits-laitiers"
+  - item: "vinaigre"
+    label: "Vinaigre"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
 
 steps:
-  - "Cuire les œufs durs 10 minutes, refroidir, écaler et couper."
+  - "Cuire les œufs durs 10 minutes, refroidir, écaler et couper en morceaux."
   - "Égoutter soigneusement le thon."
-  - "Mélanger moutarde, crème, fromage blanc et vinaigre."
-  - "Assembler salade, thon et œufs."
-  - "Ajouter la sauce au moment de servir."
+  - "Mélanger la moutarde, la crème, le fromage blanc et le vinaigre."
+  - "Assembler la salade, le thon et les œufs."
+  - "Ajouter la sauce juste avant de servir."
 
 notes_low_carb:
   - "≈ 34 g protéines par portion."
@@ -59,4 +94,3 @@ notes_low_carb:
   - "Compatible objectif ≈ 2 g/kg/jour."
   - "Thon au naturel recommandé."
 ---
-

@@ -9,11 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "poulet-creme-champignons-haricots-verts"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion"
-
 tags:
   - low-carb-modere
   - tres-proteine
@@ -24,6 +19,9 @@ tags:
 
 badges_nutritionnels:
   - vitamine-c
+
+servings: 4
+serving_size: "1 portion"
 
 calories: 395
 proteines: 42
@@ -36,15 +34,43 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "700 g de blancs de poulet"
-  - "300 g de champignons de Paris"
-  - "500 g de haricots verts"
-  - "15 cl de crème entière"
-  - "1 gousse d’ail"
-  - "1 c. à soupe de moutarde"
-  - "1 c. à café d’huile (colza ou tournesol)"
-  - "Sel (léger)"
-  - "Poivre"
+  - item: blancs-poulet
+    label: "Blancs de poulet"
+    qty: 700
+    unit: g
+  - item: champignons-paris
+    label: "Champignons de Paris"
+    qty: 300
+    unit: g
+  - item: haricots-verts
+    label: "Haricots verts"
+    qty: 500
+    unit: g
+  - item: creme-entiere
+    label: "Crème entière"
+    qty: 150
+    unit: ml
+  - item: ail
+    label: "Gousse d’ail"
+    qty: 1
+    unit: piece
+  - item: moutarde
+    label: "Moutarde"
+    qty: 1
+    unit: c-a-s
+  - item: huile-colza-tournesol
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: c-a-c
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+    note: "léger"
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Cuire les haricots verts à l’eau ou à la vapeur."
@@ -62,4 +88,3 @@ notes_low_carb:
   - "Congélation possible."
   - "Choisir une moutarde sans sucre ajouté."
 ---
-

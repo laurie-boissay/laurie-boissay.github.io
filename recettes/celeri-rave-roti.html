@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "celeri-rave-roti"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/celeri-rave-roti.webp"
+image_alt: "Cubes de céleri rave rôtis"
+
+servings: 4
+serving_size: "180 g cuits"
+
+calories: 130
+proteines: 3
+glucides_nets: 10
 
 tags:
   - low-carb-modere
@@ -19,13 +27,6 @@ tags:
 badges_nutritionnels:
   - potassium
 
-servings: 4
-serving_size: "180 g cuits"
-
-calories: 130
-proteines: 3
-glucides_nets: 10
-
 nutrition:
   lipides: 6
   glucides: 15
@@ -33,17 +34,39 @@ nutrition:
   fructose: 4
 
 ingredients:
-  - "1 gros céleri rave"
-  - "2 c. à soupe d’huile"
-  - "Sel"
-  - "Poivre"
+  - item: celeri-rave
+    label: "Céleri rave"
+    qty: 1000
+    unit: "g"
+    note: "1 gros céleri rave"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 200 °C."
-  - "Couper en cubes."
+  - "Couper le céleri rave en cubes réguliers."
   - "Mélanger avec l’huile."
-  - "Cuire 30 minutes."
-  - "Assaisonner."
+  - "Répartir sur une plaque et cuire environ 30 minutes jusqu’à légère coloration."
+  - "Assaisonner après cuisson."
 
 notes_low_carb:
   - "Glucides plus élevés qu’un légume vert."

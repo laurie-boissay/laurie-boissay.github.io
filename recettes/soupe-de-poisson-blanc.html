@@ -9,14 +9,8 @@ recipe_group: "Soupe"
 recipe_sort: "soupe-cabillaud-fenouil-konjac"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 grand bol"
-
-calories: 175
-proteines: 30
-glucides_nets: 3
 
 tags:
   - low-carb-modere
@@ -30,6 +24,10 @@ tags:
 badges_nutritionnels:
   - vitamine-b12
 
+calories: 175
+proteines: 30
+glucides_nets: 3
+
 nutrition:
   lipides: 3
   glucides: 7
@@ -37,16 +35,59 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "600 g de cabillaud frais"
-  - "1 bulbe de fenouil (~300 g)"
-  - "1/2 oignon"
-  - "200 g de konjac (rincé et égoutté)"
-  - "2 gousses d’ail"
-  - "1,2 L d’eau"
-  - "1 feuille de laurier"
-  - "1 c. à soupe de jus de citron"
-  - "Poivre"
-  - "Sel (si besoin)"
+  - item: "cabillaud"
+    label: "Cabillaud frais"
+    qty: 600
+    unit: "g"
+    group: "poissons"
+  - item: "fenouil"
+    label: "Bulbe de fenouil"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+    note: "1 bulbe"
+  - item: "oignon"
+    label: "Oignon"
+    qty: 0.5
+    unit: "piece"
+    group: "legumes"
+  - item: "konjac"
+    label: "Konjac"
+    qty: 200
+    unit: "g"
+    group: "legumes"
+    note: "rincé et égoutté"
+  - item: "ail"
+    label: "Gousses d’ail"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+  - item: "eau"
+    label: "Eau"
+    qty: 1200
+    unit: "ml"
+    group: "epicerie"
+  - item: "laurier"
+    label: "Feuille de laurier"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+    note: "si besoin"
 
 steps:
   - "Rincer abondamment le konjac puis le blanchir 2 minutes pour neutraliser l’odeur."
@@ -55,7 +96,7 @@ steps:
   - "Ajouter le fenouil et cuire 10 minutes."
   - "Ajouter le cabillaud en morceaux et cuire 8 à 10 minutes."
   - "Ajouter le konjac."
-  - "Retirer le laurier, ajouter le citron, poivrer et ajuster le sel."
+  - "Retirer le laurier, ajouter le jus de citron, poivrer et ajuster le sel."
   - "Servir chaud."
 
 notes_low_carb:
@@ -64,4 +105,3 @@ notes_low_carb:
   - "Fibres augmentées grâce au konjac."
   - "Volume élevé pour un apport calorique très bas."
 ---
-

@@ -9,10 +9,15 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "cheesecake"
 recipe_tested: false
 
-meal_type: "dessert"
+image: "/images/recettes/cheesecake.webp"
+image_alt: "Part de cheesecake low carb"
 
 servings: 8
 serving_size: "1 part"
+
+calories: 390
+proteines: 12
+glucides_nets: 3
 
 tags:
   - low-carb-modere
@@ -24,10 +29,6 @@ tags:
 badges_nutritionnels:
   - calcium
 
-calories: 390
-proteines: 12
-glucides_nets: 3
-
 nutrition:
   lipides: 35
   glucides: 6
@@ -35,16 +36,61 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "120 g de poudre d’amandes"
-  - "40 g de beurre fondu"
-  - "½ à 1 c. à café rase de Stévia Pure Via pâtisserie"
-  - "500 g de fromage frais type Philadelphia"
-  - "200 g de fromage blanc ou skyr"
-  - "3 œufs"
-  - "100 ml de crème entière"
-  - "1 c. à café d’extrait de vanille"
-  - "½ à 1 c. à café rase de Stévia Pure Via"
-  - "1 c. à café rase de konjac (optionnel)"
+  - item: poudre-amandes
+    label: "Poudre d’amandes"
+    qty: 120
+    unit: "g"
+    group: "epicerie"
+
+  - item: beurre
+    label: "Beurre fondu"
+    qty: 40
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: stevia
+    label: "Stévia pâtisserie"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster entre 0.5 et 1 c-a-c selon goût"
+    group: "epicerie"
+
+  - item: fromage-frais
+    label: "Fromage frais type Philadelphia"
+    qty: 500
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: fromage-blanc-ou-skyr
+    label: "Fromage blanc ou skyr"
+    qty: 200
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: oeufs
+    label: "Œufs"
+    qty: 3
+    unit: "piece"
+    group: "oeufs"
+
+  - item: creme-entiere
+    label: "Crème entière"
+    qty: 100
+    unit: "ml"
+    group: "produits-laitiers"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: konjac
+    label: "Konjac (poudre)"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 170 °C."
@@ -62,10 +108,9 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Calorique : environ 390 kcal par part."
-  - "Glucides nets faibles (≈ 3 g par portion)."
-  - "Commencer par ½ c. à café de stévia pour éviter tout arrière-goût."
-  - "Konjac optionnel pour une tenue renforcée."
+  - "Calorique (≈ 390 kcal par part)."
+  - "Glucides nets faibles (~3 g par portion)."
+  - "Commencer à 0.5 c-a-c de stévia pour éviter tout arrière-goût."
+  - "Konjac optionnel pour renforcer la tenue."
   - "Congélation possible en parts individuelles."
 ---
-

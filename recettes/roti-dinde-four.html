@@ -9,8 +9,6 @@ recipe_group: "Viandes"
 recipe_sort: "roti-dinde-four"
 recipe_tested: false
 
-meal_type: "viande"
-
 tags:
   - low-carb-strict
   - longue
@@ -35,9 +33,18 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "720 g de rôti de dinde"
-  - "Sel"
-  - "Poivre"
+  - item: roti-dinde
+    label: "Rôti de dinde"
+    qty: 720
+    unit: g
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Préchauffer le four à 180 °C."

@@ -9,8 +9,6 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "salade-verte-levure-biere"
 recipe_tested: true
 
-meal_type: "other"
-
 servings: 4
 serving_size: "1 assiette (≈ 200 g)"
 
@@ -25,7 +23,6 @@ badges_nutritionnels:
   - potassium
   - magnesium
 
-# Estimations par portion
 calories: 105
 proteines: 3
 glucides_nets: 4
@@ -37,12 +34,37 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "600 à 800 g de salade verte (laitue, batavia ou mélange)"
-  - "2 c. à soupe d’huile (colza ou tournesol)"
-  - "2 c. à soupe de vinaigre (vin ou cidre)"
-  - "1 c. à soupe de levure de bière"
-  - "Sel"
-  - "Poivre"
+  - item: "salade-verte"
+    label: "Salade verte (laitue, batavia ou mélange)"
+    qty: 700
+    unit: "g"
+    group: "legumes"
+    note: "600 à 800 g selon appétit"
+  - item: "huile"
+    label: "Huile (colza ou tournesol)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "vinaigre"
+    label: "Vinaigre (vin ou cidre)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "levure-biere"
+    label: "Levure de bière"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
 
 steps:
   - "Laver et essorer soigneusement la salade."
@@ -57,4 +79,3 @@ notes_low_carb:
   - "Apport calorique majoritairement issu de l’huile."
   - "Idéal en accompagnement d’un plat riche en protéines."
 ---
-

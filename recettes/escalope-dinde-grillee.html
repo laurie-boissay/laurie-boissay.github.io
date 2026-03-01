@@ -9,13 +9,13 @@ recipe_group: "Viandes"
 recipe_sort: "escalope-dinde-grillee"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/escalope-dinde-grillee.webp"
+image_alt: "Escalope de dinde grillée à la poêle"
 
 tags:
   - low-carb-strict
   - rapide
   - tres-proteine
-  - peu-calorique
 
 badges_nutritionnels:
   - selenium
@@ -35,17 +35,32 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 escalope de dinde (160 g)"
-  - "Sel"
-  - "Poivre"
+  - item: "escalope-dinde"
+    label: "Escalope de dinde"
+    qty: 160
+    unit: "g"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
-  - "Sortir la viande 15 minutes avant cuisson."
-  - "Chauffer une poêle antiadhésive."
-  - "Cuire 3 à 5 minutes par face."
-  - "Vérifier cuisson complète."
-  - "Laisser reposer 2 minutes."
+  - "Sortir la viande du réfrigérateur 15 minutes avant cuisson."
+  - "Chauffer une poêle antiadhésive à feu moyen."
+  - "Cuire l’escalope 3 à 5 minutes par face jusqu’à cuisson complète."
+  - "Vérifier que la viande est bien cuite à cœur."
+  - "Laisser reposer 2 minutes avant de servir."
 
 notes_low_carb:
-  - "Aucun ingrédient non low carb."
+  - "Strictement sans glucides."
+  - "Protéines calculées sur rendement moyen de 100 % (référentiel interne, blanc de volaille)."
 ---

@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "brocolis-vapeur"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/brocolis-vapeur.webp"
+image_alt: "Brocolis cuits à la vapeur"
+
+servings: 4
+serving_size: "200 g cuits"
+
+calories: 80
+proteines: 6
+glucides_nets: 6
 
 tags:
   - low-carb-modere
@@ -22,13 +30,6 @@ badges_nutritionnels:
   - vitamine-k
   - potassium
 
-servings: 4
-serving_size: "200 g cuits"
-
-calories: 80
-proteines: 6
-glucides_nets: 6
-
 nutrition:
   lipides: 0.8
   glucides: 11
@@ -36,17 +37,35 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "800 g de brocolis"
-  - "Sel"
-  - "Poivre"
+  - item: brocolis
+    label: "Brocolis"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Couper les brocolis en fleurettes."
   - "Cuire 8 à 12 minutes à la vapeur."
+  - "Vérifier la tendreté selon préférence."
   - "Assaisonner après cuisson."
 
 notes_low_carb:
   - "Compatible low carb modéré."
+  - "Zone peu calorique respectée (≤ 150 kcal par portion)."
   - "Bonne densité nutritionnelle pour un apport calorique faible."
   - "Cuisson vapeur recommandée pour préserver la vitamine C."
 ---

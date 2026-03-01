@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "chou-fleur-vapeur"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/chou-fleur-vapeur.webp"
+image_alt: "Chou-fleur cuit à la vapeur"
+
+servings: 4
+serving_size: "200 g cuits"
+
+calories: 60
+proteines: 5
+glucides_nets: 5
 
 tags:
   - low-carb-modere
@@ -22,13 +30,6 @@ badges_nutritionnels:
   - vitamine-b9
   - potassium
 
-servings: 4
-serving_size: "200 g cuits"
-
-calories: 60
-proteines: 5
-glucides_nets: 5
-
 nutrition:
   lipides: 0.5
   glucides: 10
@@ -36,13 +37,29 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "800 g de chou-fleur"
-  - "Sel"
-  - "Poivre"
+  - item: chou-fleur
+    label: "Chou-fleur"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Couper le chou-fleur en fleurettes."
-  - "Cuire 10 à 15 minutes à la vapeur."
+  - "Cuire 10 à 15 minutes à la vapeur jusqu’à texture tendre."
   - "Assaisonner après cuisson."
 
 notes_low_carb:

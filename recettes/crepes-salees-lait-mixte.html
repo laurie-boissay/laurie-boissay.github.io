@@ -9,7 +9,8 @@ recipe_group: "Pains & substituts"
 recipe_sort: "crepes-salees-lait-mixte"
 recipe_tested: false
 
-meal_type: "other"
+servings: 12
+serving_size: "1 crêpe"
 
 tags:
   - low-carb-modere
@@ -23,13 +24,10 @@ badges_nutritionnels:
   - magnesium
   - calcium
 
-servings: 12
-serving_size: "1 crêpe"
-
-# Valeurs corrigées par crêpe (1/12 recette)
+# Valeurs par crêpe (1/12 recette)
 calories: 110
 proteines: 5
-glucides_nets: 0.3
+glucides_nets: 0.5
 
 nutrition:
   lipides: 8
@@ -38,13 +36,47 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "5 œufs"
-  - "250 ml de lait d’amande non sucré"
-  - "250 ml de lait de vache entier"
-  - "60 g de poudre d’amandes"
-  - "18 g de psyllium blond"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "1 pincée de sel"
+  - item: oeufs
+    label: "Œufs"
+    qty: 5
+    unit: "piece"
+    group: "oeufs"
+
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 250
+    unit: "ml"
+    group: "epicerie"
+
+  - item: lait-vache-entier
+    label: "Lait de vache entier"
+    qty: 250
+    unit: "ml"
+    group: "produits-laitiers"
+
+  - item: poudre-amandes
+    label: "Poudre d’amandes"
+    qty: 60
+    unit: "g"
+    group: "epicerie"
+
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 18
+    unit: "g"
+    group: "epicerie"
+
+  - item: huile-colza-tournesol
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Mettre tous les ingrédients dans un blender."
@@ -60,9 +92,8 @@ steps:
 notes_low_carb:
   - "Compatible low carb modéré."
   - "Version plus souple grâce au lactose du lait de vache."
-  - "Présence de lactose ⚠️ (sucre naturel du lait)."
+  - "⚠️ Présence de lactose (sucre naturel du lait)."
   - "Riche en fibres via le psyllium."
   - "Micro-ondable et compatible congélation."
   - "Conservation : 48 h au réfrigérateur."
 ---
-

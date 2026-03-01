@@ -9,11 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "poulet-roti-sans-peau"
 recipe_tested: true
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion (1/4 poulet + brocolis)"
-
 image: "/images/recettes/poulet-roti-express.webp"
 image_alt: "Poulet rôti sans peau accompagné de brocolis à l’ail"
 
@@ -30,6 +25,9 @@ badges_nutritionnels:
   - selenium
   - vitamine-c
 
+servings: 4
+serving_size: "1 portion (1/4 poulet + brocolis)"
+
 calories: 410
 proteines: 58
 glucides_nets: 5
@@ -41,13 +39,38 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "1 poulet entier (1,4–1,6 kg), peau retirée après cuisson"
-  - "1 kg de brocolis (frais ou surgelés)"
-  - "3 à 4 gousses d’ail émincées"
-  - "1 bouquet garni"
-  - "Fond d’eau pour le plat"
-  - "Sel"
-  - "Poivre"
+  - item: poulet-entier
+    label: "Poulet entier"
+    qty: 1
+    unit: piece
+    note: "1,4–1,6 kg, peau retirée après cuisson"
+  - item: brocolis
+    label: "Brocolis"
+    qty: 1000
+    unit: g
+    note: "frais ou surgelés"
+  - item: ail
+    label: "Gousses d’ail émincées"
+    qty: 4
+    unit: piece
+    note: "3 à 4 selon taille"
+  - item: bouquet-garni
+    label: "Bouquet garni"
+    qty: 1
+    unit: bunch
+  - item: eau
+    label: "Fond d’eau pour le plat"
+    qty: 100
+    unit: ml
+    note: "quantité indicative"
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Préchauffer le four à 200 °C."
@@ -70,4 +93,3 @@ notes_low_carb:
   - "Congélation possible."
   - "Aucun ingrédient non compatible low carb."
 ---
-

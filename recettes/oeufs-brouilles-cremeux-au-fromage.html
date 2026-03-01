@@ -9,10 +9,8 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "oeufs-brouilles-cremeux-fromage"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
+image: "/images/recettes/oeufs-brouilles-cremeux-fromage.webp"
+image_alt: "Œufs brouillés crémeux au fromage avec légumes"
 
 tags:
   - low-carb-modere
@@ -23,6 +21,9 @@ tags:
 badges_nutritionnels:
   - vitamine-b12
   - calcium
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 400
 proteines: 31
@@ -35,12 +36,41 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "10 œufs"
-  - "100 g de fromage râpé (emmental ou comté)"
-  - "5 g de beurre"
-  - "400 g de courgettes ou d’épinards"
-  - "Sel"
-  - "Poivre"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 10
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "fromage-ra"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 100
+    unit: "g"
+    group: "fromages"
+
+  - item: "beurre"
+    label: "Beurre"
+    qty: 5
+    unit: "g"
+    group: "cremerie"
+
+  - item: "legumes"
+    label: "Courgettes ou épinards"
+    qty: 400
+    unit: "g"
+    group: "legumes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Laver et couper les courgettes en demi-rondelles (ou préparer les épinards)."
@@ -54,9 +84,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné : ≈ 31 g de protéines par portion."
+  - "Très protéiné (~31 g de protéines par portion)."
   - "Lipides maîtrisés pour rester dans une zone santé."
   - "Source naturelle de vitamine B12 (œufs) et de calcium (fromage)."
   - "À consommer immédiatement : ne se congèle pas."
 ---
-

@@ -9,14 +9,8 @@ recipe_group: "Fromages"
 recipe_sort: "mozzarella"
 recipe_tested: true
 
-meal_type: "fromage"
-
-servings: 1
-serving_size: "30 g (1 portion)"
-
-calories: 85
-proteines: 6
-glucides_nets: 1
+image: "/images/recettes/mozzarella-30g.webp"
+image_alt: "Mozzarella portion 30 g"
 
 tags:
   - low-carb-modere
@@ -26,6 +20,13 @@ badges_nutritionnels:
   - calcium
   - vitamine-b12
 
+servings: 1
+serving_size: "30 g (1 portion)"
+
+calories: 85
+proteines: 6
+glucides_nets: 1
+
 nutrition:
   lipides: 6
   glucides: 1
@@ -33,7 +34,11 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "30 g de Mozzarella"
+  - item: "mozzarella"
+    label: "Mozzarella"
+    qty: 30
+    unit: "g"
+    group: "fromages"
 
 steps:
   - "Égoutter si nécessaire."

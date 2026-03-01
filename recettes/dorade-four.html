@@ -9,23 +9,20 @@ recipe_group: "Poissons"
 recipe_sort: "dorade-four"
 recipe_tested: false
 
-meal_type: "poisson"
+servings: 4
+serving_size: "150 g de chair"
 
 tags:
   - low-carb-modere
   - tres-proteine
   - rapide
-  - peu-calorique
 
 badges_nutritionnels:
   - vitamine-b12
   - selenium
   - iode
 
-# Estimations par portion : ~150 g de chair (sur 4 portions)
-servings: 4
-serving_size: "150 g de chair"
-
+# Estimations par portion : ~150 g de chair (rendement moyen poisson entier)
 calories: 145
 proteines: 29
 glucides_nets: 0
@@ -37,24 +34,50 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "2 dorades entières vidées (~600–700 g chacune) ou 4 filets"
-  - "1 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
-  - "Rondelles de citron (facultatif)"
+  - item: dorade-entiere
+    label: "Dorades entières vidées"
+    qty: 1300
+    unit: "g"
+    group: "poissons"
+    note: "2 pièces d’environ 600 à 700 g chacune ou 4 filets équivalents"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: citron
+    label: "Citron"
+    qty: 1
+    unit: "piece"
+    group: "fruits"
+    note: "rondelles, facultatif"
 
 steps:
   - "Préchauffer le four à 190 °C."
   - "Déposer les dorades dans un plat légèrement huilé."
   - "Badigeonner très légèrement d’huile."
-  - "Saler et poivrer à l’intérieur et à l’extérieur (si poisson entier)."
+  - "Saler et poivrer à l’intérieur et à l’extérieur si poisson entier."
   - "Cuire 20 à 25 minutes pour un poisson entier ou 12 à 15 minutes pour des filets."
   - "La chair doit se détacher facilement de l’arête centrale."
-  - "Laisser reposer 2 à 3 minutes avant de servir."
+  - "Laisser reposer 2 à 3 minutes avant service."
 
 notes_low_carb:
   - "Aliment simple, 0 glucide."
   - "Très riche en protéines."
   - "Compatible low carb modéré et strict."
-  - "Surcuisson = chair sèche."
+  - "Surcuisson à éviter pour préserver la texture."
 ---

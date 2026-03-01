@@ -9,7 +9,8 @@ recipe_group: "Boissons"
 recipe_sort: "boisson-citron-gingembre"
 recipe_tested: false
 
-meal_type: "boisson"
+image: "/images/recettes/boisson-citron-gingembre.webp"
+image_alt: "Boisson citron gingembre chaude"
 
 servings: 4
 serving_size: "1 verre (250 ml)"
@@ -32,10 +33,31 @@ nutrition:
   fructose: 0.3
 
 ingredients:
-  - "1 L d’eau"
-  - "20 g de gingembre frais ou 1 c. à café de gingembre en poudre"
-  - "2 c. à soupe de jus de citron"
-  - "Stévia (optionnel, selon goût)"
+  - item: eau
+    label: "Eau"
+    qty: 1
+    unit: "l"
+    group: "epicerie"
+
+  - item: gingembre-frais
+    label: "Gingembre frais"
+    qty: 20
+    unit: "g"
+    group: "legumes"
+    note: "ou 1 c-a-c de gingembre en poudre"
+
+  - item: jus-citron
+    label: "Jus de citron"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: stevia
+    label: "Stévia"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel, selon goût"
+    group: "epicerie"
 
 steps:
   - "Éplucher et trancher finement le gingembre."
@@ -47,8 +69,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Boisson très pauvre en glucides."
+  - "⚠️ Contient du jus de citron (fructose naturellement présent)."
+  - "Boisson très pauvre en glucides (1 g net par verre)."
   - "Sans sucre ajouté ; édulcorant facultatif."
   - "À consommer dans les 24 heures après préparation (réfrigérateur)."
 ---
-

@@ -9,12 +9,12 @@ recipe_group: "Viandes"
 recipe_sort: "entrecote-poelee"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/entrecote-poelee.webp"
+image_alt: "Entrecôte de bœuf poêlée"
 
 tags:
   - low-carb-strict
   - tres-proteine
-  - calorique
 
 badges_nutritionnels:
   - fer
@@ -35,18 +35,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 entrecôte de bœuf (250 g)"
-  - "Sel"
-  - "Poivre"
+  - item: "entrecote-boeuf"
+    label: "Entrecôte de bœuf"
+    qty: 250
+    unit: "g"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
-  - "Sortir la viande 20 minutes avant cuisson."
+  - "Sortir la viande du réfrigérateur 20 minutes avant cuisson."
   - "Chauffer une poêle à feu vif."
-  - "Saisir 2 à 3 minutes par face."
+  - "Saisir l’entrecôte 2 à 3 minutes par face."
   - "Adapter le temps selon la cuisson souhaitée."
-  - "Laisser reposer 5 minutes avant service."
+  - "Laisser reposer 5 minutes avant de servir."
 
 notes_low_carb:
   - "Strictement sans glucides."
   - "Portion élevée en protéines."
+  - "Protéines calculées sur rendement moyen de 100 % (référentiel interne)."
 ---

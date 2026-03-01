@@ -9,11 +9,12 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "tarte-citron-meringuee"
 recipe_tested: false
 
-meal_type: "dessert"
-
-# Portions
 servings: 8
 serving_size: "1 part (1/8 tarte, diamètre 26–28 cm)"
+
+calories: 240
+proteines: 6
+glucides_nets: 1
 
 tags:
   - low-carb-modere
@@ -22,50 +23,73 @@ tags:
 
 badges_nutritionnels: []
 
-# =============================
-# Données nutritionnelles
-# Portion = 1 part (1/8 tarte)
-# =============================
-
-calories: 240
-proteines: 6
-glucides_nets: 1
-
 nutrition:
   lipides: 21
   glucides: 3
   fibres: 2
   fructose: 1
 
-# =============================
-# Ingrédients (8 parts)
-# =============================
-
 ingredients:
-  - "120 g de poudre d’amandes"
-  - "40 g de beurre fondu"
-  - "1 œuf"
-  - "1 c. à soupe de stévia Pure Via pâtisserie"
-  - "3 œufs"
-  - "120 ml de jus de citron"
-  - "Zeste de 2 citrons"
-  - "150 ml de crème entière"
-  - "1 c. à café rase de psyllium blond"
-  - "Stévia Pure Via (selon goût)"
-  - "3 blancs d’œufs"
-  - "1 pincée de sel"
-
-# =============================
-# Étapes
-# =============================
+  - item: "poudre-amandes"
+    label: "Poudre d’amandes"
+    qty: 120
+    unit: "g"
+    group: "epicerie"
+  - item: "beurre"
+    label: "Beurre fondu"
+    qty: 40
+    unit: "g"
+    group: "epicerie"
+  - item: "oeuf-entier"
+    label: "Œuf entier"
+    qty: 4
+    unit: "piece"
+    group: "epicerie"
+    note: "1 pour la pâte, 3 pour la crème"
+  - item: "stevia"
+    label: "Stévia Pure Via pâtisserie"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+    note: "1 c. à s pour pâte + dosage selon goût pour crème et meringue"
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 120
+    unit: "ml"
+    group: "fruits"
+  - item: "zeste-citron"
+    label: "Zeste de citron"
+    qty: 2
+    unit: "piece"
+    group: "fruits"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 150
+    unit: "ml"
+    group: "epicerie"
+  - item: "psyllium"
+    label: "Psyllium blond"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "blanc-oeuf"
+    label: "Blancs d’œufs"
+    qty: 3
+    unit: "piece"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 170 °C."
-  - "Mélanger poudre d’amandes, beurre fondu, 1 œuf et stévia. Foncer un moule (26–28 cm). Piquer et précuire 12 à 15 minutes."
+  - "Mélanger poudre d’amandes, beurre fondu, 1 œuf et 1 c. à s de stévia. Foncer un moule (26–28 cm). Piquer et précuire 12 à 15 minutes."
   - "Battre 3 œufs avec un peu de stévia. Ajouter jus et zestes de citron, puis la crème."
   - "Ajouter le psyllium en pluie en mélangeant. Laisser reposer 5 minutes."
   - "Verser la crème citron sur le fond précuit. Cuire 20 minutes à 170 °C (jusqu’à prise)."
-  - "Monter les 3 blancs avec une pincée de sel. Ajouter progressivement la stévia jusqu’à meringue lisse et ferme."
+  - "Monter les 3 blancs avec une pincée de sel. Ajouter progressivement la stévia jusqu’à obtenir une meringue lisse et ferme."
   - "Répartir la meringue sur la tarte refroidie."
   - "Dorer au chalumeau ou sous le gril (surveillance stricte)."
 
@@ -75,4 +99,3 @@ notes_low_carb:
   - "Meringue à la stévia : plus fragile qu’une meringue au sucre."
   - "Conservation idéale dans les 24 heures."
 ---
-

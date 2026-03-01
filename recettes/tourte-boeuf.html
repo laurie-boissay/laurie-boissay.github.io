@@ -9,10 +9,12 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "tourte-boeuf-champignons"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 6
 serving_size: "1 part"
+
+calories: 498
+proteines: 42
+glucides_nets: 2
 
 tags:
   - low-carb-modere
@@ -27,40 +29,68 @@ badges_nutritionnels:
   - vitamine-b12
   - zinc
 
-# =============================
-# Nutrition par part (1/6)
-# =============================
-
-calories: 498
-proteines: 42
-glucides_nets: 2
-
 nutrition:
   lipides: 34
   glucides: 9
   fibres: 7
   fructose: 1
 
-# =============================
-# Ingrédients (6 parts)
-# =============================
-
 ingredients:
-  - label: "Pâte salée aux amandes & psyllium (2 doses)"
+  - item: "pate-salee-amandes-psyllium"
+    label: "Pâte salée aux amandes & psyllium (2 doses)"
+    qty: 2
+    unit: "dose"
+    group: "epicerie"
     link: "/recettes/pate-salee.html"
-  - "800 g de bœuf émincé fin (5–10 % MG idéalement)"
-  - "500 g de champignons de Paris"
-  - "2 échalotes (ou 1 oignon moyen)"
-  - "20 g de beurre"
-  - "20 g de crème entière"
-  - "1 œuf"
-  - "1 petite gousse d’ail"
-  - "Poivre noir"
-  - "Thym"
-
-# =============================
-# Étapes
-# =============================
+  - item: "boeuf-emince"
+    label: "Bœuf émincé fin"
+    qty: 800
+    unit: "g"
+    group: "viandes"
+    note: "5–10 % MG idéalement"
+  - item: "champignons-paris"
+    label: "Champignons de Paris"
+    qty: 500
+    unit: "g"
+    group: "legumes"
+  - item: "echalotes"
+    label: "Échalotes"
+    qty: 2
+    unit: "piece"
+    group: "legumes"
+    note: "ou 1 oignon moyen"
+  - item: "beurre"
+    label: "Beurre"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+  - item: "oeuf"
+    label: "Œuf"
+    qty: 1
+    unit: "piece"
+    group: "epicerie"
+  - item: "ail"
+    label: "Gousse d’ail"
+    qty: 1
+    unit: "piece"
+    group: "legumes"
+    note: "Petite gousse"
+  - item: "poivre"
+    label: "Poivre noir"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "thym"
+    label: "Thym"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180°C."
@@ -86,4 +116,3 @@ notes_low_carb:
   - "Réchauffage micro-ondes à puissance moyenne."
   - "Dessécher parfaitement les champignons pour éviter toute humidité."
 ---
-

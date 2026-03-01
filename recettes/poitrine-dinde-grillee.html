@@ -9,8 +9,6 @@ recipe_group: "Viandes"
 recipe_sort: "poitrine-dinde-grillee"
 recipe_tested: false
 
-meal_type: "viande"
-
 tags:
   - low-carb-strict
   - rapide
@@ -34,9 +32,18 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "170 g de poitrine de dinde"
-  - "Sel"
-  - "Poivre"
+  - item: poitrine-dinde
+    label: "Poitrine de dinde"
+    qty: 170
+    unit: g
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Chauffer une poêle antiadhésive."

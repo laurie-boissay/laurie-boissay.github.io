@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "courgettes-poelees"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/courgettes-poelees.webp"
+image_alt: "Courgettes sautées à la poêle"
+
+servings: 4
+serving_size: "200 g cuits"
+
+calories: 95
+proteines: 3
+glucides_nets: 5
 
 tags:
   - low-carb-modere
@@ -20,13 +28,6 @@ tags:
 badges_nutritionnels:
   - potassium
 
-servings: 4
-serving_size: "200 g cuits"
-
-calories: 95
-proteines: 3
-glucides_nets: 5
-
 nutrition:
   lipides: 5
   glucides: 8
@@ -34,10 +35,31 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "800 g de courgettes"
-  - "2 c. à soupe d’huile de colza ou tournesol"
-  - "Sel"
-  - "Poivre"
+  - item: courgette
+    label: "Courgettes"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Laver et couper les courgettes en rondelles ou demi-rondelles."

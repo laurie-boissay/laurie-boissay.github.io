@@ -9,10 +9,15 @@ recipe_group: "Cake"
 recipe_sort: "cake-thon-courgettes-fromage"
 recipe_tested: false
 
-meal_type: "plat"
+image: "/images/recettes/cake-thon-courgettes-fromage.webp"
+image_alt: "Tranche de cake thon courgettes fromage"
 
 servings: 8
 serving_size: "1 tranche"
+
+calories: 232
+proteines: 30
+glucides_nets: 2
 
 tags:
   - low-carb-modere
@@ -27,10 +32,6 @@ badges_nutritionnels:
   - calcium
   - omega-3
 
-calories: 232
-proteines: 30
-glucides_nets: 2
-
 nutrition:
   lipides: 13
   glucides: 4
@@ -38,17 +39,76 @@ nutrition:
   fructose: 0.5
 
 ingredients:
-  - "450 g de thon au naturel bien égoutté"
-  - "300 g de courgettes râpées très bien pressées"
-  - "150 g de fromage râpé"
-  - "120 g de fromage blanc"
-  - "4 œufs"
-  - "60 g de crème entière"
-  - "10 g de psyllium blond"
-  - "1 c. à café de levure chimique"
-  - "Poivre"
-  - "Sel si nécessaire"
-  - "Beurre pour le moule"
+  - item: thon-naturel
+    label: "Thon au naturel bien égoutté"
+    qty: 450
+    unit: "g"
+    group: "poissons"
+    note: "rendement 100 % consommable"
+
+  - item: courgettes
+    label: "Courgettes râpées"
+    qty: 300
+    unit: "g"
+    note: "très bien pressées"
+    group: "legumes"
+
+  - item: fromage-rape
+    label: "Fromage râpé"
+    qty: 150
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: fromage-blanc
+    label: "Fromage blanc"
+    qty: 120
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: oeufs
+    label: "Œufs"
+    qty: 4
+    unit: "piece"
+    group: "oeufs"
+
+  - item: creme-entiere
+    label: "Crème entière"
+    qty: 60
+    unit: "g"
+    group: "produits-laitiers"
+
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 10
+    unit: "g"
+    group: "epicerie"
+
+  - item: levure-chimique
+    label: "Levure chimique"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "si nécessaire"
+    group: "epicerie"
+
+  - item: beurre
+    label: "Beurre"
+    qty: 5
+    unit: "g"
+    note: "pour le moule"
+    group: "produits-laitiers"
 
 steps:
   - "Préchauffer le four à 180 °C et beurrer un moule à cake."
@@ -63,9 +123,9 @@ steps:
 
 notes_low_carb:
   - "Conforme charte plat : ≥ 30 g de protéines par portion."
-  - "Texture plus moelleuse grâce au fromage blanc."
-  - "Psyllium réduit au strict minimum fonctionnel."
-  - "Très faible en glucides nets (~2 g par tranche)."
+  - "Texture moelleuse grâce au fromage blanc."
+  - "Psyllium utilisé au strict minimum fonctionnel."
+  - "Glucides nets faibles (~2 g par tranche)."
   - "Congélation possible en tranches individuelles."
+  - "Protéines calculées sur rendement 100 % (thon égoutté)."
 ---
-

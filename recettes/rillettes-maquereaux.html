@@ -9,11 +9,6 @@ recipe_group: "Pâtés"
 recipe_sort: "rillettes-maquereau-skyr"
 recipe_tested: false
 
-meal_type: "amuse-bouche"
-
-servings: 4
-serving_size: "1 portion (1/4 recette)"
-
 tags:
   - low-carb-modere
   - tres-proteine
@@ -26,6 +21,9 @@ badges_nutritionnels:
   - iode
   - vitamine-b12
 
+servings: 4
+serving_size: "1 portion (1/4 recette)"
+
 calories: 185
 proteines: 22
 glucides_nets: 3
@@ -37,15 +35,48 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "2 boîtes de maquereau en conserve (au naturel ou à l’huile), égouttées"
-  - "200 g de skyr nature"
-  - "1 c. à soupe de moutarde"
-  - "1 à 2 c. à soupe de jus de citron"
-  - "1 petite gousse d’ail (ou 1/2 c. à café d’ail semoule)"
-  - "Poivre"
-  - "Sel (si besoin)"
-  - "Option : 1 c. à soupe de graines de sésame"
-  - "Option : thym ou herbes de Provence"
+  - item: maquereau-conserve
+    label: "Maquereau en conserve (au naturel ou à l’huile)"
+    qty: 2
+    unit: can
+    note: "égoutté, retirer les grosses arêtes visibles"
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 200
+    unit: g
+  - item: moutarde
+    label: "Moutarde"
+    qty: 1
+    unit: c-a-s
+  - item: citron
+    label: "Jus de citron"
+    qty: 2
+    unit: c-a-s
+    note: "ajuster selon goût"
+  - item: ail
+    label: "Gousse d’ail ou ail semoule"
+    qty: 1
+    unit: piece
+    note: "ou 1/2 c. à café d’ail semoule"
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+    note: "si besoin"
+  - item: graines-sesame
+    label: "Graines de sésame"
+    qty: 1
+    unit: c-a-s
+    note: "optionnel"
+  - item: herbes
+    label: "Thym ou herbes de Provence"
+    qty: 1
+    unit: bunch
+    note: "optionnel"
 
 steps:
   - "Égoutter le maquereau et retirer les grosses arêtes visibles."
@@ -66,4 +97,3 @@ notes_low_carb:
   - "Congélation possible (texture légèrement modifiée après décongélation)."
   - "Aucun ingrédient non compatible low carb."
 ---
-

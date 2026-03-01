@@ -2,29 +2,30 @@
 layout: recipe
 
 title: "Boudin noir poêlé"
-description: "Boudin noir cuit à la poêle. Vérifier composition."
+description: "Boudin noir cuit à la poêle. Vérifier la composition (certaines recettes contiennent des glucides)."
 recipe_title: "Boudin noir"
-recipe_subtitle: "Cuisson à la poêle"
+recipe_subtitle: "Cuisson simple à la poêle"
 recipe_group: "Viandes"
 recipe_sort: "boudin-noir-poele"
 recipe_tested: false
 
-meal_type: "viande"
-
-tags:
-  - low-carb-modere
-  - calorique
-  - tres-proteine
-
-badges_nutritionnels:
-  - fer
+image: "/images/recettes/boudin-noir-poele.webp"
+image_alt: "Boudin noir poêlé"
 
 servings: 1
-serving_size: "2 portions (200 g)"
+serving_size: "200 g (1 portion)"
 
 calories: 600
 proteines: 32
 glucides_nets: 5
+
+tags:
+  - low-carb-modere
+  - tres-proteine
+  - calorique
+
+badges_nutritionnels:
+  - fer
 
 nutrition:
   lipides: 50
@@ -33,13 +34,21 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "200 g de boudin noir"
+  - item: boudin-noir
+    label: "Boudin noir"
+    qty: 200
+    unit: "g"
+    group: "viandes"
+    note: "vérifier l’absence d’amidon ou sucre ajouté"
 
 steps:
+  - "Piquer légèrement le boudin pour éviter qu’il n’éclate."
   - "Cuire à feu moyen 8 à 10 minutes."
-  - "Retourner délicatement."
+  - "Retourner délicatement à mi-cuisson."
   - "Servir chaud."
 
 notes_low_carb:
-  - "Peut contenir des glucides selon la recette."
+  - "Compatible low carb modéré selon composition."
+  - "⚠️ Certaines recettes industrielles contiennent des glucides (amidon, sucre)."
+  - "Riche en fer héminique."
 ---

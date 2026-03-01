@@ -9,7 +9,8 @@ recipe_group: "Pains & substituts"
 recipe_sort: "wraps-aux-oeufs"
 recipe_tested: false
 
-meal_type: "other"
+servings: 6
+serving_size: "1 wrap"
 
 tags:
   - low-carb-modere
@@ -20,19 +21,7 @@ tags:
 badges_nutritionnels:
   - vitamine-b12
 
-# =============================
-# Portions
-# =============================
-
-servings: 6
-serving_size: "1 wrap"
-
-# =============================
-# Données nutritionnelles
-# Par portion = 1 wrap (1/6 recette)
-# Huile incluse (~1 c. à café totale pour cuisson)
-# =============================
-
+# Nutrition par portion (1 wrap)
 calories: 102
 proteines: 7
 glucides_nets: 1
@@ -43,19 +32,28 @@ nutrition:
   fibres: 0
   fructose: 0
 
-# =============================
-# Ingrédients (6 wraps)
-# =============================
-
 ingredients:
-  - "6 œufs"
-  - "60 ml d’eau"
-  - "1 c. à café d’huile (colza ou tournesol)"
-  - "Sel, poivre"
-
-# =============================
-# Étapes
-# =============================
+  - item: oeufs
+    label: "Œufs"
+    qty: 6
+    unit: "piece"
+    group: "oeufs"
+  - item: eau
+    label: "Eau"
+    qty: 60
+    unit: "ml"
+    group: "epicerie"
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: sel-poivre
+    label: "Sel, poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "à ajuster selon goût"
 
 steps:
   - "Battre les œufs avec l’eau, le sel et le poivre."
@@ -73,4 +71,3 @@ notes_low_carb:
   - "Se congèle facilement, séparés par du papier cuisson."
   - "Base neutre : à garnir pour en faire un plat complet."
 ---
-

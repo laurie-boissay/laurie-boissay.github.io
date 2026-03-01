@@ -9,7 +9,8 @@ recipe_group: "Poissons"
 recipe_sort: "maquereau-four"
 recipe_tested: false
 
-meal_type: "poisson"
+image: "/images/recettes/maquereau-four.webp"
+image_alt: "Maquereau au four"
 
 tags:
   - low-carb-modere
@@ -23,7 +24,6 @@ badges_nutritionnels:
   - selenium
   - iode
 
-# Estimations par portion : 1 maquereau ~150 g de chair (sur 4 portions)
 servings: 4
 serving_size: "150 g de chair"
 
@@ -38,11 +38,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 maquereaux vidés (~300 g chacun)"
-  - "1 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
-  - "Citron (facultatif)"
+  - item: "maquereau-vide"
+    label: "Maquereaux vidés"
+    qty: 1200
+    unit: "g"
+    note: "4 poissons d’environ 300 g chacun"
+    group: "poissons"
+
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "citron"
+    label: "Citron"
+    qty: 0.5
+    unit: "piece"
+    note: "facultatif"
+    group: "fruits"
 
 steps:
   - "Préchauffer le four à 190 °C."
@@ -54,7 +80,7 @@ steps:
   - "Laisser reposer 2 minutes avant de servir."
 
 notes_low_carb:
-  - "Aliment simple, 0 glucide."
+  - "Strictement sans glucides."
   - "Très riche en oméga-3 (EPA/DHA)."
   - "Compatible low carb modéré et strict."
   - "Poisson gras : densité calorique plus élevée que les poissons maigres."

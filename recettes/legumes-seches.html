@@ -9,7 +9,15 @@ recipe_group: "Préparations & conservations"
 recipe_sort: "legumes-seches"
 recipe_tested: false
 
-meal_type: "other"
+image: "/images/recettes/legumes-seches.webp"
+image_alt: "Légumes séchés maison"
+
+tags:
+  - low-carb-modere
+  - longue
+
+badges_nutritionnels:
+  - potassium
 
 servings: 10
 serving_size: "10 g de légumes séchés"
@@ -24,16 +32,20 @@ nutrition:
   fibres: 1
   fructose: 1
 
-tags:
-  - low-carb-modere
-  - longue
-
-badges_nutritionnels:
-  - potassium
-
 ingredients:
-  - "Légumes low carb au choix : champignons, courgettes, poivrons, oignons, ail"
-  - "Option : une très légère pincée de sel fin"
+  - item: "legumes-mix"
+    label: "Légumes low carb au choix"
+    qty: 500
+    unit: "g"
+    note: "champignons, courgettes, poivrons, oignons, ail"
+    group: "legumes"
+
+  - item: "sel"
+    label: "Sel fin"
+    qty: 0.5
+    unit: "pincee"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
   - "Laver soigneusement les légumes."
@@ -53,4 +65,3 @@ notes_low_carb:
   - "Éviter les légumes très aqueux (salades, concombre, courges très riches en eau)."
   - "Tomates volontairement exclues."
 ---
-

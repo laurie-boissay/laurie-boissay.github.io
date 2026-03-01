@@ -9,15 +9,6 @@ recipe_group: "Fromages"
 recipe_sort: "parmesan"
 recipe_tested: true
 
-meal_type: "fromage"
-
-servings: 1
-serving_size: "30 g (1 portion)"
-
-calories: 125
-proteines: 11
-glucides_nets: 0
-
 tags:
   - low-carb-strict
   - tres-proteine
@@ -27,6 +18,13 @@ badges_nutritionnels:
   - calcium
   - vitamine-b12
 
+servings: 1
+serving_size: "30 g (1 portion)"
+
+calories: 125
+proteines: 11
+glucides_nets: 0
+
 nutrition:
   lipides: 9
   glucides: 0
@@ -34,7 +32,10 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "30 g de Parmesan"
+  - item: parmesan
+    label: "Parmesan"
+    qty: 30
+    unit: g
 
 steps:
   - "Râper ou découper une portion de 30 g."

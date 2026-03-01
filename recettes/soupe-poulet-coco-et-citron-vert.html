@@ -9,8 +9,6 @@ recipe_group: "Soupe"
 recipe_sort: "soupe-poulet-coco-citron-vert-proteine"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 bol (1/4 recette)"
 
@@ -34,15 +32,54 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "750 g de blancs de poulet"
-  - "1 L d’eau"
-  - "150 ml de lait de coco"
-  - "Zeste et jus d’1/2 citron vert"
-  - "1/2 oignon"
-  - "1/2 c. à café de gingembre (frais ou poudre)"
-  - "1 c. à café d’huile de colza"
-  - "Sel"
-  - "Poivre"
+  - item: "blancs-poulet"
+    label: "Blancs de poulet"
+    qty: 750
+    unit: "g"
+    group: "viandes"
+  - item: "eau"
+    label: "Eau"
+    qty: 1000
+    unit: "ml"
+    group: "epicerie"
+  - item: "lait-coco"
+    label: "Lait de coco"
+    qty: 150
+    unit: "ml"
+    group: "epicerie"
+  - item: "citron-vert"
+    label: "Zeste et jus de citron vert"
+    qty: 0.5
+    unit: "piece"
+    group: "fruits"
+    note: "À ajuster selon tolérance"
+  - item: "oignon"
+    label: "Oignon"
+    qty: 0.5
+    unit: "piece"
+    group: "legumes"
+  - item: "gingembre"
+    label: "Gingembre (frais ou poudre)"
+    qty: 0.5
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
 
 steps:
   - "Émincer finement le demi-oignon."
@@ -60,4 +97,3 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Réduire le citron si estomac sensible."
 ---
-

@@ -9,23 +9,20 @@ recipe_group: "Poissons"
 recipe_sort: "dorade-poele"
 recipe_tested: false
 
-meal_type: "poisson"
+servings: 4
+serving_size: "1 filet (150 g)"
 
 tags:
   - low-carb-modere
   - tres-proteine
   - rapide
-  - peu-calorique
 
 badges_nutritionnels:
   - vitamine-b12
   - selenium
   - iode
 
-# Estimations par portion : 1 filet ~150 g (sur 4 portions)
-servings: 4
-serving_size: "1 filet (~150 g)"
-
+# Estimations par portion : 1 filet ~150 g
 calories: 145
 proteines: 29
 glucides_nets: 0
@@ -37,11 +34,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 filets de dorade (~150 g chacun, avec peau)"
-  - "1 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
-  - "Citron (facultatif)"
+  - item: filets-dorade
+    label: "Filets de dorade (avec peau)"
+    qty: 600
+    unit: "g"
+    group: "poissons"
+    note: "4 filets d’environ 150 g chacun"
+
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: citron
+    label: "Citron"
+    qty: 1
+    unit: "piece"
+    group: "fruits"
+    note: "facultatif"
 
 steps:
   - "Sécher les filets avec du papier absorbant."
@@ -56,5 +79,5 @@ notes_low_carb:
   - "Aliment simple, 0 glucide."
   - "Très riche en protéines."
   - "Compatible low carb modéré et strict."
-  - "Poisson maigre : attention à la surcuisson."
+  - "Surcuisson à éviter pour préserver la texture."
 ---

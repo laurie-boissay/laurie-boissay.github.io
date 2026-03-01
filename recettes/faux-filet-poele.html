@@ -9,7 +9,8 @@ recipe_group: "Viandes"
 recipe_sort: "faux-filet-poele"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/faux-filet-poele.webp"
+image_alt: "Faux-filet de bœuf poêlé"
 
 tags:
   - low-carb-strict
@@ -35,16 +36,32 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 faux-filet (200 g)"
-  - "Sel"
-  - "Poivre"
+  - item: "faux-filet-boeuf"
+    label: "Faux-filet de bœuf"
+    qty: 200
+    unit: "g"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
+  - "Sortir la viande du réfrigérateur 15 à 20 minutes avant cuisson."
   - "Chauffer une poêle très chaude."
-  - "Saisir 2 à 3 minutes par face."
-  - "Laisser reposer 5 minutes."
-  - "Saler avant service."
+  - "Saisir le faux-filet 2 à 3 minutes par face."
+  - "Laisser reposer 5 minutes avant de servir."
+  - "Saler et poivrer au moment du service."
 
 notes_low_carb:
-  - "Bon compromis goût/protéines."
+  - "Strictement sans glucides."
+  - "Protéines calculées sur rendement moyen de 100 % (référentiel interne, steak désossé)."
 ---

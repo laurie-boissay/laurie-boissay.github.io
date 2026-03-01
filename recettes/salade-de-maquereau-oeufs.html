@@ -9,8 +9,6 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "salade-maquereau-oeufs"
 recipe_tested: false
 
-meal_type: "plat"
-
 servings: 4
 serving_size: "1 portion"
 
@@ -37,27 +35,65 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "2 boîtes de maquereau (≈ 250 g égoutté)"
-  - "6 œufs"
-  - "300 g de salade verte"
-  - "1 concombre"
-  - "2 c. à soupe de moutarde"
-  - "1 c. à soupe de jus de citron"
-  - "1 c. à soupe d’huile de colza"
-  - "Poivre"
-  - "Sel (si besoin)"
+  - item: "maquereau-boite"
+    label: "Maquereau en boîte"
+    qty: 250
+    unit: "g"
+    group: "poissons"
+    note: "≈ 2 boîtes égouttées"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 6
+    unit: "piece"
+    group: "oeufs"
+  - item: "salade-verte"
+    label: "Salade verte"
+    qty: 300
+    unit: "g"
+    group: "legumes"
+  - item: "concombre"
+    label: "Concombre"
+    qty: 1
+    unit: "piece"
+    group: "legumes"
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincée"
+    group: "epicerie"
+    note: "si besoin"
 
 steps:
   - "Cuire les œufs 10 minutes, refroidir puis écaler."
-  - "Laver la salade et couper le concombre."
-  - "Égoutter le maquereau."
-  - "Mélanger moutarde, citron et huile."
-  - "Assembler le tout et ajouter la sauce avant service."
+  - "Laver la salade et couper le concombre en dés ou rondelles."
+  - "Égoutter le maquereau et effilocher."
+  - "Mélanger la moutarde, le jus de citron et l’huile."
+  - "Assembler salade, concombre, œufs et maquereau."
+  - "Ajouter la sauce juste avant de servir."
 
 notes_low_carb:
   - "≈ 32 g protéines par portion."
   - "Lipides modérés (~20 g)."
-  - "≤ 550 kcal → peu-calorique."
+  - "≤ 550 kcal → peu-calorique selon seuil plat."
   - "Éviter surplus d’huile : maquereau déjà gras."
 ---
-

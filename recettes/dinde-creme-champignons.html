@@ -9,8 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "cuisses-dinde-champignons-creme-legere"
 recipe_tested: true
 
-meal_type: "plat"
-
 image: "/images/recettes/cuisses-dinde-champignons-creme-legere.webp"
 image_alt: "Cuisses de dinde rôties au four avec champignons et sauce crème légère"
 
@@ -40,13 +38,50 @@ badges_nutritionnels:
   - zinc
 
 ingredients:
-  - "2 grosses cuisses de dinde (≈ 900 g chacune, avec os)"
-  - "500 g de champignons de Paris"
-  - "15 cl de crème fraîche entière"
-  - "1 gousse d’ail (optionnelle)"
-  - "10 à 15 cl d’eau"
-  - "Sel"
-  - "Poivre"
+  - item: cuisses-dinde-avec-os
+    label: "Cuisses de dinde (crues avec os)"
+    qty: 1800
+    unit: "g"
+    group: "viandes"
+    note: "2 pièces d’environ 900 g chacune"
+
+  - item: champignons-paris
+    label: "Champignons de Paris"
+    qty: 500
+    unit: "g"
+    group: "legumes"
+
+  - item: creme-entiere
+    label: "Crème fraîche entière"
+    qty: 150
+    unit: "ml"
+    group: "produits-laitiers"
+
+  - item: ail
+    label: "Ail"
+    qty: 1
+    unit: "piece"
+    group: "legumes"
+    note: "gousse, optionnelle"
+
+  - item: eau
+    label: "Eau"
+    qty: 150
+    unit: "ml"
+    group: "epicerie"
+    note: "10 à 15 cl pour le fond du plat"
+
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C et verser l’eau dans le fond du plat."
@@ -58,10 +93,11 @@ steps:
   - "Prélever une louche de jus et la mélanger avec la crème."
   - "Réchauffer quelques minutes pour lier légèrement."
   - "Servir nappé de sauce."
+
 notes_low_carb:
   - "Compatible low carb modéré."
+  - "Protéines calculées sur rendement moyen de 55 % (référentiel interne volaille cuisse avec os)."
   - "Optimisé en lipides tout en conservant une bonne densité protéique."
   - "Très protéiné (≈ 44 g par portion)."
   - "Micro-ondable et congelable."
 ---
-

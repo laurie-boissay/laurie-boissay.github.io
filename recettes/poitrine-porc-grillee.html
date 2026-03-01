@@ -9,8 +9,6 @@ recipe_group: "Viandes"
 recipe_sort: "poitrine-porc-grillee"
 recipe_tested: false
 
-meal_type: "viande"
-
 tags:
   - low-carb-strict
   - calorique
@@ -33,9 +31,18 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "200 g de poitrine de porc"
-  - "Sel"
-  - "Poivre"
+  - item: poitrine-porc
+    label: "Poitrine de porc"
+    qty: 200
+    unit: g
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Chauffer une poêle à feu moyen."

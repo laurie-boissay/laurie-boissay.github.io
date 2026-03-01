@@ -9,8 +9,6 @@ recipe_group: "Pâtés"
 recipe_sort: "terrine-sardines"
 recipe_tested: false
 
-meal_type: "amuse-bouche"
-
 servings: 4
 serving_size: "1/4 terrine"
 
@@ -36,13 +34,44 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "3 boîtes de sardines (≈ 360 g égouttées)"
-  - "4 œufs"
-  - "100 g de skyr nature"
-  - "40 g de fromage râpé (emmental ou comté)"
-  - "1 c. à soupe de moutarde"
-  - "Poivre"
-  - "Citron (facultatif)"
+  - item: "sardines"
+    label: "Sardines"
+    qty: 360
+    unit: "g"
+    group: "poissons"
+    note: "3 boîtes égouttées"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 4
+    unit: "piece"
+    group: "epicerie"
+  - item: "skyr-nature"
+    label: "Skyr nature"
+    qty: 100
+    unit: "g"
+    group: "epicerie"
+  - item: "fromage-rape"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 40
+    unit: "g"
+    group: "fromages"
+  - item: "moutarde"
+    label: "Moutarde"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "citron"
+    label: "Citron"
+    qty: 0
+    unit: "piece"
+    group: "fruits"
+    note: "Facultatif"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -61,4 +90,3 @@ notes_low_carb:
   - "Version allégée en crème pour améliorer le ratio protéines/kcal."
   - "Congélation possible en tranches."
 ---
-

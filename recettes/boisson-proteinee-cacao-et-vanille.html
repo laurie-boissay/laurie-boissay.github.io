@@ -9,7 +9,8 @@ recipe_group: "Boissons"
 recipe_sort: "boisson-proteinee-cacao-vanille"
 recipe_tested: false
 
-meal_type: "boisson"
+image: "/images/recettes/boisson-proteinee-cacao-vanille.webp"
+image_alt: "Boisson protéinée cacao vanille"
 
 servings: 1
 serving_size: "1 grand verre"
@@ -33,12 +34,43 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "250 ml de lait d’amande non sucré"
-  - "30 g de whey (nature ou vanille)"
-  - "1 c. à café de cacao non sucré"
-  - "1/4 c. à café d’extrait de vanille"
-  - "Stévia (optionnel, selon goût)"
-  - "Glaçons (optionnel)"
+  - item: lait-amande-non-sucre
+    label: "Lait d’amande non sucré"
+    qty: 250
+    unit: "ml"
+    group: "epicerie"
+
+  - item: whey
+    label: "Whey (nature ou vanille)"
+    qty: 30
+    unit: "g"
+    group: "epicerie"
+
+  - item: cacao-non-sucre
+    label: "Cacao non sucré"
+    qty: 1
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: extrait-vanille
+    label: "Extrait de vanille"
+    qty: 0.25
+    unit: "c-a-c"
+    group: "epicerie"
+
+  - item: stevia
+    label: "Stévia"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel, selon goût"
+    group: "epicerie"
+
+  - item: glacons
+    label: "Glaçons"
+    qty: 4
+    unit: "piece"
+    note: "optionnel"
+    group: "epicerie"
 
 steps:
   - "Verser le lait d’amande dans un shaker ou un blender."
@@ -49,7 +81,7 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné, sans sucre ajouté."
+  - "Très protéiné (25 g par verre)."
+  - "Sans sucre ajouté."
   - "Apport énergétique modéré : adapté en collation ou autour d’un effort."
 ---
-

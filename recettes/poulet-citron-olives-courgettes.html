@@ -9,11 +9,6 @@ recipe_group: "Plats à base de viande"
 recipe_sort: "poulet-citron-olives-courgettes"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 portion"
-
 tags:
   - low-carb-modere
   - tres-proteine
@@ -24,6 +19,9 @@ tags:
 
 badges_nutritionnels:
   - vitamine-c
+
+servings: 4
+serving_size: "1 portion"
 
 calories: 380
 proteines: 39
@@ -36,19 +34,48 @@ nutrition:
   fructose: 1.5
 
 ingredients:
-  - "700 g de blancs de poulet"
-  - "600 g de courgettes"
-  - "120 g d’olives vertes dénoyautées"
-  - "1 citron (zeste + jus)"
-  - "1 gousse d’ail"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "Sel (léger)"
-  - "Poivre"
-  - "Option : thym ou herbes de Provence"
+  - item: blancs-poulet
+    label: "Blancs de poulet"
+    qty: 700
+    unit: g
+  - item: courgettes
+    label: "Courgettes"
+    qty: 600
+    unit: g
+  - item: olives-vertes
+    label: "Olives vertes dénoyautées"
+    qty: 120
+    unit: g
+  - item: citron
+    label: "Citron (zeste + jus)"
+    qty: 1
+    unit: piece
+  - item: ail
+    label: "Gousse d’ail"
+    qty: 1
+    unit: piece
+  - item: huile-colza-tournesol
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: c-a-s
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+    note: "léger"
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: herbes
+    label: "Thym ou herbes de Provence"
+    qty: 1
+    unit: sprig
+    note: "optionnel"
 
 steps:
   - "Faire dorer le poulet."
-  - "Ajouter ail, citron."
+  - "Ajouter l’ail et le citron."
   - "Ajouter courgettes et olives."
   - "Mijoter 20 minutes."
   - "Ajuster l’assaisonnement."
@@ -62,4 +89,3 @@ notes_low_carb:
   - "Olives souvent salées : ajuster le sel."
   - "Aucun ingrédient non compatible low carb."
 ---
-

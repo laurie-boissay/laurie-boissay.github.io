@@ -9,8 +9,6 @@ recipe_group: "Pains & substituts"
 recipe_sort: "pain-poudre-amandes"
 recipe_tested: true
 
-meal_type: "pain"
-
 image: "/images/recettes/pain-poudre-amandes.webp"
 image_alt: "Pain low carb à la poudre d’amandes, mie aérée"
 
@@ -37,13 +35,35 @@ nutrition:
   fructose: 0.2
 
 ingredients:
-  - "150 g de poudre d’amandes"
-  - "10 g de psyllium blond"
-  - "3 œufs (blancs et jaunes séparés)"
-  - "260 ml d’eau chaude"
-  - "1/2 c. à café de bicarbonate alimentaire"
-  - "1 c. à soupe de vinaigre de cidre"
-  - "1/2 c. à café de sel"
+  - item: poudre-amandes
+    label: "Poudre d’amandes"
+    qty: 150
+    unit: g
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 10
+    unit: g
+  - item: oeufs
+    label: "Œufs"
+    qty: 3
+    unit: piece
+    note: "blancs et jaunes séparés"
+  - item: eau-chaude
+    label: "Eau chaude"
+    qty: 260
+    unit: ml
+  - item: bicarbonate-alimentaire
+    label: "Bicarbonate alimentaire"
+    qty: 0.5
+    unit: c-a-c
+  - item: vinaigre-cidre
+    label: "Vinaigre de cidre"
+    qty: 1
+    unit: c-a-s
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: c-a-c
 
 steps:
   - "Préchauffer le four à 170 °C."
@@ -63,4 +83,3 @@ notes_low_carb:
   - "Congélation idéale en tranches."
   - "Texture dense comparée à un pain de blé."
 ---
-

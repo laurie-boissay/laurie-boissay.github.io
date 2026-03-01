@@ -9,11 +9,6 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "riz-chou-fleur-poele"
 recipe_tested: false
 
-meal_type: "other"
-
-servings: 4
-serving_size: "1 portion (≈200 g cuit)"
-
 tags:
   - low-carb-modere
   - rapide
@@ -24,6 +19,9 @@ tags:
 
 badges_nutritionnels:
   - vitamine-c
+
+servings: 4
+serving_size: "1 portion (≈200 g cuit)"
 
 calories: 55
 proteines: 3
@@ -36,10 +34,23 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "1 gros chou-fleur (≈800 g brut)"
-  - "1 c. à soupe d’huile (colza ou tournesol)"
-  - "Sel"
-  - "Poivre"
+  - item: chou-fleur
+    label: "Chou-fleur"
+    qty: 800
+    unit: g
+    note: "1 gros, brut"
+  - item: huile-colza-tournesol
+    label: "Huile (colza ou tournesol)"
+    qty: 1
+    unit: c-a-s
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Laver le chou-fleur et retirer les feuilles."
@@ -56,4 +67,3 @@ notes_low_carb:
   - "Congélation possible (texture plus humide après réchauffage)."
   - "Aucun ingrédient non compatible low carb."
 ---
-

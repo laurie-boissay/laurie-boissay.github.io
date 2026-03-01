@@ -1,15 +1,6 @@
 ---
 layout: recipe
 
-# =========================================================
-# Recette (data-only) — Préparations & conservations
-# =========================================================
-# Contrat :
-# - Le layout génère tout l’affichage.
-# - Aucune micro-donnée ni tableau HTML ici.
-# - Catégorie sans badge calorique.
-# =========================================================
-
 title: "Chips de légumes séchés"
 description: "Chips de légumes séchés maison, sans friture ni farine. Préparation croustillante low carb modéré."
 recipe_title: "Chips de légumes séchés"
@@ -18,18 +9,23 @@ recipe_group: "Amuse-bouche"
 recipe_sort: "chips-de-legumes-seches"
 recipe_tested: false
 
+image: "/images/recettes/chips-de-legumes-seches.webp"
+image_alt: "Chips de légumes séchés maison"
+
 servings: 10
 serving_size: "10 g"
+
+calories: 25
+proteines: 1
+glucides_nets: 2.5
 
 tags:
   - low-carb-modere
   - riche-en-fibres
   - longue
+  - peu-calorique
 
-# Valeurs estimées moyennes pour 10 g (variable selon légume)
-calories: 25
-proteines: 1
-glucides_nets: 2.5
+badges_nutritionnels: []
 
 nutrition:
   lipides: 0
@@ -38,9 +34,26 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "Légumes au choix (courgette, champignons, chou kale, aubergine)"
-  - "Sel fin (optionnel)"
-  - "Épices compatibles (ail en poudre, curry doux, poivre)"
+  - item: legumes-au-choix
+    label: "Légumes au choix (courgette, champignons, chou kale, aubergine)"
+    qty: 1000
+    unit: "g"
+    note: "poids cru indicatif avant séchage"
+    group: "legumes"
+
+  - item: sel-fin
+    label: "Sel fin"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel"
+    group: "epicerie"
+
+  - item: epices
+    label: "Épices compatibles (ail en poudre, curry doux, poivre)"
+    qty: 1
+    unit: "c-a-c"
+    note: "optionnel"
+    group: "epicerie"
 
 steps:
   - "Laver et sécher soigneusement les légumes."
@@ -55,7 +68,6 @@ notes_low_carb:
   - "Compatible low carb modéré."
   - "Valeurs nutritionnelles variables selon le légume utilisé."
   - "Idéal en apéritif ou comme topping croustillant."
-  - "Ne pas huiler avant séchage : la texture deviendrait molle."
+  - "Ne pas huiler avant séchage : texture molle."
   - "Conserver en bocal hermétique 7 à 10 jours."
 ---
-

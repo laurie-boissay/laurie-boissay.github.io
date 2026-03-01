@@ -9,7 +9,8 @@ recipe_group: "Viandes"
 recipe_sort: "magret-canard-poele"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/magret-canard-poele.webp"
+image_alt: "Magret de canard poêlé"
 
 tags:
   - low-carb-strict
@@ -34,18 +35,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "360 g de magret de canard"
-  - "Sel"
-  - "Poivre"
+  - item: "magret-canard"
+    label: "Magret de canard"
+    qty: 360
+    unit: "g"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Quadriller la peau sans entailler la chair."
   - "Déposer côté peau dans une poêle froide."
-  - "Cuire 6 à 10 minutes à feu moyen (faire fondre une partie du gras)."
+  - "Cuire 6 à 10 minutes à feu moyen pour faire fondre une partie du gras."
   - "Retourner et cuire 3 à 6 minutes selon cuisson souhaitée."
   - "Laisser reposer 5 minutes avant de trancher."
   - "Saler et poivrer au moment de servir."
 
 notes_low_carb:
-  - "Aucun ingrédient non low carb."
+  - "Strictement sans glucides."
+  - "Protéines calibrées pour ≥ 30 g par portion."
 ---

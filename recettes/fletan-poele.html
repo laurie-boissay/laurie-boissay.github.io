@@ -9,7 +9,8 @@ recipe_group: "Poissons"
 recipe_sort: "fletan-poele"
 recipe_tested: false
 
-meal_type: "poisson"
+image: "/images/recettes/fletan-poele.webp"
+image_alt: "Filet de flétan saisi à la poêle"
 
 tags:
   - low-carb-modere
@@ -22,7 +23,6 @@ badges_nutritionnels:
   - selenium
   - iode
 
-# Estimations par portion : 150 g de filet (sur 4 portions)
 servings: 4
 serving_size: "150 g de filet"
 
@@ -37,11 +37,37 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 filets de flétan (~150 g chacun)"
-  - "1 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
-  - "Citron (facultatif)"
+  - item: "fletan-filet"
+    label: "Filets de flétan"
+    qty: 600
+    unit: "g"
+    note: "4 portions de 150 g"
+    group: "poissons"
+
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "citron"
+    label: "Citron"
+    qty: 0.5
+    unit: "piece"
+    note: "facultatif"
+    group: "fruits"
 
 steps:
   - "Sécher les filets avec du papier absorbant."
@@ -53,8 +79,7 @@ steps:
   - "Servir immédiatement."
 
 notes_low_carb:
-  - "Aliment simple, 0 glucide."
+  - "Strictement sans glucides."
   - "Très riche en protéines."
   - "Compatible low carb modéré et strict."
-  - "Chair ferme : supporte bien la saisie."
 ---

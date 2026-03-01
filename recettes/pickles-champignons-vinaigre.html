@@ -9,8 +9,6 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "pickles-champignons-vinaigre"
 recipe_tested: false
 
-meal_type: "accompagnement"
-
 tags:
   - low-carb-strict
   - riche-en-fibres
@@ -35,15 +33,44 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "500 g de champignons de Paris"
-  - "250 ml de vinaigre (vin blanc ou cidre)"
-  - "250 ml d’eau"
-  - "1 c. à soupe de sel"
-  - "2 gousses d’ail"
-  - "1 c. à café de poivre en grains"
-  - "2 feuilles de laurier"
-  - "Quelques branches de thym"
-  - "Option : zeste de citron"
+  - item: champignons-paris
+    label: "Champignons de Paris"
+    qty: 500
+    unit: g
+  - item: vinaigre
+    label: "Vinaigre (vin blanc ou cidre)"
+    qty: 250
+    unit: ml
+  - item: eau
+    label: "Eau"
+    qty: 250
+    unit: ml
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: c-a-s
+  - item: ail
+    label: "Gousses d’ail"
+    qty: 2
+    unit: piece
+  - item: poivre-grains
+    label: "Poivre en grains"
+    qty: 1
+    unit: c-a-c
+  - item: laurier
+    label: "Feuilles de laurier"
+    qty: 2
+    unit: piece
+  - item: thym
+    label: "Thym"
+    qty: 2
+    unit: sprig
+    note: "quelques branches"
+  - item: citron
+    label: "Zeste de citron"
+    qty: 1
+    unit: piece
+    note: "optionnel"
 
 steps:
   - "Nettoyer et couper les champignons."

@@ -9,8 +9,6 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "pate-a-tartiner-choco-noisette"
 recipe_tested: false
 
-meal_type: "dessert"
-
 tags:
   - gout-sucre
   - low-carb-modere
@@ -31,12 +29,32 @@ nutrition:
   fructose: 0.2
 
 ingredients:
-  - "120 g de poudre de noisettes"
-  - "25 g de cacao non sucré"
-  - "60 g de beurre"
-  - "1/2 c. à café rase de stévia (ajuster très progressivement)"
-  - "1/2 c. à café d’extrait de vanille (optionnel)"
-  - "1 pincée de sel"
+  - item: poudre-noisettes
+    label: "Poudre de noisettes"
+    qty: 120
+    unit: g
+  - item: cacao
+    label: "Cacao non sucré"
+    qty: 25
+    unit: g
+  - item: beurre
+    label: "Beurre"
+    qty: 60
+    unit: g
+  - item: stevia
+    label: "Stévia"
+    qty: 0.5
+    unit: c-a-c
+    note: "ajuster très progressivement"
+  - item: vanille-extrait
+    label: "Extrait de vanille"
+    qty: 0.5
+    unit: c-a-c
+    note: "optionnel"
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Faire fondre doucement le beurre."
@@ -52,4 +70,3 @@ notes_low_carb:
   - "Éviter le surdosage de stévia pour prévenir l’arrière-goût."
   - "Conservation 7 jours au réfrigérateur."
 ---
-

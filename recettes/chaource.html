@@ -9,10 +9,11 @@ recipe_group: "Fromages"
 recipe_sort: "chaource"
 recipe_tested: true
 
-meal_type: "fromage"
+image: "/images/recettes/chaource.webp"
+image_alt: "Portion de chaource 30 g"
 
 servings: 1
-serving_size: "30 g (1 part)"
+serving_size: "30 g"
 
 calories: 95
 proteines: 6
@@ -33,7 +34,11 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "30 g de Chaource"
+  - item: chaource
+    label: "Chaource"
+    qty: 30
+    unit: "g"
+    group: "produits-laitiers"
 
 steps:
   - "Découper une portion de 30 g."
@@ -43,6 +48,5 @@ notes_low_carb:
   - "Glucides ≈ 0 g : compatible low carb strict."
   - "Texture crémeuse, goût doux."
   - "Bonne densité protéique."
-  - "Portion recommandée : 30 g."
   - "Produit brut, sans ajout."
 ---

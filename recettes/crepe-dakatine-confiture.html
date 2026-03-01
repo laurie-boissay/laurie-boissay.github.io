@@ -9,8 +9,6 @@ recipe_group: "Desserts & crèmes"
 recipe_sort: "crepe-dakatine-confiture"
 recipe_tested: true
 
-meal_type: "dessert"
-
 image: "/images/recettes/crepe-dakatine-confiture.webp"
 image_alt: "Crêpe low carb pliée garnie de Dakatine et confiture"
 
@@ -39,9 +37,25 @@ nutrition:
   fructose: 1
 
 ingredients:
-  - "1 crêpe salée low carb"
-  - "20 g de Dakatine (pâte d’arachide 100 %)"
-  - "30 g de confiture de fruits rouges low carb"
+  - item: crepe-salees
+    label: "Crêpe salée low carb"
+    qty: 1
+    unit: "piece"
+    group: "pains-substituts"
+    link: "{{ '/recettes/crepes-salees.html' | relative_url }}"
+
+  - item: dakatine
+    label: "Dakatine (pâte d’arachide 100 %)"
+    qty: 20
+    unit: "g"
+    group: "epicerie"
+
+  - item: confiture-fruits-rouges-low-carb
+    label: "Confiture de fruits rouges low carb"
+    qty: 30
+    unit: "g"
+    group: "preparations"
+    link: "{{ '/recettes/confiture-de-fruits-rouges.html' | relative_url }}"
 
 steps:
   - "Étaler 20 g de Dakatine sur la crêpe."
@@ -51,9 +65,8 @@ steps:
 
 notes_low_carb:
   - "Dessert calorique (≥ 300 kcal seuil dessert)."
-  - "Low carb modéré."
+  - "Compatible low carb modéré."
   - "⚠️ Présence de sucre réel via les fruits de la confiture."
   - "Texture dense et rassasiante."
-  - "Le tag longue tient compte de la préparation des crêpes de base."
+  - "Le tag longue tient compte de la préparation préalable des crêpes."
 ---
-

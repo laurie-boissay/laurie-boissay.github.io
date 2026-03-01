@@ -9,14 +9,8 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "salade-avocat-truite"
 recipe_tested: true
 
-meal_type: "plat"
-
 image: "/images/recettes/salade-avocat-truite.webp"
 image_alt: "Salade avocat et truite fumée avec œufs et sauce skyr"
-
-
-servings: 4
-serving_size: "1 portion"
 
 tags:
   - low-carb-strict
@@ -26,6 +20,9 @@ tags:
 
 badges_nutritionnels:
   - omega-3
+
+servings: 4
+serving_size: "1 portion"
 
 calories: 530
 proteines: 45
@@ -38,15 +35,43 @@ nutrition:
   fructose: 1.5
 
 ingredients:
-  - "200 g de salade verte"
-  - "2 avocats mûrs"
-  - "400 g de truite fumée"
-  - "8 œufs"
-  - "400 g de skyr nature"
-  - "1 citron"
-  - "2 c. à c. de moutarde"
-  - "Poivre"
-  - "Option : levure de bière"
+  - item: salade-verte
+    label: "Salade verte"
+    qty: 200
+    unit: g
+  - item: avocat
+    label: "Avocats mûrs"
+    qty: 2
+    unit: piece
+  - item: truite-fumee
+    label: "Truite fumée"
+    qty: 400
+    unit: g
+  - item: oeufs
+    label: "Œufs"
+    qty: 8
+    unit: piece
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 400
+    unit: g
+  - item: citron
+    label: "Citron"
+    qty: 1
+    unit: piece
+  - item: moutarde
+    label: "Moutarde"
+    qty: 2
+    unit: c-a-c
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: levure-biere
+    label: "Levure de bière"
+    qty: 1
+    unit: c-a-c
+    note: "optionnel"
 
 steps:
   - "Cuire les œufs durs, refroidir et couper."
@@ -61,4 +86,3 @@ notes_low_carb:
   - "Aucune matière grasse ajoutée."
   - "Apport significatif en oméga-3."
 ---
-

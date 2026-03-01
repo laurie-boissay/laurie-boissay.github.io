@@ -9,11 +9,6 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "quiche-sans-pate-jambon-fromage"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 part (1/4 quiche)"
-
 tags:
   - low-carb-modere
   - tres-proteine
@@ -24,6 +19,9 @@ tags:
 badges_nutritionnels:
   - calcium
   - vitamine-b12
+
+servings: 4
+serving_size: "1 part (1/4 quiche)"
 
 calories: 360
 proteines: 34
@@ -36,15 +34,32 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "6 œufs"
-  - "200 g de jambon blanc en dés (sans sucres ajoutés)"
-  - "120 g de fromage râpé (emmental ou comté)"
-  - "200 g de fromage blanc 3 %"
-  - "Poivre"
-  - "Option : noix de muscade"
-
-accompagnement:
-  - "Salade verte assaisonnée (non incluse dans les macros)"
+  - item: oeufs
+    label: "Œufs"
+    qty: 6
+    unit: piece
+  - item: jambon-blanc
+    label: "Jambon blanc en dés"
+    qty: 200
+    unit: g
+    note: "sans sucres ajoutés"
+  - item: fromage-rape
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 120
+    unit: g
+  - item: fromage-blanc-3
+    label: "Fromage blanc 3 %"
+    qty: 200
+    unit: g
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
+  - item: muscade
+    label: "Noix de muscade"
+    qty: 1
+    unit: pinch
+    note: "optionnel"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -66,4 +81,3 @@ notes_low_carb:
   - "⚠️ Vérifier la composition du jambon (éviter dextrose et amidon)."
   - "Aucun ingrédient intrinsèquement non compatible low carb."
 ---
-

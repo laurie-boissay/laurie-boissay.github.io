@@ -9,7 +9,15 @@ recipe_group: "Viandes"
 recipe_sort: "cote-boeuf-four"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/cote-boeuf-four.webp"
+image_alt: "Côte de bœuf rôtie au four"
+
+servings: 2
+serving_size: "1 portion (~210 g net)"
+
+calories: 620
+proteines: 52
+glucides_nets: 0
 
 tags:
   - low-carb-strict
@@ -22,23 +30,33 @@ badges_nutritionnels:
   - vitamine-b12
   - zinc
 
-servings: 2
-serving_size: "1 portion (300 g)"
-
-calories: 750
-proteines: 60
-glucides_nets: 0
-
 nutrition:
-  lipides: 60
+  lipides: 48
   glucides: 0
   fibres: 0
   fructose: 0
 
 ingredients:
-  - "1 côte de bœuf (600 g)"
-  - "Sel"
-  - "Poivre"
+  - item: cote-boeuf
+    label: "Côte de bœuf"
+    qty: 600
+    unit: "g"
+    note: "poids cru avec os (rendement moyen 70 %)"
+    group: "viandes"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -49,5 +67,6 @@ steps:
 
 notes_low_carb:
   - "Strictement sans glucides."
-  - "Très calorique : portion à adapter selon objectif."
+  - "Protéines calculées sur rendement moyen de 70 % (référentiel interne)."
+  - "Plat calorique : adapter la portion selon l’objectif."
 ---

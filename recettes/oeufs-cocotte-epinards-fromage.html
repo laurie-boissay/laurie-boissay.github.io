@@ -9,10 +9,8 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "oeufs-cocotte-epinards-fromage"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 ramequin (2 œufs)"
+image: "/images/recettes/oeufs-cocotte-epinards-fromage.webp"
+image_alt: "Œufs cocotte aux épinards et fromage"
 
 tags:
   - low-carb-modere
@@ -24,7 +22,9 @@ badges_nutritionnels:
   - vitamine-b12
   - calcium
 
-# Estimations par portion
+servings: 4
+serving_size: "1 ramequin (2 œufs)"
+
 calories: 380
 proteines: 31
 glucides_nets: 2
@@ -36,12 +36,42 @@ nutrition:
   fructose: 0.5
 
 ingredients:
-  - "8 œufs"
-  - "300 g d’épinards (frais ou surgelés)"
-  - "160 g de fromage râpé (emmental ou comté)"
-  - "80 ml de crème entière"
-  - "Sel"
-  - "Poivre"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 8
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "epinards"
+    label: "Épinards"
+    qty: 300
+    unit: "g"
+    note: "frais ou surgelés"
+    group: "legumes"
+
+  - item: "fromage-ra"
+    label: "Fromage râpé (emmental ou comté)"
+    qty: 160
+    unit: "g"
+    group: "fromages"
+
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 80
+    unit: "ml"
+    group: "cremerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -54,9 +84,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné : ≈ 31 g de protéines par portion."
+  - "Très protéiné (~31 g de protéines par portion)."
   - "Glucides principalement issus des épinards et des produits laitiers."
   - "Source naturelle de vitamine B12 (œufs) et de calcium (fromage)."
   - "Version allégée en crème pour réduire l’apport lipidique."
 ---
-

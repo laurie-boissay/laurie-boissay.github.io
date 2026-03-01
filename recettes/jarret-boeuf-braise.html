@@ -9,7 +9,8 @@ recipe_group: "Viandes"
 recipe_sort: "jarret-boeuf-braise"
 recipe_tested: false
 
-meal_type: "viande"
+image: "/images/recettes/jarret-boeuf-braise.webp"
+image_alt: "Jarret de bœuf braisé"
 
 tags:
   - low-carb-strict
@@ -35,18 +36,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 jarret de bœuf (400 g cru avec os)"
-  - "Sel"
-  - "Poivre"
+  - item: "jarret-boeuf"
+    label: "Jarret de bœuf"
+    qty: 400
+    unit: "g"
+    note: "poids cru avec os"
+    group: "viandes"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 160 °C."
-  - "Saisir le jarret sur toutes les faces."
-  - "Ajouter un fond d’eau."
-  - "Couvrir et cuire 2 à 3 heures."
-  - "Laisser reposer avant service."
+  - "Saisir le jarret sur toutes les faces dans une poêle chaude."
+  - "Ajouter un fond d’eau dans le plat."
+  - "Couvrir et cuire 2 à 3 heures à chaleur douce."
+  - "Laisser reposer avant de servir."
 
 notes_low_carb:
-  - "Protéines calculées sur rendement moyen de 65 % (référentiel interne)."
-  - "Aucun ingrédient non low carb."
+  - "Strictement sans glucides."
+  - "Protéines calculées sur rendement moyen de 65 % (référentiel interne, jarret avec os)."
 ---

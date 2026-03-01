@@ -9,11 +9,6 @@ recipe_group: "Gâteaux & biscuits"
 recipe_sort: "muffins-noisette-chocolat-85"
 recipe_tested: true
 
-meal_type: "dessert"
-
-servings: 9
-serving_size: "1 muffin"
-
 image: "/images/recettes/muffins-noisette-chocolat-85.webp"
 image_alt: "Muffins low carb noisette et chocolat 85 %"
 
@@ -27,6 +22,9 @@ tags:
 badges_nutritionnels:
   - magnesium
 
+servings: 9
+serving_size: "1 muffin"
+
 calories: 145
 proteines: 5
 glucides_nets: 0.5
@@ -38,15 +36,61 @@ nutrition:
   fructose: 0.1
 
 ingredients:
-  - "150 g de noisettes grillées en poudre"
-  - "4 œufs"
-  - "3 g de stévia Pure Via (≈ 1 c. à café rase)"
-  - "40 g de beurre fondu (ou huile neutre)"
-  - "35 g de chocolat noir 85 %"
-  - "5 g de psyllium blond"
-  - "1 sachet de levure chimique"
-  - "1 pincée de sel"
-  - "Vanille légère (facultatif)"
+  - item: "noisettes-poudre"
+    label: "Noisettes grillées en poudre"
+    qty: 150
+    unit: "g"
+    group: "fruits-a-coque"
+
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 4
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "stevia-purevia"
+    label: "Stévia Pure Via"
+    qty: 3
+    unit: "g"
+    note: "≈ 1 c. à café rase"
+    group: "epicerie"
+
+  - item: "beurre-fondu"
+    label: "Beurre fondu (ou huile neutre)"
+    qty: 40
+    unit: "g"
+    group: "cremerie"
+
+  - item: "chocolat-noir-85"
+    label: "Chocolat noir 85 %"
+    qty: 35
+    unit: "g"
+    group: "chocolat"
+
+  - item: "psyllium-blond"
+    label: "Psyllium blond"
+    qty: 5
+    unit: "g"
+    group: "epicerie"
+
+  - item: "levure-chimique"
+    label: "Levure chimique"
+    qty: 1
+    unit: "sachet"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "vanille"
+    label: "Vanille légère"
+    qty: 1
+    unit: "c-a-c"
+    note: "facultatif"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 170 °C."
@@ -67,4 +111,3 @@ notes_low_carb:
   - "La sensation sucrée repose surtout sur la noisette et le chocolat 85 %."
   - "Congélation et réchauffage micro-ondes possibles."
 ---
-

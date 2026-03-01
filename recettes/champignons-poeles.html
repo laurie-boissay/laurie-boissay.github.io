@@ -9,7 +9,15 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "champignons-poeles"
 recipe_tested: false
 
-meal_type: "accompagnement"
+image: "/images/recettes/champignons-poeles.webp"
+image_alt: "Champignons de Paris poêlés"
+
+servings: 4
+serving_size: "200 g cuits"
+
+calories: 90
+proteines: 6
+glucides_nets: 4
 
 tags:
   - low-carb-modere
@@ -20,13 +28,6 @@ badges_nutritionnels:
   - potassium
   - selenium
 
-servings: 4
-serving_size: "200 g cuits"
-
-calories: 90
-proteines: 6
-glucides_nets: 4
-
 nutrition:
   lipides: 5
   glucides: 6
@@ -34,10 +35,31 @@ nutrition:
   fructose: 2
 
 ingredients:
-  - "800 g de champignons de Paris"
-  - "2 c. à soupe d’huile de colza ou tournesol"
-  - "Sel"
-  - "Poivre"
+  - item: champignons-paris
+    label: "Champignons de Paris"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+
+  - item: huile-colza
+    label: "Huile (colza ou tournesol)"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: sel
+    label: "Sel"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
+
+  - item: poivre
+    label: "Poivre"
+    qty: 0.5
+    unit: "c-a-c"
+    note: "ajuster au goût"
+    group: "epicerie"
 
 steps:
   - "Nettoyer et émincer les champignons."
@@ -47,5 +69,5 @@ steps:
 
 notes_low_carb:
   - "Très faible en glucides nets."
-  - "Cuisson vive recommandée pour éviter texture aqueuse."
+  - "Cuisson vive recommandée pour éviter une texture aqueuse."
 ---

@@ -9,7 +9,12 @@ recipe_group: "Légumes & accompagnements"
 recipe_sort: "topinambours-rotis"
 recipe_tested: false
 
-meal_type: "accompagnement"
+servings: 4
+serving_size: "150 g cuits"
+
+calories: 135
+proteines: 3
+glucides_nets: 12
 
 tags:
   - low-carb-modere
@@ -20,13 +25,6 @@ badges_nutritionnels:
   - potassium
   - fer
 
-servings: 4
-serving_size: "150 g cuits"
-
-calories: 135
-proteines: 3
-glucides_nets: 12
-
 nutrition:
   lipides: 6
   glucides: 18
@@ -34,10 +32,28 @@ nutrition:
   fructose: 3
 
 ingredients:
-  - "800 g de topinambours"
-  - "2 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
+  - item: "topinambours"
+    label: "Topinambours"
+    qty: 800
+    unit: "g"
+    group: "legumes"
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 2
+    unit: "c-a-s"
+    group: "epicerie"
+  - item: "sel"
+    label: "Sel"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
+  - item: "poivre"
+    label: "Poivre"
+    qty: 0
+    unit: "piece"
+    group: "epicerie"
+    note: "À ajuster"
 
 steps:
   - "Préchauffer le four à 200 °C."

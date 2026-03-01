@@ -9,11 +9,6 @@ recipe_group: "Œufs"
 recipe_sort: "omelette-jambon"
 recipe_tested: true
 
-meal_type: "œuf"
-
-servings: 4
-serving_size: "1 portion (1/4 de la recette)"
-
 tags:
   - low-carb-modere
   - rapide
@@ -24,6 +19,9 @@ badges_nutritionnels:
   - vitamine-b12
   - vitamine-d
   - selenium
+
+servings: 4
+serving_size: "1 portion (1/4 de la recette)"
 
 calories: 255
 proteines: 27
@@ -36,10 +34,24 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "8 gros œufs (calibre L)"
-  - "300 g de jambon blanc en dés (sans sucres ajoutés si possible)"
-  - "1 c. à soupe d’huile de colza"
-  - "Poivre"
+  - item: oeufs
+    label: "Œufs gros"
+    qty: 8
+    unit: piece
+    note: "calibre L"
+  - item: jambon-blanc
+    label: "Jambon blanc en dés"
+    qty: 300
+    unit: g
+    note: "sans sucres ajoutés si possible"
+  - item: huile-colza
+    label: "Huile de colza"
+    qty: 1
+    unit: c-a-s
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Casser les œufs dans un saladier et les battre rapidement."

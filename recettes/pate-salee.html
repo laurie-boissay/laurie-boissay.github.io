@@ -9,8 +9,6 @@ recipe_group: "Pâtes & fonds"
 recipe_sort: "pate-salee"
 recipe_tested: true
 
-meal_type: "other"
-
 tags:
   - low-carb-modere
   - riche-en-fibres
@@ -32,12 +30,31 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "200 g de poudre d’amandes"
-  - "45 g de beurre froid"
-  - "2 œufs"
-  - "5 g de psyllium blond"
-  - "1,5 g de sel"
-  - "1 à 2 c. à soupe d’eau froide (si nécessaire)"
+  - item: poudre-amandes
+    label: "Poudre d’amandes"
+    qty: 200
+    unit: g
+  - item: beurre
+    label: "Beurre froid"
+    qty: 45
+    unit: g
+  - item: oeufs
+    label: "Œufs"
+    qty: 2
+    unit: piece
+  - item: psyllium-blond
+    label: "Psyllium blond"
+    qty: 5
+    unit: g
+  - item: sel
+    label: "Sel"
+    qty: 1.5
+    unit: g
+  - item: eau
+    label: "Eau froide"
+    qty: 2
+    unit: c-a-s
+    note: "si nécessaire"
 
 steps:
   - "Mélanger la poudre d’amandes, le psyllium et le sel."
@@ -53,4 +70,3 @@ notes_low_carb:
   - "Base technique : l’impact glycémique dépend surtout de la garniture."
   - "Congélation possible (crue ou précuite)."
 ---
-

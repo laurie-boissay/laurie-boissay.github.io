@@ -9,10 +9,8 @@ recipe_group: "Plats à base d’œufs"
 recipe_sort: "oeufs-cocotte-saumon-epinards"
 recipe_tested: false
 
-meal_type: "plat"
-
-servings: 4
-serving_size: "1 ramequin (2 œufs)"
+image: "/images/recettes/oeufs-cocotte-saumon-epinards.webp"
+image_alt: "Œufs cocotte au saumon et épinards"
 
 tags:
   - low-carb-modere
@@ -24,7 +22,9 @@ badges_nutritionnels:
   - omega-3
   - vitamine-b12
 
-# Estimations par portion
+servings: 4
+serving_size: "1 ramequin (2 œufs)"
+
 calories: 350
 proteines: 33
 glucides_nets: 1
@@ -36,13 +36,48 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "8 œufs"
-  - "280 g de saumon (frais ou fumé)"
-  - "200 g d’épinards (frais ou surgelés)"
-  - "120 ml de crème entière"
-  - "10 g de beurre"
-  - "Sel"
-  - "Poivre"
+  - item: "oeufs"
+    label: "Œufs"
+    qty: 8
+    unit: "piece"
+    group: "oeufs"
+
+  - item: "saumon"
+    label: "Saumon (frais ou fumé)"
+    qty: 280
+    unit: "g"
+    group: "poissons"
+
+  - item: "epinards"
+    label: "Épinards"
+    qty: 200
+    unit: "g"
+    note: "frais ou surgelés"
+    group: "legumes"
+
+  - item: "creme-entiere"
+    label: "Crème entière"
+    qty: 120
+    unit: "ml"
+    group: "cremerie"
+
+  - item: "beurre"
+    label: "Beurre"
+    qty: 10
+    unit: "g"
+    group: "cremerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
 
 steps:
   - "Préchauffer le four à 180 °C."
@@ -59,9 +94,8 @@ steps:
 
 notes_low_carb:
   - "Compatible low carb modéré."
-  - "Très protéiné : ≈ 33 g de protéines par portion."
+  - "Très protéiné (~33 g de protéines par portion)."
   - "Source importante d’oméga-3 grâce au saumon."
   - "Glucides uniquement issus des épinards."
   - "Astuce : bien égoutter les épinards pour éviter l’eau au fond."
 ---
-

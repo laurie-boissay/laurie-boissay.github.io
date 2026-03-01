@@ -9,7 +9,8 @@ recipe_group: "Poissons"
 recipe_sort: "merlu-four"
 recipe_tested: false
 
-meal_type: "poisson"
+image: "/images/recettes/merlu-four.webp"
+image_alt: "Filet de merlu au four"
 
 tags:
   - low-carb-modere
@@ -22,7 +23,6 @@ badges_nutritionnels:
   - selenium
   - iode
 
-# Estimations par portion : 1 filet ~150 g (sur 4 portions)
 servings: 4
 serving_size: "1 filet (~150 g)"
 
@@ -37,23 +37,49 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "4 filets de merlu (~150 g chacun)"
-  - "1 c. à soupe d’huile de colza"
-  - "Sel"
-  - "Poivre"
-  - "Jus de citron (facultatif)"
+  - item: "merlu-filet"
+    label: "Filets de merlu"
+    qty: 600
+    unit: "g"
+    note: "4 portions de ~150 g"
+    group: "poissons"
+
+  - item: "huile-colza"
+    label: "Huile de colza"
+    qty: 1
+    unit: "c-a-s"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "poivre"
+    label: "Poivre"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "jus-citron"
+    label: "Jus de citron"
+    qty: 0.5
+    unit: "piece"
+    note: "facultatif"
+    group: "fruits"
 
 steps:
   - "Préchauffer le four à 180 °C."
   - "Déposer les filets dans un plat légèrement huilé."
   - "Badigeonner très légèrement d’huile."
   - "Saler et poivrer."
-  - "Cuire 12 à 15 minutes selon l’épaisseur (la chair doit rester tendre et se détacher facilement)."
+  - "Cuire 12 à 15 minutes selon l’épaisseur, la chair doit rester tendre et se détacher facilement."
   - "Laisser reposer 2 minutes avant de servir."
 
 notes_low_carb:
-  - "Aliment simple, 0 glucide."
+  - "Strictement sans glucides."
   - "Très riche en protéines et pauvre en lipides."
   - "Compatible low carb modéré et strict."
-  - "Surcuisson = texture sèche."
+  - "Éviter la surcuisson pour ne pas dessécher la chair."
 ---

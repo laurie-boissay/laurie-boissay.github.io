@@ -9,8 +9,6 @@ recipe_group: "Viandes"
 recipe_sort: "onglet-boeuf-grille"
 recipe_tested: false
 
-meal_type: "viande"
-
 tags:
   - low-carb-strict
   - rapide
@@ -35,9 +33,18 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "1 onglet (170 g)"
-  - "Sel"
-  - "Poivre"
+  - item: onglet-boeuf
+    label: "Onglet de bœuf"
+    qty: 170
+    unit: g
+  - item: sel
+    label: "Sel"
+    qty: 1
+    unit: pinch
+  - item: poivre
+    label: "Poivre"
+    qty: 1
+    unit: pinch
 
 steps:
   - "Saisir à feu vif 2 à 3 minutes par face."

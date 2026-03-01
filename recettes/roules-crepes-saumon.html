@@ -9,13 +9,8 @@ recipe_group: "Plats à base de poissons"
 recipe_sort: "roules-crepes-saumon"
 recipe_tested: true
 
-meal_type: "plat"
-
 image: "/images/recettes/roules-crepes-saumon.webp"
 image_alt: "Roulés de crêpes low carb au saumon fumé et skyr"
-
-servings: 4
-serving_size: "1 portion (2 crêpes garnies)"
 
 tags:
   - low-carb-modere
@@ -29,6 +24,9 @@ badges_nutritionnels:
   - vitamine-b12
   - iode
 
+servings: 4
+serving_size: "1 portion (2 crêpes garnies)"
+
 calories: 445
 proteines: 42
 glucides_nets: 4
@@ -40,13 +38,33 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - label: "8 crêpes salées low carb (2 par personne)"
+  - item: crepes-salee
+    label: "Crêpes salées low carb"
+    qty: 8
+    unit: piece
     link: "/recettes/crepes-salee.html"
-  - "480 g de skyr nature"
-  - "400 g de saumon fumé (ou truite fumée)"
-  - "4 c. à soupe de ciboulette ciselée"
-  - "Poivre blanc"
-  - "2 c. à café de jus de citron (optionnel)"
+    note: "2 par personne"
+  - item: skyr-nature
+    label: "Skyr nature"
+    qty: 480
+    unit: g
+  - item: saumon-fume
+    label: "Saumon fumé (ou truite fumée)"
+    qty: 400
+    unit: g
+  - item: ciboulette
+    label: "Ciboulette ciselée"
+    qty: 4
+    unit: c-a-s
+  - item: poivre-blanc
+    label: "Poivre blanc"
+    qty: 1
+    unit: pinch
+  - item: jus-citron
+    label: "Jus de citron"
+    qty: 2
+    unit: c-a-c
+    note: "optionnel"
 
 steps:
   - "Mélanger le skyr avec la ciboulette et le poivre blanc (ajouter le citron si utilisé)."
@@ -64,4 +82,3 @@ notes_low_carb:
   - "À consommer froid (ne pas réchauffer une fois garni)."
   - "Aucun ingrédient non compatible low carb."
 ---
-

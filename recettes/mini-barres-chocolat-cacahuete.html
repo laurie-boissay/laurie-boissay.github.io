@@ -9,10 +9,8 @@ recipe_group: "Barres nutritionnelles"
 recipe_sort: "mini-barres-chocolat-cacahuete"
 recipe_tested: false
 
-meal_type: "other"
-
-servings: 12
-serving_size: "1 mini-barre"
+image: "/images/recettes/mini-barres-chocolat-cacahuete.webp"
+image_alt: "Mini-barres chocolat noir 85 % et cacahuète"
 
 tags:
   - low-carb-modere
@@ -23,6 +21,9 @@ tags:
 
 badges_nutritionnels:
   - magnesium
+
+servings: 12
+serving_size: "1 mini-barre"
 
 calories: 225
 proteines: 9
@@ -35,11 +36,36 @@ nutrition:
   fructose: 0
 
 ingredients:
-  - "120 g de chocolat noir 85 %"
-  - "200 g de purée de cacahuète 100 %"
-  - "60 g de protéine en poudre neutre"
-  - "1 pincée de sel"
-  - "20 g de cacahuètes grillées concassées (optionnel)"
+  - item: "chocolat-noir-85"
+    label: "Chocolat noir 85 %"
+    qty: 120
+    unit: "g"
+    group: "chocolat"
+
+  - item: "puree-cacahuete"
+    label: "Purée de cacahuète 100 %"
+    qty: 200
+    unit: "g"
+    group: "fruits-a-coque"
+
+  - item: "proteine-poudre"
+    label: "Protéine en poudre neutre"
+    qty: 60
+    unit: "g"
+    group: "epicerie"
+
+  - item: "sel"
+    label: "Sel"
+    qty: 1
+    unit: "pincee"
+    group: "epicerie"
+
+  - item: "cacahuetes-concassees"
+    label: "Cacahuètes grillées concassées"
+    qty: 20
+    unit: "g"
+    note: "optionnel"
+    group: "fruits-a-coque"
 
 steps:
   - "Faire fondre doucement le chocolat noir."
@@ -57,4 +83,3 @@ notes_low_carb:
   - "Sans stévia (règle respectée pour barres sans cuisson)."
   - "Congélation excellente."
 ---
-
