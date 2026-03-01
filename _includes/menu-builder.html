@@ -3,11 +3,21 @@
 _includes/menu-builder.html — Générateur de menu (UI)
 ==============================================================================
 
+Rôle
+- UI de paramétrage (jours, repas/jour, plafonds, cible kcal).
+- Point d’entrée de l’export PDF (bouton dédié).
+- Point d’entrée du repère protéines/repas (poids optionnel).
+
 Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
-- #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
-- #carbMax, #fatMax, #calorieTargetDay
+- #menuMessage, #generateMenu, #exportMenuPdf
+- #weekStart, #mealsPerDay, #daysCount
+- #carbMax, #fatMax, #calorieTargetDay, #proteinWeightKg
 - #menuGrid
+
+Notes UX
+- Lipides max : optionnel. Si vide (ou 0), le plafond n’est pas appliqué.
+- Export PDF : désactivé tant qu’aucun menu n’est généré (géré en JS).
 ==============================================================================
 {%- endcomment -%}
 
@@ -47,9 +57,15 @@ Contrat DOM attendu
       </div>
 
       <div class="col-md-4 d-flex align-items-end">
-        <button id="generateMenu" class="btn btn-primary w-100" type="button">
-          Générer le menu
-        </button>
+        <div class="d-grid gap-2 w-100">
+          <button id="generateMenu" class="btn btn-primary" type="button">
+            Générer le menu
+          </button>
+
+          <button id="exportMenuPdf" class="btn btn-outline-primary" type="button" disabled>
+            Exporter en PDF
+          </button>
+        </div>
       </div>
 
     </div>
@@ -115,6 +131,22 @@ Contrat DOM attendu
       <div class="col-md-4">
         <label class="form-label" for="calorieTargetDay">Calories cible / jour (kcal)</label>
         <input type="number" id="calorieTargetDay" class="form-control" value="0" step="50" min="0">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="proteinWeightKg">Poids (kg) — repère protéines/repas</label>
+        <input
+          type="number"
+          id="proteinWeightKg"
+          class="form-control"
+          value=""
+          placeholder="(optionnel)"
+          step="0.1"
+          min="0"
+        >
+        <div class="form-text">
+          Optionnel. Si renseigné, le menu peut afficher une cible indicatrice (~0,3 g/kg/repas).
+        </div>
       </div>
 
     </div>

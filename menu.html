@@ -79,7 +79,10 @@ body_id: "menu"
     <div class="card">
       <div class="card-body py-2">
         <div class="fw-bold mb-2 js-meal-title"></div>
+
+        <!-- Total repas (protéines, et plus tard seuil) -->
         <div class="small text-muted mb-2 js-meal-total"></div>
+
         <div class="d-flex flex-column gap-2 js-slots-wrap"></div>
         <div class="mt-2 d-flex justify-content-end">
           <button
@@ -128,6 +131,10 @@ body_id: "menu"
 <script src="{{ '/assets/js/menu-builder.modals.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/menu-builder.actions.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/menu-builder.render.js' | relative_url }}"></script>
+
+<!-- Export PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
+<script src="{{ '/assets/js/menu-pdf.js' | relative_url }}"></script>
 
 <script>
 (function () {
