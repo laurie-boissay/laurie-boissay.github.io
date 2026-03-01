@@ -2,18 +2,13 @@
 menu-builder.sync.js — UI (synchronisations : kcal + protéines)
 ==============================================================================
 Rôle
-- Synchroniser le champ #calorieTargetDay avec :
-  • event "calorieTargetUpdated"
-  • window.calorieTargetKcal
-  • localStorage (plusieurs clés historiques)
-  • lecture opportuniste DOM (si include injecté tard)
-
+- Synchroniser le champ #calorieTargetDay (inchangé).
 - Protéines :
   • #weightKg (poids) persistant
-  • #proteinTargetDay (optionnel) :
-      - si vide : validation désactivée
-      - si poids présent et champ non override : auto = 2 g/kg
-      - l’utilisateur peut override (persistant)
+  • #proteinTargetPerKg (g/kg/jour) persistant (défaut 2.0)
+  • #proteinTargetDay (g/jour) calculé automatiquement = poids × g/kg
+    - readonly : on évite l’ambiguïté “override en g/jour”.
+    - si poids absent => champ vide => validation/jour désactivée.
 ============================================================================== */
 
 "use strict";
@@ -100,51 +95,48 @@ Rôle
   };
 
   // ---------------------------------------------------------------------------
-  // Protéines : poids + cible/jour (2 g/kg par défaut, override possible)
+  // Protéines : poids + cible (g/kg/jour) -> cible (g/jour)
   // ---------------------------------------------------------------------------
 
   MB.setupProteinTargetSync = function setupProteinTargetSync() {
     const elWeight = MB.dom.weightKg || document.getElementById("weightKg");
-    const elTarget = MB.dom.proteinTargetDay || document.getElementById("proteinTargetDay");
-    if (!elWeight || !elTarget) return;
+    const elPerKg = MB.dom.proteinTargetPerKg || document.getElementById("proteinTargetPerKg");
+    const elDay = MB.dom.proteinTargetDay || document.getElementById("proteinTargetDay");
+    if (!elWeight || !elPerKg || !elDay) return;
 
-    const readNumber = (el) => {
+    const readFloat = (el) => {
       const raw = String(el.value || "").trim().replace(",", ".");
       const n = parseFloat(raw);
       return Number.isFinite(n) && n > 0 ? n : null;
     };
 
+    const readFloatAllowZero = (el) => {
+      const raw = String(el.value || "").trim().replace(",", ".");
+      if (raw === "") return null;
+      const n = parseFloat(raw);
+      return Number.isFinite(n) && n >= 0 ? n : null;
+    };
+
     const round1 = (n) => Math.round((Number(n) || 0) * 10) / 10;
 
-    const computeTarget = (weightKg) => {
-      // Convention UI : 2 g/kg/jour, arrondi à l’unité.
-      return Math.max(0, Math.round(2 * weightKg));
-    };
+    const recompute = () => {
+      const w = readFloat(elWeight);
+      const perKg = readFloatAllowZero(elPerKg);
 
-    const isUserOverride = () => elTarget.dataset.userOverride === "1";
-
-    const setUserOverride = (on) => {
-      if (on) elTarget.dataset.userOverride = "1";
-      else delete elTarget.dataset.userOverride;
-    };
-
-    const applyAutoIfAllowed = () => {
-      const w = readNumber(elWeight);
-      if (w === null) return;
-
-      const auto = computeTarget(w);
-      const hasTyped = String(elTarget.value || "").trim().length > 0;
-
-      // Auto si :
-      // - champ vide
-      // - ou pas d’override utilisateur
-      if (!hasTyped || !isUserOverride()) {
-        elTarget.value = String(auto);
-        setUserOverride(false);
+      // Si pas de poids valide => désactive la validation/jour
+      if (w === null) {
+        elDay.value = "";
+        return;
       }
+
+      // perKg vide => on retombe sur défaut 2.0
+      const targetPerKg = perKg === null ? 2.0 : perKg;
+
+      const g = Math.max(0, Math.round(w * targetPerKg));
+      elDay.value = String(g);
     };
 
-    // 1) Restore localStorage
+    // Restore localStorage
     try {
       const w = localStorage.getItem("weightKg");
       if (w) {
@@ -152,49 +144,30 @@ Rôle
         if (Number.isFinite(n) && n > 0) elWeight.value = String(round1(n));
       }
 
-      const p = localStorage.getItem("proteinTargetDay");
-      if (p !== null) {
-        const trimmed = String(p).trim();
-        if (trimmed === "") {
-          // vide => validation désactivée
-          elTarget.value = "";
-          setUserOverride(false);
-        } else {
-          const n = parseFloat(trimmed.replace(",", "."));
-          if (Number.isFinite(n) && n >= 0) {
-            elTarget.value = String(Math.round(n));
-            setUserOverride(true);
-          }
-        }
+      const perKg = localStorage.getItem("proteinTargetPerKg");
+      if (perKg !== null && String(perKg).trim() !== "") {
+        const n = parseFloat(String(perKg).replace(",", "."));
+        if (Number.isFinite(n) && n >= 0) elPerKg.value = String(round1(n));
       }
     } catch (_) {}
 
-    // 2) Si aucune valeur cible stockée : auto 2 g/kg si poids présent
-    if (String(elTarget.value || "").trim() === "") applyAutoIfAllowed();
+    // Initial compute
+    recompute();
 
-    // 3) Events
+    // Events
     elWeight.addEventListener("input", () => {
-      applyAutoIfAllowed();
       try {
         localStorage.setItem("weightKg", String(elWeight.value || ""));
       } catch (_) {}
+      recompute();
       MB.rerender?.();
     });
 
-    elTarget.addEventListener("input", () => {
-      const v = String(elTarget.value || "").trim();
-
-      if (v === "") {
-        // Champ vide => validation désactivée ; pas d’override.
-        setUserOverride(false);
-      } else {
-        setUserOverride(true);
-      }
-
+    elPerKg.addEventListener("input", () => {
       try {
-        localStorage.setItem("proteinTargetDay", String(elTarget.value || ""));
+        localStorage.setItem("proteinTargetPerKg", String(elPerKg.value || ""));
       } catch (_) {}
-
+      recompute();
       MB.rerender?.();
     });
   };

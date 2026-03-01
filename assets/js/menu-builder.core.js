@@ -66,8 +66,12 @@ Contrats
     carbMax: null,
     fatMax: null,
     calorieTargetDay: null,
+
+    // Objectifs protéines
     weightKg: null,
-    proteinTargetDay: null,
+    proteinTargetPerKg: null, // g/kg/jour (modifiable)
+    proteinTargetDay: null, // g/jour (calculé côté sync)
+
     grid: null,
   };
 
@@ -120,7 +124,11 @@ Contrats
 
   /**
    * Lecture canonique des paramètres UI.
-   * Contrat : doit matcher les attentes de menu-builder.actions.js
+   * Contrat : doit matcher les attentes de menu-builder.actions.js + menu-builder.render.js
+   *
+   * Note :
+   * - proteinTargetPerKg : cible utilisateur en g/kg/jour (défaut géré par sync si besoin).
+   * - proteinTargetDay   : g/jour (calculé par menu-builder.sync.js, typiquement readonly).
    */
   MenuBuilder.readParams = function readParams() {
     const mealsPerDay = MenuBuilder.readIntFromEl(MenuBuilder.dom.mealsPerDay, 3, 1, 5);
@@ -132,11 +140,22 @@ Contrats
     const carbMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.carbMax, 0, 0, 99999);
     const fatMax = MenuBuilder.readFloatFromEl(MenuBuilder.dom.fatMax, 0, 0, 99999);
 
-    // Optionnel : utilisé uniquement pour pré-remplir et/ou valider l’objectif protéines.
+    // Objectifs protéines (optionnels)
     const weightKg = MenuBuilder.readFloatFromEl(MenuBuilder.dom.weightKg, 0, 0, 99999);
+    const proteinTargetPerKg = MenuBuilder.readFloatFromEl(MenuBuilder.dom.proteinTargetPerKg, 0, 0, 99999);
     const proteinTargetDay = MenuBuilder.readFloatFromEl(MenuBuilder.dom.proteinTargetDay, 0, 0, 99999);
 
-    return { mealsPerDay, weekStart, daysCount, calorieMax, carbMax, fatMax, weightKg, proteinTargetDay };
+    return {
+      mealsPerDay,
+      weekStart,
+      daysCount,
+      calorieMax,
+      carbMax,
+      fatMax,
+      weightKg,
+      proteinTargetPerKg,
+      proteinTargetDay,
+    };
   };
 
   // Messages
@@ -207,8 +226,12 @@ Contrats
       "carbMax",
       "fatMax",
       "calorieTargetDay",
+
+      // Objectifs protéines
       "weightKg",
+      "proteinTargetPerKg",
       "proteinTargetDay",
+
       "menuGrid",
     ];
 
@@ -247,8 +270,11 @@ Contrats
     MenuBuilder.dom.carbMax = document.getElementById("carbMax");
     MenuBuilder.dom.fatMax = document.getElementById("fatMax");
     MenuBuilder.dom.calorieTargetDay = document.getElementById("calorieTargetDay");
+
     MenuBuilder.dom.weightKg = document.getElementById("weightKg");
+    MenuBuilder.dom.proteinTargetPerKg = document.getElementById("proteinTargetPerKg");
     MenuBuilder.dom.proteinTargetDay = document.getElementById("proteinTargetDay");
+
     MenuBuilder.dom.grid = document.getElementById("menuGrid");
 
     // Source unique : types fournis par MenuEngine

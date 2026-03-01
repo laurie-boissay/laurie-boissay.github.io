@@ -6,7 +6,7 @@ Contrat DOM attendu
 - #menu-builder-root[data-baseurl]
 - #menuMessage, #generateMenu, #weekStart, #mealsPerDay, #daysCount
 - #carbMax, #fatMax, #calorieTargetDay
-- #weightKg, #proteinTargetDay
+- #weightKg, #proteinTargetPerKg, #proteinTargetDay
 - (optionnel) #exportMenuPdf si export PDF activé
 - #menuGrid
 ==============================================================================
@@ -53,10 +53,6 @@ Contrat DOM attendu
             Générer le menu
           </button>
 
-          {%- comment -%}
-          Optionnel : si tu as activé l’export PDF, garde ce bouton.
-          Le JS menu-pdf.js l’activera après rendu.
-          {%- endcomment -%}
           <button id="exportMenuPdf" class="btn btn-outline-primary" type="button" disabled>
             Exporter en PDF
           </button>
@@ -140,12 +136,30 @@ Contrat DOM attendu
           placeholder="Ex : 71"
         >
         <div class="form-text">
-          Optionnel. Sert à :
-          (1) calculer la cible protéines/repas ~0,3 g/kg
-          (2) pré-remplir la cible protéines/jour à 2 g/kg.
+          Optionnel. Sert à calculer :
+          (1) la cible protéines/repas ~0,3 g/kg
+          (2) la cible protéines/jour = poids × (g/kg/jour).
         </div>
       </div>
 
+      <div class="col-md-4">
+        <label class="form-label" for="proteinTargetPerKg">Cible protéines (g/kg/jour)</label>
+        <input
+          type="number"
+          id="proteinTargetPerKg"
+          class="form-control"
+          value="2"
+          step="0.1"
+          min="0"
+        >
+        <div class="form-text">
+          Par défaut : 2,0. Exemple : 1,5.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row g-3 mb-4">
       <div class="col-md-4">
         <label class="form-label" for="proteinTargetDay">Protéines cible / jour (g)</label>
         <input
@@ -155,14 +169,14 @@ Contrat DOM attendu
           value=""
           step="1"
           min="0"
-          placeholder="Auto : 2 g/kg"
+          placeholder="Auto (poids × g/kg)"
+          readonly
         >
         <div class="form-text">
-          Laisse vide pour désactiver la validation/jour.
-          Par défaut : 2 g/kg si poids renseigné. Tu peux ensuite modifier.
+          Calcul automatique. Change le poids ou g/kg pour recalculer.
+          Si poids = vide, la validation/jour est désactivée.
         </div>
       </div>
-
     </div>
 
     <div id="menuGrid" class="mt-4"></div>
