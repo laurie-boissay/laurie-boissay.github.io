@@ -4,7 +4,11 @@ menu-pdf.js — Export du menu en PDF (jsPDF)
 Rôle
 - Exporter le menu (jours → repas → recettes) en PDF lisible.
 - Mettre en forme : bandeaux, sections, couleurs.
-- Rendre les titres de recettes cliquables (URL absolue ou relative via baseurl).
+- Rendre les titres de recettes cliquables via des URL ABSOLUES (compat PDF).
+
+Point clé (liens PDF)
+- Beaucoup de lecteurs PDF ignorent les annotations dont l’URL est relative.
+- On force donc systématiquement une URL absolue (https://…).
 
 Dépendances
 - jsPDF UMD : window.jspdf.jsPDF
@@ -72,10 +76,6 @@ Dépendances
     doc.rect(x, y, w, h, "F");
   }
 
-  function splitToWidth(doc, text, maxWidth) {
-    return doc.splitTextToSize(String(text || ""), maxWidth);
-  }
-
   function ellipsisToWidth(doc, text, maxWidth) {
     const s = String(text || "");
     if (doc.getTextWidth(s) <= maxWidth) return s;
@@ -94,12 +94,40 @@ Dépendances
     return s.slice(0, lo) + ell;
   }
 
+  /**
+   * Normalisation URL pour PDF :
+   * - Utilise la normalisation du site (baseurl, relative_url, etc.).
+   * - Force une URL absolue (sinon lien souvent non cliquable dans les lecteurs PDF).
+   */
   function normalizeUrl(MB, url) {
-    // Utilise la logique déjà existante côté site.
+    // 1) Normalisation “site”
+    let u = "#";
     if (MB && typeof MB.normalizeRecipeUrl === "function") {
-      return MB.normalizeRecipeUrl(url);
+      u = MB.normalizeRecipeUrl(url);
+    } else {
+      u = String(url || "#").trim();
     }
-    return String(url || "#");
+
+    u = String(u || "#").trim();
+    if (!u || u === "#") return "#";
+
+    // 2) Déjà absolu
+    if (/^https?:\/\//i.test(u)) return u;
+
+    // 3) Cas protocole relatif //example.com/path
+    if (u.startsWith("//")) return `https:${u}`;
+
+    // 4) Absolutisation via l’origine courante (prod ou local)
+    //    Note : en prod GitHub Pages, window.location.origin = https://laurie-boissay.github.io
+    //    et MB.normalizeRecipeUrl renvoie typiquement /laurie-boissay/recettes/....
+    if (u.startsWith("/")) return `${window.location.origin}${u}`;
+
+    // 5) Dernier recours : construire sur l’URL de la page (pour les chemins relatifs sans /)
+    try {
+      return new URL(u, window.location.href).toString();
+    } catch (_) {
+      return u;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -173,7 +201,6 @@ Dépendances
       dayBand: [30, 90, 160],
       mealBg: [245, 247, 250],
       cardBorder: [225, 230, 238],
-      ok: [20, 120, 90],
       warn: [190, 110, 10],
     };
 
@@ -191,11 +218,7 @@ Dépendances
 
     // Intro / résumé paramètres (léger)
     setText(doc, 10.5, C.ink[0], C.ink[1], C.ink[2], "normal");
-    doc.text(
-      `${safeDaysCount} jour(s) · ${params.mealsPerDay} repas/jour`,
-      X,
-      cursor.y
-    );
+    doc.text(`${safeDaysCount} jour(s) · ${params.mealsPerDay} repas/jour`, X, cursor.y);
     cursor.y += 8;
 
     for (let dayOffset = 0; dayOffset < safeDaysCount; dayOffset += 1) {
@@ -270,7 +293,7 @@ Dépendances
           const leftX = X + 6;
           const rightX = X + W - 3;
 
-          // On réserve un bloc à droite pour macros (largeur fixe), et à gauche pour le titre cliquable.
+          // Bloc macros (droite) + bloc titre (gauche)
           setText(doc, 9.5, C.muted[0], C.muted[1], C.muted[2], "normal");
           const macros = `P ${fmt1(prot)} · ${Math.round(kcal)} kcal · G ${fmt1(carbs)}`;
           const macrosW = doc.getTextWidth(macros);
@@ -278,23 +301,26 @@ Dépendances
           const gap = 6;
           const maxTitleW = Math.max(40, (rightX - leftX) - macrosW - gap);
 
-          // Puce + titre cliquable
+          // Puce
           setText(doc, 9.5, C.ink[0], C.ink[1], C.ink[2], "normal");
           doc.text("•", X + 3.5, cursor.y);
 
           const title = ellipsisToWidth(doc, titleRaw, maxTitleW);
 
-          // Titre en couleur "link"
+          // Titre en couleur + lien cliquable (URL absolue)
           setText(doc, 9.5, C.accent2[0], C.accent2[1], C.accent2[2], "normal");
-          if (typeof doc.textWithLink === "function") {
-            doc.textWithLink(title, leftX, cursor.y, { url });
+          if (url !== "#") {
+            if (typeof doc.textWithLink === "function") {
+              doc.textWithLink(title, leftX, cursor.y, { url });
+            } else {
+              doc.text(title, leftX, cursor.y);
+              try {
+                const tw = doc.getTextWidth(title);
+                doc.link(leftX, cursor.y - 4, tw, 5, { url });
+              } catch (_) {}
+            }
           } else {
-            // Fallback : texte + annotation cliquable sur la zone
             doc.text(title, leftX, cursor.y);
-            try {
-              const tw = doc.getTextWidth(title);
-              doc.link(leftX, cursor.y - 4, tw, 5, { url });
-            } catch (_) {}
           }
 
           // Macros à droite
