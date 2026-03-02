@@ -1,29 +1,56 @@
 ---
-layout: null
+layout: none
 permalink: /assets/data/recipes.json
+sitemap: false
 ---
 
+{%- comment -%}
+==============================================================================
+assets/data/recipes.json — Export JSON (client-side rendering)
+==============================================================================
+Rôle
+- Fournir au JS une liste de recettes sous forme de JSON valide.
+- Source: pages Jekyll dont layout == "recipe".
+
+Contraintes
+- JSON strict (pas de HTML, pas de front-matter dans la sortie).
+- Champs textuels / listes / objets : toujours via `| jsonify`.
+- Exclut meal_type (champ supprimé du projet).
+- Inclut tags et badges_nutritionnels pour filtrage tag-index.
+============================================================================== 
+{%- endcomment -%}
 [
-{%- assign recipes = site.pages | where: "layout", "recipe" -%}
+{%- assign recipes_all = site.pages | where: "layout", "recipe" -%}
+{%- assign recipes = recipes_all | where_exp: "r", "r.recipe_group and r.recipe_group != ''" -%}
 {%- for r in recipes -%}
-  {%- if r.recipe_group and r.recipe_group != "" -%}
   {
     "title": {{ r.title | jsonify }},
-    "url": {{ r.url | relative_url | jsonify }},
-    "meal_type": {{ r.meal_type | jsonify }},
+    "recipe_title": {{ r.recipe_title | default: r.title | jsonify }},
+    "recipe_subtitle": {{ r.recipe_subtitle | jsonify }},
     "recipe_group": {{ r.recipe_group | jsonify }},
+    "recipe_sort": {{ r.recipe_sort | jsonify }},
+    "recipe_tested": {{ r.recipe_tested | jsonify }},
+
+    "url": {{ r.url | relative_url | jsonify }},
+
     "calories": {{ r.calories | jsonify }},
     "proteines": {{ r.proteines | jsonify }},
     "glucides_nets": {{ r.glucides_nets | jsonify }},
-    "lipides": {{ r.nutrition.lipides | jsonify }},
-    "glucides": {{ r.nutrition.glucides | jsonify }},
-    "fibres": {{ r.nutrition.fibres | jsonify }},
-    "fructose": {{ r.nutrition.fructose | jsonify }},
+
+    "nutrition": {
+      "lipides": {{ r.nutrition.lipides | jsonify }},
+      "glucides": {{ r.nutrition.glucides | jsonify }},
+      "fibres": {{ r.nutrition.fibres | jsonify }},
+      "fructose": {{ r.nutrition.fructose | jsonify }}
+    },
+
     "servings": {{ r.servings | jsonify }},
     "serving_size": {{ r.serving_size | jsonify }},
+
+    "tags": {{ r.tags | jsonify }},
+    "badges_nutritionnels": {{ r.badges_nutritionnels | jsonify }},
+
     "ingredients": {{ r.ingredients | jsonify }}
-  }{% unless forloop.last %},{% endunless %}
-  {%- endif -%}
+  }{%- unless forloop.last -%},{%- endunless -%}
 {%- endfor -%}
 ]
-

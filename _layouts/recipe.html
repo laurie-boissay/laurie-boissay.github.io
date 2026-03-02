@@ -13,6 +13,9 @@
 
       {% include bandeau-non-teste.html %}
 
+      {%- comment -%}
+        Tags masqués (tags techniques) : ils restent dans le front-matter mais ne s’affichent pas en badges.
+      {%- endcomment -%}
       {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
 
       <header class="recipe-head">
@@ -50,6 +53,7 @@
                     {% when "calorique" %}<li><a class="badge-link-card" href="{{ '/tags/calorique/' | relative_url }}" title="Calorique">🔥</a></li>
                     {% when "longue" %}<li><a class="badge-link-card" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
                     {% when "gout-sucre" %}<li><a class="badge-link-card" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+                    {% when "microbiote-friendly" %}<li><a class="badge-link-card" href="{{ '/tags/microbiote-friendly/' | relative_url }}" title="Microbiote friendly">🦠</a></li>
                   {% endcase %}
                 {% endunless %}
               {% endfor %}
@@ -93,16 +97,19 @@
             <ul>
               {% for i in page.ingredients %}
                 <li>
-                  {% if i.label %}
+                  {% comment %} Nouveau traitement unifié {% endcomment %}
+                  {% if i.qty and i.unit %}
+                    {% if i.link %}
+                      <a href="{{ i.link | relative_url }}">{{ i.label | default: i.item }}</a> : {{ i.qty }} {{ i.unit }}{% if i.note %} ({{ i.note }}){% endif %}
+                    {% else %}
+                      {{ i.label | default: i.item }} : {{ i.qty }} {{ i.unit }}{% if i.note %} ({{ i.note }}){% endif %}
+                    {% endif %}
+                  {% elsif i.label %}
                     {% if i.link %}
                       <a href="{{ i.link | relative_url }}">{{ i.label }}</a>
                     {% else %}
                       {{ i.label }}
                     {% endif %}
-                  {% elsif i.item %}
-                    {{ i.label | default: i.item }}
-                    {% if i.qty and i.unit %} : {{ i.qty }} {{ i.unit }}{% endif %}
-                    {% if i.note %} ({{ i.note }}){% endif %}
                   {% else %}
                     {{ i }}
                   {% endif %}

@@ -93,3 +93,14 @@ gout-sucre:
     - "Compatible avec le low carb tant que les glucides restent maîtrisés."
     - "Les recettes avec ce tag sont exclues de certaines suggestions automatiques (ex. tirage aléatoire), par choix éditorial."
 
+microbiote-friendly:
+  titre: "Microbiote friendly 🦠"
+  signification: >
+    Recette taggée selon des critères internes orientés fibres/prébiotiques et/ou aliments fermentés,
+    pour faciliter le repérage dans le site (ce n’est pas un label médical).
+  criteres:
+    - "Voie A : fibres ≥ 5 g/portion ET présence d’au moins une source prébiotique (ail, oignon, poireau, topinambour, asperge, artichaut, chou, fenouil…)."
+    - "Voie B : présence d’un aliment fermenté (ex. choucroute/kimchi/lactofermenté) ET fibres ≥ 1 g/portion (ou tag riche-en-fibres)."
+  notes:
+    - "Tag fonctionnel : classement pratique basé sur les données/ingrédients saisis dans la recette."
+    - "Ne garantit pas un effet santé : la tolérance digestive varie selon les personnes."

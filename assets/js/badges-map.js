@@ -16,14 +16,20 @@
 
   window.RECETTES_BADGES_MAP = {
     TAG_BADGES: {
-      "tres-proteine":   { emoji: "💪", title: "Très protéiné" },
-      "riche-en-fibres": { emoji: "💩", title: "Riche en fibres" },
-      "rapide":          { emoji: "⏱️", title: "Rapide" },
-      "congelable":      { emoji: "❄️", title: "Congélable" },
-      "micro-ondable":   { emoji: "♨️", title: "Micro-ondable" },
-      "peu-calorique":   { emoji: "🪶", title: "Peu calorique" },
-      "calorique":       { emoji: "🔥", title: "Calorique" },
-      "longue":          { emoji: "🐌", title: "Préparation longue" }
+      "tres-proteine":       { emoji: "💪", title: "Très protéiné" },
+      "riche-en-fibres":     { emoji: "💩", title: "Riche en fibres" },
+      "rapide":              { emoji: "⏱️", title: "Rapide" },
+      "congelable":          { emoji: "❄️", title: "Congélable" },
+      "micro-ondable":       { emoji: "♨️", title: "Micro-ondable" },
+      "peu-calorique":       { emoji: "🪶", title: "Peu calorique" },
+      "calorique":           { emoji: "🔥", title: "Calorique" },
+      "longue":              { emoji: "🐌", title: "Préparation longue" },
+
+      // Tag fonctionnel utilisé en navigation
+      "gout-sucre":          { emoji: "🍬", title: "Goût sucré" },
+
+      // Nouveau tag fonctionnel
+      "microbiote-friendly": { emoji: "🦠", title: "Microbiote friendly" }
     },
 
     MICRO_BADGES: {
@@ -47,4 +53,3 @@
     }
   };
 })();
-

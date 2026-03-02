@@ -138,33 +138,36 @@ Objectif UX
     const HIDDEN_TAGS = new Set(["low-carb-modere", "low-carb-strict"]);
 
     const TAG_BADGES = {
-      "tres-proteine":   { emoji: "💪", title: "Très protéiné",      href: BASE + "tags/tres-proteine/" },
-      "riche-en-fibres": { emoji: "💩", title: "Riche en fibres",    href: BASE + "tags/riche-en-fibres/" },
-      "rapide":         { emoji: "⏱️", title: "Rapide",             href: BASE + "tags/rapide/" },
-      "congelable":     { emoji: "❄️", title: "Congélable",          href: BASE + "tags/congelable/" },
-      "micro-ondable":  { emoji: "♨️", title: "Micro-ondable",       href: BASE + "tags/micro-ondable/" },
-      "peu-calorique":  { emoji: "🪶", title: "Peu calorique",       href: BASE + "tags/peu-calorique/" },
-      "calorique":      { emoji: "🔥", title: "Calorique",           href: BASE + "tags/calorique/" },
-      "longue":         { emoji: "🐌", title: "Préparation longue",  href: BASE + "tags/longue/" },
-      "gout-sucre":     { emoji: "🍬", title: "Goût sucré",          href: BASE + "tags/gout-sucre/" }
+      "tres-proteine":       { emoji: "💪", title: "Très protéiné",      href: BASE + "tags/tres-proteine/" },
+      "riche-en-fibres":     { emoji: "💩", title: "Riche en fibres",    href: BASE + "tags/riche-en-fibres/" },
+      "rapide":              { emoji: "⏱️", title: "Rapide",             href: BASE + "tags/rapide/" },
+      "congelable":          { emoji: "❄️", title: "Congélable",          href: BASE + "tags/congelable/" },
+      "micro-ondable":       { emoji: "♨️", title: "Micro-ondable",       href: BASE + "tags/micro-ondable/" },
+      "peu-calorique":       { emoji: "🪶", title: "Peu calorique",       href: BASE + "tags/peu-calorique/" },
+      "calorique":           { emoji: "🔥", title: "Calorique",           href: BASE + "tags/calorique/" },
+      "longue":              { emoji: "🐌", title: "Préparation longue",  href: BASE + "tags/longue/" },
+      "gout-sucre":          { emoji: "🍬", title: "Goût sucré",          href: BASE + "tags/gout-sucre/" },
+
+      /* Tag fonctionnel ajouté : affichage badge + lien page tag. */
+      "microbiote-friendly": { emoji: "🦠", title: "Microbiote friendly", href: BASE + "tags/microbiote-friendly/" }
     };
 
     const MICRO_BADGES = {
-      "omega-3":      { emoji: "🐟", title: "Oméga-3",     href: BASE + "micronutriments/omega-3/" },
-      "vitamine-a":   { emoji: "👁️", title: "Vitamine A",  href: BASE + "micronutriments/vitamine-a/" },
-      "vitamine-c":   { emoji: "🍋", title: "Vitamine C",  href: BASE + "micronutriments/vitamine-c/" },
-      "vitamine-d":   { emoji: "🌤️", title: "Vitamine D",  href: BASE + "micronutriments/vitamine-d/" },
-      "vitamine-e":   { emoji: "🛡️", title: "Vitamine E",  href: BASE + "micronutriments/vitamine-e/" },
-      "vitamine-k":   { emoji: "🩸", title: "Vitamine K",  href: BASE + "micronutriments/vitamine-k/" },
-      "vitamine-b9":  { emoji: "🌱", title: "Vitamine B9", href: BASE + "micronutriments/vitamine-b9/" },
-      "vitamine-b12": { emoji: "🥩", title: "Vitamine B12",href: BASE + "micronutriments/vitamine-b12/" },
-      "calcium":      { emoji: "🦴", title: "Calcium",     href: BASE + "micronutriments/calcium/" },
-      "fer":          { emoji: "🧲", title: "Fer",         href: BASE + "micronutriments/fer/" },
-      "magnesium":    { emoji: "⚡", title: "Magnésium",   href: BASE + "micronutriments/magnesium/" },
-      "potassium":    { emoji: "🍌", title: "Potassium",   href: BASE + "micronutriments/potassium/" },
-      "zinc":         { emoji: "🔩", title: "Zinc",        href: BASE + "micronutriments/zinc/" },
-      "selenium":     { emoji: "🧪", title: "Sélénium",    href: BASE + "micronutriments/selenium/" },
-      "iode":         { emoji: "🌊", title: "Iode",        href: BASE + "micronutriments/iode/" }
+      "omega-3":      { emoji: "🐟", title: "Oméga-3",      href: BASE + "micronutriments/omega-3/" },
+      "vitamine-a":   { emoji: "👁️", title: "Vitamine A",   href: BASE + "micronutriments/vitamine-a/" },
+      "vitamine-c":   { emoji: "🍋", title: "Vitamine C",   href: BASE + "micronutriments/vitamine-c/" },
+      "vitamine-d":   { emoji: "🌤️", title: "Vitamine D",   href: BASE + "micronutriments/vitamine-d/" },
+      "vitamine-e":   { emoji: "🛡️", title: "Vitamine E",   href: BASE + "micronutriments/vitamine-e/" },
+      "vitamine-k":   { emoji: "🩸", title: "Vitamine K",   href: BASE + "micronutriments/vitamine-k/" },
+      "vitamine-b9":  { emoji: "🌱", title: "Vitamine B9",  href: BASE + "micronutriments/vitamine-b9/" },
+      "vitamine-b12": { emoji: "🥩", title: "Vitamine B12", href: BASE + "micronutriments/vitamine-b12/" },
+      "calcium":      { emoji: "🦴", title: "Calcium",      href: BASE + "micronutriments/calcium/" },
+      "fer":          { emoji: "🧲", title: "Fer",          href: BASE + "micronutriments/fer/" },
+      "magnesium":    { emoji: "⚡", title: "Magnésium",    href: BASE + "micronutriments/magnesium/" },
+      "potassium":    { emoji: "🍌", title: "Potassium",    href: BASE + "micronutriments/potassium/" },
+      "zinc":         { emoji: "🔩", title: "Zinc",         href: BASE + "micronutriments/zinc/" },
+      "selenium":     { emoji: "🧪", title: "Sélénium",     href: BASE + "micronutriments/selenium/" },
+      "iode":         { emoji: "🌊", title: "Iode",         href: BASE + "micronutriments/iode/" }
     };
 
     function escapeHtml(s) {
@@ -226,7 +229,6 @@ Objectif UX
       const subtitle = escapeHtml(recipe.recipe_subtitle || "");
       const tested = recipe.recipe_tested === true;
       const url = recipe.url ? recipe.url : "";
-      const img = recipeImage(recipe);
       const tags = asArray(recipe.tags);
       const micros = asArray(recipe.badges_nutritionnels);
 
