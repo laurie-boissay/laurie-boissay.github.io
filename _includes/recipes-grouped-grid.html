@@ -2,55 +2,17 @@
 ==============================================================================
 recipes-grouped-grid.html — Rendu mutualisé des listes de fiches/recettes
 ==============================================================================
-
-Rôle
-- Afficher une collection de pages "recipe" sous forme :
-  • (optionnel) compteur total + compteur testées
-  • (optionnel) filtre “recettes testées” si pertinent
-  • regroupement visuel par recipe_group
-  • grille de cartes (titre, sous-titre, statut testée, CTA, badges)
-
-Entrées (include params)
-- recipes         : Array<Page> (obligatoire)
-- cta_label       : Libellé du bouton (optionnel, défaut "Voir la fiche")
-- show_controls   : bool (optionnel, défaut true)
-  • true  => affiche compteur + filtre "testées"
-  • false => n’affiche QUE la grille (compteur/filtre gérés par la page appelante)
-
-Contrats / dépendances
-- filter-tested.html :
-  • JS s’appuie sur `.recipe-item[data-tested]`.
-- recipes-search.html :
-  • filtre via `.recipe-item[data-search]`.
-- random-pick.html :
-  • le tirage doit s’appuyer sur des attributs présents sur les cartes/éléments
-    (meal_type n’est plus disponible ; préférer recipe_group / tags).
-
-Contraintes
-- Robustesse : certains contenus peuvent ne pas avoir de tags ou de micronutriments.
-- Tri : recipe_group puis recipe_sort.
-==============================================================================
 {%- endcomment -%}
 
 {%- assign cta = include.cta_label | default: "Voir la fiche" -%}
 
-{%- comment -%}
-  show_controls :
-  - Liquid ne cast pas “proprement” les strings, donc on traite explicitement "false".
-{%- endcomment -%}
 {%- assign show_controls = true -%}
 {%- if include.show_controls == false or include.show_controls == "false" -%}
   {%- assign show_controls = false -%}
 {%- endif -%}
 
-{%- comment -%}
-  Tags techniques masqués dans l’UI des cartes (classification interne).
-{%- endcomment -%}
 {%- assign hidden_tags = "low-carb-modere,low-carb-strict" | split: "," -%}
 
-{%- comment -%}
-  Comptage des fiches testées (pour le compteur + condition d’affichage du filtre).
-{%- endcomment -%}
 {%- assign tested_count = 0 -%}
 {%- for r in include.recipes -%}
   {%- if r.recipe_tested == true -%}
@@ -64,20 +26,11 @@ Contraintes
     <span class="ms-2">Testée(s) : <strong>{{ tested_count }}</strong>.</span>
   </p>
 
-  {%- comment -%}
-    Filtre “recettes testées” :
-    - affiché uniquement si la sélection contient au moins une fiche non testée.
-  {%- endcomment -%}
   {%- if include.recipes.size > tested_count -%}
     {% include filter-tested.html %}
   {%- endif -%}
 {%- endif -%}
 
-{%- comment -%}
-  Tri global pour éviter `group_by` + tri interne par groupe.
-  - On trie d’abord par recipe_sort, puis par recipe_group (tri “secondaire”).
-  - Objectif : limiter le coût Liquid quand ce rendu est inclus plusieurs fois.
-{%- endcomment -%}
 {%- assign sorted = include.recipes | sort: "recipe_sort" | sort: "recipe_group" -%}
 
 <div id="recipes-index">
@@ -103,11 +56,6 @@ Contraintes
           {%- assign current_group = gname -%}
     {%- endif -%}
 
-    {%- comment -%}
-      Champ de recherche :
-      - CONTRAINTE : recherche limitée STRICTEMENT au titre (recipe_title).
-      - Normalisation (accents/ligatures/pluriel simple) faite côté JS.
-    {%- endcomment -%}
     {%- assign search_blob = r.recipe_title -%}
 
     <div
@@ -165,6 +113,8 @@ Contraintes
                       <li><a class="badge-link-card" href="{{ '/tags/longue/' | relative_url }}" title="Préparation longue">🐌</a></li>
                     {% when "gout-sucre" %}
                       <li><a class="badge-link-card" href="{{ '/tags/gout-sucre/' | relative_url }}" title="Goût sucré">🍬</a></li>
+                    {% when "microbiote-friendly" %}
+                      <li><a class="badge-link-card" href="{{ '/tags/microbiote-friendly/' | relative_url }}" title="Microbiote friendly">🦠</a></li>
                   {% endcase %}
                 {% endunless %}
               {% endfor %}
@@ -176,36 +126,21 @@ Contraintes
             <ul class="recipe-badges-line badges-micro" aria-label="Micronutriments">
               {% for m in micros %}
                 {% case m %}
-                  {% when "omega-3" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
-                  {% when "vitamine-a" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
-                  {% when "vitamine-c" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
-                  {% when "vitamine-d" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
-                  {% when "vitamine-e" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
-                  {% when "vitamine-k" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
-                  {% when "vitamine-b9" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
-                  {% when "vitamine-b12" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
-                  {% when "calcium" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
-                  {% when "fer" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
-                  {% when "magnesium" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
-                  {% when "potassium" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
-                  {% when "zinc" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
-                  {% when "selenium" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
-                  {% when "iode" %}
-                    <li><a class="badge-link-card" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
+                  {% when "omega-3" %}<li><a class="badge-link-card" href="{{ '/micronutriments/omega-3/' | relative_url }}" title="Oméga-3">🐟</a></li>
+                  {% when "vitamine-a" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-a/' | relative_url }}" title="Vitamine A">👁️</a></li>
+                  {% when "vitamine-c" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-c/' | relative_url }}" title="Vitamine C">🍋</a></li>
+                  {% when "vitamine-d" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-d/' | relative_url }}" title="Vitamine D">🌤️</a></li>
+                  {% when "vitamine-e" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-e/' | relative_url }}" title="Vitamine E">🛡️</a></li>
+                  {% when "vitamine-k" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-k/' | relative_url }}" title="Vitamine K">🩸</a></li>
+                  {% when "vitamine-b9" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-b9/' | relative_url }}" title="Vitamine B9">🌱</a></li>
+                  {% when "vitamine-b12" %}<li><a class="badge-link-card" href="{{ '/micronutriments/vitamine-b12/' | relative_url }}" title="Vitamine B12">🥩</a></li>
+                  {% when "calcium" %}<li><a class="badge-link-card" href="{{ '/micronutriments/calcium/' | relative_url }}" title="Calcium">🦴</a></li>
+                  {% when "fer" %}<li><a class="badge-link-card" href="{{ '/micronutriments/fer/' | relative_url }}" title="Fer">🧲</a></li>
+                  {% when "magnesium" %}<li><a class="badge-link-card" href="{{ '/micronutriments/magnesium/' | relative_url }}" title="Magnésium">⚡</a></li>
+                  {% when "potassium" %}<li><a class="badge-link-card" href="{{ '/micronutriments/potassium/' | relative_url }}" title="Potassium">🍌</a></li>
+                  {% when "zinc" %}<li><a class="badge-link-card" href="{{ '/micronutriments/zinc/' | relative_url }}" title="Zinc">🔩</a></li>
+                  {% when "selenium" %}<li><a class="badge-link-card" href="{{ '/micronutriments/selenium/' | relative_url }}" title="Sélénium">🧪</a></li>
+                  {% when "iode" %}<li><a class="badge-link-card" href="{{ '/micronutriments/iode/' | relative_url }}" title="Iode">🌊</a></li>
                 {% endcase %}
               {% endfor %}
             </ul>

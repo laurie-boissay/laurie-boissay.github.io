@@ -45,8 +45,14 @@ Remarques
 {%- comment -%}
   hidden_tags est optionnel : on sécurise pour éviter une erreur Liquid si l’appelant
   n’en fournit pas.
+  IMPORTANT :
+  - include.hidden_tags est en général un Array (split: ",").
+  - on force un Array vide si absent pour éviter les pièges du `contains` sur string.
 {%- endcomment -%}
 {%- assign hidden_tags = include.hidden_tags | default: "" -%}
+{%- unless hidden_tags and hidden_tags.size > 0 -%}
+  {%- assign hidden_tags = "" | split: "," -%}
+{%- endunless -%}
 
 {%- comment -%}
   Tri des groupes par nom :
@@ -142,6 +148,11 @@ Remarques
                                   par l’appelant via hidden_tags.
                               {%- endcomment -%}
                               {%- when "gout-sucre" -%}<li title="Goût sucré">🍬</li>
+
+                              {%- comment -%}
+                                Nouveau tag fonctionnel : microbiote-friendly.
+                              {%- endcomment -%}
+                              {%- when "microbiote-friendly" -%}<li title="Microbiote friendly">🦠</li>
                             {%- endcase -%}
                           {%- endunless -%}
                         {%- endfor -%}
@@ -190,4 +201,3 @@ Remarques
     {%- endif -%}
   {%- endfor -%}
 </div>
-
